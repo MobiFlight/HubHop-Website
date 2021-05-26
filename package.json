@@ -10,8 +10,10 @@
   "dependencies": {
     "@headlessui/vue": "^1.2.0",
     "core-js": "^3.6.5",
+    "json-server": "^0.16.3",
     "vue": "^3.0.0",
-    "vue-router": "^4.0.0-0"
+    "vue-router": "^4.0.0-0",
+    "vuejs-smart-table": "^0.1.12"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

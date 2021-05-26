@@ -1,0 +1,49 @@
+{
+  "presets": [
+    {
+      "id": "1",
+      "path": "ASOBO.BONANZA.ELECTRICAL",
+      "vendor": "ASOBO",
+      "aircraft": "BONANZA",
+      "system": "ELECTRICAL",
+      "code": "(A:Battery Voltage, Volts)",
+      "label": "Battery Voltage",
+      "tags": ["battery", "ELECTRICAL", "LVar"],
+      "presetType": "Output",
+      "status": "Submitted",
+      "version": "1",
+      "createdDate": "2021-05-26Z19:00:00",
+      "author": "Pizman"
+    },
+    {
+      "id": "2",
+      "path": "ASOBO.BONANZA.ELECTRICAL",
+      "vendor": "ASOBO",
+      "aircraft": "BONANZA",
+      "system": "ELECTRICAL",
+      "code": "(K:Master Switch On)",
+      "label": "Master Switch",
+      "tags": ["battery", "ELECTRICAL", "LVar"],
+      "presetType": "Input",
+      "status": "Submitted",
+      "version": "1",
+      "createdDate": "2021-05-26Z19:00:00",
+      "author": "DocMoebiuz"
+    },
+    {
+      "id": "3",
+      "path": "FBW.A320.AUTOPILOT",
+      "vendor": "FBW",
+      "aircraft": "A320",
+      "system": "AUTOPILOT",
+      "code": "(L:Master AP Switch On)",
+      "label": "Master Autopilot",
+      "tags": ["FBW", "Autopilot", "LVar"],
+      "presetType": "Input",
+      "status": "Released",
+      "version": "1",
+      "createdDate": "2021-05-26Z19:00:00",
+      "author": "rofl-er"
+    }
+  ]
+}

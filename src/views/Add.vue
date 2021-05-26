@@ -5,13 +5,13 @@
       <div class="mt-5 flex items-start justify-between px-14">
         <!-- Add event or variable form -->
         <form class="max-w-2xl flex flex-col">
-          <!-- Publisher / Author -->
+          <!-- Publisher / vendor -->
           <select
             class="bg-hhCard my-3 p-3 rounded-lg border border-hhOrange"
-            v-model="author"
+            v-model="vendor"
           >
             <option value="" disabled selected
-              >Pick the Publisher / Author</option
+              >Pick the Publisher / vendor</option
             >
             <option value="ASOBO">Asobo</option>
             <option value="FBW">Fly by Wire Simulation</option>
@@ -29,23 +29,23 @@
             <option value="CRJ57">CRJ 500-700</option>
             <option value="AC">Any other aircraft</option>
           </select>
-          <!-- Instrument -->
+          <!-- system -->
           <select
             class="bg-hhCard my-3 p-3 rounded-lg border border-hhOrange"
-            v-model="instrument"
+            v-model="system"
           >
-            <option value="" disabled selected>Pick the Instrument</option>
+            <option value="" disabled selected>Pick the system</option>
             <option value="AP">Autopilot</option>
             <option value="COM">Radio Stack</option>
             <option value="THR">Throttle</option>
-            <option value="INST">Any other instrument panel</option>
+            <option value="INST">Any other system panel</option>
           </select>
           <!-- User defined name of variable -->
           <label class="flex mt-3 items-start">Give a precise name</label>
           <input
             class="bg-hhCard p-3 rounded-lg border border-hhOrange"
             type="text"
-            v-model="tempName"
+            v-model="label"
             placeholder="Alternator 1 On"
           />
           <!-- Code snippet -->
@@ -84,13 +84,13 @@
                 style="min-width: 643px;"
               >
                 {{
-                  author +
+                  vendor +
                     "." +
                     aircraft +
                     "." +
-                    instrument +
+                    system +
                     "." +
-                    tempName +
+                    label +
                     "#" +
                     code +
                     "#" +
@@ -98,32 +98,21 @@
                 }}
               </p>
             </div>
-            <h4 class="mt-10 mb-5">Name visible for others</h4>
-            <p class="bg-hhBG p-3 rounded-lg border border-hhOrange">
-              {{ name }}
-            </p>
           </div>
           <!-- Veriable stored list section -->
           <div
             class="max-w-2xl flex flex-col bg-hhCard mt-3 p-3 rounded-lg border border-hhOrange"
           >
             <div>
-              <div v-for="name in names" :key="name">{{ name }}</div>
+              <div v-for="name in label" :key="name">{{ name }}</div>
             </div>
 
             <!-- Buttons -->
             <div class="flex justify-between items-center mt-5">
               <button
-                @click="addName"
                 class="bg-hhOrange border font-bold border-hhBG max-w-sm text-hhBG text-2xl py-2 px-10 rounded-lg"
               >
                 Add one more
-              </button>
-              <button
-                @click="removeName"
-                class="bg-hhOrange border font-bold border-hhBG max-w-sm text-hhBG text-2xl py-2 px-10 rounded-lg"
-              >
-                Delete last variable / event
               </button>
               <button
                 class="bg-hhOrange border font-bold border-hhBG max-w-sm text-hhBG text-2xl py-2 px-10 rounded-lg"
@@ -142,22 +131,19 @@
 export default {
   data() {
     return {
-      author: "",
+      vendor: "",
       aircraft: "",
-      instrument: "",
-      tempName: "",
+      system: "",
+      label: "",
       code: "",
       description: "",
-      names: [],
+      tags: "",
+      presetType: "",
+      status: "",
+      version: "1",
+      createdDate: "",
+      author: "",
     };
-  },
-  methods: {
-    addName() {
-      this.names.push(this.tempName);
-    },
-    removeName() {
-      this.names.pop(this.tempName);
-    },
   },
   Name: "Add",
 };

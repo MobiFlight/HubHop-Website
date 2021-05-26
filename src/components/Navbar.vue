@@ -18,12 +18,12 @@
           <router-link @click="scrollTop" class="px-5" to="/list"
             >Events/Variables</router-link
           >
-          <router-link @click="scrollTop" class="px-5" to="/api"
+          <!-- <router-link @click="scrollTop" class="px-5" to="/api"
             >The API</router-link
-          >
-          <router-link @click="scrollTop" class="px-5" to="/team"
+          > -->
+          <!-- <router-link @click="scrollTop" class="px-5" to="/team"
             >The Team</router-link
-          >
+          > -->
         </div>
       </div>
     </div>
