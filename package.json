@@ -15,6 +15,7 @@
     "core-js": "^3.6.5",
     "json-server": "^0.16.3",
     "vue": "^3.0.0",
+    "vue-resource": "^1.5.2",
     "vue-router": "^4.0.0-0",
     "vuejs-smart-table": "^0.1.12"
   },

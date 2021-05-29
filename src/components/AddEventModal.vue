@@ -38,7 +38,7 @@
             leave-to="opacity-0 scale-95"
           >
             <div
-              class="inline-block w-full max-w-7xl p-6 my-8 overflow-hidden text-left align-middle transition-all transform border border-hhOrange bg-hhBG backdrop-filter backdrop-blur bg-opacity-75 shadow-xl rounded-lg"
+              class="inline-block w-full max-w-7xl p-6 my-8 overflow-hidden text-left align-middle transition-all transform border border-hhOrange bg-hhBG backdrop-filter backdrop-blur bg-opacity-50 shadow-xl rounded-lg"
             >
               <DialogTitle
                 as="h3"
@@ -100,7 +100,7 @@ export default {
   },
 
   setup() {
-    const isOpen = ref(true);
+    const isOpen = ref(false);
 
     return {
       isOpen,

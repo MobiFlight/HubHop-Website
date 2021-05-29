@@ -13,17 +13,10 @@
           >Join us on Discord
         </button>
       </div>
-      <div class="mx-5">
-        <button>
-          <a href="#" target="_blank"
-            ><img class="max-h-10 mx-3" src="" alt="" /> </a
-          >Donate
-        </button>
-      </div>
     </div>
     <div class="flex flex-col items-end">
       <button class="mt-1 mb-1 flex items-center justify-around">
-        <a href="#" target="_blank">
+        <a href="https://github.com/HubHopAPI/HubHop-Website" target="_blank">
           <img
             class="max-h-7 mx-2"
             src="../assets/GitHub-Mark-Light-32px.png"

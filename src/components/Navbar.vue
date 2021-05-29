@@ -12,9 +12,9 @@
         </div>
         <div class="flex items-center text-2xl">
           <router-link @click="scrollTop" class="px-5" to="/">Home</router-link>
-          <router-link @click="scrollTop" class="px-5" to="/add"
+          <!-- <router-link @click="scrollTop" class="px-5" to="/add"
             >Add event</router-link
-          >
+          > -->
           <router-link @click="scrollTop" class="px-5" to="/list"
             >Events/Variables</router-link
           >
