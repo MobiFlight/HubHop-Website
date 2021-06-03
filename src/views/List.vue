@@ -33,7 +33,7 @@
         </select>
         <input
           class="bg-hhCard px-5 py-2 max-w-xs text-lg rounded"
-          placeholder="Search Name"
+          placeholder="Search Preset Name"
           v-model="filters.name.value"
         />
       </div>
