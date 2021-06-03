@@ -172,7 +172,7 @@ export default {
         tags: this.tags,
         presetType: this.presetType,
         status: "Submitted",
-        version: "1",
+        version: 1,
         createdDate: new Date().toUTCString(),
         author: this.author,
         description: this.description,

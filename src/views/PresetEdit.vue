@@ -1,10 +1,10 @@
 <template>
   <div class="h-full text-lg p-5 my-3 container mx-auto" v-if="preset">
     <div class="flex justify-center mb-5 text-3xl">
-      <div class="bg-hhBG rounded-lg border w-screen border-hhOrange">
+      <div class="bg-hhBG rounded-lg border w-screen px-60 border-hhOrange">
         <label class="border-b border-hhOrange">Preset name</label><br />
         <input
-          class="my-2 bg-hhCard text-hhText rounded text-center p-1"
+          class="my-2 bg-hhCard text-hhText rounded text-center p-1 min-w-full"
           v-model="preset.label"
         />
       </div>
@@ -42,22 +42,6 @@
     <div class="flex justify-between mt-5">
       <div class="bg-hhBG rounded-lg border border-hhOrange w-60">
         <label class="border-b border-hhOrange">Status</label><br />
-        <!-- <select
-          v-model="preset.status"
-          class="bg-hhCard px-5 py-2 max-w-xs text-lg round"
-        >
-          <option value="" selected></option>
-          <option value="A320">A320</option>
-          <option value="BONANZA">Bonanza</option>
-          <option value="CRJ 550-700">CRJ 550-700</option>
-          <option value="CJ4">CJ4</option>
-        </select>
-        <select>
-          <option value=""></option>
-          <option value="Submitted"></option>
-          <option value="Released"></option>
-          <option value="Outdated"></option>
-        </select> -->
         <input
           class="my-2 bg-hhCard text-hhText rounded text-center p-1"
           v-model="preset.status"
@@ -72,7 +56,11 @@
       </div>
       <div class="bg-hhBG rounded-lg border border-hhOrange w-60">
         <label class="border-b border-hhOrange">Version</label>
-        <p class="pt-2">{{ preset.version }}</p>
+        <input
+          disabled
+          class="my-2 bg-hhBG text-hhText rounded text-center p-1"
+          v-model="preset.version"
+        />
       </div>
       <div class="bg-hhBG rounded-lg border border-hhOrange w-60">
         <label class="border-b border-hhOrange">Submitted on</label>
@@ -110,7 +98,7 @@
       </button>
       <button
         class="text-xl mt-5 px-4 py-2 font-bold text-hhCard bg-hhOrange rounded-md hover:bg-orange-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-        @click="$router.go(-1)"
+        @click="updatePreset(preset.id)"
       >
         Save
       </button>
@@ -128,6 +116,64 @@ export default {
     return {
       preset: null,
     };
+  },
+  methods: {
+    updatePreset(id) {
+      // const url = "https://hubhop.azurewebsites.net/api/presets?code=yJVAredcAmi5YDQDJixvwcaHZC3taYRyVJUI09OLrIplRG8ExHoB1g==";
+      const url = "http://localhost:3000/presets/" + id;
+
+      // post body data
+      const preset = {
+        path:
+          this.preset.vendor +
+          "." +
+          this.preset.aircraft +
+          "." +
+          this.preset.system +
+          "." +
+          this.preset.label,
+        vendor: this.preset.vendor,
+        aircraft: this.preset.aircraft,
+        system: this.preset.system,
+        code: this.preset.code,
+        label: this.preset.label,
+        tags: this.preset.tags,
+        presetType: this.preset.presetType,
+        status: "Updated",
+        version: this.preset.version+1,
+        createdDate: new Date().toUTCString(),
+        author: this.preset.author,
+        description: this.preset.description,
+      };
+
+      // request options
+      const options = {
+        method: "PATCH",
+        body: JSON.stringify(preset),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      (this.preset.label = ""),
+        (this.preset.code = ""),
+        (this.preset.description = ""),
+        // send POST request
+        fetch(url, options)
+          .then((res) => res.json())
+          .then((res) => console.log(res));
+      // Use sweetalert2
+      this.$swal({
+        position: "center",
+        icon: "success",
+        title: "Your preset has been updated",
+        showConfirmButton: false,
+        backdrop: false,
+        background: "#33353e",
+        toast: true,
+        timer: 2000,
+      });
+      setTimeout(() => this.$router.go(-1), 2000);
+    },
   },
   mounted() {
     fetch("http://localhost:3000/presets/" + this.id)
