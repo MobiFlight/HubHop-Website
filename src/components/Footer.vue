@@ -15,25 +15,15 @@
       </div>
     </div>
     <div class="flex flex-col items-end">
-      <button class="mt-1 mb-1 flex items-center justify-around">
-        <a href="https://github.com/HubHopAPI/HubHop-Website" target="_blank">
-          <img
-            class="max-h-7 mx-2"
-            src="../assets/GitHub-Mark-Light-32px.png"
-            alt="GitHub"
-          /> </a
-        >Homepage Source Code
-      </button>
       <div>
         <button class="mt-1 mb-1 flex items-center justify-around">
-          <a href="#" target="_blank">
+          <a class="flex items-center justify-around" href="https://github.com/HubHopAPI/HubHop-Website" target="_blank">
             <img
               class="max-h-7 mx-2"
               src="../assets/GitHub-Mark-Light-32px.png"
               alt="GitHub"
-            />
+            />Homepage Source Code
           </a>
-          API Source Code?!
         </button>
       </div>
       <div>
@@ -45,7 +35,7 @@
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6"
+              class="h-6 w-6 mr-1"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -63,10 +53,14 @@
       </div>
       <div>
         <button class="mt-1 mb-1 flex items-center justify-around">
-          <router-link @click="scrollTop" class="flex items-center justify-around" to="/privacy">
+          <router-link
+            @click="scrollTop"
+            class="flex items-center justify-around"
+            to="/privacy"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6"
+              class="h-6 w-6 mr-1"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
