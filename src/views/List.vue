@@ -24,7 +24,7 @@
           <option value="CJ4">CJ4</option>
         </select>
         <select
-          v-model="filters.name.value"
+          v-model="filters.type.value"
           class="bg-hhCard px-5 py-2 max-w-xs text-lg rounded"
         >
           <option value="" selected>Select Input/Output</option>
