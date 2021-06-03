@@ -16,7 +16,7 @@
             >Add event</router-link
           > -->
           <router-link @click="scrollTop" class="px-5" to="/list"
-            >Events/Variables</router-link
+            >Preset list</router-link
           >
           <!-- <router-link @click="scrollTop" class="px-5" to="/api"
             >The API</router-link

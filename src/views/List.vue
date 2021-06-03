@@ -59,7 +59,7 @@
           <tr class="text-lg border-b-2 border-hhBG">
             <th>Vendor</th>
             <th>Aircraft</th>
-            <th>Name</th>
+            <th>Preset name</th>
             <th>Description</th>
             <th>Type</th>
             <th>Actions</th>
@@ -141,7 +141,7 @@
                 <button
                   v-if="confirmDelete"
                   @click="deletePreset(preset.id), (confirmDelete = false)"
-                  class="inline-flex items-center justify-center py-1 px-2 ml-2 font-medium text-hhText bg-green-900 rounded-md hover:bg-green-700 hover:text-hhText focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+                  class="inline-flex items-center justify-center py-1 px-2 ml-2 font-medium text-hhText bg-red-900 rounded-md hover:bg-red-700 hover:text-hhText focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -157,12 +157,12 @@
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
-                  Confirm
+                  Delete
                 </button>
                 <button
                   v-if="confirmDelete"
                   @click="confirmDelete = false"
-                  class="inline-flex items-center justify-center py-1 px-2 ml-2 font-medium text-hhText bg-red-900 rounded-md hover:bg-red-700 hover:text-hhText focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+                  class="inline-flex items-center justify-center py-1 px-2 ml-2 font-medium text-hhText bg-hhBG rounded-md hover:bg-gray-700 hover:text-hhText focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
