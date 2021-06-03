@@ -6,6 +6,8 @@ import List from "../views/List.vue";
 import Add from "../views/Add.vue";
 import Terms from "../views/Terms.vue";
 import Privacy from "../views/Privacy.vue";
+import PresetEdit from "../views/PresetEdit.vue";
+import PresetView from "../views/PresetView.vue";
 
 
 const routes = [
@@ -43,6 +45,18 @@ const routes = [
     path: "/privacy",
     name: "Privacy",
     component: Privacy,
+  },
+  {
+    path: "/presetview/:id",
+    name: "PresetView",
+    component: PresetView,
+    props: true,
+  },
+  {
+    path: "/presetedit/:id",
+    name: "PresetEdit",
+    component: PresetEdit,
+    props: true,
   },
 ];
 

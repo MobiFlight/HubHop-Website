@@ -38,7 +38,7 @@
             leave-to="opacity-0 scale-95"
           >
             <div
-              class="inline-block w-full max-w-7xl p-6 my-8 overflow-hidden text-left align-middle transition-all transform border border-hhOrange bg-hhBG backdrop-filter backdrop-blur bg-opacity-50 shadow-xl rounded-lg"
+              class="inline-block w-full max-w-7xl p-6 my-8 overflow-hidden text-left align-middle transition-all transform border border-hhOrange bg-hhBG backdrop-filter backdrop-blur bg-opacity-90 shadow-xl rounded-lg"
             >
               <DialogTitle
                 as="h3"
@@ -46,29 +46,19 @@
               >
                 Add an event or variable
               </DialogTitle>
-              <div class="mt-2">
+              <div class="flex justify-around mt-2">
                 <p class="text-sm text-gray-500">
                   <AddEvent />
                 </p>
               </div>
-              <div class="flex space-x-4 justify-end mt-4">
-                <div>
-                  <button
-                    type="button"
-                    class="inline-flex justify-center px-4 py-2 font-medium text-hhCard bg-hhOrange rounded-md hover:bg-orange-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-                  >
-                    Add event / variable
-                  </button>
-                </div>
-                <div>
-                  <button
-                    type="button"
-                    class="inline-flex justify-center px-4 py-2 font-medium text-hhCard bg-hhOrange rounded-md hover:bg-orange-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-                    @click="closeModal"
-                  >
-                    Close
-                  </button>
-                </div>
+              <div class="flex justify-end">
+                <button
+                  type="button"
+                  class="inline-flex justify-center px-4 py-2 font-medium text-hhCard bg-hhOrange rounded-md hover:bg-orange-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+                  @click="closeModal"
+                >
+                  Close
+                </button>
               </div>
             </div>
           </TransitionChild>

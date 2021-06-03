@@ -9,14 +9,16 @@
   },
   "dependencies": {
     "@headlessui/vue": "^1.2.0",
+    "@heroicons/vue": "^1.0.1",
     "@vue-hero-icons/outline": "^1.7.2",
     "@vue-hero-icons/solid": "^1.7.2",
-    "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "json-server": "^0.16.3",
     "vue": "^3.0.0",
+    "vue-final-modal": "^3.3.0",
     "vue-resource": "^1.5.2",
     "vue-router": "^4.0.0-0",
+    "vue-sweetalert2": "^4.3.1",
     "vuejs-smart-table": "^0.1.12"
   },
   "devDependencies": {
