@@ -16,6 +16,9 @@
             <option value="WT">Working Title</option>
             <option value="More">Any other vendor</option>
           </select>
+          <span class="-mt-3 text-red-500" v-if="v$.vendor.$error">
+            {{ v$.vendor.$errors[0].$message }}
+          </span>
           <!-- Aircraft Type -->
           <select
             class="bg-hhCard text-hhText my-3 p-2 rounded-lg border border-hhOrange"
@@ -27,6 +30,9 @@
             <option value="CRJ57">CRJ 500-700</option>
             <option value="AC">Any other aircraft</option>
           </select>
+          <span class="-mt-3 text-red-500" v-if="v$.aircraft.$error">
+            {{ v$.aircraft.$errors[0].$message }}
+          </span>
           <!-- system -->
           <select
             class="bg-hhCard text-hhText my-3 p-2 rounded-lg border border-hhOrange"
@@ -38,6 +44,9 @@
             <option value="THR">Throttle</option>
             <option value="INST">Any other system panel</option>
           </select>
+          <span class="-mt-3 text-red-500" v-if="v$.system.$error">
+            {{ v$.system.$errors[0].$message }}
+          </span>
           <!-- input or output -->
           <select
             class="bg-hhCard text-hhText my-3 p-2 rounded-lg border border-hhOrange"
@@ -47,7 +56,9 @@
             <option value="Input">Input</option>
             <option value="Output">Output</option>
           </select>
-
+          <span class="-mt-3 text-red-500" v-if="v$.presetType.$error">
+            {{ v$.presetType.$errors[0].$message }}
+          </span>
           <label class="flex text-hhText mb-1 items-start"
             >Your name (optional)</label
           >
@@ -70,6 +81,9 @@
             v-model="label"
             placeholder="Alternator 1 On"
           />
+          <span class="-mt-3 text-red-500" v-if="v$.label.$error">
+            {{ v$.label.$errors[0].$message }}
+          </span>
           <!-- Code snippet -->
           <label class="flex text-hhText text-base items-start"
             >Code to be executed inside the Sim</label
@@ -82,6 +96,9 @@
             v-model="code"
             placeholder="(>L:somecode) (>K:somecodeToo) * near"
           ></textarea>
+          <span class="-mt-3 text-red-500" v-if="v$.code.$error">
+            {{ v$.code.$errors[0].$message }}
+          </span>
           <!-- Comment for variable -->
           <label class="flex text-hhText items-start">Description</label>
           <textarea
@@ -92,6 +109,9 @@
             v-model="description"
             placeholder="Anything"
           ></textarea>
+          <span class="text-red-500" v-if="v$.description.$error">
+            {{ v$.description.$errors[0].$message }}
+          </span>
         </div>
       </div>
     </div>
@@ -115,23 +135,39 @@
 </template>
 
 <script>
+import useVuelidate from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
+
 export default {
+  setup() {
+    return { v$: useVuelidate() };
+  },
   Name: "Add",
   data() {
     return {
       vendor: "",
       aircraft: "",
       system: "",
-      inputOutput: "",
       label: "",
       code: "",
       description: "",
       tags: "",
       presetType: "",
-      status: "",
-      version: "1",
+      status: "Submitted",
+      version: 1,
       createdDate: "",
       author: "",
+    };
+  },
+  validations() {
+    return {
+      vendor: { required },
+      aircraft: { required },
+      system: { required },
+      label: { required },
+      code: { required },
+      description: { required },
+      presetType: { required },
     };
   },
   methods: {
@@ -151,59 +187,62 @@ export default {
       }, 2000);
     },
     submitPreset() {
+      this.v$.$validate();
+      if (!this.v$.$error) {
+        const url = "http://localhost:3000/presets";
+
+        // post body data
+        const preset = {
+          path:
+            this.vendor +
+            "." +
+            this.aircraft +
+            "." +
+            this.system +
+            "." +
+            this.label,
+          vendor: this.vendor,
+          aircraft: this.aircraft,
+          system: this.system,
+          code: this.code,
+          label: this.label,
+          tags: this.tags,
+          presetType: this.presetType,
+          status: "Submitted",
+          version: 1,
+          createdDate: new Date().toUTCString(),
+          author: this.author,
+          description: this.description,
+        };
+
+        // request options
+        const options = {
+          method: "POST",
+          body: JSON.stringify(preset),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
+        (this.label = ""),
+          (this.code = ""),
+          (this.description = ""),
+          // send POST request
+          fetch(url, options)
+            .then((res) => res.json())
+            .then((res) => console.log(res));
+        // Use sweetalert2
+        this.$swal({
+          position: "center",
+          icon: "success",
+          title: "Your event/variable has been saved",
+          showConfirmButton: false,
+          backdrop: false,
+          background: "#33353e",
+          toast: true,
+          timer: 2000,
+        });
+      }
       // const url = "https://hubhop.azurewebsites.net/api/presets?code=yJVAredcAmi5YDQDJixvwcaHZC3taYRyVJUI09OLrIplRG8ExHoB1g==";
-      const url = "http://localhost:3000/presets";
-
-      // post body data
-      const preset = {
-        path:
-          this.vendor +
-          "." +
-          this.aircraft +
-          "." +
-          this.system +
-          "." +
-          this.label,
-        vendor: this.vendor,
-        aircraft: this.aircraft,
-        system: this.system,
-        code: this.code,
-        label: this.label,
-        tags: this.tags,
-        presetType: this.presetType,
-        status: "Submitted",
-        version: 1,
-        createdDate: new Date().toUTCString(),
-        author: this.author,
-        description: this.description,
-      };
-
-      // request options
-      const options = {
-        method: "POST",
-        body: JSON.stringify(preset),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-      (this.label = ""),
-        (this.code = ""),
-        (this.description = ""),
-        // send POST request
-        fetch(url, options)
-          .then((res) => res.json())
-          .then((res) => console.log(res));
-      // Use sweetalert2
-      this.$swal({
-        position: "center",
-        icon: "success",
-        title: "Your event/variable has been saved",
-        showConfirmButton: false,
-        backdrop: false,
-        background: "#33353e",
-        toast: true,
-        timer: 2000,
-      });
     },
   },
 };

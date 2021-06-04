@@ -56,7 +56,7 @@
         </p>
       </div>
     </div>
-    <div class="flex justify-end">
+    <div class="flex justify-start">
       <button
         class="text-xl mt-5 px-4 py-2 font-bold text-hhCard bg-hhOrange rounded-md hover:bg-orange-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
         @click="$router.go(-1)"

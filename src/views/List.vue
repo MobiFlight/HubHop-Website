@@ -56,7 +56,7 @@
         style="width:100%"
       >
         <template #head>
-          <tr class="text-lg border-b-2 border-hhBG">
+          <tr class="text-lg">
             <th>Vendor</th>
             <th>Aircraft</th>
             <th>Preset name</th>
@@ -190,13 +190,13 @@
         v-model:currentPage="currentPage"
         :total-pages="totalPages"
       />
-      <strong>Selected:</strong>
+      <strong>[DEBUG] Selected:</strong>
       <div v-if="selectedRows.length === 0">
         No rows selected
       </div>
       <ul>
         <li v-for="row in selectedRows" :key="row.id">
-          {{ row.vendor }}.{{ row.aircraft }}#{{ row.label }}
+          {{ row.path }}#{{ row.label }}#{{ row.code }}
         </li>
       </ul>
     </div>

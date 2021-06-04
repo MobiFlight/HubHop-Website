@@ -104,10 +104,11 @@
       "label": "Autopilot LOC",
       "tags": "ein paar, tags, und so, weiter",
       "presetType": "Input",
-      "status": "Released",
-      "version": "1",
-      "createdDate": "5/27/21 8:39",
-      "author": "MF Community"
+      "status": "Updated",
+      "version": "11",
+      "createdDate": "Fri, 04 Jun 2021 18:07:43 GMT",
+      "author": "MF Community",
+      "description": "update"
     },
     {
       "id": "10",

@@ -12,6 +12,8 @@
     "@heroicons/vue": "^1.0.1",
     "@vue-hero-icons/outline": "^1.7.2",
     "@vue-hero-icons/solid": "^1.7.2",
+    "@vuelidate/core": "^2.0.0-alpha.19",
+    "@vuelidate/validators": "^2.0.0-alpha.16",
     "core-js": "^3.6.5",
     "json-server": "^0.16.3",
     "vue": "^3.0.0",
