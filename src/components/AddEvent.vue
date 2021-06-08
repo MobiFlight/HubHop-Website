@@ -118,14 +118,14 @@
   </div>
   <div class="flex justify-end">
     <button
-      @click="submitPreset()"
+      @click="submitPreset(false)"
       type="button"
       class="mx-5 inline-flex justify-center text-base px-4 py-2 font-medium text-hhCard bg-hhOrange rounded-md hover:bg-orange-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
     >
       Submit and add more
     </button>
     <button
-      @click="submitPreset(), addAndReload()"
+      @click="submitPreset(true)"
       type="button"
       class="inline-flex justify-center text-base px-4 py-2 font-medium text-hhCard bg-hhOrange rounded-md hover:bg-orange-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
     >
@@ -172,24 +172,20 @@ export default {
   },
   methods: {
     addAndReload() {
-      this.$swal({
-        position: "center",
-        icon: "success",
-        title: "Your event/variable has been saved",
-        showConfirmButton: false,
-        backdrop: false,
-        background: "#33353e",
-        toast: true,
-        timer: 2000,
-      });
-      setTimeout(function() {
-        location.reload();
-      }, 2000);
-    },
-    submitPreset() {
       this.v$.$validate();
       if (!this.v$.$error) {
-        const url = "http://localhost:3000/presets";
+        this.submitPreset();
+        setTimeout(function() {
+          location.reload();
+        }, 2000);
+      }
+    },
+    submitPreset(onSuccessReload) {
+      this.v$.$validate();
+      if (!this.v$.$error) {
+        const url =
+          "https://hubhop.azurewebsites.net/api/presets?code=yJVAredcAmi5YDQDJixvwcaHZC3taYRyVJUI09OLrIplRG8ExHoB1g==";
+        // const url = "http://localhost:3000/presets";
 
         // post body data
         const preset = {
@@ -223,26 +219,27 @@ export default {
             "Content-Type": "application/json",
           },
         };
-        (this.label = ""),
-          (this.code = ""),
-          (this.description = ""),
-          // send POST request
-          fetch(url, options)
-            .then((res) => res.json())
-            .then((res) => console.log(res));
-        // Use sweetalert2
-        this.$swal({
-          position: "center",
-          icon: "success",
-          title: "Your event/variable has been saved",
-          showConfirmButton: false,
-          backdrop: false,
-          background: "#33353e",
-          toast: true,
-          timer: 2000,
+        this.label = "";
+        this.code = "";
+        this.description = "";
+        // send POST request
+        fetch(url, options).then((res) => {
+          if (res.status != 200) return;
+          this.$swal({
+            position: "center",
+            icon: "success",
+            title: "Your event/variable has been saved",
+            showConfirmButton: false,
+            backdrop: false,
+            background: "#33353e",
+            toast: true,
+            timer: 2000,
+            willClose: () => {
+              if (onSuccessReload) location.reload();
+            },
+          });
         });
       }
-      // const url = "https://hubhop.azurewebsites.net/api/presets?code=yJVAredcAmi5YDQDJixvwcaHZC3taYRyVJUI09OLrIplRG8ExHoB1g==";
     },
   },
 };

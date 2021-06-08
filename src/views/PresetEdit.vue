@@ -118,9 +118,12 @@ export default {
     };
   },
   methods: {
-    updatePreset(id) {
-      // const url = "https://hubhop.azurewebsites.net/api/presets?code=yJVAredcAmi5YDQDJixvwcaHZC3taYRyVJUI09OLrIplRG8ExHoB1g==";
-      const url = "http://localhost:3000/presets/" + id;
+    updatePreset(id, onSuccessReload) {
+      const url =
+        "https://hubhop.azurewebsites.net/api/presets/" +
+        id +
+        "?code=ZpSdeNay2NhZNIqrRwx6N/7TDGiTStpL2PTbLe4IZmU3gDF1q11eQQ==";
+      // const url = "http://localhost:3000/presets/" + id;
 
       // post body data
       const preset = {
@@ -140,7 +143,7 @@ export default {
         tags: this.preset.tags,
         presetType: this.preset.presetType,
         status: "Updated",
-        version: this.preset.version+1,
+        version: this.preset.version + 1,
         createdDate: new Date().toUTCString(),
         author: this.preset.author,
         description: this.preset.description,
@@ -154,32 +157,34 @@ export default {
           "Content-Type": "application/json",
         },
       };
-      (this.preset.label = ""),
-        (this.preset.code = ""),
-        (this.preset.description = ""),
-        // send POST request
-        fetch(url, options)
-          .then((res) => res.json())
-          .then((res) => console.log(res));
-      // Use sweetalert2
-      this.$swal({
-        position: "center",
-        icon: "success",
-        title: "Your preset has been updated",
-        showConfirmButton: false,
-        backdrop: false,
-        background: "#33353e",
-        toast: true,
-        timer: 2000,
+      // send POST request
+      fetch(url, options).then((res) => {
+        if (res.status != 200) return;
+        this.$swal({
+          position: "center",
+          icon: "success",
+          title: "Your event/variable has been saved",
+          showConfirmButton: false,
+          backdrop: false,
+          background: "#33353e",
+          toast: true,
+          timer: 2000,
+          willClose: () => {
+            if (onSuccessReload) location.reload();
+            this.$router.go(-1);
+          },
+        });
       });
-      setTimeout(() => this.$router.go(-1), 2000);
     },
   },
   mounted() {
-    fetch("http://localhost:3000/presets/" + this.id)
+    fetch(
+      "https://hubhop.azurewebsites.net/api/presets/" +
+        this.id +
+        "?code=Yut6qZknZj6oTlAqroRT6SSgrAjtQOicgWHdmmzZWVDQi/V6yS/UMQ=="
+    )
       .then((res) => res.json())
-      .then((data) => (this.preset = data))
-      .catch((err) => console.log(err.massage));
+      .then((data) => (this.preset = data));
   },
 };
 </script>

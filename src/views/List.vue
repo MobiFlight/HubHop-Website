@@ -15,7 +15,7 @@
         </select>
         <select
           v-model="filters.aircraft.value"
-          class="bg-hhCard px-5 py-2 max-w-xs text-lg round"
+          class="bg-hhCard px-5 py-2 max-w-xs text-lg rounded"
         >
           <option value="" selected>All Aircraft</option>
           <option value="A320">A320</option>
@@ -216,10 +216,25 @@ export default {
   },
   methods: {
     deletePreset(id) {
-      fetch("http://localhost:3000/presets/" + id, {
-        method: "DELETE",
-      }).then(() => {
-        console.log("removed");
+      fetch(
+        "https://hubhop.azurewebsites.net/api/presets/" +
+          id +
+          "?code=LWx7IkK2IZDOsLVEHm07Bi0CEoMb6MEIE0mfvoNDlEEI87FxtSkpEQ==",
+        {
+          method: "DELETE",
+        }
+      ).then((res) => {
+        if (res.status != 200) return;
+        this.$swal({
+          position: "center",
+          icon: "success",
+          title: "Your event/variable has been removed",
+          showConfirmButton: false,
+          backdrop: false,
+          background: "#33353e",
+          toast: true,
+          timer: 2000,
+        });
       });
       this.presets = this.presets.filter((preset) => preset.id != id);
     },
@@ -242,13 +257,12 @@ export default {
     };
   },
   mounted() {
-    // fetch(
-    //   "https://hubhop.azurewebsites.net/api/presets?code=vVm8UnLAsxiaPAX2BNA8T2TSsG3sp8UCJKuOb7b4Jjm3N3zQzCsB3A=="
-    // );
-    fetch("http://localhost:3000/presets")
+    // fetch("http://localhost:3000/presets");
+    fetch(
+      "https://hubhop.azurewebsites.net/api/presets?code=vVm8UnLAsxiaPAX2BNA8T2TSsG3sp8UCJKuOb7b4Jjm3N3zQzCsB3A=="
+    )
       .then((res) => res.json())
-      .then((data) => (this.presets = data))
-      .catch((err) => console.log(err.massage));
+      .then((data) => (this.presets = data));
   },
 };
 </script>
