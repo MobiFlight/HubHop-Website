@@ -8,6 +8,10 @@ import Terms from "../views/Terms.vue";
 import Privacy from "../views/Privacy.vue";
 import PresetEdit from "../views/PresetEdit.vue";
 import PresetView from "../views/PresetView.vue";
+import Callback from '../views/Callback'
+import ErrorPage from '../views/Error'
+
+// import { routeGuard } from '../../auth'
 
 
 const routes = [
@@ -30,6 +34,7 @@ const routes = [
     path: "/list",
     name: "List",
     component: List,
+    // beforeEnter: routeGuard,
   },
   {
     path: "/add",
@@ -58,6 +63,16 @@ const routes = [
     component: PresetEdit,
     props: true,
   },
+  {
+    path: '/callback',
+    name: 'Callback',
+    component: Callback,
+  },
+  {
+    path: '/error',
+    name: 'Error',
+    component: ErrorPage,
+  }
 ];
 
 const router = createRouter({

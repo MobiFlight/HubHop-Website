@@ -20,10 +20,28 @@
           >
           <!-- <router-link @click="scrollTop" class="px-5" to="/api"
             >The API</router-link
-          > -->
-          <!-- <router-link @click="scrollTop" class="px-5" to="/team"
+          >
+          <router-link @click="scrollTop" class="px-5" to="/team"
             >The Team</router-link
           > -->
+          <div class="flex items-center text-2xl" v-if="!$auth.loading.value">
+            <button
+              class="px-5"
+              v-if="!$auth.isAuthenticated.value"
+              @click="login"
+            >
+              Log in
+            </button>
+            <button
+              class="px-5"
+              v-if="$auth.isAuthenticated.value"
+              @click="logout"
+            >
+              Log out
+            </button>
+            <div v-if="$auth.isAuthenticated.value" class="px-5">Hi, {{ $auth.user.value.name }}</div>
+            <img v-if="$auth.isAuthenticated.value" class="w-10" :src="$auth.user.value.picture" />
+          </div>
         </div>
       </div>
     </div>
@@ -44,6 +62,15 @@ export default {
     window.addEventListener("scroll", this.handleScroll);
   },
   methods: {
+    login() {
+      this.$auth.loginWithRedirect();
+    },
+    // Log the user out
+    logout() {
+      this.$auth.logout({
+        returnTo: window.location.origin,
+      });
+    },
     handleScroll() {
       if (window.pageYOffset > 0) {
         if (this.view.topOfPage) this.view.topOfPage = false;

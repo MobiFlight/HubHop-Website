@@ -1,0 +1,6 @@
+{
+  "domain": "hubhop.eu.auth0.com",
+  "client_id": "LXDyKIiMPztrI1mPOI9RcWRRGBQjalBk",
+  "redirect_uri": "http://localhost:8080/callback",
+  "audience": "https://hubhop.eu.auth0.com/api/v2/"
+}

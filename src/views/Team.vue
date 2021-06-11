@@ -1,5 +1,11 @@
 <template>
   <div class="flex justify-around h-full">
-    Team Page
+    something
   </div>
 </template>
+
+<script>
+export default {
+  name: "Team",
+};
+</script>

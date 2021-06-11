@@ -65,7 +65,7 @@
           <input
             class="bg-hhCard w-80 text-hhText p-2 rounded-lg border border-hhOrange"
             type="text"
-            v-model="author"
+            
             placeholder="YourUserName"
           />
         </form>
@@ -156,7 +156,6 @@ export default {
       status: "Submitted",
       version: 1,
       createdDate: "",
-      author: "",
     };
   },
   validations() {
@@ -207,7 +206,7 @@ export default {
           status: "Submitted",
           version: 1,
           createdDate: new Date().toUTCString(),
-          author: this.author,
+          author: this.$auth.user.value.name,
           description: this.description,
         };
 
