@@ -257,7 +257,6 @@ export default {
     };
   },
   mounted() {
-    // fetch("http://localhost:3000/presets");
     fetch(
       "https://hubhop.azurewebsites.net/api/presets?code=vVm8UnLAsxiaPAX2BNA8T2TSsG3sp8UCJKuOb7b4Jjm3N3zQzCsB3A=="
     )

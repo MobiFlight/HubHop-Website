@@ -1,6 +1,6 @@
 {
-  "domain": "hubhop.eu.auth0.com",
-  "client_id": "LXDyKIiMPztrI1mPOI9RcWRRGBQjalBk",
-  "redirect_uri": "http://localhost:8080/callback",
-  "audience": "https://hubhop.eu.auth0.com/api/v2/"
+  "domain": "mobiflightid.b2clogin.com/mobiflightid.onmicrosoft.com/B2C_1_mobiflight/oauth2/v2.0/",
+  "client_id": "3fa991e7-f622-4b85-bdcf-d08af4083f79",
+  "redirect_uri": "https://hubhop.io:8080/callback",
+  "audience": "https://mobiflightid.b2clogin.com/mobiflightid.onmicrosoft.com/B2C_1_mobiflight/oauth2/v2.0/"
 }

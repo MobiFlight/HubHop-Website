@@ -24,23 +24,15 @@
           <router-link @click="scrollTop" class="px-5" to="/team"
             >The Team</router-link
           > -->
-          <div class="flex items-center text-2xl" v-if="!$auth.loading.value">
-            <button
-              class="px-5"
-              v-if="!$auth.isAuthenticated.value"
-              @click="login"
-            >
+          <div class="flex items-center text-2xl">
+            <button v-if="!account" class="px-5" @click="login">
               Log in
             </button>
-            <button
-              class="px-5"
-              v-if="$auth.isAuthenticated.value"
-              @click="logout"
-            >
+            <div v-if="account" class="px-5">Hi, {{ account.name }}</div>
+            <button v-if="account" class="px-5" @click="logout">
               Log out
             </button>
-            <div v-if="$auth.isAuthenticated.value" class="px-5">Hi, {{ $auth.user.value.name }}</div>
-            <img v-if="$auth.isAuthenticated.value" class="w-10" :src="$auth.user.value.picture" />
+            <img class="w-10" />
           </div>
         </div>
       </div>
@@ -49,27 +41,49 @@
 </template>
 
 <script>
+import { PublicClientApplication } from "@azure/msal-browser";
+
 export default {
   name: "Navbar",
   data() {
     return {
+      account: undefined,
       view: {
         topOfPage: true,
       },
     };
   },
+  async created() {
+    this.$msalInstance = new PublicClientApplication(
+      this.$store.state.msalConfig
+    );
+    const myAccounts = this.$msalInstance.getAllAccounts();
+    this.account = myAccounts[0];
+  },
   beforeMount() {
     window.addEventListener("scroll", this.handleScroll);
   },
   methods: {
-    login() {
-      this.$auth.loginWithRedirect();
+    async login() {
+      await this.$msalInstance
+        .loginPopup({})
+        .then(() => {
+          const myAccounts = this.$msalInstance.getAllAccounts();
+          this.account = myAccounts[0];
+          console.log(this.account);
+        })
+        .catch((error) => {
+          console.error(`error during authentication: ${error}`);
+        });
     },
     // Log the user out
-    logout() {
-      this.$auth.logout({
-        returnTo: window.location.origin,
-      });
+    async logout() {
+      await this.$msalInstance
+        .logout({})
+        .then(() => {})
+        .catch((error) => {
+          console.error(error);
+        });
     },
     handleScroll() {
       if (window.pageYOffset > 0) {
@@ -89,8 +103,14 @@ export default {
     scrollListener: function() {
       this.visible = window.scrollY > 150;
     },
-    mounted: function() {
-      window.addEventListener("scroll", this.scrollListener);
+    mounted() {
+      const accounts = this.$msalInstance.getAllAccounts();
+      if (accounts.length == 0) {
+        console.log("here");
+        return;
+      }
+      this.account = accounts[0];
+      console.log(this.account);
     },
     beforeUnmount: function() {
       window.removeEventListener("scroll", this.scrollListener);

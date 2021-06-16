@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@auth0/auth0-spa-js": "^1.15.0",
+    "@azure/msal-browser": "^2.14.2",
     "@headlessui/vue": "^1.2.0",
     "@heroicons/vue": "^1.0.1",
     "@vue-hero-icons/outline": "^1.7.2",
@@ -23,7 +24,9 @@
     "vue-resource": "^1.5.2",
     "vue-router": "^4.0.0-0",
     "vue-sweetalert2": "^4.3.1",
-    "vuejs-smart-table": "^0.1.12"
+    "vuejs-smart-table": "^0.1.12",
+    "vuex": "^4.0.1",
+    "vuex-persistedstate": "^4.0.0-beta.3"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

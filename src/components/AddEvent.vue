@@ -65,7 +65,6 @@
           <input
             class="bg-hhCard w-80 text-hhText p-2 rounded-lg border border-hhOrange"
             type="text"
-            
             placeholder="YourUserName"
           />
         </form>
@@ -137,12 +136,18 @@
 <script>
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
+import { PublicClientApplication } from "@azure/msal-browser";
 
 export default {
   setup() {
     return { v$: useVuelidate() };
   },
   Name: "Add",
+  async created() {
+    this.$msalInstance = new PublicClientApplication(
+      this.$store.state.msalConfig
+    );
+  },
   data() {
     return {
       vendor: "",
@@ -180,11 +185,12 @@ export default {
       }
     },
     submitPreset(onSuccessReload) {
+      const myAccounts = this.$msalInstance.getAllAccounts();
+      this.account = myAccounts[0];
       this.v$.$validate();
       if (!this.v$.$error) {
         const url =
           "https://hubhop.azurewebsites.net/api/presets?code=yJVAredcAmi5YDQDJixvwcaHZC3taYRyVJUI09OLrIplRG8ExHoB1g==";
-        // const url = "http://localhost:3000/presets";
 
         // post body data
         const preset = {
@@ -206,7 +212,7 @@ export default {
           status: "Submitted",
           version: 1,
           createdDate: new Date().toUTCString(),
-          author: this.$auth.user.value.name,
+          author: this.account.name,
           description: this.description,
         };
 
