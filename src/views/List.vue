@@ -216,14 +216,15 @@ export default {
   },
   methods: {
     deletePreset(id) {
-      fetch(
-        "https://hubhop.azurewebsites.net/api/presets/" +
-          id +
-          "?code=LWx7IkK2IZDOsLVEHm07Bi0CEoMb6MEIE0mfvoNDlEEI87FxtSkpEQ==",
-        {
-          method: "DELETE",
-        }
-      ).then((res) => {
+      fetch(this.$hubHopApi.baseUrl + "/presets/" + id, {
+        credentials: "include",
+        method: "DELETE",
+        headers: {
+          Authorization:
+            "Bearer " +
+            "abJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ilg1ZVhrNHh5b2pORnVtMWtsMll0djhkbE5QNC1jNTdkTzZRR1RWQndhTmsifQ.eyJpc3MiOiJodHRwczovL21vYmlmbGlnaHRpZC5iMmNsb2dpbi5jb20vNDE1YjdkNWQtN2VmZC00YWRiLThkMTItNGM0YjI3MjE5ZDNjL3YyLjAvIiwiZXhwIjoxNjIzOTYwMjY3LCJuYmYiOjE2MjM5NTY2NjcsImF1ZCI6IjNmYTk5MWU3LWY2MjItNGI4NS1iZGNmLWQwOGFmNDA4M2Y3OSIsInN1YiI6IjUzYTY4ZWNkLTdlZTQtNGEwZi05YTg3LTIyNGJiOWYyMmRmOSIsIm5hbWUiOiJEb2NNb2ViaXV6IiwiZW1haWxzIjpbInNlYmFzdGlhbkBtb2ViaXVzLW9ubGluZS5jb20iXSwidGZwIjoiQjJDXzFfbW9iaWZsaWdodCIsInNjcCI6InByZXNldHMiLCJhenAiOiIzZmE5OTFlNy1mNjIyLTRiODUtYmRjZi1kMDhhZjQwODNmNzkiLCJ2ZXIiOiIxLjAiLCJpYXQiOjE2MjM5NTY2Njd9.JJ-_MvYLX0sl9DwAWtPfEk_CylOB1Lde3bva9I2cvkYZytJ7mhCTkJTGh9o9LjW5vuHF4QU2jzMSNlaIA9gynSy2OAGG5FsJf9XCAmSCLwiWTHvf9zHg29waCXQyCAvcpzm4UJ8Hob1asovAVJBhUa9-fDw7LnpbJGezPJXg7hTdMdvJCSpZsu-GJlwam9KAenZPo1JS8FrKaOpz6AGYhweVMNgLZHtm7kaxIs34wKZHTqnLi5XGsChqP3GOcPrctKozJwOSq6JZ8IB57h77Mj0ZSJq4Qqpxcx39CdmGXmLoh4cCHI5G_2OBVifh6fd0fteE4L0r1pnAPAce8S3WVg",
+        },
+      }).then((res) => {
         if (res.status != 200) return;
         this.$swal({
           position: "center",
@@ -257,9 +258,7 @@ export default {
     };
   },
   mounted() {
-    fetch(
-      "https://hubhop.azurewebsites.net/api/presets?code=vVm8UnLAsxiaPAX2BNA8T2TSsG3sp8UCJKuOb7b4Jjm3N3zQzCsB3A=="
-    )
+    fetch(this.$hubHopApi.baseUrl + "/presets/")
       .then((res) => res.json())
       .then((data) => (this.presets = data));
   },

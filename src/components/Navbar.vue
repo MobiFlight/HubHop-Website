@@ -70,10 +70,33 @@ export default {
         .then(() => {
           const myAccounts = this.$msalInstance.getAllAccounts();
           this.account = myAccounts[0];
-          console.log(this.account);
+          this.$msalInstance;
+          this.getToken()
+
         })
         .catch((error) => {
           console.error(`error during authentication: ${error}`);
+        });
+    },
+    async getToken() {
+      var request = {
+        scopes: ["https://mobiflightid.onmicrosoft.com/api/presets"],
+      };
+
+      await this.$msalInstance
+        .acquireTokenSilent(request)
+        .then((tokenResponse) => {
+          // Do something with the tokenResponse
+          console.log(tokenResponse)
+        })
+        .catch(async () => {
+          // if (error instanceof InteractionRequiredAuthError) {
+          //   // fallback to interaction when silent call fails
+          //   return this.$msalInstance.acquireTokenPopup(request);
+          // }
+        })
+        .catch(() => {
+          // handleError(error);
         });
     },
     // Log the user out

@@ -7,10 +7,12 @@ import VueSweetalert2 from "vue-sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 import VueFinalModal from "vue-final-modal";
 import store from './store';
+import hubHopApi from "./services/hubhop-api";
 
 
 const app = createApp(App)
 app.config.globalProperties.$msalInstance = {};
+app.config.globalProperties.$hubHopApi = hubHopApi;
 app.use(router)
 .use(SmartTable)
 .use(VueSweetalert2)

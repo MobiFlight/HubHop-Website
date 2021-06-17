@@ -79,7 +79,7 @@ export default {
     };
   },
   mounted() {
-    fetch("https://hubhop.azurewebsites.net/api/presets/" + this.id + "?code=Yut6qZknZj6oTlAqroRT6SSgrAjtQOicgWHdmmzZWVDQi/V6yS/UMQ==")
+    fetch(this.$hubHopApi.baseUrl + "/presets/" + this.id)
       .then((res) => res.json())
       .then((data) => (this.preset = data))
       .catch((err) => console.log(err.massage));

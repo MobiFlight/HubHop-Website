@@ -190,7 +190,7 @@ export default {
       this.v$.$validate();
       if (!this.v$.$error) {
         const url =
-          "https://hubhop.azurewebsites.net/api/presets?code=yJVAredcAmi5YDQDJixvwcaHZC3taYRyVJUI09OLrIplRG8ExHoB1g==";
+          this.$hubHopApi.baseUrl + "/presets";
 
         // post body data
         const preset = {
@@ -212,7 +212,7 @@ export default {
           status: "Submitted",
           version: 1,
           createdDate: new Date().toUTCString(),
-          author: this.account.name,
+          // author: this.account.name,
           description: this.description,
         };
 

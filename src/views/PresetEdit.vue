@@ -120,10 +120,8 @@ export default {
   methods: {
     updatePreset(id, onSuccessReload) {
       const url =
-        "https://hubhop.azurewebsites.net/api/presets/" +
-        id +
-        "?code=ZpSdeNay2NhZNIqrRwx6N/7TDGiTStpL2PTbLe4IZmU3gDF1q11eQQ==";
-      // const url = "http://localhost:3000/presets/" + id;
+        this.$hubHopApi.baseUrl + "/presets/" +
+        id;
 
       // post body data
       const preset = {
@@ -179,10 +177,8 @@ export default {
   },
   mounted() {
     fetch(
-      "https://hubhop.azurewebsites.net/api/presets/" +
-        this.id +
-        "?code=Yut6qZknZj6oTlAqroRT6SSgrAjtQOicgWHdmmzZWVDQi/V6yS/UMQ=="
-    )
+      this.$hubHopApi.baseUrl + "/presets/" +
+        this.id)
       .then((res) => res.json())
       .then((data) => (this.preset = data));
   },
