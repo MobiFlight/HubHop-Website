@@ -155,7 +155,7 @@ export default {
       };
       // send POST request
       fetch(url, options).then((res) => {
-        if (res.status != 200) return;
+        if (res.status != 201) return;
         this.$swal({
           position: "center",
           icon: "success",
