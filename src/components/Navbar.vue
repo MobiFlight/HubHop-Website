@@ -42,6 +42,7 @@
 
 <script>
 import { PublicClientApplication } from "@azure/msal-browser";
+import { mapMutations } from "vuex";
 
 export default {
   name: "Navbar",
@@ -64,6 +65,7 @@ export default {
     window.addEventListener("scroll", this.handleScroll);
   },
   methods: {
+    ...mapMutations(["setAccessToken"]),
     async login() {
       await this.$msalInstance
         .loginPopup({})
@@ -71,33 +73,32 @@ export default {
           const myAccounts = this.$msalInstance.getAllAccounts();
           this.account = myAccounts[0];
           this.$msalInstance;
-          this.getToken()
-
+          this.getAccessToken();
         })
         .catch((error) => {
           console.error(`error during authentication: ${error}`);
         });
     },
-    async getToken() {
-      var request = {
+    async getAccessToken() {
+      let request = {
         scopes: ["https://mobiflightid.onmicrosoft.com/api/presets"],
       };
-
-      await this.$msalInstance
-        .acquireTokenSilent(request)
-        .then((tokenResponse) => {
-          // Do something with the tokenResponse
-          console.log(tokenResponse)
-        })
-        .catch(async () => {
-          // if (error instanceof InteractionRequiredAuthError) {
-          //   // fallback to interaction when silent call fails
-          //   return this.$msalInstance.acquireTokenPopup(request);
-          // }
-        })
-        .catch(() => {
-          // handleError(error);
-        });
+      const msalInstance = new PublicClientApplication(
+        this.$store.state.msalConfig
+      );
+      try {
+        let tokenResponse = await msalInstance.acquireTokenSilent(request);
+        this.$store.commit("setAccessToken", tokenResponse.accessToken);
+      } catch (error) {
+        console.error(
+          "Silent token acquisition failed. Using interactive mode"
+        );
+        let tokenResponse = await msalInstance.acquireTokenPopup(request);
+        console.log(
+          `Access token acquired via interactive auth ${tokenResponse.accessToken}`
+        );
+        this.$store.commit("setAccessToken", tokenResponse.accessToken);
+      }
     },
     // Log the user out
     async logout() {

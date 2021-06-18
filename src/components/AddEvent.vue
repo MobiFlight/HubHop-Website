@@ -222,6 +222,7 @@ export default {
           body: JSON.stringify(preset),
           headers: {
             "Content-Type": "application/json",
+            Authorization: "Bearer " + this.$store.state.accessToken
           },
         };
         this.label = "";
@@ -235,7 +236,6 @@ export default {
             icon: "success",
             title: "Your event/variable has been saved",
             showConfirmButton: false,
-            backdrop: false,
             background: "#33353e",
             toast: true,
             timer: 2000,

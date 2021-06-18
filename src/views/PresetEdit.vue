@@ -119,9 +119,7 @@ export default {
   },
   methods: {
     updatePreset(id, onSuccessReload) {
-      const url =
-        this.$hubHopApi.baseUrl + "/presets/" +
-        id;
+      const url = this.$hubHopApi.baseUrl + "/presets/" + id;
 
       // post body data
       const preset = {
@@ -147,11 +145,11 @@ export default {
         description: this.preset.description,
       };
 
-      // request options
       const options = {
-        method: "PATCH",
+        method: "PUT",
         body: JSON.stringify(preset),
         headers: {
+          Authorization: "Bearer " + this.$store.state.accessToken,
           "Content-Type": "application/json",
         },
       };
@@ -163,7 +161,6 @@ export default {
           icon: "success",
           title: "Your event/variable has been saved",
           showConfirmButton: false,
-          backdrop: false,
           background: "#33353e",
           toast: true,
           timer: 2000,
@@ -176,9 +173,7 @@ export default {
     },
   },
   mounted() {
-    fetch(
-      this.$hubHopApi.baseUrl + "/presets/" +
-        this.id)
+    fetch(this.$hubHopApi.baseUrl + "/presets/" + this.id)
       .then((res) => res.json())
       .then((data) => (this.preset = data));
   },
