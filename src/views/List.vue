@@ -104,6 +104,7 @@
                   </button>
                 </router-link>
                 <router-link
+                  v-if="roles.includes('Moderator')"
                   :to="{ name: 'PresetEdit', params: { id: preset.id } }"
                 >
                   <button
@@ -122,6 +123,7 @@
                   </button>
                 </router-link>
                 <button
+                  v-if="roles.includes('Moderator')"
                   @click="confirmDelete = !confirmDelete"
                   class="inline-flex items-center justify-center h-8 w-8 py-1 px-2 font-medium text-hhText bg-hhBG rounded-md hover:bg-hhOrange hover:text-hhBG focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
                 >
@@ -216,15 +218,13 @@ export default {
     AddEventModal,
   },
   methods: {
-    ...mapMutations(["setAccessToken"]),
+    ...mapMutations(["setAccessToken", "setUserSettings"]),
     deletePreset(id) {
       fetch(this.$hubHopApi.baseUrl + "/presets/" + id, {
         credentials: "include",
         method: "DELETE",
         headers: {
-          Authorization:
-            "Bearer " +
-            this.$store.state.accessToken,
+          Authorization: "Bearer " + this.$store.state.accessToken,
         },
       }).then((res) => {
         if (res.status != 200) return;
@@ -245,6 +245,8 @@ export default {
     return {
       account: undefined,
       confirmDelete: false,
+      roles: this.$store.state.userSettings.roles,
+      anzeigen: true,
       presets: [],
       totalPages: 1,
       currentPage: 1,

@@ -65,7 +65,7 @@ export default {
     window.addEventListener("scroll", this.handleScroll);
   },
   methods: {
-    ...mapMutations(["setAccessToken"]),
+    ...mapMutations(["setAccessToken", "setUserSettings"]),
     async login() {
       await this.$msalInstance
         .loginPopup({})
@@ -73,7 +73,7 @@ export default {
           const myAccounts = this.$msalInstance.getAllAccounts();
           this.account = myAccounts[0];
           this.$msalInstance;
-          this.getAccessToken();
+          this.getAccessToken().then(() => this.getUserSettings());
         })
         .catch((error) => {
           console.error(`error during authentication: ${error}`);
@@ -100,8 +100,29 @@ export default {
         this.$store.commit("setAccessToken", tokenResponse.accessToken);
       }
     },
+    async getUserSettings() {
+      const url = this.$hubHopApi.baseUrl + "/settings/user";
+      const options = {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + this.$store.state.accessToken,
+        },
+      };
+      fetch(url, options)
+        .then((response) => response.json())
+        .then((userSettings) => {
+          this.$store.commit("setUserSettings", userSettings);
+          console.log(userSettings);
+        });
+    },
     // Log the user out
     async logout() {
+      this.$store.commit("setUserSettings", {
+        roles: ["Guest"],
+        username: "Guest",
+      });
+      this.$store.commit("setAccessToken", "");
       await this.$msalInstance
         .logout({})
         .then(() => {})

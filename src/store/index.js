@@ -17,11 +17,18 @@ const store = createStore({
         },
       },
       accessToken: "",
+      userSettings: {
+        roles: ["Guest"],
+        username: "Guest",
+      },
     };
   },
   mutations: {
     setAccessToken(state, token) {
       state.accessToken = token;
+    },
+    setUserSettings(state, userSettings) {
+      state.userSettings = userSettings;
     },
   },
   plugins: [createPersistedState()],
