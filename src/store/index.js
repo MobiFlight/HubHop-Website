@@ -6,11 +6,10 @@ const store = createStore({
     return {
       msalConfig: {
         auth: {
-          clientId: "3fa991e7-f622-4b85-bdcf-d08af4083f79",
-          authority:
-            "https://id.mobiflight.com/mobiflightid.onmicrosoft.com/B2C_1_mobiflight",
-          knownAuthorities: ["id.mobiflight.com"],
-          redirectUri: "https://hubhop.io:8080/callback",
+          clientId: process.env.VUE_APP_HUBHOP_OAUTH_CLIENTID,
+          authority: process.env.VUE_APP_HUBHOP_OAUTH_AUTHORITY,
+          knownAuthorities: [ process.env.VUE_APP_HUBHOP_OAUTH_KNOWN_AUTHORITIES ],
+          redirectUri: process.env.VUE_APP_HUBHOP_OAUTH_REDIRECT_URI,
         },
         cache: {
           cacheLocation: "localStorage",
@@ -18,8 +17,8 @@ const store = createStore({
       },
       accessToken: "",
       userSettings: {
-        roles: ["Guest"],
-        username: "Guest",
+        roles: [ process.env.VUE_APP_HUBHOP_ROLES_DEFAULT_ROLE ],
+        username: process.env.VUE_APP_HUBHOP_ROLES_DEFAULT_NAME,
       },
     };
   },

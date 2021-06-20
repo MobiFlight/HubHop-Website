@@ -81,7 +81,7 @@ export default {
     },
     async getAccessToken() {
       let request = {
-        scopes: ["https://mobiflightid.onmicrosoft.com/api/presets"],
+        scopes: [process.env.VUE_APP_HUBHOP_OAUTH_SCOPES],
       };
       const msalInstance = new PublicClientApplication(
         this.$store.state.msalConfig
