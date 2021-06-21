@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/Home.vue";
 import Team from "../views/Team.vue";
 import Api from "../views/Api.vue";
@@ -11,7 +11,6 @@ import PresetView from "../views/PresetView.vue";
 import Callback from '../views/Callback'
 import ErrorPage from '../views/Error'
 
-// import { routeGuard } from '../../auth'
 
 
 const routes = [
@@ -34,7 +33,6 @@ const routes = [
     path: "/list",
     name: "List",
     component: List,
-    // beforeEnter: routeGuard,
   },
   {
     path: "/add",
@@ -76,7 +74,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes,
 });
 
