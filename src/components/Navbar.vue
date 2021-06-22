@@ -66,9 +66,9 @@ export default {
   },
   methods: {
     ...mapMutations(["setAccessToken", "setUserSettings"]),
-    login() {
-      this.$msalInstance
-        .loginRedirect({})
+    async login() {
+      await this.$msalInstance
+        .loginPopup({})
         .then(() => {
           const myAccounts = this.$msalInstance.getAllAccounts();
           this.account = myAccounts[0];
@@ -79,7 +79,7 @@ export default {
           console.error(`error during authentication: ${error}`);
         });
     },
-    getAccessToken() {
+    async getAccessToken() {
       let request = {
         scopes: [process.env.VUE_APP_HUBHOP_OAUTH_SCOPES],
       };
@@ -87,13 +87,13 @@ export default {
         this.$store.state.msalConfig
       );
       try {
-        let tokenResponse = msalInstance.acquireTokenSilent(request);
+        let tokenResponse = await msalInstance.acquireTokenSilent(request);
         this.$store.commit("setAccessToken", tokenResponse.accessToken);
       } catch (error) {
         console.error(
           "Silent token acquisition failed. Using interactive mode"
         );
-        let tokenResponse = msalInstance.acquireTokenRedirect(request);
+        let tokenResponse = await msalInstance.acquireTokenPopup(request);
         console.log(
           `Access token acquired via interactive auth ${tokenResponse.accessToken}`
         );

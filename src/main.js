@@ -9,6 +9,7 @@ import VueFinalModal from "vue-final-modal";
 import store from './store';
 import hubHopApi from "./services/hubhop-api";
 
+
 const app = createApp(App)
 app.config.globalProperties.$msalInstance = {};
 app.config.globalProperties.$hubHopApi = hubHopApi;

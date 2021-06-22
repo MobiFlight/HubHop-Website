@@ -7,21 +7,37 @@
           v-model="filters.vendor.value"
           class="bg-hhCard px-5 py-2 max-w-xs text-lg rounded"
         >
-          <option value="" selected>All Vendors</option>
-          <option value="ASOBO">Asobo</option>
-          <option value="Fly by Wire">Fly by Wire Simulation</option>
-          <option value="Aerosoft">Aerosoft</option>
-          <option value="Working Title">Working Title</option>
+          <option value="">All Vendors</option>
+          <option
+            v-for="vendor in uniqueVendors"
+            :value="vendor"
+            :key="vendor"
+            >{{ vendor }}</option
+          >
         </select>
         <select
           v-model="filters.aircraft.value"
           class="bg-hhCard px-5 py-2 max-w-xs text-lg rounded"
         >
-          <option value="" selected>All Aircraft</option>
-          <option value="A320">A320</option>
-          <option value="BONANZA">Bonanza</option>
-          <option value="CRJ 550-700">CRJ 550-700</option>
-          <option value="CJ4">CJ4</option>
+          <option value="">All Aircraft</option>
+          <option
+            v-for="aircraft in uniqueAircraft"
+            :value="aircraft"
+            :key="aircraft"
+            >{{ aircraft }}</option
+          >
+        </select>
+        <select
+          v-model="filters.system.value"
+          class="bg-hhCard px-5 py-2 max-w-xs text-lg rounded"
+        >
+          <option value="">All Systems</option>
+          <option
+            v-for="system in uniqueSystem"
+            :value="system"
+            :key="system"
+            >{{ system }}</option
+          >
         </select>
         <select
           v-model="filters.type.value"
@@ -59,6 +75,7 @@
           <tr class="text-lg">
             <th>Vendor</th>
             <th>Aircraft</th>
+            <th>System</th>
             <th>Preset name</th>
             <th>Description</th>
             <th>Type</th>
@@ -69,6 +86,7 @@
           <VTr :row="preset" v-for="preset in rows" :key="preset._id">
             <td>{{ preset.vendor }}</td>
             <td>{{ preset.aircraft }}</td>
+            <td>{{ preset.system }}</td>
             <td>{{ preset.label }}</td>
             <td>{{ preset.description }}</td>
             <td>{{ preset.presetType }}</td>
@@ -246,7 +264,6 @@ export default {
       account: undefined,
       confirmDelete: false,
       roles: this.$store.state.userSettings.roles,
-      anzeigen: true,
       presets: [],
       totalPages: 1,
       currentPage: 1,
@@ -260,6 +277,17 @@ export default {
         status: { value: "", keys: ["status"] },
       },
     };
+  },
+  computed: {
+    uniqueVendors() {
+      return [...new Set(this.presets.map(({ vendor }) => vendor))];
+    },
+    uniqueAircraft() {
+      return [...new Set(this.presets.map(({ aircraft }) => aircraft))];
+    },
+    uniqueSystem() {
+      return [...new Set(this.presets.map(({ system }) => system))];
+    },
   },
   mounted() {
     fetch(this.$hubHopApi.baseUrl + "/presets/")
