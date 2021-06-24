@@ -221,7 +221,7 @@
       </ul>
     </div>
     <div v-else>
-      <h4>Loading ...</h4>
+      <div class="spinner"></div>
     </div>
   </div>
 </template>
@@ -314,5 +314,26 @@ li.active {
   font-weight: bold;
   font-size: larger;
   align-items: center;
+}
+@keyframes spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner:before {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100px;
+  height: 100px;
+  margin-top: -10px;
+  margin-left: -10px;
+  border-radius: 50%;
+  border-top: 2px solid rgb(255, 160, 71);
+  border-right: 2px solid transparent;
+  animation: spinner 0.6s linear infinite;
 }
 </style>
