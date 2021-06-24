@@ -210,15 +210,6 @@
         v-model:currentPage="currentPage"
         :total-pages="totalPages"
       />
-      <strong>[DEBUG] Selected:</strong>
-      <div v-if="selectedRows.length === 0">
-        No rows selected
-      </div>
-      <ul>
-        <li v-for="row in selectedRows" :key="row.id">
-          {{ row.path }}#{{ row.label }}#{{ row.code }}
-        </li>
-      </ul>
     </div>
     <div v-else>
       <div class="spinner"></div>
