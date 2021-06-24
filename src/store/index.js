@@ -15,6 +15,7 @@ const store = createStore({
           cacheLocation: "localStorage",
         },
       },
+      loggedIn: false,
       accessToken: "",
       userSettings: {
         roles: [ process.env.VUE_APP_HUBHOP_ROLES_DEFAULT_ROLE ],
@@ -29,6 +30,9 @@ const store = createStore({
     setUserSettings(state, userSettings) {
       state.userSettings = userSettings;
     },
+    setLoggedIn(state, loggedIn) {
+      state.loggedIn = loggedIn;
+    }
   },
   plugins: [createPersistedState()],
 });

@@ -228,9 +228,9 @@ export default {
     AddEventModal,
   },
   created() {
-    if (this.$store.state.userSettings.username == "Guest") {
-      return;
-    } else this.getAccessToken().then(() => this.getUserSettings());
+    if (this.$store.state.loggedIn == true) {
+      return this.getAccessToken().then(() => this.getUserSettings());
+    }
   },
   methods: {
     async getAccessToken() {
@@ -249,7 +249,6 @@ export default {
           `"Silent token acquisition failed. Using interactive mode" + ${error}`
         );
       }
-      return console.log(this.account);
     },
     async getUserSettings() {
       const url = this.$hubHopApi.baseUrl + "/settings/user";

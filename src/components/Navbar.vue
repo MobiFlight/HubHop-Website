@@ -73,7 +73,8 @@ export default {
           const myAccounts = this.$msalInstance.getAllAccounts();
           this.account = myAccounts[0];
           this.$msalInstance;
-          // this.getAccessToken().then(() => this.getUserSettings());
+          this.$store.commit("setLoggedIn", true);
+          this.getAccessToken().then(() => this.getUserSettings());
         })
         .catch((error) => {
           console.error(`error during authentication: ${error}`);
@@ -118,6 +119,7 @@ export default {
         roles: ["Guest"],
         username: "Guest",
       });
+      this.$store.commit("setLoggedIn", false)
       this.$store.commit("setAccessToken", "");
       await this.$msalInstance
         .logout({})
