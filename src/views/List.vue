@@ -219,6 +219,7 @@
 
 <script>
 import AddEventModal from "../components/AddEventModal.vue";
+import { PublicClientApplication } from "@azure/msal-browser";
 import { mapMutations } from "vuex";
 
 export default {
@@ -226,7 +227,46 @@ export default {
   components: {
     AddEventModal,
   },
+  created() {
+    if (this.$store.state.userSettings.username == "Guest") {
+      return;
+    } else this.getAccessToken().then(() => this.getUserSettings());
+  },
   methods: {
+    async getAccessToken() {
+      let request = {
+        scopes: [process.env.VUE_APP_HUBHOP_OAUTH_SCOPES],
+        account: this.$store.state.userSettings.username,
+      };
+      const msalInstance = new PublicClientApplication(
+        this.$store.state.msalConfig
+      );
+      try {
+        let tokenResponse = await msalInstance.acquireTokenSilent(request);
+        this.$store.commit("setAccessToken", tokenResponse.accessToken);
+      } catch (error) {
+        console.error(
+          `"Silent token acquisition failed. Using interactive mode" + ${error}`
+        );
+      }
+      return console.log(this.account);
+    },
+    async getUserSettings() {
+      const url = this.$hubHopApi.baseUrl + "/settings/user";
+      const options = {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + this.$store.state.accessToken,
+        },
+      };
+      fetch(url, options)
+        .then((response) => response.json())
+        .then((userSettings) => {
+          this.$store.commit("setUserSettings", userSettings);
+          console.log(userSettings);
+        });
+    },
     ...mapMutations(["setAccessToken", "setUserSettings"]),
     deletePreset(id) {
       fetch(this.$hubHopApi.baseUrl + "/presets/" + id, {

@@ -73,7 +73,7 @@ export default {
           const myAccounts = this.$msalInstance.getAllAccounts();
           this.account = myAccounts[0];
           this.$msalInstance;
-          this.getAccessToken().then(() => this.getUserSettings());
+          // this.getAccessToken().then(() => this.getUserSettings());
         })
         .catch((error) => {
           console.error(`error during authentication: ${error}`);
@@ -82,6 +82,7 @@ export default {
     async getAccessToken() {
       let request = {
         scopes: [process.env.VUE_APP_HUBHOP_OAUTH_SCOPES],
+        account: this.account
       };
       const msalInstance = new PublicClientApplication(
         this.$store.state.msalConfig
@@ -91,14 +92,9 @@ export default {
         this.$store.commit("setAccessToken", tokenResponse.accessToken);
       } catch (error) {
         console.error(
-          "Silent token acquisition failed. Using interactive mode"
+          `"Silent token acquisition failed. Using interactive mode" + ${error}`
         );
-        let tokenResponse = await msalInstance.acquireTokenPopup(request);
-        console.log(
-          `Access token acquired via interactive auth ${tokenResponse.accessToken}`
-        );
-        this.$store.commit("setAccessToken", tokenResponse.accessToken);
-      }
+      } return console.log("This Account is: " + this.account)
     },
     async getUserSettings() {
       const url = this.$hubHopApi.baseUrl + "/settings/user";
