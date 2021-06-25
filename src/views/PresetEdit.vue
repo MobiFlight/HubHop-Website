@@ -110,6 +110,8 @@
 </template>
 
 <script>
+import { PublicClientApplication } from "@azure/msal-browser";
+
 export default {
   props: ["id"],
   data() {
@@ -117,8 +119,15 @@ export default {
       preset: null,
     };
   },
+    async created() {
+    this.$msalInstance = new PublicClientApplication(
+      this.$store.state.msalConfig
+    );
+  },
   methods: {
     updatePreset(id, onSuccessReload) {
+      const myAccounts = this.$msalInstance.getAllAccounts();
+      this.account = myAccounts[0];
       const url = this.$hubHopApi.baseUrl + "/presets/" + id;
 
       // post body data
@@ -139,7 +148,6 @@ export default {
         tags: this.preset.tags,
         presetType: this.preset.presetType,
         status: "Updated",
-        version: this.preset.version + 1,
         createdDate: new Date().toUTCString(),
         author: this.preset.author,
         description: this.preset.description,
@@ -149,12 +157,13 @@ export default {
         method: "PUT",
         body: JSON.stringify(preset),
         headers: {
-          Authorization: "Bearer " + this.$store.state.accessToken,
           "Content-Type": "application/json",
+          Authorization: "Bearer " + this.$store.state.accessToken,
         },
       };
       // send POST request
       fetch(url, options).then((res) => {
+        console.log(res)
         if (res.status != 201) return;
         this.$swal({
           position: "center",

@@ -213,7 +213,6 @@
                   </button>
                 </router-link>
                 <router-link
-                  v-if="roles.includes('Moderator')"
                   :to="{ name: 'PresetEdit', params: { id: preset.id } }"
                 >
                   <button
