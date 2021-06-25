@@ -1,11 +1,40 @@
 <template>
-  <div class="container mx-auto text-lg mb-10 h-full">
-    <h2 class="flex items-start mb-5">Filter</h2>
+  <div class="container mx-auto text-base mb-10 h-full">
+    <h2 class="flex mb-5 items-center">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="mr-2 h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+        /></svg
+      >Filter
+    </h2>
     <div class="flex justify-between items-center mb-5">
-      <div class="flex items-center space-x-5">
+      <div class="flex items-center">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="mr-2 h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+          />
+        </svg>
         <select
           v-model="filters.vendor.value"
-          class="bg-hhCard px-5 py-2 max-w-xs text-lg rounded"
+          class="bg-hhCard mr-5 px-2 py-2 max-w-xs text-base rounded"
         >
           <option value="">All Vendors</option>
           <option
@@ -15,9 +44,23 @@
             >{{ vendor }}</option
           >
         </select>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="mr-2 h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+          />
+        </svg>
         <select
           v-model="filters.aircraft.value"
-          class="bg-hhCard px-5 py-2 max-w-xs text-lg rounded"
+          class="bg-hhCard mr-5 px-2 py-2 max-w-xs text-base rounded"
         >
           <option value="">All Aircraft</option>
           <option
@@ -27,9 +70,29 @@
             >{{ aircraft }}</option
           >
         </select>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="mr-2 h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+          />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+          />
+        </svg>
         <select
           v-model="filters.system.value"
-          class="bg-hhCard px-5 py-2 max-w-xs text-lg rounded"
+          class="bg-hhCard mr-5 px-2 py-2 max-w-xs text-base rounded"
         >
           <option value="">All Systems</option>
           <option
@@ -39,16 +102,44 @@
             >{{ system }}</option
           >
         </select>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="mr-2 h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
+          />
+        </svg>
         <select
           v-model="filters.type.value"
-          class="bg-hhCard px-5 py-2 max-w-xs text-lg rounded"
+          class="bg-hhCard mr-5 px-2 py-2 max-w-xs text-base rounded"
         >
           <option value="" selected>Select Input/Output</option>
           <option value="Input">Input</option>
           <option value="Output">Output</option>
         </select>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="mr-2 h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M8 16l2.879-2.879m0 0a3 3 0 104.243-4.242 3 3 0 00-4.243 4.242zM21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
         <input
-          class="bg-hhCard px-5 py-2 max-w-xs text-lg rounded"
+          class="bg-hhCard px-2 py-2 max-w-xs text-base rounded"
           placeholder="Search Preset Name"
           v-model="filters.name.value"
         />
@@ -72,7 +163,7 @@
         style="width:100%"
       >
         <template #head>
-          <tr class="text-lg">
+          <tr class="text-base">
             <th>Vendor</th>
             <th>Aircraft</th>
             <th>System</th>

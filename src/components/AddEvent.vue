@@ -7,6 +7,20 @@
           <!-- Publisher / vendor -->
           <label class="flex text-transparent mb-1 items-start">ph</label>
           <div class="flex items-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="text-hhText mr-2 h-10 w-10"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+              />
+            </svg>
             <select
               class="bg-hhCard text-hhText p-2 w-full rounded-lg border border-hhOrange"
               v-if="!newVendorPlus"
@@ -50,6 +64,20 @@
           </div>
           <!-- Aircraft -->
           <div class="flex items-center mt-5">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="text-hhText mr-2 h-10 w-10"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+              />
+            </svg>
             <select
               class="bg-hhCard text-hhText p-2 w-full rounded-lg border border-hhOrange"
               v-if="!newAircraftPlus"
@@ -93,6 +121,26 @@
           </div>
           <!-- System -->
           <div class="flex items-center mt-5">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="text-hhText mr-2 h-10 w-10"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+              />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+              />
+            </svg>
             <select
               class="bg-hhCard text-hhText p-2 w-full rounded-lg border border-hhOrange"
               v-if="!newSystemPlus"
@@ -135,25 +183,63 @@
             </label>
           </div>
           <!-- input or output -->
-          <select
-            class="bg-hhCard text-hhText mt-5 p-2 rounded-lg border border-hhOrange"
-            v-model="presetType"
-          >
-            <option value="" disabled selected>Input/Output</option>
-            <option value="Input">Input</option>
-            <option value="Output">Output</option>
-          </select>
-          <span class="-mt-3 text-red-500" v-if="v$.presetType.$error">
-            {{ v$.presetType.$errors[0].$message }}
-          </span>
-          <label class="flex text-hhText mt-3 items-start"
+          <div class="flex items-center mt-5">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="text-hhText mr-2 h-8 w-8"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
+              />
+            </svg>
+            <select
+              class="bg-hhCard text-hhText p-2 w-80 rounded-lg border border-hhOrange"
+              v-model="presetType"
+            >
+              <option value="" disabled selected>Input/Output</option>
+              <option value="Input">Input</option>
+              <option value="Output">Output</option>
+            </select>
+            <label
+              for="off"
+              class="flex items-center ml-2 justify-center text-base text-transparent bg-transparent rounded-md"
+            >
+              <input type="checkbox" v-model="newSystemPlus" id="system" />
+              <div class="square-system">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </div>
+            </label>
+            <span class="-mt-3 text-red-500" v-if="v$.presetType.$error">
+              {{ v$.presetType.$errors[0].$message }}
+            </span>
+          </div>
+          <!-- '          <label class="flex text-hhText mt-3 items-start"
             >Your name (optional)</label
           >
-          <input
-            class="bg-hhCard w-80 text-hhText p-2 rounded-lg border border-hhOrange"
-            type="text"
-            placeholder="YourUserName"
-          />
+          <div class="flex items-center">
+            <input
+              class="bg-hhCard w-80 text-hhText p-2 rounded-lg border border-hhOrange"
+              type="text"
+              placeholder="YourUserName"
+            />
+          </div> -->
         </form>
         <!-- right side of form -->
         <div class="text-base ml-36 flex flex-col">
@@ -213,7 +299,7 @@
     <button
       @click="submitPreset(true)"
       type="button"
-      class="inline-flex justify-center text-base px-4 py-2 font-medium text-hhCard bg-hhOrange rounded-md hover:bg-orange-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+      class="inline-flex justify-center text-base mr-5 px-4 py-2 font-medium text-hhCard bg-hhOrange rounded-md hover:bg-orange-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
     >
       Submit and close
     </button>
