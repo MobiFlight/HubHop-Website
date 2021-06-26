@@ -202,9 +202,9 @@
               class="bg-hhCard text-hhText p-2 w-80 rounded-lg border border-hhOrange"
               v-model="presetType"
             >
-              <option value="" disabled selected>Input/Output</option>
-              <option value="Input">Input</option>
-              <option value="Output">Output</option>
+              <option value="" disabled selected>Input (e.g. Switch) / Output (e.g. LED)</option>
+              <option value="Input">Input (Button/Switch)</option>
+              <option value="Output">Output (LED/7-Segment)</option>
             </select>
             <label
               for="off"

@@ -299,6 +299,7 @@
         class="flex"
         v-model:currentPage="currentPage"
         :total-pages="totalPages"
+        :maxPageLinks="10"
       />
     </div>
     <div v-else>
