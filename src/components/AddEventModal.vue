@@ -119,11 +119,9 @@ export default {
       isOpen,
       closeModal() {
         isOpen.value = false;
-        console.log(isOpen);
       },
       openModal() {
         isOpen.value = true;
-        console.log(isOpen);
       },
     };
   },

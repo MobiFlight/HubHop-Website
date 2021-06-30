@@ -292,23 +292,12 @@
 
 <script>
 import useVuelidate from "@vuelidate/core";
-import { ref } from "vue";
 import { required } from "@vuelidate/validators";
 import { PublicClientApplication } from "@azure/msal-browser";
 
 export default {
   setup() {
-    const isOpen = ref();
-
     return {
-      isOpen,
-      closeModal() {
-        isOpen.value = false;
-        console.log(isOpen);
-      },
-      openModal() {
-        isOpen.value = true;
-      },
       v$: useVuelidate(),
     };
   },
