@@ -1,10 +1,9 @@
 <template>
-  <div class="h-full container mx-auto">
-    <div class="p-2 rounded-lg bg-opacity-60">
-      <div class="flex mt-5">
+  <div class="mt-5 container mx-auto">
+    <div class="rounded-lg bg-opacity-60">
+      <div class="flex justify-between">
         <!-- Add event or variable form -->
-        <form class="max-w-2xl text-base flex flex-col">
-          <!-- Publisher / vendor -->
+        <form class="max-w-2xl text-base">
           <label class="flex text-transparent mb-1 items-start">ph</label>
           <div class="flex items-center">
             <svg
@@ -62,7 +61,6 @@
               </div>
             </label>
           </div>
-          <!-- Aircraft -->
           <div class="flex items-center mt-5">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -119,7 +117,6 @@
               </div>
             </label>
           </div>
-          <!-- System -->
           <div class="flex items-center mt-5">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -182,7 +179,6 @@
               </div>
             </label>
           </div>
-          <!-- input or output -->
           <div class="flex items-center mt-5">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -202,7 +198,9 @@
               class="bg-hhCard text-hhText p-2 w-80 rounded-lg border border-hhOrange"
               v-model="presetType"
             >
-              <option value="" disabled selected>Input (e.g. Switch) / Output (e.g. LED)</option>
+              <option value="" disabled selected
+                >Input (e.g. Switch) / Output (e.g. LED)</option
+              >
               <option value="Input">Input (Button/Switch)</option>
               <option value="Output">Output (LED/7-Segment)</option>
             </select>
@@ -226,24 +224,12 @@
                 </svg>
               </div>
             </label>
-            <span class="-mt-3 text-red-500" v-if="v$.presetType.$error">
-              {{ v$.presetType.$errors[0].$message }}
-            </span>
           </div>
-          <!-- '          <label class="flex text-hhText mt-3 items-start"
-            >Your name (optional)</label
-          >
-          <div class="flex items-center">
-            <input
-              class="bg-hhCard w-80 text-hhText p-2 rounded-lg border border-hhOrange"
-              type="text"
-              placeholder="YourUserName"
-            />
-          </div> -->
+          <span class="text-red-500 ml-10" v-if="v$.presetType.$error">
+            {{ v$.presetType.$errors[0].$message }}
+          </span>
         </form>
-        <!-- right side of form -->
-        <div class="text-base ml-36 flex flex-col">
-          <!-- User defined name of variable -->
+        <div class="text-base flex flex-col">
           <label class="flex text-hhText mb-1 items-start"
             >Give a precise name</label
           >
@@ -256,7 +242,6 @@
           <span class="-mt-3 text-red-500" v-if="v$.label.$error">
             {{ v$.label.$errors[0].$message }}
           </span>
-          <!-- Code snippet -->
           <label class="flex text-hhText text-base items-start"
             >Code to be executed inside the Sim</label
           >
@@ -271,7 +256,6 @@
           <span class="-mt-3 text-red-500" v-if="v$.code.$error">
             {{ v$.code.$errors[0].$message }}
           </span>
-          <!-- Comment for variable -->
           <label class="flex text-hhText items-start">Description</label>
           <textarea
             cols="75"
@@ -288,7 +272,7 @@
       </div>
     </div>
   </div>
-  <div class="flex justify-end">
+  <div class="flex justify-end mt-5">
     <button
       @click="submitPreset(false)"
       type="button"
@@ -299,7 +283,7 @@
     <button
       @click="submitPreset(true)"
       type="button"
-      class="inline-flex justify-center text-base mr-5 px-4 py-2 font-medium text-hhCard bg-hhOrange rounded-md hover:bg-orange-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+      class="inline-flex justify-center text-base px-4 py-2 font-medium text-hhCard bg-hhOrange rounded-md hover:bg-orange-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
     >
       Submit and close
     </button>
@@ -308,12 +292,25 @@
 
 <script>
 import useVuelidate from "@vuelidate/core";
+import { ref } from "vue";
 import { required } from "@vuelidate/validators";
 import { PublicClientApplication } from "@azure/msal-browser";
 
 export default {
   setup() {
-    return { v$: useVuelidate() };
+    const isOpen = ref();
+
+    return {
+      isOpen,
+      closeModal() {
+        isOpen.value = false;
+        console.log(isOpen);
+      },
+      openModal() {
+        isOpen.value = true;
+      },
+      v$: useVuelidate(),
+    };
   },
   Name: "Add",
   async created() {
