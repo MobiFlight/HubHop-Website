@@ -21,21 +21,11 @@
         >
           <div class="rounded-md shadow">
             <router-link
-              to="/add"
+              to="/list"
               class="w-full flex items-center justify-center px-8 py-3 font-bold rounded-lg shadow-lg bg-hhOrange text-hhBG hover:bg-orange-500 md:py-4 md:text-lg md:px-10"
             >
               <div class="text-2xl">
-                Contribute
-              </div>
-            </router-link>
-          </div>
-          <div class="mt-3 sm:mt-0 sm:ml-3">
-            <router-link
-              to="/list"
-              class="w-full flex items-center justify-center shadow-lg px-8 py-3 text-base rounded-lg text-hhText bg-hhCard hover:bg-gray-700 md:py-4 md:text-lg md:px-10"
-            >
-              <div class="text-2xl">
-                View list
+                View contributions
               </div>
             </router-link>
           </div>
@@ -46,7 +36,7 @@
       </div>
     </div>
   </header>
-  <div class="container mx-auto">
+  <!-- <div class="container mx-auto">
     <div>
       <div class="container mx-auto mb-10">
         <h1>Unique event/variable names</h1>
@@ -226,12 +216,11 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script>
 export default {
   name: "Home",
-  components: {},
 };
 </script>

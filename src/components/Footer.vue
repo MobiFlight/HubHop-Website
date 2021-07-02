@@ -2,22 +2,26 @@
   <footer class="bg-hhBG text-base p-10 flex items-center justify-between">
     <div><span>&#169;</span> HubHop and its contributors 2021</div>
     <div class="flex items-center">
-      <div class="mx-5">
-        <button class="flex items-center justify-around">
-          <a href="#" target="_blank"
+      <div class="flex mx-5">
+        <button>
+          <a href="https://discord.gg/YMExvWp8eX" class="flex items-center" target="_blank"
             ><img
               class="max-h-8 mx-2"
               src="../assets/Discord-Logo-White.png"
               alt="Discord Logo"
-            /> </a
-          >Join us on Discord
+            />Join us on Discord</a
+          >
         </button>
       </div>
     </div>
     <div class="flex flex-col items-end">
       <div>
         <button class="mt-1 mb-1 flex items-center justify-around">
-          <a class="flex items-center justify-around" href="https://github.com/HubHopAPI/HubHop-Website" target="_blank">
+          <a
+            class="flex items-center justify-around"
+            href="https://github.com/HubHopAPI/HubHop-Website"
+            target="_blank"
+          >
             <img
               class="max-h-7 mx-2"
               src="../assets/GitHub-Mark-Light-32px.png"
