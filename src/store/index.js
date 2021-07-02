@@ -21,6 +21,10 @@ const store = createStore({
         roles: [ process.env.VUE_APP_HUBHOP_ROLES_DEFAULT_ROLE ],
         username: process.env.VUE_APP_HUBHOP_ROLES_DEFAULT_NAME,
       },
+      filterVendor: "",
+      filterAircraft: "",
+      filterSystem: "",
+      filterInputType: "",
     };
   },
   mutations: {
@@ -32,6 +36,18 @@ const store = createStore({
     },
     setLoggedIn(state, loggedIn) {
       state.loggedIn = loggedIn;
+    },
+    setFilterVendor(state, filterVendor) {
+      state.filterVendor = filterVendor;
+    },
+    setFilterAircraft(state, filterAircraft) {
+      state.filterAircraft = filterAircraft;
+    },
+    setFilterSystem(state, filterSystem) {
+      state.filterSystem = filterSystem;
+    },
+    setFilterInputType(state, filterInputType) {
+      state.filterInputType = filterInputType;
     }
   },
   plugins: [createPersistedState()],

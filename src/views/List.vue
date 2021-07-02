@@ -33,8 +33,9 @@
           />
         </svg>
         <select
+          @click="setFilterVendor"
           v-model="filters.vendor.value"
-          class="bg-hhCard mr-5 px-2 py-2 max-w-xs text-base rounded"
+          class="bg-hhCard mr-5 px-2 py-2 max-w-xs text-sm rounded"
         >
           <option value="">All Vendors</option>
           <option
@@ -59,8 +60,9 @@
           />
         </svg>
         <select
+          @click="setFilterAircraft"
           v-model="filters.aircraft.value"
-          class="bg-hhCard mr-5 px-2 py-2 max-w-xs text-base rounded"
+          class="bg-hhCard mr-5 px-2 py-2 max-w-xs text-sm rounded"
         >
           <option value="">All Aircraft</option>
           <option
@@ -91,8 +93,9 @@
           />
         </svg>
         <select
+          @click="setFilterSystem"
           v-model="filters.system.value"
-          class="bg-hhCard mr-5 px-2 py-2 max-w-xs text-base rounded"
+          class="bg-hhCard mr-5 px-2 py-2 max-w-xs text-sm rounded"
         >
           <option value="">All Systems</option>
           <option
@@ -117,8 +120,9 @@
           />
         </svg>
         <select
+          @click="setFilterInputType"
           v-model="filters.type.value"
-          class="bg-hhCard mr-5 px-2 py-2 max-w-xs text-base rounded"
+          class="bg-hhCard mr-5 px-2 py-2 max-w-xs text-sm rounded"
         >
           <option value="" selected>Select Input/Output</option>
           <option value="Input">Input</option>
@@ -139,10 +143,30 @@
           />
         </svg>
         <input
-          class="bg-hhCard px-2 py-2 max-w-xs text-base rounded"
+          class="bg-hhCard px-2 py-2 max-w-xs text-sm rounded"
           placeholder="Search Preset Name"
           v-model="filters.name.value"
         />
+        <button
+          @click="resetFilters"
+          class="ml-5 flex items-center text-sm bg-hhBG p-2 rounded"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="mr-2 h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"
+            />
+          </svg>
+          Reset filters
+        </button>
       </div>
       <AddEventModal />
     </div>
@@ -324,6 +348,25 @@ export default {
     }
   },
   methods: {
+    resetFilters() {
+      this.$store.commit("setFilterVendor", "");
+      this.$store.commit("setFilterAircraft", "");
+      this.$store.commit("setFilterSystem", "");
+      this.$store.commit("setFilterInputType", "");
+      location.reload();
+    },
+    setFilterVendor() {
+      this.$store.commit("setFilterVendor", this.filters.vendor.value);
+    },
+    setFilterAircraft() {
+      this.$store.commit("setFilterAircraft", this.filters.aircraft.value);
+    },
+    setFilterSystem() {
+      this.$store.commit("setFilterSystem", this.filters.system.value);
+    },
+    setFilterInputType() {
+      this.$store.commit("setFilterInputType", this.filters.type.value);
+    },
     async getAccessToken() {
       let request = {
         scopes: [process.env.VUE_APP_HUBHOP_OAUTH_SCOPES],
@@ -390,11 +433,17 @@ export default {
       currentPage: 1,
       selectedRows: [],
       filters: {
-        aircraft: { value: "", keys: ["aircraft"] },
-        vendor: { value: "", keys: ["vendor"] },
-        system: { value: "", keys: ["system"] },
+        aircraft: {
+          value: this.$store.state.filterAircraft,
+          keys: ["aircraft"],
+        },
+        vendor: { value: this.$store.state.filterVendor, keys: ["vendor"] },
+        system: { value: this.$store.state.filterSystem, keys: ["system"] },
         name: { value: "", keys: ["label"] },
-        type: { value: "", keys: ["presetType"] },
+        type: {
+          value: this.$store.state.filterInputType,
+          keys: ["presetType"],
+        },
         status: { value: "", keys: ["status"] },
       },
     };
