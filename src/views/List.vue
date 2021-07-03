@@ -180,9 +180,6 @@
         :pageSize="15"
         v-model:currentPage="currentPage"
         @totalPagesChanged="totalPages = $event"
-        selectionMode="multiple"
-        selectedClass="bg-hhOrange text-hhBG font-bold transition duration-150 ease-in-out"
-        @stateChanged="selectedRows = $event.selectedRows"
         class="mx-auto text-base bg-hhCard bg-opacity-70 rounded"
         style="width:100%"
       >
