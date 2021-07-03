@@ -353,7 +353,10 @@ export default {
       this.$store.commit("setFilterAircraft", "");
       this.$store.commit("setFilterSystem", "");
       this.$store.commit("setFilterInputType", "");
-      location.reload();
+      this.filters.vendor.value="";
+      this.filters.aircraft.value="",
+      this.filters.system.value="",
+      this.filters.type.value=""
     },
     setFilterVendor() {
       this.$store.commit("setFilterVendor", this.filters.vendor.value);
