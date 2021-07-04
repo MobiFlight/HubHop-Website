@@ -147,6 +147,7 @@ export default {
         label: this.preset.label,
         tags: this.preset.tags,
         presetType: this.preset.presetType,
+        version: this.preset.version,
         status: "Updated",
         createdDate: new Date().toUTCString(),
         author: this.preset.author,
