@@ -438,7 +438,8 @@ export default {
           this.$swal({
             position: "center",
             icon: "success",
-            title: "Your event/variable has been saved",
+            title:
+              '<h4 style="color:#D2D0D2">Your event/variable has been saved</h4>',
             showConfirmButton: false,
             background: "#33353e",
             toast: true,

@@ -1,81 +1,786 @@
 <template>
   <div class="h-full text-lg p-5 mb-3 container mx-auto" v-if="preset">
-    <div class="flex justify-center mb-5 text-3xl">
-      <div class="bg-hhBG rounded-lg border w-screen border-hhOrange">
-        <label class="border-b border-hhOrange">Preset name</label>
-        <p class="p-2 pt-5">{{ preset.label }}</p>
-      </div>
-    </div>
-    <div class="flex justify-between">
-      <div class="bg-hhBG rounded-lg border border-hhOrange w-60">
-        <label class="border-b border-hhOrange">Vendor</label>
-        <p class="pt-2">{{ preset.vendor }}</p>
-      </div>
-      <div class="bg-hhBG rounded-lg border border-hhOrange w-60">
-        <label class="border-b border-hhOrange">Aircraft</label>
-        <p class="pt-2">{{ preset.aircraft }}</p>
-      </div>
-      <div class="bg-hhBG rounded-lg border border-hhOrange w-60">
-        <label class="border-b border-hhOrange">System</label>
-        <p class="pt-2">{{ preset.system }}</p>
-      </div>
-      <div class="bg-hhBG rounded-lg border border-hhOrange w-60">
-        <label class="border-b border-hhOrange">Type</label>
-        <p class="pt-2">{{ preset.presetType }}</p>
-      </div>
-    </div>
-    <div class="flex justify-between mt-5">
-      <div class="bg-hhBG rounded-lg border border-hhOrange w-60">
-        <label class="border-b border-hhOrange">Status</label>
-        <p class="pt-2">{{ preset.status }}</p>
-      </div>
-      <div class="bg-hhBG rounded-lg border border-hhOrange w-60">
-        <label class="border-b border-hhOrange">Author</label>
-        <p class="pt-2">{{ preset.author }}</p>
-      </div>
-      <div class="bg-hhBG rounded-lg border border-hhOrange w-60">
-        <label class="border-b border-hhOrange">Version</label>
-        <p class="pt-2">{{ preset.version }}</p>
-      </div>
-      <div class="bg-hhBG rounded-lg border border-hhOrange w-60">
-        <label class="border-b border-hhOrange">Submitted on</label>
-        <p class="pt-2">{{ preset.createdDate }}</p>
-      </div>
-    </div>
-    <div class="flex justify-around space-x-10 mt-5">
-      <div class="bg-hhBG rounded-lg border border-hhOrange w-screen">
-        <label class="border-b px-5 border-hhOrange"
-          >Code to be executed (single line)</label
+    <!-- View -->
+    <div class="flex justify-between space-x-20" v-if="!edit">
+      <div class="w-1/3 space-y-5">
+        <div
+          class="flex items-center p-2 bg-hhBG border border-hhOrange rounded-lg"
         >
-        <p class="p-2 font-mono">{{ preset.code }}</p>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="text-hhText mr-2 h-7 w-7"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+            />
+          </svg>
+          {{ preset.vendor }}
+        </div>
+        <div
+          class="flex items-center p-2 bg-hhBG border border-hhOrange rounded-lg"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="text-hhText mr-2 h-7 w-7"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+            />
+          </svg>
+          {{ preset.aircraft }}
+        </div>
+        <div
+          class="flex items-center p-2 bg-hhBG border border-hhOrange rounded-lg"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="text-hhText mr-2 h-7 w-7"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+            />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+            />
+          </svg>
+          {{ preset.system }}
+        </div>
+        <div
+          class="flex items-center p-2 bg-hhBG border border-hhOrange rounded-lg"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="text-hhText mr-2 h-7 w-7"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
+            />
+          </svg>
+          {{ preset.presetType }}
+        </div>
+        <div
+          class="flex items-center p-2 bg-hhBG border border-hhOrange rounded-lg"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="text-hhText mr-2 h-7 w-7"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          {{ preset.status }}
+        </div>
+        <div
+          class="flex items-center p-2 bg-hhBG border border-hhOrange rounded-lg"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="text-hhText mr-2 h-7 w-7"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+            />
+          </svg>
+          {{ preset.createdDate }}
+        </div>
+        <div
+          class="flex items-center p-2 bg-hhBG border border-hhOrange rounded-lg"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="text-hhText mr-2 h-7 w-7"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+            />
+          </svg>
+          {{ preset.author }}
+        </div>
+        <div
+          class="flex items-center p-2 bg-hhBG border border-hhOrange rounded-lg"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="text-hhText mr-2 h-7 w-7"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
+            />
+          </svg>
+          Version: {{ preset.version }}
+        </div>
       </div>
-      <div class="bg-hhBG rounded-lg border border-hhOrange w-screen">
-        <label class="border-b border-hhOrange">Description</label>
-        <p class="pt-2">
-          {{ preset.description }}
-        </p>
+      <div class="w-full space-y-5">
+        <div class="p-2 bg-hhBG border border-hhOrange rounded-lg">
+          <div class="flex items-center justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="text-hhText mr-2 h-7 w-7"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+              />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+              />
+            </svg>
+            Label Name
+          </div>
+          <div class="p-3">
+            {{ preset.label }}
+          </div>
+        </div>
+        <div class="p-2 bg-hhBG border border-hhOrange rounded-lg">
+          <div class="flex items-center justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="text-hhText mr-2 h-7 w-7"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
+              />
+            </svg>
+            Code
+          </div>
+          <div class="p-3">
+            {{ preset.code }}
+          </div>
+        </div>
+        <div class="p-2 bg-hhBG border border-hhOrange rounded-lg">
+          <div class="flex items-center justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="text-hhText mr-2 h-7 w-7"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+              />
+            </svg>
+            Description
+          </div>
+          <div class="p-3">
+            {{ preset.description }}
+          </div>
+        </div>
       </div>
     </div>
-    <div class="flex justify-start">
-      <button
-        class="text-xl mt-5 px-4 py-2 font-bold text-hhCard bg-hhOrange rounded-md hover:bg-orange-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-        @click="$router.go(-1)"
-      >
-        Back
-      </button>
+    <!-- Edit -->
+    <div class="flex justify-between space-x-20" v-if="edit">
+      <div class="w-1/3 space-y-5">
+        <div
+          class="flex items-center p-2 bg-hhBG border border-hhOrange rounded-lg"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="text-hhText mr-2 h-7 w-7"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+            />
+          </svg>
+          <input
+            class="bg-hhCard text-hhText rounded px-2 w-full"
+            v-model="preset.vendor"
+          />
+        </div>
+        <div
+          class="flex items-center p-2 bg-hhBG border border-hhOrange rounded-lg"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="text-hhText mr-2 h-7 w-7"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+            />
+          </svg>
+          <input
+            class="bg-hhCard text-hhText rounded px-2 w-full"
+            v-model="preset.aircraft"
+          />
+        </div>
+        <div
+          class="flex items-center p-2 bg-hhBG border border-hhOrange rounded-lg"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="text-hhText mr-2 h-7 w-7"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+            />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+            />
+          </svg>
+          <input
+            class="bg-hhCard text-hhText rounded px-2 w-full"
+            v-model="preset.system"
+          />
+        </div>
+        <div
+          class="flex items-center p-2 bg-hhBG border border-hhOrange rounded-lg"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="text-hhText mr-2 h-7 w-7"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
+            />
+          </svg>
+          <input
+            class="bg-hhCard text-hhText rounded px-2 w-full"
+            v-model="preset.presetType"
+          />
+        </div>
+        <div
+          class="flex items-center p-2 bg-hhBG border border-hhOrange rounded-lg"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="text-hhText mr-2 h-7 w-7"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <input
+            class="bg-hhCard text-hhText rounded px-2 w-full"
+            v-model="preset.status"
+          />
+        </div>
+        <div
+          class="flex items-center p-2 bg-hhBG border border-hhOrange rounded-lg"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="text-hhText mr-2 h-7 w-7"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+            />
+          </svg>
+          <input
+            class="bg-hhCard text-hhText rounded px-2 w-full"
+            v-model="preset.createdDate"
+          />
+        </div>
+        <div
+          class="flex items-center p-2 bg-hhBG border border-hhOrange rounded-lg"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="text-hhText mr-2 h-7 w-7"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+            />
+          </svg>
+          <input
+            class="bg-hhCard text-hhText rounded px-2 w-full"
+            v-model="preset.author"
+          />
+        </div>
+        <div
+          class="flex items-center p-2 bg-hhBG border border-hhOrange rounded-lg"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="text-hhText mr-2 h-7 w-7"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
+            />
+          </svg>
+          {{ preset.version }}
+        </div>
+      </div>
+      <div class="w-full space-y-5">
+        <div class="p-2 bg-hhBG border border-hhOrange rounded-lg">
+          <div class="flex items-center justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="text-hhText mr-2 h-7 w-7"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+              />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+              />
+            </svg>
+            Label Name
+          </div>
+          <div class="p-3">
+            <input
+              class="bg-hhCard text-hhText rounded px-2 w-full text-center"
+              v-model="preset.label"
+            />
+          </div>
+        </div>
+        <div class="p-2 bg-hhBG border border-hhOrange rounded-lg">
+          <div class="flex items-center justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="text-hhText mr-2 h-7 w-7"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
+              />
+            </svg>
+            Code
+          </div>
+          <div class="p-3">
+            <input
+              class="bg-hhCard text-hhText rounded px-2 w-full text-center"
+              v-model="preset.code"
+            />
+          </div>
+        </div>
+        <div class="p-2 bg-hhBG border border-hhOrange rounded-lg">
+          <div class="flex items-center justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="text-hhText mr-2 h-7 w-7"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+              />
+            </svg>
+            Description
+          </div>
+          <div class="p-3">
+            <input
+              class="bg-hhCard text-hhText rounded px-2 w-full text-center"
+              v-model="preset.description"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex mt-5 justify-between items-center">
+      <div class="flex space-x-5">
+        <button
+          class="text-xl px-4 py-2 font-bold text-hhCard bg-hhOrange rounded-md hover:bg-orange-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+          @click="$router.go(-1)"
+        >
+          Back
+        </button>
+        <label for="toogleEdit" class="flex items-center cursor-pointer">
+          <div class="mr-3 text-xl font-bold text-hhOrange" v-if="!edit">
+            View
+          </div>
+          <div class="mr-3 text-xl" v-else>
+            View
+          </div>
+          <div class="flex items-center">
+            <!-- toggle -->
+            <div class="relative">
+              <!-- input -->
+              <input
+                id="toogleEdit"
+                type="checkbox"
+                class="sr-only"
+                v-model="edit"
+              />
+              <!-- line -->
+              <div class="w-14 h-6 bg-gray-400 rounded-full shadow-inner"></div>
+              <!-- dot -->
+              <div
+                class="dot absolute w-8 h-8 bg-hhCard rounded-full shadow -left-1 -top-1 transition"
+              ></div>
+            </div>
+            <!-- label -->
+            <div class="ml-3 text-xl font-bold text-hhOrange" v-if="edit">
+              Edit
+            </div>
+            <div class="ml-3 text-xl" v-else>
+              Edit
+            </div>
+          </div>
+          <div></div>
+        </label>
+      </div>
+      <div class="flex items-center justify-center">
+        <button
+          class="text-xl ml-3 px-4 py-2 font-bold text-hhCard bg-hhOrange rounded-md hover:bg-orange-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+          @click="updatePreset(preset.id)"
+          v-if="edit"
+        >
+          Save changes
+        </button>
+        <button
+          class="text-xl ml-5 px-4 py-2 font-bold bg-red-800 rounded-md hover:bg-red-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+          v-if="roles.includes('Moderator')"
+          @click="open = true"
+        >
+          Delete
+        </button>
+        <TransitionRoot as="confirmDelete" :show="open">
+          <Dialog
+            as="div"
+            static
+            class="fixed z-10 inset-0 overflow-y-auto"
+            @close="open = false"
+            :open="open"
+          >
+            <div
+              class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+            >
+              <TransitionChild
+                as="confirmDelete"
+                enter="ease-out duration-300"
+                enter-from="opacity-0"
+                enter-to="opacity-100"
+                leave="ease-in duration-200"
+                leave-from="opacity-100"
+                leave-to="opacity-0"
+              >
+                <DialogOverlay
+                  class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity backdrop-filter backdrop-blur-sm"
+                />
+              </TransitionChild>
+
+              <!-- This element is to trick the browser into centering the modal contents. -->
+              <span
+                class="hidden sm:inline-block sm:align-middle sm:h-screen"
+                aria-hidden="true"
+                >&#8203;</span
+              >
+              <TransitionChild
+                as="confirmDelete"
+                enter="ease-out duration-300"
+                enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                enter-to="opacity-100 translate-y-0 sm:scale-100"
+                leave="ease-in duration-200"
+                leave-from="opacity-100 translate-y-0 sm:scale-100"
+                leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+              >
+                <div
+                  class="inline-block align-bottom bg-hhText rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+                >
+                  <div class="bg-hhText px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                      <div
+                        class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-200 sm:mx-0 sm:h-10 sm:w-10"
+                      >
+                        <ExclamationIcon
+                          class="h-6 w-6 text-red-600"
+                          aria-hidden="true"
+                        />
+                      </div>
+                      <div
+                        class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left"
+                      >
+                        <DialogTitle
+                          as="h3"
+                          class="text-lg leading-6 font-medium text-gray-900"
+                        >
+                          Delete preset
+                        </DialogTitle>
+                        <div class="mt-2">
+                          <p class="text-gray-500">
+                            Are you sure you want to delete this preset?
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="bg-hhText px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse"
+                  >
+                    <button
+                      type="button"
+                      class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
+                      @click="deletePreset(preset.id)"
+                    >
+                      Delete
+                    </button>
+                    <button
+                      type="button"
+                      class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                      @click="open = false"
+                      ref="cancelButtonRef"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </TransitionChild>
+            </div>
+          </Dialog>
+        </TransitionRoot>
+      </div>
     </div>
   </div>
   <div v-else>
-    <p>Loading...</p>
+    <div class="spinner h-full"></div>
   </div>
 </template>
 
 <script>
+import { PublicClientApplication } from "@azure/msal-browser";
+import { ref } from "vue";
+import {
+  Dialog,
+  DialogOverlay,
+  DialogTitle,
+  TransitionChild,
+  TransitionRoot,
+} from "@headlessui/vue";
+import { ExclamationIcon } from "@heroicons/vue/outline";
+
 export default {
   props: ["id"],
+  components: {
+    Dialog,
+    DialogOverlay,
+    DialogTitle,
+    TransitionChild,
+    TransitionRoot,
+    ExclamationIcon,
+  },
+  async created() {
+    this.$msalInstance = new PublicClientApplication(
+      this.$store.state.msalConfig
+    );
+  },
+  methods: {
+    deletePreset(id, onSuccessReload) {
+      fetch(this.$hubHopApi.baseUrl + "/presets/" + id, {
+        credentials: "include",
+        method: "DELETE",
+        headers: {
+          Authorization: "Bearer " + this.$store.state.accessToken,
+        },
+      }).then((res) => {
+        if (res.status != 200) return;
+        this.$swal({
+          position: "center",
+          icon: "success",
+          title:
+            '<h4 style="color:#D2D0D2">Your event/variable has been removed</h4>',
+          showConfirmButton: false,
+          background: "#33353e",
+          toast: true,
+          timer: 2000,
+          willClose: () => {
+            if (onSuccessReload) location.reload();
+            this.$router.go(-1);
+          },
+        });
+      });
+    },
+    updatePreset(id, onSuccessReload) {
+      const myAccounts = this.$msalInstance.getAllAccounts();
+      this.account = myAccounts[0];
+      const url = this.$hubHopApi.baseUrl + "/presets/" + id;
+
+      // post body data
+      const preset = {
+        path:
+          this.preset.vendor +
+          "." +
+          this.preset.aircraft +
+          "." +
+          this.preset.system +
+          "." +
+          this.preset.label,
+        vendor: this.preset.vendor,
+        aircraft: this.preset.aircraft,
+        system: this.preset.system,
+        code: this.preset.code,
+        label: this.preset.label,
+        tags: this.preset.tags,
+        presetType: this.preset.presetType,
+        version: this.preset.version,
+        status: "Updated",
+        createdDate: new Date().toUTCString(),
+        author: this.preset.author,
+        description: this.preset.description,
+      };
+
+      const options = {
+        method: "PUT",
+        body: JSON.stringify(preset),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + this.$store.state.accessToken,
+        },
+      };
+      // send POST request
+      fetch(url, options).then((res) => {
+        console.log(res);
+        if (res.status != 201) return;
+        this.$swal({
+          position: "center",
+          icon: "success",
+          title:
+            '<h4 style="color:#D2D0D2">Your event/variable has been saved</h4>',
+          showConfirmButton: false,
+          background: "#33353e",
+          toast: true,
+          timer: 2000,
+          willClose: () => {
+            if (onSuccessReload) location.reload();
+            this.$router.go(-1);
+          },
+        });
+      });
+    },
+  },
+
   data() {
     return {
       preset: null,
+      edit: false,
+      roles: this.$store.state.userSettings.roles,
     };
   },
   mounted() {
@@ -84,5 +789,19 @@ export default {
       .then((data) => (this.preset = data))
       .catch((err) => console.log(err.massage));
   },
+  setup() {
+    const open = ref(false);
+
+    return {
+      open,
+    };
+  },
 };
 </script>
+
+<style scoped>
+input:checked ~ .dot {
+  transform: translateX(100%);
+  background-color: #ffa047;
+}
+</style>
