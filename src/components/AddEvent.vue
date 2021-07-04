@@ -418,7 +418,7 @@ export default {
           presetType: this.presetType,
           status: "Submitted",
           createdDate: new Date().toUTCString(),
-          // author: this.account.name,
+          author: this.account.name,
           description: this.description,
         };
 
