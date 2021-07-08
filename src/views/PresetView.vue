@@ -3,7 +3,7 @@
     <!-- View -->
     <div class="flex justify-between space-x-20" v-if="!edit">
       <div class="w-1/3 space-y-5">
-        <div class="flex text-transparent items-start">ph</div>
+        <div class="flex text-transparent -mt-2 items-start">ph</div>
         <div class="flex items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -271,7 +271,7 @@
     <!-- Edit -->
     <div class="flex justify-between space-x-20" v-if="edit">
       <div class="w-1/3 space-y-5">
-        <div class="flex text-transparent items-start">ph</div>
+        <div class="flex text-transparent -mt-2 items-start">ph</div>
         <div class="flex items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
