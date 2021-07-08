@@ -3,12 +3,11 @@
     <!-- View -->
     <div class="flex justify-between space-x-20" v-if="!edit">
       <div class="w-1/3 space-y-5">
-        <div
-          class="flex items-center p-2 bg-hhBG border border-hhOrange rounded-lg"
-        >
+        <div class="flex text-transparent items-start">ph</div>
+        <div class="flex items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="text-hhText mr-2 h-7 w-7"
+            class="text-hhText mr-2 h-8 w-8"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -16,18 +15,20 @@
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
-              stroke-width="1.5"
+              stroke-width="2"
               d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
             />
           </svg>
-          {{ preset.vendor }}
+          <div
+            class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+          >
+            {{ preset.vendor }}
+          </div>
         </div>
-        <div
-          class="flex items-center p-2 bg-hhBG border border-hhOrange rounded-lg"
-        >
+        <div class="flex items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="text-hhText mr-2 h-7 w-7"
+            class="text-hhText mr-2 h-8 w-8"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -35,18 +36,20 @@
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
-              stroke-width="1.5"
+              stroke-width="2"
               d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
             />
           </svg>
-          {{ preset.aircraft }}
+          <div
+            class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+          >
+            {{ preset.aircraft }}
+          </div>
         </div>
-        <div
-          class="flex items-center p-2 bg-hhBG border border-hhOrange rounded-lg"
-        >
+        <div class="flex items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="text-hhText mr-2 h-7 w-7"
+            class="text-hhText mr-2 h-8 w-8"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -54,24 +57,26 @@
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
-              stroke-width="1.5"
+              stroke-width="2"
               d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
             />
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
-              stroke-width="1.5"
+              stroke-width="2"
               d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
             />
           </svg>
-          {{ preset.system }}
+          <div
+            class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+          >
+            {{ preset.system }}
+          </div>
         </div>
-        <div
-          class="flex items-center p-2 bg-hhBG border border-hhOrange rounded-lg"
-        >
+        <div class="flex items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="text-hhText mr-2 h-7 w-7"
+            class="text-hhText mr-2 h-8 w-8"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -79,18 +84,20 @@
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
-              stroke-width="1.5"
+              stroke-width="2"
               d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
             />
           </svg>
-          {{ preset.presetType }}
+          <div
+            class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+          >
+            {{ preset.presetType }}
+          </div>
         </div>
-        <div
-          class="flex items-center p-2 bg-hhBG border border-hhOrange rounded-lg"
-        >
+        <div class="flex items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="text-hhText mr-2 h-7 w-7"
+            class="text-hhText mr-2 h-8 w-8"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -98,18 +105,20 @@
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
-              stroke-width="1.5"
+              stroke-width="2"
               d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
             />
           </svg>
-          {{ preset.status }}
+          <div
+            class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+          >
+            {{ preset.status }}
+          </div>
         </div>
-        <div
-          class="flex items-center p-2 bg-hhBG border border-hhOrange rounded-lg"
-        >
+        <div class="flex items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="text-hhText mr-2 h-7 w-7"
+            class="text-hhText mr-2 h-8 w-8"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -117,18 +126,27 @@
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
-              stroke-width="1.5"
+              stroke-width="2"
               d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
             />
           </svg>
-          {{ preset.createdDate }}
+          <div
+            v-if="preset.createdDate"
+            class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+          >
+            {{ preset.createdDate }}
+          </div>
+          <div
+            v-if="!preset.createdDate"
+            class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+          >
+            Initial import
+          </div>
         </div>
-        <div
-          class="flex items-center p-2 bg-hhBG border border-hhOrange rounded-lg"
-        >
+        <div class="flex items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="text-hhText mr-2 h-7 w-7"
+            class="text-hhText mr-2 h-8 w-8"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -136,18 +154,20 @@
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
-              stroke-width="1.5"
+              stroke-width="2"
               d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
             />
           </svg>
-          {{ preset.author }}
+          <div
+            class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+          >
+            {{ preset.author }}
+          </div>
         </div>
-        <div
-          class="flex items-center p-2 bg-hhBG border border-hhOrange rounded-lg"
-        >
+        <div class="flex items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="text-hhText mr-2 h-7 w-7"
+            class="text-hhText mr-2 h-8 w-8"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -155,97 +175,107 @@
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
-              stroke-width="1.5"
+              stroke-width="2"
               d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
             />
           </svg>
-          Version: {{ preset.version }}
+          <div
+            class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+          >
+            Version: {{ preset.version }}
+          </div>
         </div>
       </div>
-      <div class="w-full space-y-5">
-        <div class="p-2 bg-hhBG border border-hhOrange rounded-lg">
-          <div class="flex items-center justify-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="text-hhText mr-2 h-7 w-7"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-              />
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="1.5"
-                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-              />
-            </svg>
-            Label Name
-          </div>
-          <div class="p-3">
-            {{ preset.label }}
-          </div>
+      <div class="w-full">
+        <div class="flex items-center justify-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="text-hhText mr-2 h-8 w-8"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+            />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+            />
+          </svg>
+          Preset Name
         </div>
-        <div class="p-2 bg-hhBG border border-hhOrange rounded-lg">
-          <div class="flex items-center justify-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="text-hhText mr-2 h-7 w-7"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="1.5"
-                d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
-              />
-            </svg>
-            Code
-          </div>
-          <div class="p-3">
-            {{ preset.code }}
-          </div>
+        <div
+          class="bg-hhBG text-hhText p-1 mt-2 w-full rounded-lg border border-hhOrange"
+        >
+          {{ preset.label }}
         </div>
-        <div class="p-2 bg-hhBG border border-hhOrange rounded-lg">
-          <div class="flex items-center justify-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="text-hhText mr-2 h-7 w-7"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="1.5"
-                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-              />
-            </svg>
-            Description
-          </div>
-          <div class="p-3">
-            {{ preset.description }}
-          </div>
+        <div class="flex items-center justify-center mt-5">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="text-hhText mr-2 h-8 w-8"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
+            />
+          </svg>
+          Code
+        </div>
+        <div
+          class="bg-hhBG text-hhText flex place-content-center items-center font-mono mt-2 p-1 w-full rounded-lg border border-hhOrange h-40"
+        >
+          {{ preset.code }}
+        </div>
+        <div class="flex items-center justify-center mt-5">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="text-hhText mr-2 h-8 w-8"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+            />
+          </svg>
+          Description
+        </div>
+        <div
+          v-if="preset.description"
+          class="bg-hhBG text-hhText p-1 mt-2 w-full flex place-content-center items-center  rounded-lg border border-hhOrange h-40"
+        >
+          {{ preset.description }}
+        </div>
+        <div
+          v-if="!preset.description"
+          class="bg-hhBG text-hhText p-1 mt-2 w-full flex place-content-center items-center rounded-lg border border-hhOrange h-40"
+        >
+          No description available
         </div>
       </div>
     </div>
     <!-- Edit -->
     <div class="flex justify-between space-x-20" v-if="edit">
       <div class="w-1/3 space-y-5">
-        <div
-          class="flex items-center p-2 bg-hhBG border border-hhOrange rounded-lg"
-        >
+        <div class="flex text-transparent items-start">ph</div>
+        <div class="flex items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="text-hhText mr-2 h-7 w-7"
+            class="text-hhText mr-2 h-8 w-8"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -253,21 +283,19 @@
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
-              stroke-width="1.5"
+              stroke-width="2"
               d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
             />
           </svg>
           <input
-            class="bg-hhCard text-hhText rounded px-2 w-full"
+            class="bg-hhCard text-hhText text-center p-1 w-full rounded-lg border border-hhOrange"
             v-model="preset.vendor"
           />
         </div>
-        <div
-          class="flex items-center p-2 bg-hhBG border border-hhOrange rounded-lg"
-        >
+        <div class="flex items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="text-hhText mr-2 h-7 w-7"
+            class="text-hhText mr-2 h-8 w-8"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -275,21 +303,19 @@
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
-              stroke-width="1.5"
+              stroke-width="2"
               d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
             />
           </svg>
           <input
-            class="bg-hhCard text-hhText rounded px-2 w-full"
+            class="bg-hhCard text-hhText text-center p-1 w-full rounded-lg border border-hhOrange"
             v-model="preset.aircraft"
           />
         </div>
-        <div
-          class="flex items-center p-2 bg-hhBG border border-hhOrange rounded-lg"
-        >
+        <div class="flex items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="text-hhText mr-2 h-7 w-7"
+            class="text-hhText mr-2 h-8 w-8"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -297,27 +323,25 @@
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
-              stroke-width="1.5"
+              stroke-width="2"
               d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
             />
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
-              stroke-width="1.5"
+              stroke-width="2"
               d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
             />
           </svg>
           <input
-            class="bg-hhCard text-hhText rounded px-2 w-full"
+            class="bg-hhCard text-hhText text-center p-1 w-full rounded-lg border border-hhOrange"
             v-model="preset.system"
           />
         </div>
-        <div
-          class="flex items-center p-2 bg-hhBG border border-hhOrange rounded-lg"
-        >
+        <div class="flex items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="text-hhText mr-2 h-7 w-7"
+            class="text-hhText mr-2 h-8 w-8"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -325,21 +349,19 @@
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
-              stroke-width="1.5"
+              stroke-width="2"
               d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
             />
           </svg>
           <input
-            class="bg-hhCard text-hhText rounded px-2 w-full"
+            class="bg-hhCard text-hhText text-center p-1 w-full rounded-lg border border-hhOrange"
             v-model="preset.presetType"
           />
         </div>
-        <div
-          class="flex items-center p-2 bg-hhBG border border-hhOrange rounded-lg"
-        >
+        <div class="flex items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="text-hhText mr-2 h-7 w-7"
+            class="text-hhText mr-2 h-8 w-8"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -347,21 +369,19 @@
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
-              stroke-width="1.5"
+              stroke-width="2"
               d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
             />
           </svg>
           <input
-            class="bg-hhCard text-hhText rounded px-2 w-full"
+            class="bg-hhBG text-hhText text-center p-1 w-full rounded-lg border border-hhOrange"
             v-model="preset.status"
           />
         </div>
-        <div
-          class="flex items-center p-2 bg-hhBG border border-hhOrange rounded-lg"
-        >
+        <div class="flex items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="text-hhText mr-2 h-7 w-7"
+            class="text-hhText mr-2 h-8 w-8"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -369,21 +389,26 @@
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
-              stroke-width="1.5"
+              stroke-width="2"
               d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
             />
           </svg>
           <input
-            class="bg-hhCard text-hhText rounded px-2 w-full"
+            v-if="preset.createdDate"
+            class="bg-hhBG text-hhText text-center p-1 w-full rounded-lg border border-hhOrange"
             v-model="preset.createdDate"
           />
+          <div
+            v-if="!preset.createdDate"
+            class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+          >
+            Initial import
+          </div>
         </div>
-        <div
-          class="flex items-center p-2 bg-hhBG border border-hhOrange rounded-lg"
-        >
+        <div class="flex items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="text-hhText mr-2 h-7 w-7"
+            class="text-hhText mr-2 h-8 w-8"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -391,21 +416,19 @@
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
-              stroke-width="1.5"
+              stroke-width="2"
               d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
             />
           </svg>
           <input
-            class="bg-hhCard text-hhText rounded px-2 w-full"
+            class="bg-hhCard text-hhText text-center p-1 w-full rounded-lg border border-hhOrange"
             v-model="preset.author"
           />
         </div>
-        <div
-          class="flex items-center p-2 bg-hhBG border border-hhOrange rounded-lg"
-        >
+        <div class="flex items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="text-hhText mr-2 h-7 w-7"
+            class="text-hhText mr-2 h-8 w-8"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -413,95 +436,87 @@
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
-              stroke-width="1.5"
+              stroke-width="2"
               d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
             />
           </svg>
-          {{ preset.version }}
+          <div
+            class="bg-hhBG text-hhText text-center p-1 w-full rounded-lg border border-hhOrange"
+          >
+            Version: {{ preset.version }}
+          </div>
         </div>
       </div>
-      <div class="w-full space-y-5">
-        <div class="p-2 bg-hhBG border border-hhOrange rounded-lg">
-          <div class="flex items-center justify-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="text-hhText mr-2 h-7 w-7"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-              />
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="1.5"
-                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-              />
-            </svg>
-            Label Name
-          </div>
-          <div class="p-3">
-            <input
-              class="bg-hhCard text-hhText rounded px-2 w-full text-center"
-              v-model="preset.label"
+      <div class="w-full">
+        <div class="flex items-center justify-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="text-hhText mr-2 h-8 w-8"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
             />
-          </div>
-        </div>
-        <div class="p-2 bg-hhBG border border-hhOrange rounded-lg">
-          <div class="flex items-center justify-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="text-hhText mr-2 h-7 w-7"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="1.5"
-                d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
-              />
-            </svg>
-            Code
-          </div>
-          <div class="p-3">
-            <input
-              class="bg-hhCard text-hhText rounded px-2 w-full text-center"
-              v-model="preset.code"
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
             />
-          </div>
+          </svg>
+          Preset Name
         </div>
-        <div class="p-2 bg-hhBG border border-hhOrange rounded-lg">
-          <div class="flex items-center justify-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="text-hhText mr-2 h-7 w-7"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="1.5"
-                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-              />
-            </svg>
-            Description
-          </div>
-          <div class="p-3">
-            <input
-              class="bg-hhCard text-hhText rounded px-2 w-full text-center"
-              v-model="preset.description"
+        <input
+          class="bg-hhCard text-hhText text-center mt-2 p-1 w-full rounded-lg border border-hhOrange"
+          v-model="preset.label"
+        />
+        <div class="flex items-center justify-center mt-5">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="text-hhText mr-2 h-8 w-8"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
             />
-          </div>
+          </svg>
+          Code
         </div>
+        <input
+          class="bg-hhCard text-hhText font-mono text-center mt-2 p-1 w-full rounded-lg border border-hhOrange h-40"
+          v-model="preset.code"
+        />
+        <div class="flex items-center justify-center mt-5">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="text-hhText mr-2 h-8 w-8"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+            />
+          </svg>
+          Description
+        </div>
+        <input
+          class="bg-hhCard text-hhText text-center mt-2 p-1 w-full rounded-lg border border-hhOrange h-40"
+          v-model="preset.description"
+        />
       </div>
     </div>
     <div class="flex mt-5 justify-between items-center">
