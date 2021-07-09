@@ -194,7 +194,9 @@
         </template>
         <template #body="{rows}">
           <VTr :row="preset" v-for="preset in rows" :key="preset._id">
-            <td class="py-1.5" @click="viewPreset(preset.id)">{{ preset.vendor }}</td>
+            <td class="py-1.5" @click="viewPreset(preset.id)">
+              {{ preset.vendor }}
+            </td>
             <td @click="viewPreset(preset.id)">{{ preset.aircraft }}</td>
             <td @click="viewPreset(preset.id)">{{ preset.system }}</td>
             <td @click="viewPreset(preset.id)">{{ preset.label }}</td>
@@ -339,13 +341,13 @@ export default {
   },
   computed: {
     uniqueVendors() {
-      return [...new Set(this.presets.map(({ vendor }) => vendor))];
+      return [...new Set(this.presets.map(({ vendor }) => vendor))].sort();
     },
     uniqueAircraft() {
-      return [...new Set(this.presets.map(({ aircraft }) => aircraft))];
+      return [...new Set(this.presets.map(({ aircraft }) => aircraft))].sort();
     },
     uniqueSystem() {
-      return [...new Set(this.presets.map(({ system }) => system))];
+      return [...new Set(this.presets.map(({ system }) => system))].sort();
     },
   },
   mounted() {

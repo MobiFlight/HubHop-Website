@@ -354,13 +354,13 @@ export default {
   },
   computed: {
     uniqueVendors() {
-      return [...new Set(this.presets.map(({ vendor }) => vendor))];
+      return [...new Set(this.presets.map(({ vendor }) => vendor))].sort();
     },
     uniqueAircraft() {
-      return [...new Set(this.presets.map(({ aircraft }) => aircraft))];
+      return [...new Set(this.presets.map(({ aircraft }) => aircraft))].sort();
     },
     uniqueSystems() {
-      return [...new Set(this.presets.map(({ system }) => system))];
+      return [...new Set(this.presets.map(({ system }) => system))].sort();
     },
   },
   methods: {
@@ -418,7 +418,7 @@ export default {
           presetType: this.presetType,
           status: "Submitted",
           createdDate: new Date().toUTCString(),
-          author: this.account,
+          author: this.$store.state.userSettings.username,
           description: this.description,
         };
 
