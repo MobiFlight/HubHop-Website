@@ -233,7 +233,7 @@
           Code
         </div>
         <div
-          class="bg-hhBG text-hhText flex place-content-center items-center font-mono mt-2 p-1 w-full rounded-lg border border-hhOrange h-40"
+          class="bg-hhBG text-hhText flex place-content-center items-center font-mono mt-2 p-1 w-full rounded-lg border border-hhOrange"
         >
           {{ preset.code }}
         </div>
@@ -256,13 +256,13 @@
         </div>
         <div
           v-if="preset.description"
-          class="bg-hhBG text-hhText p-1 mt-2 w-full flex place-content-center items-center  rounded-lg border border-hhOrange h-40"
+          class="bg-hhBG text-hhText p-1 mt-2 w-full flex place-content-center items-center  rounded-lg border border-hhOrange" 
         >
           {{ preset.description }}
         </div>
         <div
           v-if="!preset.description"
-          class="bg-hhBG text-hhText p-1 mt-2 w-full flex place-content-center items-center rounded-lg border border-hhOrange h-40"
+          class="bg-hhBG text-hhText p-1 mt-2 w-full flex place-content-center items-center rounded-lg border border-hhOrange" 
         >
           No description available
         </div>
@@ -493,7 +493,7 @@
           Code
         </div>
         <input
-          class="bg-hhCard text-hhText font-mono text-center mt-2 p-1 w-full rounded-lg border border-hhOrange h-40"
+          class="bg-hhCard text-hhText font-mono text-center mt-2 p-1 w-full rounded-lg border border-hhOrange" 
           v-model="preset.code"
         />
         <div class="flex items-center justify-center mt-5">
@@ -514,7 +514,7 @@
           Description
         </div>
         <input
-          class="bg-hhCard text-hhText text-center mt-2 p-1 w-full rounded-lg border border-hhOrange h-40"
+          class="bg-hhCard text-hhText text-center mt-2 p-1 w-full rounded-lg border border-hhOrange" 
           v-model="preset.description"
         />
       </div>
@@ -598,7 +598,7 @@
                 leave-to="opacity-0"
               >
                 <DialogOverlay
-                  class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity backdrop-filter backdrop-blur-sm"
+                  class="fixed inset-0 bg-hhBG bg-opacity-50 transition-opacity backdrop-filter backdrop-blur-sm"
                 />
               </TransitionChild>
 

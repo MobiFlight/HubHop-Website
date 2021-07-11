@@ -8,7 +8,9 @@ const store = createStore({
         auth: {
           clientId: process.env.VUE_APP_HUBHOP_OAUTH_CLIENTID,
           authority: process.env.VUE_APP_HUBHOP_OAUTH_AUTHORITY,
-          knownAuthorities: [ process.env.VUE_APP_HUBHOP_OAUTH_KNOWN_AUTHORITIES ],
+          knownAuthorities: [
+            process.env.VUE_APP_HUBHOP_OAUTH_KNOWN_AUTHORITIES,
+          ],
           redirectUri: process.env.VUE_APP_HUBHOP_OAUTH_REDIRECT_URI,
         },
         cache: {
@@ -18,13 +20,14 @@ const store = createStore({
       loggedIn: false,
       accessToken: "",
       userSettings: {
-        roles: [ process.env.VUE_APP_HUBHOP_ROLES_DEFAULT_ROLE ],
+        roles: [process.env.VUE_APP_HUBHOP_ROLES_DEFAULT_ROLE],
         username: process.env.VUE_APP_HUBHOP_ROLES_DEFAULT_NAME,
       },
       filterVendor: "",
       filterAircraft: "",
       filterSystem: "",
       filterInputType: "",
+      filterName: "",
     };
   },
   mutations: {
@@ -48,7 +51,10 @@ const store = createStore({
     },
     setFilterInputType(state, filterInputType) {
       state.filterInputType = filterInputType;
-    }
+    },
+    setFilterName(state, filterName) {
+      state.filterName = filterName;
+    },
   },
   plugins: [createPersistedState()],
 });

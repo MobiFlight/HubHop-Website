@@ -145,6 +145,7 @@
         <input
           class="bg-hhCard px-2 py-2 max-w-xs text-sm rounded"
           placeholder="Search Preset Name"
+          @keyup="setFilterName"
           v-model="filters.name.value"
         />
         <button
@@ -241,7 +242,9 @@ export default {
       this.$store.commit("setFilterAircraft", "");
       this.$store.commit("setFilterSystem", "");
       this.$store.commit("setFilterInputType", "");
+      this.$store.commit("setFilterName", "");
       this.filters.vendor.value = "";
+      this.filters.name.value = "";
       (this.filters.aircraft.value = ""),
         (this.filters.system.value = ""),
         (this.filters.type.value = "");
@@ -257,6 +260,9 @@ export default {
     },
     setFilterInputType() {
       this.$store.commit("setFilterInputType", this.filters.type.value);
+    },
+    setFilterName() {
+      this.$store.commit("setFilterName", this.filters.name.value);
     },
     async getAccessToken() {
       let request = {
@@ -330,7 +336,7 @@ export default {
         },
         vendor: { value: this.$store.state.filterVendor, keys: ["vendor"] },
         system: { value: this.$store.state.filterSystem, keys: ["system"] },
-        name: { value: "", keys: ["label"] },
+        name: { value: this.$store.state.filterName, keys: ["label"] },
         type: {
           value: this.$store.state.filterInputType,
           keys: ["presetType"],

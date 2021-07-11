@@ -25,7 +25,7 @@
               v-if="!newVendorPlus"
               v-model="vendor"
             >
-              <option selected disabled value="">Pick Vendor</option>
+              <option selected :value="vendor">{{ vendor }}</option>
               <option
                 v-for="vendor in uniqueVendors"
                 :value="vendor"
@@ -61,6 +61,9 @@
               </div>
             </label>
           </div>
+          <span class="-mt-3 text-red-500" v-if="v$.vendor.$error">
+            {{ v$.vendor.$errors[0].$message }}
+          </span>
           <div class="flex items-center mt-5">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -81,7 +84,7 @@
               v-if="!newAircraftPlus"
               v-model="aircraft"
             >
-              <option selected disabled value="">Pick Aircraft</option>
+              <option selected :value="aircraft">{{ aircraft }}</option>
               <option
                 v-for="aircraft in uniqueAircraft"
                 :value="aircraft"
@@ -143,7 +146,7 @@
               v-if="!newSystemPlus"
               v-model="system"
             >
-              <option selected disabled value="">Pick System</option>
+              <option selected :value="system">{{ system }}</option>
               <option
                 v-for="system in uniqueSystems"
                 :value="system"
@@ -198,9 +201,7 @@
               class="bg-hhCard text-hhText p-2 w-80 rounded-lg border border-hhOrange"
               v-model="presetType"
             >
-              <option value="" disabled selected
-                >Input (e.g. Switch) / Output (e.g. LED)</option
-              >
+              <option selected :value="presetType">{{ presetType }}</option>
               <option value="Input">Input (Button/Switch)</option>
               <option value="Output">Output (LED/7-Segment)</option>
             </select>
@@ -292,7 +293,7 @@
 
 <script>
 import useVuelidate from "@vuelidate/core";
-import { required } from "@vuelidate/validators";
+import { required, sameAs, not } from "@vuelidate/validators";
 import { PublicClientApplication } from "@azure/msal-browser";
 
 export default {
@@ -309,17 +310,18 @@ export default {
   },
   data() {
     return {
-      vendor: "",
+      vendorPreselected: this.$store.state.filterVendor,
+      vendor: this.showFilteredVendor(),
       newVendor: "",
       newVendorPlus: false,
       description: "",
       code: "",
       label: "",
-      presetType: "",
-      system: "",
+      presetType: this.showFilteredInputType(),
+      system: this.showFilteredSystem(),
       newSystem: "",
       newSystemPlus: false,
-      aircraft: "",
+      aircraft: this.showFilteredAircraft(),
       newAircraft: "",
       newAircraftPlus: false,
       account: undefined,
@@ -346,6 +348,9 @@ export default {
   },
   validations() {
     return {
+      vendor: {
+        vendor: not(sameAs('Pick Vendor')),
+      },
       label: { required },
       code: { required },
       description: { required },
@@ -371,6 +376,34 @@ export default {
         setTimeout(function() {
           location.reload();
         }, 2000);
+      }
+    },
+    showFilteredVendor() {
+      if (this.$store.state.filterVendor) {
+        return this.$store.state.filterVendor;
+      } else {
+        return "Pick Vendor";
+      }
+    },
+    showFilteredSystem() {
+      if (this.$store.state.filterSystem) {
+        return this.$store.state.filterSystem;
+      } else {
+        return "Pick System";
+      }
+    },
+    showFilteredAircraft() {
+      if (this.$store.state.filterAircraft) {
+        return this.$store.state.filterAircraft;
+      } else {
+        return "Pick Aircraft";
+      }
+    },
+    showFilteredInputType() {
+      if (this.$store.state.filterInputType) {
+        return this.$store.state.filterInputType;
+      } else {
+        return "Input (e.g Switch) / Output (e.g. LED)";
       }
     },
     addNewVendor() {

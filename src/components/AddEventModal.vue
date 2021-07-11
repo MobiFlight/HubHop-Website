@@ -9,8 +9,8 @@
     </button>
   </div>
   <TransitionRoot appear :show="isOpen" as="template">
-    <Dialog as="div" @close="closeModal">
-      <div class="fixed inset-0 z-10 overflow-y-auto">
+    <Dialog as="div">
+      <div class="fixed inset-0 z-10 overflow-y-auto bg-hhBG bg-opacity-50 transition-opacity backdrop-filter backdrop-blur-sm">
         <div class="px-4 text-center">
           <TransitionChild
             as="template"
