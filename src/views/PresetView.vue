@@ -256,13 +256,13 @@
         </div>
         <div
           v-if="preset.description"
-          class="bg-hhBG text-hhText p-1 mt-2 w-full flex place-content-center items-center  rounded-lg border border-hhOrange" 
+          class="bg-hhBG text-hhText p-1 mt-2 w-full flex place-content-center items-center  rounded-lg border border-hhOrange"
         >
           {{ preset.description }}
         </div>
         <div
           v-if="!preset.description"
-          class="bg-hhBG text-hhText p-1 mt-2 w-full flex place-content-center items-center rounded-lg border border-hhOrange" 
+          class="bg-hhBG text-hhText p-1 mt-2 w-full flex place-content-center items-center rounded-lg border border-hhOrange"
         >
           No description available
         </div>
@@ -492,8 +492,9 @@
           </svg>
           Code
         </div>
-        <input
-          class="bg-hhCard text-hhText font-mono text-center mt-2 p-1 w-full rounded-lg border border-hhOrange" 
+        <textarea
+          rows="4"
+          class="bg-hhCard text-hhText font-mono text-center mt-2 p-1 w-full break-normal rounded-lg border border-hhOrange"
           v-model="preset.code"
         />
         <div class="flex items-center justify-center mt-5">
@@ -513,8 +514,9 @@
           </svg>
           Description
         </div>
-        <input
-          class="bg-hhCard text-hhText text-center mt-2 p-1 w-full rounded-lg border border-hhOrange" 
+        <textarea
+          rows="4"
+          class="bg-hhCard text-hhText text-center mt-2 p-1 w-full rounded-lg border border-hhOrange"
           v-model="preset.description"
         />
       </div>

@@ -1,7 +1,7 @@
 <template>
   <div class="mt-5 container mx-auto">
     <div class="rounded-lg bg-opacity-60">
-      <div class="flex justify-between">
+      <div class="flex justify-around">
         <!-- Add event or variable form -->
         <form class="max-w-2xl text-base">
           <label class="flex text-transparent mb-1 items-start">ph</label>
@@ -491,7 +491,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 h2 {
   color: #d2d0d2 !important;
 }

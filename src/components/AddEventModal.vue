@@ -71,7 +71,7 @@
                   </button>
                 </div>
               </div>
-              <div class="mt-2 px-20">
+              <div class="mt-2">
                   <AddEvent />
               </div>
               <div class="flex justify-end">
