@@ -567,6 +567,12 @@
       <div class="flex items-center justify-center">
         <button
           class="text-xl ml-3 px-4 py-2 font-bold text-hhCard bg-hhOrange rounded-md hover:bg-orange-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+          @click="reportPreset(id)"
+        >
+          Report preset
+        </button>
+        <button
+          class="text-xl ml-3 px-4 py-2 font-bold text-hhCard bg-hhOrange rounded-md hover:bg-orange-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
           @click="updatePreset(preset.id)"
           v-if="edit"
         >
@@ -734,6 +740,61 @@ export default {
         });
       });
     },
+    reportPreset(id) {
+      const myAccounts = this.$msalInstance.getAllAccounts();
+      this.account = myAccounts[0];
+      const url = this.$hubHopApi.baseUrl + "/presets/" + id;
+
+      // post body data
+      const preset = {
+        path:
+          this.preset.vendor +
+          "." +
+          this.preset.aircraft +
+          "." +
+          this.preset.system +
+          "." +
+          this.preset.label,
+        vendor: this.preset.vendor,
+        aircraft: this.preset.aircraft,
+        system: this.preset.system,
+        code: this.preset.code,
+        label: this.preset.label,
+        tags: this.preset.tags,
+        presetType: this.preset.presetType,
+        version: this.preset.version,
+        status: "Updated",
+        createdDate: new Date().toUTCString(),
+        author: this.preset.author,
+        description: this.preset.description,
+        reported: +1,
+      };
+
+      const options = {
+        method: "PUT",
+        body: JSON.stringify(preset),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + this.$store.state.accessToken,
+        },
+      };
+      // send POST request
+      fetch(url, options).then((res) => {
+        console.log(res);
+        if (res.status != 201) return;
+        this.$swal({
+          position: "center",
+          icon: "success",
+          title:
+            '<h4 style="color:#D2D0D2">Your event/variable has been reported</h4>',
+          showConfirmButton: false,
+          background: "#33353e",
+          toast: true,
+          timer: 2000,
+        });
+      });
+    },
+
     updatePreset(id, onSuccessReload) {
       const myAccounts = this.$msalInstance.getAllAccounts();
       this.account = myAccounts[0];
