@@ -160,6 +160,18 @@ export default {
         })
         .catch((error) => {
           console.error(`error during authentication: ${error}`);
+          this.$store.commit("setUserSettings", {
+            roles: ["Guest"],
+            username: "Guest",
+          });
+          this.$store.commit("setLoggedIn", false);
+          this.$store.commit("setAccessToken", "");
+          this.$msalInstance
+            .logout({})
+            .then(() => {})
+            .catch((error) => {
+              console.error(error);
+            });
         });
     },
     async getAccessToken() {
