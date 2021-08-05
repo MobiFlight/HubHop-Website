@@ -186,6 +186,7 @@
       >
         <template #head>
           <tr class="text-base">
+            <!-- <th>Votes</th> -->
             <th>Vendor</th>
             <th>Aircraft</th>
             <th>System</th>
@@ -195,6 +196,44 @@
         </template>
         <template #body="{rows}">
           <VTr :row="preset" v-for="preset in rows" :key="preset._id">
+            <!-- <td class="flex flex-1 items-center justify-between max-w-0">
+              <div class="flex flex-col mr-7">
+                <button @click="upvote(preset.id)" class="flex items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6 mx-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M5 15l7-7 7 7"
+                    /></svg
+                  >Upvote</button
+                ><button @click="downvote(preset.id)" class="flex items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6 mx-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    /></svg
+                  >Downvote
+                </button>
+              </div>
+              <div class="text-xl">
+                {{ preset.votes }}
+              </div>
+            </td> -->
             <td class="py-1.5" @click="viewPreset(preset.id)">
               {{ preset.vendor }}
             </td>
@@ -228,12 +267,132 @@ export default {
   components: {
     AddEventModal,
   },
-  created() {
+  async created() {
+    this.$msalInstance = new PublicClientApplication(
+      this.$store.state.msalConfig
+    );
     if (this.$store.state.loggedIn == true) {
       return this.getAccessToken().then(() => this.getUserSettings());
     }
   },
   methods: {
+    upvote(id, onSuccessReload) {
+      const myAccounts = this.$msalInstance.getAllAccounts();
+      this.account = myAccounts[0];
+      const url = this.$hubHopApi.baseUrl + "/presets/" + id;
+
+      // post body data
+      const preset = {
+        path:
+          this.preset.vendor +
+          "." +
+          this.preset.aircraft +
+          "." +
+          this.preset.system +
+          "." +
+          this.preset.label,
+        vendor: this.preset.vendor,
+        aircraft: this.preset.aircraft,
+        system: this.preset.system,
+        code: this.preset.code,
+        label: this.preset.label,
+        tags: this.preset.tags,
+        presetType: this.preset.presetType,
+        version: this.preset.version,
+        status: "Updated",
+        createdDate: new Date().toUTCString(),
+        author: this.preset.author,
+        description: this.preset.description,
+        reported: this.preset.reported + 0,
+        votes: this.preset.votes + 1,
+      };
+
+      const options = {
+        method: "PUT",
+        body: JSON.stringify(preset),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + this.$store.state.accessToken,
+        },
+      };
+      // send POST request
+      fetch(url, options).then((res) => {
+        console.log(res);
+        if (res.status != 201) return;
+        this.$swal({
+          position: "center",
+          icon: "success",
+          title:
+            '<h4 style="color:#D2D0D2">Your event/variable has been saved</h4>',
+          showConfirmButton: false,
+          background: "#33353e",
+          toast: true,
+          timer: 2000,
+          willClose: () => {
+            if (onSuccessReload) location.reload();
+          },
+        });
+      });
+    },
+    downvote(id, onSuccessReload) {
+      const myAccounts = this.$msalInstance.getAllAccounts();
+      this.account = myAccounts[0];
+      const url = this.$hubHopApi.baseUrl + "/presets/" + id;
+
+      // post body data
+      const preset = {
+        path:
+          this.preset.vendor +
+          "." +
+          this.preset.aircraft +
+          "." +
+          this.preset.system +
+          "." +
+          this.preset.label,
+        vendor: this.preset.vendor,
+        aircraft: this.preset.aircraft,
+        system: this.preset.system,
+        code: this.preset.code,
+        label: this.preset.label,
+        tags: this.preset.tags,
+        presetType: this.preset.presetType,
+        version: this.preset.version,
+        status: "Updated",
+        createdDate: new Date().toUTCString(),
+        author: this.preset.author,
+        description: this.preset.description,
+        reported: this.preset.reported + 0,
+        votes: this.preset.votes - 1,
+      };
+
+      const options = {
+        method: "PUT",
+        body: JSON.stringify(preset),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + this.$store.state.accessToken,
+        },
+      };
+      // send POST request
+      fetch(url, options).then((res) => {
+        console.log(res);
+        if (res.status != 201) return;
+        this.$swal({
+          position: "center",
+          icon: "success",
+          title:
+            '<h4 style="color:#D2D0D2">Your event/variable has been saved</h4>',
+          showConfirmButton: false,
+          background: "#33353e",
+          toast: true,
+          timer: 2000,
+          willClose: () => {
+            if (onSuccessReload) location.reload();
+          },
+        });
+      });
+    },
+
     viewPreset(id) {
       this.$router.push({ name: "PresetView", params: { id: id } });
     },
@@ -277,7 +436,7 @@ export default {
         this.$store.commit("setAccessToken", tokenResponse.accessToken);
       } catch (error) {
         console.error(
-          `"Silent token acquisition failed. Using interactive mode" + ${error}`
+          `"Silent token acquisition failed." + ${error}`
         );
       }
     },
@@ -322,6 +481,7 @@ export default {
   },
   data() {
     return {
+      preset: null,
       account: undefined,
       confirmDelete: false,
       roles: this.$store.state.userSettings.roles,
