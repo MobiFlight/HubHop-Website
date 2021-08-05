@@ -185,6 +185,27 @@
             Version: {{ preset.version }}
           </div>
         </div>
+        <div v-if="preset.reported" class="flex items-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="text-hhText mr-2 h-8 w-8"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"
+            />
+          </svg>
+          <div
+            class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+          >
+            Reported: {{ preset.reported }} Times
+          </div>
+        </div>
       </div>
       <div class="w-full">
         <div class="flex items-center justify-center">
@@ -233,9 +254,10 @@
           Code
         </div>
         <div
-          class="bg-hhBG text-hhText flex place-content-center items-center font-mono mt-2 p-1 w-full rounded-lg border border-hhOrange"
+          class="bg-hhBG text-hhText flex place-content-start items-center font-mono mt-2 p-1 w-full rounded-lg border border-hhOrange"
         >
           {{ preset.code }}
+          <!-- <button @click="copy">Copy to clipboard</button> -->
         </div>
         <div class="flex items-center justify-center mt-5">
           <svg
@@ -256,7 +278,7 @@
         </div>
         <div
           v-if="preset.description"
-          class="bg-hhBG text-hhText p-1 mt-2 w-full flex place-content-center items-center  rounded-lg border border-hhOrange"
+          class="bg-hhBG text-hhText p-1 mt-2 w-full flex place-content-start items-center  rounded-lg border border-hhOrange"
         >
           {{ preset.description }}
         </div>
@@ -446,6 +468,27 @@
             Version: {{ preset.version }}
           </div>
         </div>
+        <div v-if="preset.reported" class="flex items-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="text-hhText mr-2 h-8 w-8"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"
+            />
+          </svg>
+          <div
+            class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+          >
+            Reported: {{ preset.reported }} Times
+          </div>
+        </div>
       </div>
       <div class="w-full">
         <div class="flex items-center justify-center">
@@ -494,7 +537,7 @@
         </div>
         <textarea
           rows="4"
-          class="bg-hhCard text-hhText font-mono text-center mt-2 p-1 w-full break-normal rounded-lg border border-hhOrange"
+          class="bg-hhCard text-hhText font-mono text-start mt-2 p-1 w-full break-normal rounded-lg border border-hhOrange"
           v-model="preset.code"
         />
         <div class="flex items-center justify-center mt-5">
@@ -516,7 +559,7 @@
         </div>
         <textarea
           rows="4"
-          class="bg-hhCard text-hhText text-center mt-2 p-1 w-full rounded-lg border border-hhOrange"
+          class="bg-hhCard text-hhText text-start mt-2 p-1 w-full rounded-lg border border-hhOrange"
           v-model="preset.description"
         />
       </div>
@@ -566,11 +609,146 @@
       </div>
       <div class="flex items-center justify-center">
         <button
-          class="text-xl ml-3 px-4 py-2 font-bold text-hhCard bg-hhOrange rounded-md hover:bg-orange-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-          @click="reportPreset(id)"
+          v-on:mouseenter="toggleTooltip()"
+          v-on:mouseleave="toggleTooltip()"
+          ref="btnRef"
+          class="disabled:opacity-75 disabled:cursor-not-allowed flex items-center text-xl ml-3 px-4 py-2 font-bold text-hhCard bg-hhOrange rounded-md hover:bg-orange-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+          @click="openReport = true"
         >
           Report preset
         </button>
+        <div
+          ref="tooltipRef"
+          v-bind:class="{ hidden: !tooltipShow, block: tooltipShow }"
+          class="bg-hhBG text-hhText border-0 block z-50 font-normal leading-normal text-sm max-w-xs text-left no-underline break-words rounded-lg"
+        >
+          <div>
+            <div
+              class="bg-hhBG text-hhText opacity-75 font-semibold p-3 border-b border-solid border-hhOrange uppercase rounded-t-lg"
+            >
+              Report preset
+            </div>
+            <div class="text-white p-3">
+              Report it if this preset is not functional or misleading.
+            </div>
+          </div>
+        </div>
+        <TransitionRoot as="confirmReport" :show="openReport">
+          <Dialog
+            as="div"
+            static
+            class="fixed z-10 inset-0 overflow-y-auto"
+            @close="openReport = false"
+            :openReport="openReport"
+          >
+            <div
+              class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+            >
+              <TransitionChild
+                as="confirmReport"
+                enter="ease-out duration-300"
+                enter-from="opacity-0"
+                enter-to="opacity-100"
+                leave="ease-in duration-200"
+                leave-from="opacity-100"
+                leave-to="opacity-0"
+              >
+                <DialogOverlay
+                  class="fixed inset-0 bg-hhBG bg-opacity-50 transition-opacity backdrop-filter backdrop-blur-sm"
+                />
+              </TransitionChild>
+
+              <span
+                class="hidden sm:inline-block sm:align-middle sm:h-screen"
+                aria-hidden="true"
+                >&#8203;</span
+              >
+              <TransitionChild
+                as="confirmReport"
+                enter="ease-out duration-300"
+                enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                enter-to="opacity-100 translate-y-0 sm:scale-100"
+                leave="ease-in duration-200"
+                leave-from="opacity-100 translate-y-0 sm:scale-100"
+                leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+              >
+                <div
+                  class="inline-block align-bottom bg-hhText rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+                >
+                  <div class="bg-hhText px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                      <div
+                        class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-200 sm:mx-0 sm:h-10 sm:w-10"
+                      >
+                        <ExclamationIcon
+                          class="h-6 w-6 text-red-600"
+                          aria-hidden="true"
+                        />
+                      </div>
+                      <div
+                        class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left"
+                      >
+                        <DialogTitle
+                          as="h3"
+                          class="text-lg leading-6 font-medium text-gray-900"
+                        >
+                          Report preset
+                        </DialogTitle>
+                        <div class="mt-2">
+                          <p class="text-gray-500">
+                            Are you sure you want to report this preset?
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="bg-hhText px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse"
+                  >
+                    <button
+                      type="button"
+                      class="disabled:opacity-25 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
+                      @click="reportPreset(id)"
+                      :disabled="reportPresetClicked === true"
+                    >
+                      <svg
+                        v-if="reportPresetClicked === true"
+                        class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          class="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          stroke-width="4"
+                        ></circle>
+                        <path
+                          class="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                      Report
+                    </button>
+                    <button
+                      type="button"
+                      class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                      @click="openReport = false"
+                      ref="cancelButtonRef"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </TransitionChild>
+            </div>
+          </Dialog>
+        </TransitionRoot>
+
         <button
           class="text-xl ml-3 px-4 py-2 font-bold text-hhCard bg-hhOrange rounded-md hover:bg-orange-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
           @click="updatePreset(preset.id)"
@@ -581,17 +759,17 @@
         <button
           class="text-xl ml-5 px-4 py-2 font-bold bg-red-800 rounded-md hover:bg-red-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
           v-if="roles.includes('Moderator')"
-          @click="open = true"
+          @click="openDelete = true"
         >
           Delete
         </button>
-        <TransitionRoot as="confirmDelete" :show="open">
+        <TransitionRoot as="confirmDelete" :show="openDelete">
           <Dialog
             as="div"
             static
             class="fixed z-10 inset-0 overflow-y-auto"
-            @close="open = false"
-            :open="open"
+            @close="openDelete = false"
+            :openDelete="openDelete"
           >
             <div
               class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
@@ -668,7 +846,7 @@
                     <button
                       type="button"
                       class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                      @click="open = false"
+                      @click="openDelete = false"
                       ref="cancelButtonRef"
                     >
                       Cancel
@@ -698,6 +876,8 @@ import {
   TransitionRoot,
 } from "@headlessui/vue";
 import { ExclamationIcon } from "@heroicons/vue/outline";
+import { createPopper } from "@popperjs/core";
+import useClipboard from "vue-clipboard3";
 
 export default {
   props: ["id"],
@@ -740,10 +920,14 @@ export default {
         });
       });
     },
+    reportPresetClick() {
+      this.reportPresetClicked === true;
+    },
     reportPreset(id) {
       const myAccounts = this.$msalInstance.getAllAccounts();
       this.account = myAccounts[0];
       const url = this.$hubHopApi.baseUrl + "/presets/" + id;
+      this.reportPresetClicked = true;
 
       // post body data
       const preset = {
@@ -767,7 +951,7 @@ export default {
         createdDate: new Date().toUTCString(),
         author: this.preset.author,
         description: this.preset.description,
-        reported: +1,
+        reported: this.preset.reported + 1,
       };
 
       const options = {
@@ -791,10 +975,23 @@ export default {
           background: "#33353e",
           toast: true,
           timer: 2000,
+          willClose: () => {
+            this.reportPresetClicked = false;
+            location.reload();
+          },
         });
       });
     },
-
+    toggleTooltip: function() {
+      if (this.tooltipShow) {
+        this.tooltipShow = false;
+      } else {
+        this.tooltipShow = true;
+        createPopper(this.$refs.btnRef, this.$refs.tooltipRef, {
+          placement: "top",
+        });
+      }
+    },
     updatePreset(id, onSuccessReload) {
       const myAccounts = this.$msalInstance.getAllAccounts();
       this.account = myAccounts[0];
@@ -822,6 +1019,7 @@ export default {
         createdDate: new Date().toUTCString(),
         author: this.preset.author,
         description: this.preset.description,
+        reported: this.preset.reported + 0,
       };
 
       const options = {
@@ -859,6 +1057,8 @@ export default {
       preset: null,
       edit: false,
       roles: this.$store.state.userSettings.roles,
+      reportPresetClicked: undefined,
+      tooltipShow: false,
     };
   },
   mounted() {
@@ -868,10 +1068,25 @@ export default {
       .catch((err) => console.log(err.massage));
   },
   setup() {
-    const open = ref(false);
+    const openDelete = ref(false);
+    const openReport = ref(false);
+
+    const { toClipboard } = useClipboard();
+    const preset = ref("");
+
+    const copy = async () => {
+      try {
+        await toClipboard(preset.value);
+        console.log("Copied to clipboard");
+      } catch (e) {
+        console.error(e);
+      }
+    };
 
     return {
-      open,
+      openDelete,
+      openReport,
+      copy,
     };
   },
 };

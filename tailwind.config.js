@@ -928,7 +928,7 @@ module.exports = {
     mixBlendMode: ['responsive'],
     objectFit: ['responsive'],
     objectPosition: ['responsive'],
-    opacity: ['responsive', 'group-hover', 'focus-within', 'hover', 'focus'],
+    opacity: ['responsive', 'group-hover', 'focus-within', 'hover', 'focus', 'disabled'],
     order: ['responsive'],
     outline: ['responsive', 'focus-within', 'focus'],
     overflow: ['responsive'],
@@ -977,5 +977,6 @@ module.exports = {
     wordBreak: ['responsive'],
     zIndex: ['responsive', 'focus-within', 'focus'],
   },
+
   plugins: [],
 }
