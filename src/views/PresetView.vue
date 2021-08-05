@@ -952,6 +952,7 @@ export default {
         author: this.preset.author,
         description: this.preset.description,
         reported: this.preset.reported + 1,
+        votes: this.preset.votes + 0,
       };
 
       const options = {
@@ -1020,6 +1021,7 @@ export default {
         author: this.preset.author,
         description: this.preset.description,
         reported: this.preset.reported + 0,
+        votes: this.preset.votes + 0,
       };
 
       const options = {
