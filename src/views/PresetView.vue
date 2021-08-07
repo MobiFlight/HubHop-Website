@@ -206,6 +206,31 @@
             Reported: {{ preset.reported }} Times
           </div>
         </div>
+        <div class="flex justify-end">
+          <button
+            v-on:mouseenter="toggleTooltip()"
+            v-on:mouseleave="toggleTooltip()"
+            ref="btnRef"
+            class="disabled:opacity-75 disabled:cursor-not-allowed flex items-center text-base px-2 text-hhText border-hhOrange rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+            @click="openReport = true"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5 mr-1"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"
+              />
+            </svg>
+            Report preset
+          </button>
+        </div>
       </div>
       <div class="w-full">
         <div class="flex items-center justify-center">
@@ -254,12 +279,32 @@
           Code
         </div>
         <textarea
-          disabled
+          id="preset-Code"
+          v-model="preset.code"
           rows="4"
           class="bg-hhBG text-hhText font-mono text-start mt-2 p-1 w-full break-normal rounded-lg border border-hhOrange"
-          v-model="preset.code"
         />
-        <!-- <button @click="copy">Copy to clipboard</button> -->
+        <div class="flex flex-col items-end">
+          <button
+            class="bg-hhOrange flex items-center text-hhBG font-bold text-sm px-2 rounded-lg"
+            @click="copyCode"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5 mr-1"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"
+              /></svg
+            >Copy
+          </button>
+        </div>
         <div class="flex items-center justify-center mt-5">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -278,6 +323,7 @@
           Description
         </div>
         <textarea
+          disabled
           rows="4"
           class="bg-hhBG text-hhText text-start mt-2 p-1 w-full rounded-lg border border-hhOrange"
           v-model="preset.description"
@@ -489,6 +535,31 @@
             Reported: {{ preset.reported }} Times
           </div>
         </div>
+        <div class="flex justify-end">
+          <button
+            v-on:mouseenter="toggleTooltip()"
+            v-on:mouseleave="toggleTooltip()"
+            ref="btnRef"
+            class="disabled:opacity-75 disabled:cursor-not-allowed flex items-center text-base px-2 text-hhText border-hhOrange rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+            @click="openReport = true"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5 mr-1"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"
+              />
+            </svg>
+            Report preset
+          </button>
+        </div>
       </div>
       <div class="w-full">
         <div class="flex items-center justify-center">
@@ -536,10 +607,32 @@
           Code
         </div>
         <textarea
+          v-model="preset.code"
+          id="preset-Code"
           rows="4"
           class="bg-hhCard text-hhText font-mono text-start mt-2 p-1 w-full break-normal rounded-lg border border-hhOrange"
-          v-model="preset.code"
         />
+        <div class="flex flex-col items-end">
+          <button
+            class="bg-hhOrange flex items-center text-hhBG font-bold text-sm px-2 rounded-lg"
+            @click="copyCode"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5 mr-1"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"
+              /></svg
+            >Copy
+          </button>
+        </div>
         <div class="flex items-center justify-center mt-5">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -567,10 +660,12 @@
     <div class="flex mt-5 justify-between items-center">
       <div class="flex space-x-5">
         <button
-          class="text-xl px-4 py-2 font-bold text-hhCard bg-hhOrange rounded-md hover:bg-orange-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-          @click="$router.go(-1)"
+          style="background-color: #A4031F"
+          class="text-xl ml-5 px-4 py-2 font-bold rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+          v-if="roles.includes('Moderator')"
+          @click="openDelete = true"
         >
-          Back
+          Delete
         </button>
         <label for="toogleEdit" class="flex items-center cursor-pointer">
           <div class="mr-3 text-xl font-bold text-hhOrange" v-if="!edit">
@@ -608,19 +703,10 @@
         </label>
       </div>
       <div class="flex items-center justify-center">
-        <button
-          v-on:mouseenter="toggleTooltip()"
-          v-on:mouseleave="toggleTooltip()"
-          ref="btnRef"
-          class="disabled:opacity-75 disabled:cursor-not-allowed flex items-center text-xl ml-3 px-4 py-2 font-bold text-hhCard bg-hhOrange rounded-md hover:bg-orange-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-          @click="openReport = true"
-        >
-          Report preset
-        </button>
         <div
           ref="tooltipRef"
           v-bind:class="{ hidden: !tooltipShow, block: tooltipShow }"
-          class="bg-hhBG text-hhText border-0 block z-50 font-normal leading-normal text-sm max-w-xs text-left no-underline break-words rounded-lg"
+          class="bg-hhBG border border-hhOrange text-hhText block z-50 font-normal leading-normal text-sm max-w-sm text-left no-underline break-words rounded-lg"
         >
           <div>
             <div
@@ -757,11 +843,10 @@
           Save changes
         </button>
         <button
-          class="text-xl ml-5 px-4 py-2 font-bold bg-red-800 rounded-md hover:bg-red-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-          v-if="roles.includes('Moderator')"
-          @click="openDelete = true"
+          class="text-xl px-4 py-2 font-bold text-hhCard bg-hhOrange rounded-md ml-2 hover:bg-orange-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+          @click="$router.go(-1)"
         >
-          Delete
+          Back
         </button>
         <TransitionRoot as="confirmDelete" :show="openDelete">
           <Dialog
@@ -881,6 +966,15 @@ import useClipboard from "vue-clipboard3";
 
 export default {
   props: ["id"],
+  data() {
+    return {
+      preset: null,
+      edit: false,
+      roles: this.$store.state.userSettings.roles,
+      reportPresetClicked: undefined,
+      tooltipShow: false,
+    };
+  },
   components: {
     Dialog,
     DialogOverlay,
@@ -895,6 +989,27 @@ export default {
     );
   },
   methods: {
+    copyCode() {
+      let codeToCopy = document.querySelector("#preset-Code");
+      codeToCopy.select();
+      try {
+        var successful = document.execCommand("copy");
+        var msg = successful ? "successful" : "unsuccessful";
+        console.log(msg);
+        this.$swal({
+          position: "bottom-end",
+          icon: "info",
+          title: '<h4 style="color:#D2D0D2">Copied to clipboard</h4>',
+          showConfirmButton: false,
+          background: "#33353e",
+          toast: true,
+          timer: 1000,
+        });
+      } catch (err) {
+        alert("Oops, unable to copy");
+      }
+      window.getSelection().removeAllRanges();
+    },
     deletePreset(id, onSuccessReload) {
       fetch(this.$hubHopApi.baseUrl + "/presets/" + id, {
         credentials: "include",
@@ -1053,16 +1168,6 @@ export default {
       });
     },
   },
-
-  data() {
-    return {
-      preset: null,
-      edit: false,
-      roles: this.$store.state.userSettings.roles,
-      reportPresetClicked: undefined,
-      tooltipShow: false,
-    };
-  },
   mounted() {
     fetch(this.$hubHopApi.baseUrl + "/presets/" + this.id)
       .then((res) => res.json())
@@ -1074,7 +1179,7 @@ export default {
     const openReport = ref(false);
 
     const { toClipboard } = useClipboard();
-    const preset = ref("");
+    const preset = ref("this.preset.code");
 
     const copy = async () => {
       try {
