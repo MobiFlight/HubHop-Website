@@ -253,12 +253,13 @@
           </svg>
           Code
         </div>
-        <div
-          class="bg-hhBG text-hhText flex place-content-start items-center font-mono mt-2 p-1 w-full rounded-lg border border-hhOrange"
-        >
-          {{ preset.code }}
-          <!-- <button @click="copy">Copy to clipboard</button> -->
-        </div>
+        <textarea
+          disabled
+          rows="4"
+          class="bg-hhBG text-hhText font-mono text-start mt-2 p-1 w-full break-normal rounded-lg border border-hhOrange"
+          v-model="preset.code"
+        />
+        <!-- <button @click="copy">Copy to clipboard</button> -->
         <div class="flex items-center justify-center mt-5">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -276,12 +277,11 @@
           </svg>
           Description
         </div>
-        <div
-          v-if="preset.description"
-          class="bg-hhBG text-hhText p-1 mt-2 w-full flex place-content-start items-center  rounded-lg border border-hhOrange"
-        >
-          {{ preset.description }}
-        </div>
+        <textarea
+          rows="4"
+          class="bg-hhBG text-hhText text-start mt-2 p-1 w-full rounded-lg border border-hhOrange"
+          v-model="preset.description"
+        />
         <div
           v-if="!preset.description"
           class="bg-hhBG text-hhText p-1 mt-2 w-full flex place-content-center items-center rounded-lg border border-hhOrange"

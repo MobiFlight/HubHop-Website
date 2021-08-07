@@ -435,9 +435,8 @@ export default {
         let tokenResponse = await msalInstance.acquireTokenSilent(request);
         this.$store.commit("setAccessToken", tokenResponse.accessToken);
       } catch (error) {
-        console.error(
-          `"Silent token acquisition failed." + ${error}`
-        );
+        console.error(`"Silent token acquisition failed. Logging out..." + ${error}`);
+        this.logout();
       }
     },
     async getUserSettings() {
@@ -454,6 +453,20 @@ export default {
         .then((userSettings) => {
           this.$store.commit("setUserSettings", userSettings);
           console.log(userSettings);
+        });
+    },
+    async logout() {
+      this.$store.commit("setUserSettings", {
+        roles: ["Guest"],
+        username: "Guest",
+      });
+      this.$store.commit("setLoggedIn", false);
+      this.$store.commit("setAccessToken", "");
+      await this.$msalInstance
+        .logout({})
+        .then(() => {})
+        .catch((error) => {
+          console.error(error);
         });
     },
     ...mapMutations(["setAccessToken", "setUserSettings"]),

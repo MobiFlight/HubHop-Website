@@ -189,6 +189,7 @@ export default {
         console.error(
           `"Silent token acquisition failed. Using interactive mode" + ${error}`
         );
+        this.logout();
       }
       return console.log("This Account is: " + this.account);
     },
