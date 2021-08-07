@@ -390,6 +390,7 @@
           disabled
           rows="4"
           class="bg-hhBG text-hhText text-start mt-2 p-1 w-full rounded-lg border border-hhOrange"
+          v-if="preset.description"
           v-model="preset.description"
         />
         <div
