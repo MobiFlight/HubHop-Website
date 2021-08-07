@@ -206,6 +206,70 @@
             Reported: {{ preset.reported }} Times
           </div>
         </div>
+        <div class="flex items-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="text-hhText mr-2 h-8 w-8"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"
+            />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"
+            />
+          </svg>
+          <div
+            class="flex bg-hhBG text-hhText justify-around text-center p-1 w-full rounded-lg border border-hhOrange"
+          >
+            <div v-if="preset.score">Score: {{ preset.score + score }}</div>
+            <div v-else>Score: {{ 0 + score }}</div>
+            <div>
+              <button @click="upvotePreset(id)" class="flex items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 11l7-7 7 7M5 19l7-7 7 7"
+                  /></svg
+                >Upvote
+              </button>
+            </div>
+            <div>
+              <button @click="downvotePreset(id)" class="flex items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 13l-7 7-7-7m14-8l-7 7-7-7"
+                  /></svg
+                >Downvote
+              </button>
+            </div>
+          </div>
+        </div>
         <div class="flex justify-end">
           <button
             v-on:mouseenter="toggleTooltip()"
@@ -533,6 +597,70 @@
             class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
           >
             Reported: {{ preset.reported }} Times
+          </div>
+        </div>
+        <div class="flex items-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="text-hhText mr-2 h-8 w-8"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"
+            />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"
+            />
+          </svg>
+          <div
+            class="flex bg-hhBG text-hhText justify-around text-center p-1 w-full rounded-lg border border-hhOrange"
+          >
+            <div v-if="preset.score">Score: {{ preset.score + score }}</div>
+            <div v-else>Score: {{ 0 + score }}</div>
+            <div>
+              <button @click="upvotePreset(id)" class="flex items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 11l7-7 7 7M5 19l7-7 7 7"
+                  /></svg
+                >Upvote
+              </button>
+            </div>
+            <div>
+              <button @click="downvotePreset(id)" class="flex items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 13l-7 7-7-7m14-8l-7 7-7-7"
+                  /></svg
+                >Downvote
+              </button>
+            </div>
           </div>
         </div>
         <div class="flex justify-end">
@@ -973,6 +1101,7 @@ export default {
       roles: this.$store.state.userSettings.roles,
       reportPresetClicked: undefined,
       tooltipShow: false,
+      score: "",
     };
   },
   components: {
@@ -1038,6 +1167,144 @@ export default {
     reportPresetClick() {
       this.reportPresetClicked === true;
     },
+    upvotePreset(id) {
+      const myAccounts = this.$msalInstance.getAllAccounts();
+      this.account = myAccounts[0];
+      const url = this.$hubHopApi.baseUrl + "/presets/" + id;
+      this.score++;
+
+      let scoreNumber = {
+        path:
+          this.preset.vendor +
+          "." +
+          this.preset.aircraft +
+          "." +
+          this.preset.system +
+          "." +
+          this.preset.label,
+        vendor: this.preset.vendor,
+        aircraft: this.preset.aircraft,
+        system: this.preset.system,
+        code: this.preset.code,
+        label: this.preset.label,
+        tags: this.preset.tags,
+        presetType: this.preset.presetType,
+        version: this.preset.version,
+        status: "Updated",
+        createdDate: new Date().toUTCString(),
+        author: this.preset.author,
+        description: this.preset.description,
+        reported: this.preset.reported + 0,
+        score: this.score,
+      };
+
+      if (this.preset.score) {
+        scoreNumber = {
+          path:
+            this.preset.vendor +
+            "." +
+            this.preset.aircraft +
+            "." +
+            this.preset.system +
+            "." +
+            this.preset.label,
+          vendor: this.preset.vendor,
+          aircraft: this.preset.aircraft,
+          system: this.preset.system,
+          code: this.preset.code,
+          label: this.preset.label,
+          tags: this.preset.tags,
+          presetType: this.preset.presetType,
+          version: this.preset.version,
+          status: "Updated",
+          createdDate: new Date().toUTCString(),
+          author: this.preset.author,
+          description: this.preset.description,
+          reported: this.preset.reported + 0,
+          score: this.preset.score + this.score,
+        };
+      }
+      const preset = scoreNumber;
+
+      // post body data
+      const options = {
+        method: "PUT",
+        body: JSON.stringify(preset),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + this.$store.state.accessToken,
+        },
+      };
+      // send POST request
+      fetch(url, options).then((res) => {
+        console.log(res);
+        if (res.status != 201) return;
+        this.$swal({
+          position: "bottom-end",
+          icon: "success",
+          title: '<h4 style="color:#D2D0D2">Upvote successful</h4>',
+          showConfirmButton: false,
+          background: "#33353e",
+          toast: true,
+          timer: 1000,
+        });
+      });
+    },
+    downvotePreset(id) {
+      const myAccounts = this.$msalInstance.getAllAccounts();
+      this.account = myAccounts[0];
+      const url = this.$hubHopApi.baseUrl + "/presets/" + id;
+      this.score--;
+
+      // post body data
+      const preset = {
+        path:
+          this.preset.vendor +
+          "." +
+          this.preset.aircraft +
+          "." +
+          this.preset.system +
+          "." +
+          this.preset.label,
+        vendor: this.preset.vendor,
+        aircraft: this.preset.aircraft,
+        system: this.preset.system,
+        code: this.preset.code,
+        label: this.preset.label,
+        tags: this.preset.tags,
+        presetType: this.preset.presetType,
+        version: this.preset.version,
+        status: "Updated",
+        createdDate: new Date().toUTCString(),
+        author: this.preset.author,
+        description: this.preset.description,
+        reported: this.preset.reported + 0,
+        score: this.preset.score + this.score,
+      };
+      const options = {
+        method: "PUT",
+        body: JSON.stringify(preset),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + this.$store.state.accessToken,
+        },
+      };
+      // send POST request
+      fetch(url, options).then((res) => {
+        console.log(res);
+        if (res.status != 201) return;
+        this.$swal({
+          position: "bottom-end",
+          icon: "success",
+          title: '<h4 style="color:#D2D0D2">Downvote successful</h4>',
+          showConfirmButton: false,
+          background: "#33353e",
+          toast: true,
+          timer: 1000,
+        });
+      });
+    },
+
     reportPreset(id) {
       const myAccounts = this.$msalInstance.getAllAccounts();
       this.account = myAccounts[0];
@@ -1067,7 +1334,7 @@ export default {
         author: this.preset.author,
         description: this.preset.description,
         reported: this.preset.reported + 1,
-        votes: this.preset.votes + 0,
+        score: this.preset.score + 0,
       };
 
       const options = {
@@ -1136,7 +1403,7 @@ export default {
         author: this.preset.author,
         description: this.preset.description,
         reported: this.preset.reported + 0,
-        votes: this.preset.votes + 0,
+        score: this.preset.score + 0,
       };
 
       const options = {

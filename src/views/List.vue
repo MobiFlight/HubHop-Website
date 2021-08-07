@@ -186,7 +186,7 @@
       >
         <template #head>
           <tr class="text-base">
-            <!-- <th>Votes</th> -->
+            <th>Score</th>
             <th>Vendor</th>
             <th>Aircraft</th>
             <th>System</th>
@@ -196,44 +196,8 @@
         </template>
         <template #body="{rows}">
           <VTr :row="preset" v-for="preset in rows" :key="preset._id">
-            <!-- <td class="flex flex-1 items-center justify-between max-w-0">
-              <div class="flex flex-col mr-7">
-                <button @click="upvote(preset.id)" class="flex items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-6 w-6 mx-2"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M5 15l7-7 7 7"
-                    /></svg
-                  >Upvote</button
-                ><button @click="downvote(preset.id)" class="flex items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-6 w-6 mx-2"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M19 9l-7 7-7-7"
-                    /></svg
-                  >Downvote
-                </button>
-              </div>
-              <div class="text-xl">
-                {{ preset.votes }}
-              </div>
-            </td> -->
+            <td class="max-w-0" v-if="preset.score" @click="viewPreset(preset.id)">{{ preset.score }}</td>
+            <td v-else @click="viewPreset(preset.id)">No score</td>
             <td class="py-1.5" @click="viewPreset(preset.id)">
               {{ preset.vendor }}
             </td>
@@ -435,7 +399,9 @@ export default {
         let tokenResponse = await msalInstance.acquireTokenSilent(request);
         this.$store.commit("setAccessToken", tokenResponse.accessToken);
       } catch (error) {
-        console.error(`"Silent token acquisition failed. Logging out..." + ${error}`);
+        console.error(
+          `"Silent token acquisition failed. Logging out..." + ${error}`
+        );
         this.logout();
       }
     },
