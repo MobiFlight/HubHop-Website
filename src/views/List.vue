@@ -196,7 +196,13 @@
         </template>
         <template #body="{rows}">
           <VTr :row="preset" v-for="preset in rows" :key="preset._id">
-            <td class="max-w-0" v-if="preset.score" @click="viewPreset(preset.id)">{{ preset.score }}</td>
+            <td
+              class="max-w-0"
+              v-if="preset.score"
+              @click="viewPreset(preset.id)"
+            >
+              {{ preset.score }}
+            </td>
             <td v-else @click="viewPreset(preset.id)">No score</td>
             <td class="py-1.5" @click="viewPreset(preset.id)">
               {{ preset.vendor }}
@@ -211,6 +217,7 @@
       <VTPagination
         class="flex"
         v-model:currentPage="currentPage"
+        @click="setCurrentPage"
         :total-pages="totalPages"
         :maxPageLinks="10"
       />
@@ -231,6 +238,33 @@ export default {
   components: {
     AddEventModal,
   },
+  data() {
+    return {
+      preset: null,
+      account: undefined,
+      confirmDelete: false,
+      roles: this.$store.state.userSettings.roles,
+      presets: [],
+      totalPages: 1,
+      currentPage: this.$store.state.currentPage,
+      selectedRows: [],
+      filters: {
+        aircraft: {
+          value: this.$store.state.filterAircraft,
+          keys: ["aircraft"],
+        },
+        vendor: { value: this.$store.state.filterVendor, keys: ["vendor"] },
+        system: { value: this.$store.state.filterSystem, keys: ["system"] },
+        name: { value: this.$store.state.filterName, keys: ["label"] },
+        type: {
+          value: this.$store.state.filterInputType,
+          keys: ["presetType"],
+        },
+        status: { value: "", keys: ["status"] },
+      },
+    };
+  },
+
   async created() {
     this.$msalInstance = new PublicClientApplication(
       this.$store.state.msalConfig
@@ -366,6 +400,7 @@ export default {
       this.$store.commit("setFilterSystem", "");
       this.$store.commit("setFilterInputType", "");
       this.$store.commit("setFilterName", "");
+      this.$store.commit("setCurrentPage", 1);
       this.filters.vendor.value = "";
       this.filters.name.value = "";
       (this.filters.aircraft.value = ""),
@@ -386,6 +421,9 @@ export default {
     },
     setFilterName() {
       this.$store.commit("setFilterName", this.filters.name.value);
+    },
+    setCurrentPage() {
+      this.$store.commit("setCurrentPage", this.currentPage);
     },
     async getAccessToken() {
       let request = {
@@ -457,32 +495,6 @@ export default {
       });
       this.presets = this.presets.filter((preset) => preset.id != id);
     },
-  },
-  data() {
-    return {
-      preset: null,
-      account: undefined,
-      confirmDelete: false,
-      roles: this.$store.state.userSettings.roles,
-      presets: [],
-      totalPages: 1,
-      currentPage: 1,
-      selectedRows: [],
-      filters: {
-        aircraft: {
-          value: this.$store.state.filterAircraft,
-          keys: ["aircraft"],
-        },
-        vendor: { value: this.$store.state.filterVendor, keys: ["vendor"] },
-        system: { value: this.$store.state.filterSystem, keys: ["system"] },
-        name: { value: this.$store.state.filterName, keys: ["label"] },
-        type: {
-          value: this.$store.state.filterInputType,
-          keys: ["presetType"],
-        },
-        status: { value: "", keys: ["status"] },
-      },
-    };
   },
   computed: {
     uniqueVendors() {

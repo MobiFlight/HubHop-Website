@@ -28,6 +28,7 @@ const store = createStore({
       filterSystem: "",
       filterInputType: "",
       filterName: "",
+      currentPage: 1,
     };
   },
   mutations: {
@@ -54,6 +55,9 @@ const store = createStore({
     },
     setFilterName(state, filterName) {
       state.filterName = filterName;
+    },
+    setCurrentPage(state, currentPage) {
+      state.currentPage = currentPage;
     },
   },
   plugins: [createPersistedState()],
