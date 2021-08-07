@@ -1,5 +1,5 @@
 <template>
   <div class="h-full">
-    Explain API
+    This will be the dashboard
   </div>
 </template>

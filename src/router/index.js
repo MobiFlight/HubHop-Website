@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import Home from "../views/Home.vue";
 import Team from "../views/Team.vue";
-import Api from "../views/Api.vue";
+import Api from "../views/Dashboard.vue";
 import List from "../views/List.vue";
 import Add from "../views/Add.vue";
 import Terms from "../views/Terms.vue";
@@ -25,8 +25,8 @@ const routes = [
     component: Team,
   },
   {
-    path: "/api",
-    name: "API",
+    path: "/dashboard",
+    name: "Dashboard",
     component: Api,
   },
   {

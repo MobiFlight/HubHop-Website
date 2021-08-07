@@ -49,10 +49,26 @@
               /></svg
             >Preset list</router-link
           >
-          <!-- <router-link @click="scrollTop" class="px-5" to="/api"
-            >The API</router-link
-          >
-          <router-link @click="scrollTop" class="px-5" to="/team"
+          <!-- <router-link
+            @click="scrollTop"
+            class="px-5 flex items-center"
+            to="/dashboard"
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="mr-1 h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"
+              /></svg
+            >Dashboard</router-link
+          > -->
+          <!--<router-link @click="scrollTop" class="px-5" to="/team"
             >The Team</router-link
           > -->
           <div class="flex items-center text-2xl">

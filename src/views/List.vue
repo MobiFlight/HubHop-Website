@@ -401,6 +401,7 @@ export default {
       this.$store.commit("setFilterInputType", "");
       this.$store.commit("setFilterName", "");
       this.$store.commit("setCurrentPage", 1);
+      this.currentPage = 1;
       this.filters.vendor.value = "";
       this.filters.name.value = "";
       (this.filters.aircraft.value = ""),
