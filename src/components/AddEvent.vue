@@ -24,8 +24,9 @@
               class="bg-hhCard text-hhText p-2 w-full rounded-lg border border-hhOrange"
               v-if="!newVendorPlus"
               v-model="vendor"
+              required
             >
-              <option selected :value="vendor">{{ vendor }}</option>
+              <option selected disabled value="">Pick Vendor</option>
               <option
                 v-for="vendor in uniqueVendors"
                 :value="vendor"
@@ -61,8 +62,9 @@
               </div>
             </label>
           </div>
-          <span class="-mt-3 text-red-500" v-if="v$.vendor.$error">
-            {{ v$.vendor.$errors[0].$message }}
+          <span class="-mt-3 text-red-500 ml-10" v-if="v$.vendor.$error">
+            Select Vendor
+            <!-- {{ v$.aircraft.$errors[0].$message }} -->
           </span>
           <div class="flex items-center mt-5">
             <svg
@@ -83,8 +85,9 @@
               class="bg-hhCard text-hhText p-2 w-full rounded-lg border border-hhOrange"
               v-if="!newAircraftPlus"
               v-model="aircraft"
+              required
             >
-              <option selected :value="aircraft">{{ aircraft }}</option>
+              <option selected disabled value="">Pick Aircraft</option>
               <option
                 v-for="aircraft in uniqueAircraft"
                 :value="aircraft"
@@ -120,6 +123,10 @@
               </div>
             </label>
           </div>
+          <span class="-mt-3 text-red-500 ml-10" v-if="v$.aircraft.$error">
+            Select Aircraft
+            <!-- {{ v$.aircraft.$errors[0].$message }} -->
+          </span>
           <div class="flex items-center mt-5">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -145,8 +152,9 @@
               class="bg-hhCard text-hhText p-2 w-full rounded-lg border border-hhOrange"
               v-if="!newSystemPlus"
               v-model="system"
+              required
             >
-              <option selected :value="system">{{ system }}</option>
+              <option selected disabled value="">Pick System</option>
               <option
                 v-for="system in uniqueSystems"
                 :value="system"
@@ -182,6 +190,10 @@
               </div>
             </label>
           </div>
+          <span class="-mt-3 text-red-500 ml-10" v-if="v$.system.$error">
+            Select System
+            <!-- {{ v$.system.$errors[0].$message }} -->
+          </span>
           <div class="flex items-center mt-5">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -200,8 +212,11 @@
             <select
               class="bg-hhCard text-hhText p-2 w-80 rounded-lg border border-hhOrange"
               v-model="presetType"
+              required
             >
-              <option selected :value="presetType">{{ presetType }}</option>
+              <option selected disabled value=""
+                >Input (e.g Switch) / Output (e.g. LED)</option
+              >
               <option value="Input">Input (Button/Switch)</option>
               <option value="Output">Output (LED/7-Segment)</option>
             </select>
@@ -227,7 +242,8 @@
             </label>
           </div>
           <span class="text-red-500 ml-10" v-if="v$.presetType.$error">
-            {{ v$.presetType.$errors[0].$message }}
+            Select Type
+            <!-- {{ v$.presetType.$errors[0].$message }} -->
           </span>
         </form>
         <div class="text-base flex flex-col">
@@ -241,7 +257,8 @@
             placeholder="Alternator 1 On"
           />
           <span class="-mt-3 text-red-500" v-if="v$.label.$error">
-            {{ v$.label.$errors[0].$message }}
+            Name required
+            <!-- {{ v$.label.$errors[0].$message }} -->
           </span>
           <label class="flex text-hhText text-base items-start"
             >Code to be executed inside the Sim</label
@@ -255,7 +272,8 @@
             placeholder="(>L:somecode) (>K:somecodeToo) * near"
           ></textarea>
           <span class="-mt-3 text-red-500" v-if="v$.code.$error">
-            {{ v$.code.$errors[0].$message }}
+            Code required
+            <!-- {{ v$.code.$errors[0].$message }} -->
           </span>
           <label class="flex text-hhText items-start">Description</label>
           <textarea
@@ -267,7 +285,8 @@
             placeholder="Anything"
           ></textarea>
           <span class="text-red-500" v-if="v$.description.$error">
-            {{ v$.description.$errors[0].$message }}
+            Description required
+            <!-- {{ v$.description.$errors[0].$message }} -->
           </span>
         </div>
       </div>
@@ -293,7 +312,7 @@
 
 <script>
 import useVuelidate from "@vuelidate/core";
-import { required, sameAs, not } from "@vuelidate/validators";
+import { required } from "@vuelidate/validators";
 import { PublicClientApplication } from "@azure/msal-browser";
 
 export default {
@@ -348,9 +367,9 @@ export default {
   },
   validations() {
     return {
-      vendor: {
-        vendor: not(sameAs('Pick Vendor')),
-      },
+      vendor: { required },
+      aircraft: { required },
+      system: { required },
       label: { required },
       code: { required },
       description: { required },
@@ -382,28 +401,28 @@ export default {
       if (this.$store.state.filterVendor) {
         return this.$store.state.filterVendor;
       } else {
-        return "Pick Vendor";
+        return "";
       }
     },
     showFilteredSystem() {
       if (this.$store.state.filterSystem) {
         return this.$store.state.filterSystem;
       } else {
-        return "Pick System";
+        return "";
       }
     },
     showFilteredAircraft() {
       if (this.$store.state.filterAircraft) {
         return this.$store.state.filterAircraft;
       } else {
-        return "Pick Aircraft";
+        return "";
       }
     },
     showFilteredInputType() {
       if (this.$store.state.filterInputType) {
         return this.$store.state.filterInputType;
       } else {
-        return "Input (e.g Switch) / Output (e.g. LED)";
+        return "";
       }
     },
     addNewVendor() {
