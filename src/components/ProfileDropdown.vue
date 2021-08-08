@@ -1,88 +1,112 @@
 <template>
-  <div
-    :class="{ onScroll: !view.topOfPage }"
-    class="nav fixed top-0 left-0 right-0"
+  <button v-if="!account" class="px-5 flex items-center" @click="login">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="mr-1 h-6 w-6"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="1.5"
+        d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+      />
+    </svg>
+    Log in
+  </button>
+  <button
+    v-if="account"
+    class="px-5 flex items-center"
+    type="button"
+    v-on:click="toggleDropdown()"
+    ref="btnDropdownRef"
   >
-    <div class="px-52 mx-auto px-page">
-      <div class="flex justify-between">
-        <div>
-          <router-link @click="scrollTop" to="/"
-            ><img class="max-h-20" src="@/assets/logo-big.png" alt=""
-          /></router-link>
-        </div>
-        <div class="flex items-center text-2xl">
-          <router-link @click="scrollTop" class="px-5 flex items-center" to="/"
-            ><svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="mr-1 h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="1.5"
-                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-              /></svg
-            >Home</router-link
-          >
-          <router-link
-            @click="scrollTop"
-            class="px-5 flex items-center"
-            to="/list"
-            ><svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="mr-1 h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="1.5"
-                d="M4 6h16M4 10h16M4 14h16M4 18h16"
-              /></svg
-            >Preset list</router-link
-          >
-          <!-- <router-link
-            @click="scrollTop"
-            class="px-5 flex items-center"
-            to="/dashboard"
-            ><svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="mr-1 h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="1.5"
-                d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"
-              /></svg
-            >Dashboard</router-link
-          > -->
-          <ProfileDropdown />
-        </div>
-      </div>
-    </div>
+    Hi, {{ account.name }}
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="ml-1 h-5 w-5"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+    >
+      <path
+        fill-rule="evenodd"
+        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+        clip-rule="evenodd"
+      />
+    </svg>
+  </button>
+  <div
+    v-bind:class="{
+      hidden: !dropdownPopoverShow,
+      block: dropdownPopoverShow,
+    }"
+    class="bg-hhCard text-base z-50 float-left list-none text-left rounded shadow-lg animate-fade-in-down animate-fade-out-down"
+    style="min-width:12rem"
+    ref="popoverDropdownRef"
+  >
+    <router-link
+      v-if="account"
+      to="/account"
+      @click="scrollTop(), toggleDropdown()"
+      class="px-4 py-2 flex items-center w-full"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="mr-1 h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="1.5"
+          d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+      </svg>
+      Your Account
+    </router-link>
+    <div
+      class="h-0 border border-solid border-t-0 border-blueGray-800 opacity-25"
+    ></div>
+    <button
+      v-if="account"
+      class="px-4 my-2 flex items-center w-full"
+      @click="logout"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="mr-1 h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="1.5"
+          d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+        />
+      </svg>
+      Log out
+    </button>
   </div>
 </template>
 
 <script>
+import { createPopper } from "@popperjs/core";
 import { PublicClientApplication } from "@azure/msal-browser";
 import { mapMutations } from "vuex";
-import ProfileDropdown from "./ProfileDropdown.vue";
 
 export default {
-  name: "Navbar",
-  components: { ProfileDropdown },
+  name: "dropdown",
   data() {
     return {
       account: undefined,
+      dropdownPopoverShow: false,
+
       view: {
         topOfPage: true,
       },
@@ -99,6 +123,17 @@ export default {
     window.addEventListener("scroll", this.handleScroll);
   },
   methods: {
+    toggleDropdown: function() {
+      if (this.dropdownPopoverShow) {
+        this.dropdownPopoverShow = false;
+      } else {
+        this.dropdownPopoverShow = true;
+        createPopper(this.$refs.btnDropdownRef, this.$refs.popoverDropdownRef, {
+          placement: "bottom-start",
+        });
+      }
+    },
+
     ...mapMutations(["setAccessToken", "setUserSettings"]),
     async login() {
       await this.$msalInstance
@@ -209,18 +244,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.nav {
-  transition: all 0.2s ease-in-out;
-  &.onScroll {
-    box-shadow: 0 0 10px #33353e;
-    background-color: #33353e;
-  }
-  a {
-    &.router-link-exact-active {
-      color: #ffa047;
-    }
-  }
-}
-</style>
