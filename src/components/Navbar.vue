@@ -68,9 +68,6 @@
               /></svg
             >Dashboard</router-link
           > -->
-          <!--<router-link @click="scrollTop" class="px-5" to="/team"
-            >The Team</router-link
-          > -->
           <div class="flex items-center text-2xl">
             <button
               v-if="!account"

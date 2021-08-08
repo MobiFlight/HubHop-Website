@@ -410,18 +410,28 @@ export default {
     },
     setFilterVendor() {
       this.$store.commit("setFilterVendor", this.filters.vendor.value);
+      this.$store.commit("setCurrentPage", 1);
+      this.currentPage = 1;
     },
     setFilterAircraft() {
       this.$store.commit("setFilterAircraft", this.filters.aircraft.value);
+      this.$store.commit("setCurrentPage", 1);
+      this.currentPage = 1;
     },
     setFilterSystem() {
       this.$store.commit("setFilterSystem", this.filters.system.value);
+      this.$store.commit("setCurrentPage", 1);
+      this.currentPage = 1;
     },
     setFilterInputType() {
       this.$store.commit("setFilterInputType", this.filters.type.value);
+      this.$store.commit("setCurrentPage", 1);
+      this.currentPage = 1;
     },
     setFilterName() {
       this.$store.commit("setFilterName", this.filters.name.value);
+      this.$store.commit("setCurrentPage", 1);
+      this.currentPage = 1;
     },
     setCurrentPage() {
       this.$store.commit("setCurrentPage", this.currentPage);

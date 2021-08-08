@@ -3,7 +3,7 @@ import Home from "../views/Home.vue";
 import Team from "../views/Team.vue";
 import Api from "../views/Dashboard.vue";
 import List from "../views/List.vue";
-import Add from "../views/Add.vue";
+import Add from "../views/Profile.vue";
 import Terms from "../views/Terms.vue";
 import Privacy from "../views/Privacy.vue";
 import PresetEdit from "../views/PresetEdit.vue";
@@ -35,8 +35,8 @@ const routes = [
     component: List,
   },
   {
-    path: "/add",
-    name: "Add",
+    path: "/profile",
+    name: "Profile",
     component: Add,
   },
   {
