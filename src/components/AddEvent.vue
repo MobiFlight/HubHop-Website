@@ -366,6 +366,111 @@ export default {
       .then((data) => (this.presets = data));
   },
   validations() {
+    if (this.newVendorPlus) {
+      if (this.newAircraftPlus) {
+        if (this.newSystemPlus) {
+          return {
+            vendor: {},
+            aircraft: {},
+            system: {},
+            label: { required },
+            code: { required },
+            description: { required },
+            presetType: { required },
+          };
+        }
+        return {
+          vendor: {},
+          aircraft: {},
+          system: { required },
+          label: { required },
+          code: { required },
+          description: { required },
+          presetType: { required },
+        };
+      } else if (this.newSystemPlus) {
+        return {
+          vendor: {},
+          aircraft: { required },
+          system: {},
+          label: { required },
+          code: { required },
+          description: { required },
+          presetType: { required },
+        };
+      }
+      return {
+        vendor: {},
+        aircraft: { required },
+        system: { required },
+        label: { required },
+        code: { required },
+        description: { required },
+        presetType: { required },
+      };
+    } else if (this.newAircraftPlus) {
+      if (this.newSystemPlus) {
+        return {
+          vendor: { required },
+          aircraft: {},
+          system: {},
+          label: { required },
+          code: { required },
+          description: { required },
+          presetType: { required },
+        };
+      } else if (this.newVendorPlus) {
+        return {
+          vendor: {},
+          aircraft: {},
+          system: { required },
+          label: { required },
+          code: { required },
+          description: { required },
+          presetType: { required },
+        };
+      }
+      return {
+        vendor: { required },
+        aircraft: {},
+        system: { required },
+        label: { required },
+        code: { required },
+        description: { required },
+        presetType: { required },
+      };
+    } else if (this.newSystemPlus) {
+      if (this.newVendorPlus) {
+        return {
+          vendor: {},
+          aircraft: { required },
+          system: {},
+          label: { required },
+          code: { required },
+          description: { required },
+          presetType: { required },
+        };
+      } else if (this.newAircraftPlus) {
+        return {
+          vendor: { required },
+          aircraft: {},
+          system: {},
+          label: { required },
+          code: { required },
+          description: { required },
+          presetType: { required },
+        };
+      }
+      return {
+        vendor: { required },
+        aircraft: { required },
+        system: {},
+        label: { required },
+        code: { required },
+        description: { required },
+        presetType: { required },
+      };
+    }
     return {
       vendor: { required },
       aircraft: { required },
