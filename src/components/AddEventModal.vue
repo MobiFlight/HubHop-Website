@@ -1,16 +1,18 @@
 <template>
-  <div class="flex items-center justify-center">
+  <div class="hidden md:flex items-center justify-center">
     <button
       type="button"
       @click="openModal"
-      class="bg-hhOrange font px-5 py-2 max-w-xs font-semibold text-hhCard text-lg rounded"
+      class="bg-hhOrange font px-2 py-1 max-w-xs font-semibold text-hhCard text-lg rounded"
     >
       Add event or variable
     </button>
   </div>
   <TransitionRoot appear :show="isOpen" as="template">
     <Dialog as="div">
-      <div class="fixed inset-0 z-10 overflow-y-auto bg-hhBG bg-opacity-50 transition-opacity backdrop-filter backdrop-blur-sm">
+      <div
+        class="fixed inset-0 z-10 overflow-y-auto bg-hhBG bg-opacity-50 transition-opacity backdrop-filter backdrop-blur-sm"
+      >
         <div class="px-4 text-center">
           <TransitionChild
             as="template"
@@ -50,10 +52,7 @@
                   </DialogTitle>
                 </div>
                 <div>
-                  <button
-                    type="button"
-                    @click="closeModal"
-                  >
+                  <button type="button" @click="closeModal">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       class="h-6 w-6"
@@ -72,7 +71,7 @@
                 </div>
               </div>
               <div class="mt-2">
-                  <AddEvent />
+                <AddEvent />
               </div>
               <div class="flex justify-end">
                 <!-- <button

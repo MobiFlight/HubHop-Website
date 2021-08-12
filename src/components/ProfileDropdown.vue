@@ -1,5 +1,5 @@
 <template>
-  <button v-if="!account" class="px-5 flex items-center" @click="login">
+  <button v-if="!account" class="flex items-center" @click="login">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       class="mr-1 h-6 w-6"
@@ -18,7 +18,7 @@
   </button>
   <button
     v-if="account"
-    class="px-5 flex items-center"
+    class="flex items-center"
     type="button"
     v-on:click="toggleDropdown()"
     ref="btnDropdownRef"

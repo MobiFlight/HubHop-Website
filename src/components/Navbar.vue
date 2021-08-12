@@ -1,9 +1,107 @@
 <template>
   <div
     :class="{ onScroll: !view.topOfPage }"
-    class="nav fixed top-0 left-0 right-0"
+    class="px-3 nav fixed top-0 left-0 right-0"
   >
-    <div class="px-52 mx-auto px-page">
+    <div class="xl:hidden block">
+      <div class="container bg-hhBG flex justify-between mx-auto items-center">
+        <div class="flex items-center">
+          <router-link @click="scrollTop" to="/"
+            ><img class="max-h-16 mt-2" src="@/assets/logo-big.png" alt=""
+          /></router-link>
+        </div>
+        <div>
+          <button class="flex items-center text-2xl" @click="toggleNavbar">
+            Menu
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="ml-3 h-8 w-8"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="M4 6h16M4 12h16m-7 6h7"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <transition name="slide-fade">
+        <div
+          v-if="menuShow"
+          class="container bg-hhBG mx-auto flex justify-end"
+        >
+          <div class="flex justify-end">
+            <div class="flex flex-col items-start text-2xl">
+              <router-link
+                @click="scrollTop(), toggleNavbar()"
+                class="flex items-center"
+                to="/"
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="mr-1 h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.5"
+                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                  /></svg
+                >Home</router-link
+              >
+              <router-link
+                @click="scrollTop(), toggleNavbar()"
+                class="flex items-center"
+                to="/list"
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="mr-1 h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.5"
+                    d="M4 6h16M4 10h16M4 14h16M4 18h16"
+                  /></svg
+                >Preset list</router-link
+              >
+              <ProfileDropdown />
+
+              <!-- <router-link
+            @click="scrollTop"
+            class="px-5 flex items-center"
+            to="/dashboard"
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="mr-1 h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"
+              /></svg
+            >Dashboard</router-link
+          > -->
+            </div>
+          </div>
+        </div>
+      </transition>
+    </div>
+    <div class="hidden xl:block px-52 mx-auto px-page">
       <div class="flex justify-between">
         <div>
           <router-link @click="scrollTop" to="/"
@@ -86,6 +184,7 @@ export default {
       view: {
         topOfPage: true,
       },
+      menuShow: false,
     };
   },
   async created() {
@@ -99,6 +198,9 @@ export default {
     window.addEventListener("scroll", this.handleScroll);
   },
   methods: {
+    toggleNavbar: function() {
+      this.menuShow = !this.menuShow;
+    },
     ...mapMutations(["setAccessToken", "setUserSettings"]),
     async login() {
       await this.$msalInstance
