@@ -776,7 +776,7 @@
       </div>
     </div>
     <!-- Buttons -->
-    <div class="flex items-center justify-between mt-5">
+    <div class="md:hidden flex items-center justify-between mt-5">
       <div>
         <label for="toogleEdit" class="flex items-center cursor-pointer">
           <div class="mr-3 text-xl font-bold text-hhOrange" v-if="!edit">
@@ -822,7 +822,7 @@
         </button>
       </div>
     </div>
-    <div class="flex justify-end mt-5">
+    <div class="md:hidden flex justify-end mt-5">
       <button
         class=" justify-end text-xl px-2 py-1 font-bold text-hhCard bg-hhOrange rounded-md hover:bg-orange-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
         @click="updatePreset(preset.id)"
@@ -831,7 +831,7 @@
         Save changes
       </button>
     </div>
-    <div class="flex justify-end mt-5">
+    <div class="md:hidden flex justify-end mt-5">
       <button
         style="background-color: #A4031F"
         class=" justify-end text-xl px-2 py-1 font-bold rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
