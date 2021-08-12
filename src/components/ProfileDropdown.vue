@@ -49,7 +49,7 @@
     <router-link
       v-if="account"
       to="/account"
-      @click="scrollTop(), toggleDropdown()"
+      @click="scrollTop(), toggleDropdown(), $emit('click')"
       class="px-4 py-2 flex items-center w-full"
     >
       <svg

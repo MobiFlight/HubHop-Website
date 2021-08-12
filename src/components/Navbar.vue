@@ -75,7 +75,7 @@
                   /></svg
                 >Preset list</router-link
               >
-              <ProfileDropdown />
+              <ProfileDropdown @click="scrollTop(), toggleNavbar()"/>
 
               <!-- <router-link
             @click="scrollTop"
