@@ -1,5 +1,5 @@
 <template>
-  <div class="px-52 mb-10 text-left">
+  <div class="container mx-auto px-2 md:mt-10 -mt-10 mb-10 text-left">
     <h1>Datenschutzerklärung:</h1>
     <p><strong>Datenschutz</strong></p>
     <p>
