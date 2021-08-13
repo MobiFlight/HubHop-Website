@@ -1,10 +1,10 @@
 <template>
   <div
     :class="{ onScroll: !view.topOfPage }"
-    class="px-3 nav fixed top-0 left-0 right-0"
+    class="bg-hhBG xl:bg-transparent px-3 nav fixed top-0 left-0 right-0"
   >
     <div class="xl:hidden block">
-      <div class="container bg-hhBG flex justify-between mx-auto items-center">
+      <div class="container flex justify-between mx-auto items-center">
         <div class="flex items-center">
           <router-link @click="scrollTop" to="/"
             ><img class="max-h-16 mt-2" src="@/assets/logo-big.png" alt=""
