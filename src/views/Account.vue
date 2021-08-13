@@ -3,7 +3,7 @@
     <!-- Mobile View -->
     <div class="-mt-10 block md:hidden container mx-auto">
       <div class="px-2 container mx-auto gap-20">
-        <div class="bg-hhBG shadow-lg rounded-lg px-10 h-32">
+        <div class="bg-hhCard shadow-lg rounded-lg px-10 h-32">
           <div class="text-2xl border-b-2 border-hhCard">
             Hi, {{ account.name }}
           </div>
@@ -78,7 +78,7 @@
               <h3>Your Profile</h3>
             </div>
             <div class="mt-5 grid grid-cols-3 gap-2 my-5">
-              <div class="bg-hhBG rounded-lg shadow-lg py-2 px-5">
+              <div class="bg-hhCard rounded-lg shadow-lg py-2 px-5">
                 <div
                   class="flex justify-center items-center border-b-2 border-hhCard mb-3"
                 >
@@ -102,7 +102,7 @@
                 </div>
                 <p>To be added</p>
               </div>
-              <div class="bg-hhBG rounded-lg shadow-lg py-2 px-5">
+              <div class="bg-hhCard rounded-lg shadow-lg py-2 px-5">
                 <div
                   class="flex justify-center items-center border-b-2 border-hhCard mb-3"
                 >
@@ -126,7 +126,7 @@
                 </div>
                 <p>To be added</p>
               </div>
-              <div class="bg-hhBG rounded-lg shadow-lg py-2 px-5">
+              <div class="bg-hhCard rounded-lg shadow-lg py-2 px-5">
                 <div
                   class="flex justify-center items-center border-b-2 border-hhCard mb-3"
                 >
@@ -149,7 +149,7 @@
                 <p>To be added</p>
               </div>
             </div>
-            <div class="bg-hhBG rounded-lg shadow-lg py-2 px-5 mb-5">
+            <div class="bg-hhCard rounded-lg shadow-lg py-2 px-5 mb-5">
               <div
                 class="flex items-center justify-center border-b-2 border-hhCard"
               >
@@ -297,7 +297,7 @@
     <!-- Desktop View -->
     <div class="hidden md:block h-screen container mx-auto">
       <div class="flex gap-20">
-        <div class="bg-hhBG shadow-lg rounded-lg px-10 h-32">
+        <div class="bg-hhCard shadow-lg rounded-lg px-10 h-32">
           <div class="text-2xl border-b-2 border-hhCard">
             Hi, {{ account.name }}
           </div>
@@ -372,7 +372,7 @@
               <h3>Your Profile</h3>
             </div>
             <div class="mt-5 grid grid-cols-3 gap-20 my-5">
-              <div class="bg-hhBG rounded-lg shadow-lg py-2 px-5">
+              <div class="bg-hhCard rounded-lg shadow-lg py-2 px-5">
                 <div
                   class="flex justify-center items-center border-b-2 border-hhCard mb-3"
                 >
@@ -396,7 +396,7 @@
                 </div>
                 <p>To be added</p>
               </div>
-              <div class="bg-hhBG rounded-lg shadow-lg py-2 px-5">
+              <div class="bg-hhCard rounded-lg shadow-lg py-2 px-5">
                 <div
                   class="flex justify-center items-center border-b-2 border-hhCard mb-3"
                 >
@@ -420,7 +420,7 @@
                 </div>
                 <p>To be added</p>
               </div>
-              <div class="bg-hhBG rounded-lg shadow-lg py-2 px-5">
+              <div class="bg-hhCard rounded-lg shadow-lg py-2 px-5">
                 <div
                   class="flex justify-center items-center border-b-2 border-hhCard mb-3"
                 >
@@ -443,7 +443,7 @@
                 <p>To be added</p>
               </div>
             </div>
-            <div class="bg-hhBG rounded-lg shadow-lg py-2 px-5 mb-5">
+            <div class="bg-hhCard rounded-lg shadow-lg py-2 px-5 mb-5">
               <div
                 class="flex items-center justify-center border-b-2 border-hhCard"
               >

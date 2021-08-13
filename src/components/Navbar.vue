@@ -31,10 +31,7 @@
         </div>
       </div>
       <transition name="slide-fade">
-        <div
-          v-if="menuShow"
-          class="container bg-hhBG mx-auto flex justify-end"
-        >
+        <div v-if="menuShow" class="container bg-hhBG mx-auto flex justify-end">
           <div class="flex justify-end">
             <div class="flex flex-col items-start text-2xl">
               <router-link
@@ -75,27 +72,26 @@
                   /></svg
                 >Preset list</router-link
               >
-              <ProfileDropdown @click="scrollTop(), toggleNavbar()"/>
-
               <!-- <router-link
-            @click="scrollTop"
-            class="px-5 flex items-center"
-            to="/dashboard"
-            ><svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="mr-1 h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="1.5"
-                d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"
-              /></svg
-            >Dashboard</router-link
-          > -->
+                @click="scrollTop(), toggleNavbar()"
+                class="flex items-center"
+                to="/dashboard"
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="mr-1 h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.5"
+                    d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"
+                  /></svg
+                >Dashboard</router-link
+              > -->
+              <ProfileDropdown @click="scrollTop(), toggleNavbar()" />
             </div>
           </div>
         </div>
@@ -146,7 +142,7 @@
           >
           <!-- <router-link
             @click="scrollTop"
-            class="px-5 flex items-center"
+            class="mr-5 flex items-center"
             to="/dashboard"
             ><svg
               xmlns="http://www.w3.org/2000/svg"
