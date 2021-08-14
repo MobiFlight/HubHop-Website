@@ -816,7 +816,7 @@
       <div>
         <button
           class="text-xl px-2 py-1 font-bold text-hhCard bg-hhOrange rounded-md hover:bg-orange-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-          @click="$router.go(-1)"
+          @click="goBackCheck"
         >
           Back
         </button>
@@ -1843,7 +1843,7 @@
         </button>
         <button
           class="text-xl px-4 py-2 font-bold text-hhCard bg-hhOrange rounded-md ml-2 hover:bg-orange-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-          @click="$router.go(-1)"
+          @click="goBackCheck"
         >
           Back
         </button>
@@ -1989,6 +1989,13 @@ export default {
     );
   },
   methods: {
+    goBackCheck() {
+      if (window.history.length > 2) {
+        this.$router.go(-1);
+      } else {
+        this.$router.replace("/list");
+      }
+    },
     copyCode() {
       let codeToCopy = document.querySelector("#preset-Code");
       codeToCopy.select();
