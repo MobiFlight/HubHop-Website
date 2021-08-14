@@ -391,7 +391,12 @@
           </tr>
         </template>
         <template #body="{rows}">
-          <VTr class="hover:bg-hhOrange transition rounded-lg hover:text-hhBG" :row="preset" v-for="preset in rows" :key="preset._id">
+          <VTr
+            class="hover:bg-hhOrange transition rounded-lg hover:text-hhBG"
+            :row="preset"
+            v-for="preset in rows"
+            :key="preset._id"
+          >
             <td
               class="hidden md:table-cell"
               v-if="preset.score"
@@ -421,13 +426,17 @@
           </VTr>
         </template>
       </VTable>
-      <VTPagination
-        class="flex"
-        v-model:currentPage="currentPage"
-        @click="setCurrentPage"
-        :total-pages="totalPages"
-        :maxPageLinks="10"
-      />
+      <div class="flex items-center justify-between">
+        <VTPagination
+          class=""
+          v-model:currentPage="currentPage"
+          @click="setCurrentPage"
+          :total-pages="totalPages"
+          :maxPageLinks="10"
+        />
+        <ExportModal />
+
+      </div>
     </div>
     <div class="container mx-auto" v-else>
       <div class="spinner"></div>
@@ -437,6 +446,7 @@
 
 <script>
 import AddEventModal from "../components/AddEventModal.vue";
+import ExportModal from "../components/ExportModal.vue";
 import { PublicClientApplication } from "@azure/msal-browser";
 import { mapMutations } from "vuex";
 
@@ -444,10 +454,12 @@ export default {
   name: "variables",
   components: {
     AddEventModal,
+    ExportModal,
   },
   data() {
     return {
       filterShow: true,
+      exportModal: false,
       preset: null,
       account: undefined,
       confirmDelete: false,
@@ -482,6 +494,9 @@ export default {
     }
   },
   methods: {
+    showExportModal() {
+      this.exportModal = !this.exportModal;
+    },
     viewPreset(id) {
       this.$router.push({ name: "PresetView", params: { id: id } });
     },
