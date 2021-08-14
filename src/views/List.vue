@@ -341,7 +341,7 @@
           />
           <button
             @click="resetFilters"
-            class="ml-5 flex items-center text-sm bg-hhBG p-2 rounded"
+            class="ml-5 flex items-center text-sm p-1 bg-hhBG rounded"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -391,7 +391,7 @@
           </tr>
         </template>
         <template #body="{rows}">
-          <VTr :row="preset" v-for="preset in rows" :key="preset._id">
+          <VTr class="hover:bg-hhOrange transition rounded-lg hover:text-hhBG" :row="preset" v-for="preset in rows" :key="preset._id">
             <td
               class="hidden md:table-cell"
               v-if="preset.score"
@@ -482,126 +482,6 @@ export default {
     }
   },
   methods: {
-    toggleFilter: function() {
-      this.filterShow = !this.filterShow;
-    },
-    upvote(id, onSuccessReload) {
-      const myAccounts = this.$msalInstance.getAllAccounts();
-      this.account = myAccounts[0];
-      const url = this.$hubHopApi.baseUrl + "/presets/" + id;
-
-      // post body data
-      const preset = {
-        path:
-          this.preset.vendor +
-          "." +
-          this.preset.aircraft +
-          "." +
-          this.preset.system +
-          "." +
-          this.preset.label,
-        vendor: this.preset.vendor,
-        aircraft: this.preset.aircraft,
-        system: this.preset.system,
-        code: this.preset.code,
-        label: this.preset.label,
-        tags: this.preset.tags,
-        presetType: this.preset.presetType,
-        version: this.preset.version,
-        status: "Updated",
-        createdDate: new Date().toUTCString(),
-        author: this.preset.author,
-        description: this.preset.description,
-        reported: this.preset.reported + 0,
-        votes: this.preset.votes + 1,
-      };
-
-      const options = {
-        method: "PUT",
-        body: JSON.stringify(preset),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + this.$store.state.accessToken,
-        },
-      };
-      // send POST request
-      fetch(url, options).then((res) => {
-        console.log(res);
-        if (res.status != 201) return;
-        this.$swal({
-          position: "center",
-          icon: "success",
-          title:
-            '<h4 style="color:#D2D0D2">Your event/variable has been saved</h4>',
-          showConfirmButton: false,
-          background: "#33353e",
-          toast: true,
-          timer: 2000,
-          willClose: () => {
-            if (onSuccessReload) location.reload();
-          },
-        });
-      });
-    },
-    downvote(id, onSuccessReload) {
-      const myAccounts = this.$msalInstance.getAllAccounts();
-      this.account = myAccounts[0];
-      const url = this.$hubHopApi.baseUrl + "/presets/" + id;
-
-      // post body data
-      const preset = {
-        path:
-          this.preset.vendor +
-          "." +
-          this.preset.aircraft +
-          "." +
-          this.preset.system +
-          "." +
-          this.preset.label,
-        vendor: this.preset.vendor,
-        aircraft: this.preset.aircraft,
-        system: this.preset.system,
-        code: this.preset.code,
-        label: this.preset.label,
-        tags: this.preset.tags,
-        presetType: this.preset.presetType,
-        version: this.preset.version,
-        status: "Updated",
-        createdDate: new Date().toUTCString(),
-        author: this.preset.author,
-        description: this.preset.description,
-        reported: this.preset.reported + 0,
-        votes: this.preset.votes - 1,
-      };
-
-      const options = {
-        method: "PUT",
-        body: JSON.stringify(preset),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + this.$store.state.accessToken,
-        },
-      };
-      // send POST request
-      fetch(url, options).then((res) => {
-        console.log(res);
-        if (res.status != 201) return;
-        this.$swal({
-          position: "center",
-          icon: "success",
-          title:
-            '<h4 style="color:#D2D0D2">Your event/variable has been saved</h4>',
-          showConfirmButton: false,
-          background: "#33353e",
-          toast: true,
-          timer: 2000,
-          willClose: () => {
-            if (onSuccessReload) location.reload();
-          },
-        });
-      });
-    },
-
     viewPreset(id) {
       this.$router.push({ name: "PresetView", params: { id: id } });
     },
@@ -696,27 +576,6 @@ export default {
         });
     },
     ...mapMutations(["setAccessToken", "setUserSettings"]),
-    deletePreset(id) {
-      fetch(this.$hubHopApi.baseUrl + "/presets/" + id, {
-        credentials: "include",
-        method: "DELETE",
-        headers: {
-          Authorization: "Bearer " + this.$store.state.accessToken,
-        },
-      }).then((res) => {
-        if (res.status != 200) return;
-        this.$swal({
-          position: "center",
-          icon: "success",
-          title: "Your event/variable has been removed",
-          showConfirmButton: false,
-          background: "#33353e",
-          toast: true,
-          timer: 2000,
-        });
-      });
-      this.presets = this.presets.filter((preset) => preset.id != id);
-    },
   },
   computed: {
     uniqueVendors() {

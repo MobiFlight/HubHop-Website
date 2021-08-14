@@ -1,6 +1,6 @@
 <template>
   <div
-    class="container px-5 mx-auto md:flex md:space-x-5 min-h-screen -mt-10 md:mt-5"
+    class="container mb-5 px-5 mx-auto md:flex md:space-x-5 min-h-screen -mt-10 md:mt-5"
   >
     <div
       class="bg-hhCard flex md:block justify-center rounded-lg shadow-lg py-5 mb-5 md:mb-0 w-full md:w-1/6 text-xs md:text-base "

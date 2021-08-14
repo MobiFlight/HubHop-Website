@@ -3,7 +3,7 @@
     <button
       type="button"
       @click="openModal"
-      class="bg-hhOrange font px-2 py-1 max-w-xs font-semibold text-hhCard text-lg rounded"
+      class="bg-hhOrange font px-1 py-1 max-w-xs font-semibold text-hhCard text-base rounded"
     >
       Add event or variable
     </button>

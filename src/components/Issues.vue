@@ -108,7 +108,7 @@
             >
               <div
                 @click="openIssueOnGithub(openIssues.number)"
-                class="container cursor-pointer transition transform scale-100 hover:scale-110 hover:bg-hhOrange hover:text-hhBG hover:shadow-lg rounded-lg px-5 mx-auto flex text-left mt-5"
+                class="container cursor-pointer transition hover:bg-hhOrange hover:text-hhBG hover:shadow-lg rounded-lg px-5 mx-auto flex text-left mt-5"
               >
                 {{ openIssues.title }}
               </div>
@@ -130,7 +130,7 @@
             >
               <div
                 @click="openIssueOnGithub(closedIssues.number)"
-                class="container cursor-pointer transition transform scale-100 hover:scale-110 hover:bg-hhOrange hover:text-hhBG hover:shadow-lg rounded-lg px-5 mx-auto flex text-left mt-5"
+                class="container cursor-pointer transition hover:bg-hhOrange hover:text-hhBG hover:shadow-lg rounded-lg px-5 mx-auto flex text-left mt-5"
               >
                 {{ closedIssues.title }}
               </div>
