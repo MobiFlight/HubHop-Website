@@ -392,7 +392,7 @@
         </template>
         <template #body="{rows}">
           <VTr
-            class="hover:bg-hhOrange transition rounded-lg hover:text-hhBG"
+            class="hover:bg-hhOrange hover:font-bold transition rounded-lg hover:text-hhBG"
             :row="preset"
             v-for="preset in rows"
             :key="preset._id"
@@ -434,8 +434,7 @@
           :total-pages="totalPages"
           :maxPageLinks="10"
         />
-        <ExportModal />
-
+        <ExportModal v-if="roles.includes('SuperAdmin')" />
       </div>
     </div>
     <div class="container mx-auto" v-else>

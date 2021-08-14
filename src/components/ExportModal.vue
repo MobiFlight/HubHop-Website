@@ -63,7 +63,6 @@
                     as="h3"
                     class="text-2xl items-center leading-6 text-hhText"
                   >
-                    Export preset list
                   </DialogTitle>
                 </div>
                 <div>
@@ -86,7 +85,7 @@
                 </div>
               </div>
               <div class="mt-3">
-                <div class="grid grid-cols-5 align-top mt-3 gap-5">
+                <div class="grid grid-cols-4 align-top mt-3 gap-5">
                   <div
                     class="flex flex-col align-top items-center justify-center"
                   >
@@ -152,61 +151,55 @@
                       </button>
                     </div>
                   </div>
-                  <div class="hidden flex-col items-center justify-center">
+                  <div class="flex flex-col items-center justify-center">
                     <h2 class="border-b-2 text-xl border-hhCard">FSUIPC</h2>
                     <div class="flex flex-col space-y-3 justify-center mt-3">
                       <button
-                        class="flex items-center bg-hhOrange justify-center text-hhBG px-2 py-1 rounded-lg shadow-lg"
+                        disabled
+                        class="flex items-center bg-hhCard justify-center text-hhBG px-2 py-1 rounded-lg shadow-lg"
                         type="button"
                         @click="closeModal"
                       >
                         mobiflight.evt
                       </button>
+                      <div class="flex justify-center">Available soon</div>
                     </div>
                   </div>
-                  <div class="hidden flex-col items-center justify-center">
+                  <div class="flex flex-col items-center justify-center">
                     <h2 class="border-b-2 text-xl border-hhCard">SPAD.neXt</h2>
                     <div class="flex flex-col space-y-3 justify-center mt-3">
                       <button
-                        class="flex items-center bg-hhOrange justify-center text-hhBG px-2 py-1 rounded-lg shadow-lg"
+                        disabled
+                        class="flex items-center bg-hhCard justify-center text-hhBG px-2 py-1 rounded-lg shadow-lg"
                         type="button"
                         @click="closeModal"
                       >
-                        Configuration file
+                        Configuration file (soon)
                       </button>
+                      <div class="flex justify-center">Available soon</div>
                     </div>
                   </div>
-                  <div class="hidden flex-col items-center justify-center">
+                  <div class="flex flex-col items-center justify-center">
                     <h2 class="border-b-2 text-xl border-hhCard">
                       Axis and Ohs
                     </h2>
                     <div class="flex flex-col space-y-3 justify-center mt-3">
                       <button
-                        class="flex items-center bg-hhOrange justify-center text-hhBG px-2 py-1 rounded-lg shadow-lg"
+                        disabled
+                        class="flex items-center bg-hhCard justify-center text-hhBG px-2 py-1 rounded-lg shadow-lg"
                         type="button"
                         @click="closeModal"
                       >
                         Configuration file
                       </button>
-                    </div>
-                  </div>
-                  <div class="hidden flex-col items-center justify-center">
-                    <h2 class="border-b-2 text-xl border-hhCard">Other</h2>
-                    <div class="flex flex-col space-y-3 justify-center mt-3">
-                      <button
-                        class="flex items-center bg-hhOrange justify-center text-hhBG px-2 py-1 rounded-lg shadow-lg"
-                        type="button"
-                        @click="closeModal"
-                      >
-                        Some other config
-                      </button>
+                      <div class="flex justify-center">Available soon</div>
                     </div>
                   </div>
                 </div>
               </div>
               <div class="flex justify-end">
                 <button
-                  class="flex items-center bg-hhOrange justify-center text-hhBG px-2 py-1 rounded-lg shadow-lg"
+                  class="flex items-center bg-hhOrange justify-center text-hhBG px-2 py-1 rounded-lg shadow-lg mt-5"
                   type="button"
                   @click="closeModal"
                 >
