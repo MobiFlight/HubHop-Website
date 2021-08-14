@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-around h-full">
+  <div class="min-h-screen flex justify-around h-full">
     something
   </div>
 </template>

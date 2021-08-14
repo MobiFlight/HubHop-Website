@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="min-h-screen">
     <!-- Mobile View -->
     <div class="-mt-10 block md:hidden container mx-auto">
       <div class="px-2 container mx-auto gap-20">

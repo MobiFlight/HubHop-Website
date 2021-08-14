@@ -1,5 +1,5 @@
 <template>
-  <div class="text-lg p-5 mb-3 container mx-auto" v-if="preset">
+  <div class="min-h-screen text-lg p-5 mb-3 container mx-auto" v-if="preset">
     <!-- Mobile View -->
     <!-- View -->
     <div class="flex flex-col md:hidden justify-between -mt-10" v-if="!edit">

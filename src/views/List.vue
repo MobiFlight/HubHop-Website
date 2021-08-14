@@ -1,5 +1,5 @@
 <template>
-  <div class="container px-3 mx-auto text-base mb-10 h-full lg:min-h-screen">
+  <div class="container px-3 mx-auto text-base mb-10 min-h-screen">
     <!-- Mobile filter -->
     <div class="block 2xl:hidden -mt-10">
       <h4 class="flex mb-5 items-center">

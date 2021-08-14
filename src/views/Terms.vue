@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto px-2 md:mt-10 -mt-10 mb-10 text-left">
+  <div class="container min-h-screen mx-auto px-2 md:mt-10 -mt-10 mb-10 text-left">
     <h1>Impressum / Terms</h1>
     <h2>Angaben gemäß § 5 TMG:</h2>
     <p>
