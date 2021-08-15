@@ -3,12 +3,13 @@
     class="container mb-5 px-5 mx-auto md:flex md:space-x-5 min-h-screen -mt-10 md:mt-5"
   >
     <div
-      class="bg-hhCard flex md:block justify-center rounded-lg shadow-lg py-5 mb-5 md:mb-0 w-full md:w-1/6 text-xs md:text-base "
+      class="bg-hhCard flex flex-col md:block justify-center rounded-lg shadow-lg py-5 mb-5 md:mb-0 w-full md:w-1/6 text-xs md:text-base "
     >
+      <h3 class="border-b border-hhText pb-3 mx-3">Menu</h3>
       <div class="flex justify-center mt-3 mb-3 px-3">
         <button
           @click="dashboardActive()"
-          class="flex flex-col md:flex-row items-center bg-hhOrange text-hhBG font-bold shadow-lg rounded-lg px-2 py-1 w-full"
+          class="flex justify-center md:flex-row items-center bg-hhOrange text-hhBG font-bold shadow-lg rounded-lg px-2 py-1 w-full"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -27,32 +28,10 @@
           Dashboard
         </button>
       </div>
-      <!-- <div class="flex justify-center mt-3 mb-3 px-3">
-        <button
-          @click="updatedActive()"
-          class="flex flex-col md:flex-row items-center bg-hhOrange text-hhBG font-bold shadow-lg rounded-lg px-2 py-1 w-full"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="1.5"
-              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-            />
-          </svg>
-          Updated Presets
-        </button>
-      </div> -->
-      <div class="flex justify-center mt-3 mb-3 px-3">
+      <div class="flex justify-center px-3">
         <button
           @click="changelogActive()"
-          class="flex flex-col md:flex-row items-center bg-hhOrange text-hhBG font-bold shadow-lg rounded-lg px-2 py-1 w-full"
+          class="flex justify-center md:flex-row items-center bg-hhOrange text-hhBG font-bold shadow-lg rounded-lg px-2 py-1 w-full"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -108,7 +87,7 @@ export default {
   },
   methods: {
     dashboardActive() {
-      if ((this.updatedPresets || this.changelog)) {
+      if (this.updatedPresets || this.changelog) {
         setTimeout(() => {
           this.dashboard = true;
         }, 500);
@@ -117,7 +96,7 @@ export default {
       }
     },
     updatedActive() {
-      if ((this.dashboard || this.changelog)) {
+      if (this.dashboard || this.changelog) {
         setTimeout(() => {
           this.updatedPresets = true;
         }, 500);
@@ -126,7 +105,7 @@ export default {
       }
     },
     changelogActive() {
-      if ((this.dashboard || this.updatedPresets)) {
+      if (this.dashboard || this.updatedPresets) {
         setTimeout(() => {
           this.changelog = true;
         }, 500);
