@@ -188,7 +188,7 @@
         <div v-if="preset.updatedBy" class="flex items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="text-hhText mr-2 h-8 w-8"
+            class="h-8 w-8 mr-2"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -196,8 +196,8 @@
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
-              stroke-width="2"
-              d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
+              stroke-width="1.5"
+              d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
             />
           </svg>
           <div
@@ -257,7 +257,7 @@
               <button @click="upvotePreset(id)" class="flex items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  class="h-6 w-6"
+                  class="h-6 w-6 mr-1"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -265,8 +265,8 @@
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M5 11l7-7 7 7M5 19l7-7 7 7"
+                    stroke-width="1.5"
+                    d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
                   /></svg
                 >Upvote
               </button>
@@ -275,7 +275,7 @@
               <button @click="downvotePreset(id)" class="flex items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  class="h-6 w-6"
+                  class="h-6 w-6 mr-1"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -283,8 +283,8 @@
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M19 13l-7 7-7-7m14-8l-7 7-7-7"
+                    stroke-width="1.5"
+                    d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018a2 2 0 01.485.06l3.76.94m-7 10v5a2 2 0 002 2h.096c.5 0 .905-.405.905-.904 0-.715.211-1.413.608-2.008L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2.5"
                   /></svg
                 >Downvote
               </button>
@@ -597,7 +597,7 @@
         <div v-if="preset.updatedBy" class="flex items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="text-hhText mr-2 h-8 w-8"
+            class="h-8 w-8 mr-2"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -605,8 +605,8 @@
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
-              stroke-width="2"
-              d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
+              stroke-width="1.5"
+              d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
             />
           </svg>
           <div
@@ -666,7 +666,7 @@
               <button @click="upvotePreset(id)" class="flex items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  class="h-6 w-6"
+                  class="h-6 w-6 mr-1"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -674,8 +674,8 @@
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M5 11l7-7 7 7M5 19l7-7 7 7"
+                    stroke-width="1.5"
+                    d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
                   /></svg
                 >Upvote
               </button>
@@ -684,7 +684,7 @@
               <button @click="downvotePreset(id)" class="flex items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  class="h-6 w-6"
+                  class="h-6 w-6 mr-1"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -692,8 +692,8 @@
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M19 13l-7 7-7-7m14-8l-7 7-7-7"
+                    stroke-width="1.5"
+                    d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018a2 2 0 01.485.06l3.76.94m-7 10v5a2 2 0 002 2h.096c.5 0 .905-.405.905-.904 0-.715.211-1.413.608-2.008L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2.5"
                   /></svg
                 >Downvote
               </button>
@@ -1099,7 +1099,7 @@
         <div v-if="preset.updatedBy" class="flex items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="text-hhText mr-2 h-8 w-8"
+            class="h-8 w-8 mr-2"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -1107,8 +1107,8 @@
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
-              stroke-width="2"
-              d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
+              stroke-width="1.5"
+              d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
             />
           </svg>
           <div
@@ -1168,7 +1168,7 @@
               <button @click="upvotePreset(id)" class="flex items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  class="h-6 w-6"
+                  class="h-6 w-6 mr-1"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -1176,8 +1176,8 @@
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M5 11l7-7 7 7M5 19l7-7 7 7"
+                    stroke-width="1.5"
+                    d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
                   /></svg
                 >Upvote
               </button>
@@ -1186,7 +1186,7 @@
               <button @click="downvotePreset(id)" class="flex items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  class="h-6 w-6"
+                  class="h-6 w-6 mr-1"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -1194,8 +1194,8 @@
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M19 13l-7 7-7-7m14-8l-7 7-7-7"
+                    stroke-width="1.5"
+                    d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018a2 2 0 01.485.06l3.76.94m-7 10v5a2 2 0 002 2h.096c.5 0 .905-.405.905-.904 0-.715.211-1.413.608-2.008L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2.5"
                   /></svg
                 >Downvote
               </button>
@@ -1514,7 +1514,7 @@
         <div v-if="preset.updatedBy" class="flex items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="text-hhText mr-2 h-8 w-8"
+            class="h-8 w-8 mr-2"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -1522,8 +1522,8 @@
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
-              stroke-width="2"
-              d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
+              stroke-width="1.5"
+              d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
             />
           </svg>
           <div
@@ -1583,7 +1583,7 @@
               <button @click="upvotePreset(id)" class="flex items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  class="h-6 w-6"
+                  class="h-6 w-6 mr-1"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -1591,8 +1591,8 @@
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M5 11l7-7 7 7M5 19l7-7 7 7"
+                    stroke-width="1.5"
+                    d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
                   /></svg
                 >Upvote
               </button>
@@ -1601,7 +1601,7 @@
               <button @click="downvotePreset(id)" class="flex items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  class="h-6 w-6"
+                  class="h-6 w-6 mr-1"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -1609,8 +1609,8 @@
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M19 13l-7 7-7-7m14-8l-7 7-7-7"
+                    stroke-width="1.5"
+                    d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018a2 2 0 01.485.06l3.76.94m-7 10v5a2 2 0 002 2h.096c.5 0 .905-.405.905-.904 0-.715.211-1.413.608-2.008L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2.5"
                   /></svg
                 >Downvote
               </button>
@@ -1850,7 +1850,7 @@
                         class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-200 sm:mx-0 sm:h-10 sm:w-10"
                       >
                         <ExclamationIcon
-                          class="h-6 w-6 text-red-600"
+                          class="h-6 w-6 mr-1 text-red-600"
                           aria-hidden="true"
                         />
                       </div>
@@ -1980,7 +1980,7 @@
                         class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-200 sm:mx-0 sm:h-10 sm:w-10"
                       >
                         <ExclamationIcon
-                          class="h-6 w-6 text-red-600"
+                          class="h-6 w-6 mr-1 text-red-600"
                           aria-hidden="true"
                         />
                       </div>
