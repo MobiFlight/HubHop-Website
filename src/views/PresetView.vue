@@ -134,7 +134,7 @@
             v-if="preset.createdDate"
             class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
           >
-            {{ preset.createdDate }}
+            {{ formatDate(preset.createdDate) }}
           </div>
           <div
             v-if="!preset.createdDate"
@@ -1045,7 +1045,7 @@
             v-if="preset.createdDate"
             class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
           >
-            {{ preset.createdDate }}
+            {{ formatDate(preset.createdDate) }}
           </div>
           <div
             v-if="!preset.createdDate"
@@ -1863,11 +1863,48 @@
                         >
                           Report preset
                         </DialogTitle>
-                        <div class="mt-2">
-                          <p class="text-gray-500">
-                            Are you sure you want to report this preset?
-                          </p>
-                        </div>
+                        <form class="flex flex-col text-hhBG mt-3 space-y-3">
+                          <div class="flex">
+                            <label>Pick report category</label>
+                            <select
+                              v-model="reportCategory"
+                              required
+                              class="bg-hhCard text-hhText px-2 py-1 w-full rounded-lg border border-hhOrange"
+                            >
+                              <option disabled selected value=""
+                                >Pick an option</option
+                              >
+                              <option>Not working since sim update</option>
+                              <option>Bad code</option>
+                              <option>Misleading</option>
+                              <option>Duplicate</option>
+                              <option>Other</option>
+                            </select>
+                          </div>
+                          <span
+                            class="text-red-500"
+                            v-if="v$.reportCategory.$error"
+                          >
+                            Pick a category
+                            <!-- {{ v$.description.$errors[0].$message }} -->
+                          </span>
+                          <div class="flex flex-col">
+                            <label>Describe your report</label>
+                            <textarea
+                              class="break-words text-hhText bg-hhCard p-3 rounded-lg border border-hhOrange"
+                              cols="30"
+                              rows="5"
+                              v-model="reportDescription"
+                            ></textarea>
+                          </div>
+                          <span
+                            class="text-red-500"
+                            v-if="v$.reportDescription.$error"
+                          >
+                            Description required
+                            <!-- {{ v$.description.$errors[0].$message }} -->
+                          </span>
+                        </form>
                       </div>
                     </div>
                   </div>
@@ -2046,9 +2083,15 @@ import {
 import { ExclamationIcon } from "@heroicons/vue/outline";
 import { createPopper } from "@popperjs/core";
 import useClipboard from "vue-clipboard3";
+import useVuelidate from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
 
 export default {
   props: ["id"],
+  validations: {
+    reportCategory: { required },
+    reportDescription: { required },
+  },
   data() {
     return {
       preset: null,
@@ -2057,6 +2100,8 @@ export default {
       reportPresetClicked: undefined,
       tooltipShow: false,
       score: "",
+      reportCategory: "",
+      reportDescription: "",
     };
   },
   components: {
@@ -2155,6 +2200,7 @@ export default {
         status: "Updated",
         createdDate: new Date().toUTCString(),
         author: this.preset.author,
+        updatedBy: this.$store.state.userSettings.username,
         description: this.preset.description,
         reported: this.preset.reported + 0,
         score: this.score,
@@ -2181,6 +2227,7 @@ export default {
           status: "Updated",
           createdDate: new Date().toUTCString(),
           author: this.preset.author,
+          updatedBy: this.$store.state.userSettings.username,
           description: this.preset.description,
           reported: this.preset.reported + 0,
           score: this.preset.score + this.score,
@@ -2239,6 +2286,7 @@ export default {
         status: "Updated",
         createdDate: new Date().toUTCString(),
         author: this.preset.author,
+        updatedBy: this.$store.state.userSettings.username,
         description: this.preset.description,
         reported: this.preset.reported + 0,
         score: this.preset.score + this.score,
@@ -2270,62 +2318,67 @@ export default {
     reportPreset(id) {
       const myAccounts = this.$msalInstance.getAllAccounts();
       this.account = myAccounts[0];
-      const url = this.$hubHopApi.baseUrl + "/presets/" + id;
-      this.reportPresetClicked = true;
+      this.v$.$validate();
+      if (!this.v$.$error) {
+        const url = this.$hubHopApi.baseUrl + "/presets/" + id;
+        this.reportPresetClicked = true;
 
-      // post body data
-      const preset = {
-        path:
-          this.preset.vendor +
-          "." +
-          this.preset.aircraft +
-          "." +
-          this.preset.system +
-          "." +
-          this.preset.label,
-        vendor: this.preset.vendor,
-        aircraft: this.preset.aircraft,
-        system: this.preset.system,
-        code: this.preset.code,
-        label: this.preset.label,
-        tags: this.preset.tags,
-        presetType: this.preset.presetType,
-        version: this.preset.version,
-        status: "Updated",
-        createdDate: new Date().toUTCString(),
-        author: this.preset.author,
-        description: this.preset.description,
-        reported: this.preset.reported + 1,
-        score: this.preset.score + 0,
-      };
+        // post body data
+        const preset = {
+          path:
+            this.preset.vendor +
+            "." +
+            this.preset.aircraft +
+            "." +
+            this.preset.system +
+            "." +
+            this.preset.label,
+          vendor: this.preset.vendor,
+          aircraft: this.preset.aircraft,
+          system: this.preset.system,
+          code: this.preset.code,
+          label: this.preset.label,
+          tags: this.preset.tags,
+          presetType: this.preset.presetType,
+          version: this.preset.version,
+          status: "Updated",
+          createdDate: new Date().toUTCString(),
+          author: this.preset.author,
+          updatedBy: this.$store.state.userSettings.username,
+          description: this.preset.description,
+          score: this.preset.score + 0,
+          reported: this.preset.reported + 1,
+          report_catergory: this.reportCategory,
+          report_description: this.reportDescription,
+        };
 
-      const options = {
-        method: "PUT",
-        body: JSON.stringify(preset),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + this.$store.state.accessToken,
-        },
-      };
-      // send POST request
-      fetch(url, options).then((res) => {
-        console.log(res);
-        if (res.status != 201) return;
-        this.$swal({
-          position: "center",
-          icon: "success",
-          title:
-            '<h4 style="color:#D2D0D2">Your event/variable has been reported</h4>',
-          showConfirmButton: false,
-          background: "#33353e",
-          toast: true,
-          timer: 2000,
-          willClose: () => {
-            this.reportPresetClicked = false;
-            location.reload();
+        const options = {
+          method: "PUT",
+          body: JSON.stringify(preset),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + this.$store.state.accessToken,
           },
+        };
+        // send POST request
+        fetch(url, options).then((res) => {
+          if (res.status != 201) return;
+          this.$swal({
+            position: "center",
+            icon: "success",
+            title:
+              '<h4 style="color:#D2D0D2">Your event/variable has been reported</h4>',
+            showConfirmButton: false,
+            background: "#33353e",
+            toast: true,
+            timer: 2000,
+            willClose: () => {
+              this.reportPresetClicked = false;
+              location.reload();
+            },
+          });
         });
-      });
+      }
     },
     toggleTooltip: function() {
       if (this.tooltipShow) {
@@ -2336,6 +2389,13 @@ export default {
           placement: "top",
         });
       }
+    },
+    formatDate(dateString) {
+      const date = new Date(dateString);
+      // Then specify how you want your dates to be formatted
+      return new Intl.DateTimeFormat("default", { dateStyle: "short" }).format(
+        date
+      );
     },
     updatePreset(id, onSuccessReload) {
       const myAccounts = this.$msalInstance.getAllAccounts();
@@ -2424,6 +2484,7 @@ export default {
       openDelete,
       openReport,
       copy,
+      v$: useVuelidate(),
     };
   },
 };

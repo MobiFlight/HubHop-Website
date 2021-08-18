@@ -1,15 +1,15 @@
 <template>
   <div
-    class="container mb-5 px-5 mx-auto md:flex md:space-x-5 min-h-screen -mt-10 md:mt-5"
+    class="container mb-5 px-5 mx-auto xl:flex xl:space-x-5 min-h-screen -mt-10 xl:mt-5"
   >
     <div
-      class="bg-hhCard flex flex-col md:block justify-center rounded-lg shadow-lg py-5 mb-5 md:mb-0 w-full md:w-1/6 text-xs md:text-base "
+      class="bg-hhCard flex flex-col xl:block justify-center rounded-lg shadow-lg py-5 mb-5 xl:mb-0 w-full xl:w-1/6 text-xs xl:text-base "
     >
       <h3 class="border-b border-hhText pb-3 mx-3">Menu</h3>
       <div class="flex justify-center mt-3 mb-3 px-3">
         <button
           @click="dashboardActive()"
-          class="flex justify-center md:flex-row items-center bg-hhOrange text-hhBG font-bold shadow-lg rounded-lg px-2 py-1 w-full"
+          class="flex justify-center xl:flex-row items-center bg-hhOrange text-hhBG font-bold shadow-lg rounded-lg px-2 py-1 w-full"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -31,7 +31,7 @@
       <div class="flex justify-center px-3">
         <button
           @click="changelogActive()"
-          class="flex justify-center md:flex-row items-center bg-hhOrange text-hhBG font-bold shadow-lg rounded-lg px-2 py-1 w-full"
+          class="flex justify-center xl:flex-row items-center bg-hhOrange text-hhBG font-bold shadow-lg rounded-lg px-2 py-1 w-full"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -51,7 +51,7 @@
         </button>
       </div>
     </div>
-    <div class="mx-auto w-full md:px-0 md:w-5/6">
+    <div class="mx-auto w-full xl:px-0 xl:w-5/6">
       <!-- Added presets -->
       <transition name="fade" mode="out-in">
         <GeneralDashboard v-if="dashboard" />

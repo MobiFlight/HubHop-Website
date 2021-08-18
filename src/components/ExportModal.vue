@@ -149,6 +149,34 @@
                         </svg>
                         msfs2020_eventids.cip
                       </button>
+                      <button
+                        class="flex items-center bg-hhOrange justify-center text-hhBG px-2 py-1 rounded-lg shadow-lg"
+                        type="button"
+                        @click="exportSimvars"
+                      >
+                        <svg
+                          v-if="eventSimvarDownload === true"
+                          class="animate-spin -ml-1 mr-3 h-5 w-5 text-hhBG"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            class="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            stroke-width="4"
+                          ></circle>
+                          <path
+                            class="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          ></path>
+                        </svg>
+                        msfs2020_simvars.cip
+                      </button>
                     </div>
                   </div>
                   <div class="flex flex-col items-center justify-center">
@@ -250,6 +278,7 @@ export default {
     return {
       eventsTxtDownload: false,
       eventIdsCipDownload: false,
+      eventSimvarDownload: false,
     };
   },
   setup() {
@@ -283,17 +312,32 @@ export default {
     },
     exportEventIds() {
       this.eventIdsCipDownload = true;
-      fetch(this.$hubHopApi.baseUrl + "/export/presets")
+      fetch(this.$hubHopApi.baseUrl + "/export/presets?type=cip")
         .then((response) => response.blob())
         .then((blob) => {
           var url = window.URL.createObjectURL(blob);
           var a = document.createElement("a");
           a.href = url;
-          a.download = "events.txt";
+          a.download = "msfs2020_eventids.cip";
           document.body.appendChild(a);
           a.click();
           a.remove();
           this.eventIdsCipDownload = false;
+        });
+    },
+    exportSimvars() {
+      this.eventSimvarDownload = true;
+      fetch(this.$hubHopApi.baseUrl + "/export/presets?type=simvar")
+        .then((response) => response.blob())
+        .then((blob) => {
+          var url = window.URL.createObjectURL(blob);
+          var a = document.createElement("a");
+          a.href = url;
+          a.download = "msfs2020_simvars.cip";
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          this.eventSimvarDownload = false;
         });
     },
   },

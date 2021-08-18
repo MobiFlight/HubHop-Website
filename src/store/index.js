@@ -29,6 +29,7 @@ const store = createStore({
       filterInputType: "",
       filterName: "",
       currentPage: 1,
+      pageSize: 15,
     };
   },
   mutations: {
@@ -58,6 +59,9 @@ const store = createStore({
     },
     setCurrentPage(state, currentPage) {
       state.currentPage = currentPage;
+    },
+    setPageSize(state, pageSize) {
+      state.pageSize = pageSize;
     },
   },
   plugins: [createPersistedState()],

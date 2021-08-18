@@ -374,7 +374,7 @@
         :filters="filters"
         :data="presets"
         :hideSortIcons="true"
-        :pageSize="15"
+        :pageSize="pageSize"
         v-model:currentPage="currentPage"
         @totalPagesChanged="totalPages = $event"
         class="mx-auto text-base bg-hhCard bg-opacity-70 rounded"
@@ -397,44 +397,90 @@
             v-for="preset in rows"
             :key="preset._id"
           >
-            <td
-              class="hidden md:table-cell"
-              v-if="preset.score"
-              @click="viewPreset(preset.id)"
-            >
-              {{ preset.score }}
+            <td class="hidden md:table-cell" v-if="preset.score">
+              <router-link
+                :to="{ name: 'PresetView', params: { id: preset.id } }"
+              >
+                {{ preset.score }}
+              </router-link>
             </td>
-            <td
-              class="hidden md:table-cell"
-              v-else
-              @click="viewPreset(preset.id)"
-            >
-              No score
+            <td class="hidden md:table-cell" v-else>
+              <router-link
+                :to="{ name: 'PresetView', params: { id: preset.id } }"
+              >
+                No score
+              </router-link>
             </td>
-            <td
-              class="py-1.5 hidden md:table-cell"
-              @click="viewPreset(preset.id)"
-            >
-              {{ preset.vendor }}
+            <td class="py-1.5 hidden md:table-cell">
+              <router-link
+                :to="{ name: 'PresetView', params: { id: preset.id } }"
+              >
+                {{ preset.vendor }}
+              </router-link>
             </td>
-            <td @click="viewPreset(preset.id)">{{ preset.aircraft }}</td>
-            <td class="hidden md:table-cell" @click="viewPreset(preset.id)">
-              {{ preset.system }}
+            <td>
+              <router-link
+                :to="{ name: 'PresetView', params: { id: preset.id } }"
+              >
+                {{ preset.aircraft }}
+              </router-link>
             </td>
-            <td @click="viewPreset(preset.id)">{{ preset.label }}</td>
-            <td @click="viewPreset(preset.id)">{{ preset.presetType }}</td>
+            <td class="hidden md:table-cell">
+              <router-link
+                :to="{ name: 'PresetView', params: { id: preset.id } }"
+              >
+                {{ preset.system }}
+              </router-link>
+            </td>
+            <td>
+              <router-link
+                :to="{ name: 'PresetView', params: { id: preset.id } }"
+              >
+                {{ preset.label }}
+              </router-link>
+            </td>
+            <td>
+              <router-link
+                :to="{ name: 'PresetView', params: { id: preset.id } }"
+              >
+                {{ preset.presetType }}
+              </router-link>
+            </td>
           </VTr>
         </template>
       </VTable>
-      <div class="flex items-center justify-between">
-        <VTPagination
-          class=""
-          v-model:currentPage="currentPage"
-          @click="setCurrentPage"
-          :total-pages="totalPages"
-          :maxPageLinks="10"
-        />
-        <ExportModal v-if="roles.includes('SuperAdmin')" />
+      <div class="flex flex-col md:flex-row items-center justify-between">
+        <div class="flex items-center">
+          <div class="flex flex-col md:flex-row items-center mr-3">
+            <VTPagination
+              class=""
+              v-model:currentPage="currentPage"
+              @click="setCurrentPage"
+              :total-pages="totalPages"
+              :maxPageLinks="10"
+            />
+            {{ totalPages }} total pages.
+          </div>
+        </div>
+        <div class="flex items-center">
+          <div class="flex item items-center">
+            <label>Show number of rows:</label>
+            <select
+              @click="setPageSize"
+              class="bg-hhCard text-hhText ml-1 text-left px-2 rounded-lg"
+              v-model.number="pageSize"
+            >
+              <option selected value="15">15</option>
+              <option>25</option>
+              <option>50</option>
+              <option>75</option>
+              <option>100</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-end">
+        <ExportModal v-if="loggedIn" />
       </div>
     </div>
     <div class="container mx-auto" v-else>
@@ -457,6 +503,7 @@ export default {
   },
   data() {
     return {
+      loggedIn: this.$store.state.loggedIn,
       filterShow: true,
       exportModal: false,
       preset: null,
@@ -464,6 +511,7 @@ export default {
       confirmDelete: false,
       roles: this.$store.state.userSettings.roles,
       presets: [],
+      pageSize: this.$store.state.pageSize,
       totalPages: 1,
       currentPage: this.$store.state.currentPage,
       selectedRows: [],
@@ -540,6 +588,9 @@ export default {
     },
     setCurrentPage() {
       this.$store.commit("setCurrentPage", this.currentPage);
+    },
+    setPageSize() {
+      this.$store.commit("setPageSize", this.pageSize);
     },
     async getAccessToken() {
       let request = {
@@ -667,6 +718,17 @@ li.active {
   height: 100px;
   margin-top: -10px;
   margin-left: -10px;
+  border-radius: 50%;
+  border-top: 2px solid rgb(255, 160, 71);
+  border-right: 2px solid transparent;
+  animation: spinner 0.6s linear infinite;
+}
+.spinnerSmall:before {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  width: 75px;
+  height: 75px;
   border-radius: 50%;
   border-top: 2px solid rgb(255, 160, 71);
   border-right: 2px solid transparent;

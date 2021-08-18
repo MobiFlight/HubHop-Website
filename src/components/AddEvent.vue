@@ -603,11 +603,11 @@ export default {
             timer: 2000,
             willClose: () => {
               if (onSuccessReload) location.reload();
+              this.label = "";
+              this.code = "";
+              this.description = "";
             },
           });
-          this.label = "";
-          this.code = "";
-          this.description = "";
         });
       }
     },

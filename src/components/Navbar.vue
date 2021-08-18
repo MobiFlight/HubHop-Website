@@ -72,7 +72,7 @@
                   /></svg
                 >Preset list</router-link
               >
-              <!-- <router-link
+              <router-link
                 @click="scrollTop(), toggleNavbar()"
                 class="flex items-center"
                 to="/dashboard"
@@ -90,7 +90,7 @@
                     d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"
                   /></svg
                 >Dashboard</router-link
-              > -->
+              >
               <ProfileDropdown @click="scrollTop(), toggleNavbar()" />
             </div>
           </div>
@@ -123,7 +123,7 @@
           >
           <router-link
             @click="scrollTop"
-            class="px-5 flex items-center"
+            class="pr-5 flex items-center"
             to="/list"
             ><svg
               xmlns="http://www.w3.org/2000/svg"
@@ -140,7 +140,7 @@
               /></svg
             >Preset list</router-link
           >
-          <!-- <router-link
+          <router-link
             @click="scrollTop"
             class="mr-5 flex items-center"
             to="/dashboard"
@@ -158,7 +158,7 @@
                 d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"
               /></svg
             >Dashboard</router-link
-          > -->
+          >
           <ProfileDropdown />
         </div>
       </div>
