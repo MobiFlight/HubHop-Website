@@ -397,49 +397,60 @@
             v-for="preset in rows"
             :key="preset._id"
           >
-            <td class="hidden md:table-cell" v-if="preset.score">
+            <td
+              @click="viewPreset(preset.id)"
+              class="hidden md:table-cell"
+              v-if="preset.score"
+            >
               <router-link
                 :to="{ name: 'PresetView', params: { id: preset.id } }"
               >
                 {{ preset.score }}
               </router-link>
             </td>
-            <td class="hidden md:table-cell" v-else>
+            <td
+              @click="viewPreset(preset.id)"
+              class="hidden md:table-cell"
+              v-else
+            >
               <router-link
                 :to="{ name: 'PresetView', params: { id: preset.id } }"
               >
                 No score
               </router-link>
             </td>
-            <td class="py-1.5 hidden md:table-cell">
+            <td
+              @click="viewPreset(preset.id)"
+              class="py-1.5 hidden md:table-cell"
+            >
               <router-link
                 :to="{ name: 'PresetView', params: { id: preset.id } }"
               >
                 {{ preset.vendor }}
               </router-link>
             </td>
-            <td>
+            <td @click="viewPreset(preset.id)">
               <router-link
                 :to="{ name: 'PresetView', params: { id: preset.id } }"
               >
                 {{ preset.aircraft }}
               </router-link>
             </td>
-            <td class="hidden md:table-cell">
+            <td @click="viewPreset(preset.id)" class="hidden md:table-cell">
               <router-link
                 :to="{ name: 'PresetView', params: { id: preset.id } }"
               >
                 {{ preset.system }}
               </router-link>
             </td>
-            <td>
+            <td @click="viewPreset(preset.id)">
               <router-link
                 :to="{ name: 'PresetView', params: { id: preset.id } }"
               >
                 {{ preset.label }}
               </router-link>
             </td>
-            <td>
+            <td @click="viewPreset(preset.id)">
               <router-link
                 :to="{ name: 'PresetView', params: { id: preset.id } }"
               >

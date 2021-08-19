@@ -226,37 +226,89 @@
                         :key="presetAdded._id"
                       >
                         <td @click="viewPreset(presetAdded._id)">
-                          {{ formatDate(presetAdded.createdDate) }}
+                          <router-link
+                            :to="{
+                              name: 'PresetView',
+                              params: { id: presetAdded._id },
+                            }"
+                          >
+                            {{ formatDate(presetAdded.createdDate) }}
+                          </router-link>
                         </td>
                         <td
                           class="hidden xl:table-cell"
                           @click="viewPreset(presetAdded._id)"
                         >
-                          {{ presetAdded.vendor }}
+                          <router-link
+                            :to="{
+                              name: 'PresetView',
+                              params: { id: presetAdded._id },
+                            }"
+                          >
+                            {{ presetAdded.vendor }}
+                          </router-link>
                         </td>
                         <td @click="viewPreset(presetAdded._id)">
-                          {{ presetAdded.aircraft }}
+                          <router-link
+                            :to="{
+                              name: 'PresetView',
+                              params: { id: presetAdded._id },
+                            }"
+                          >
+                            {{ presetAdded.aircraft }}
+                          </router-link>
                         </td>
                         <td
                           class="hidden xl:table-cell"
                           @click="viewPreset(presetAdded._id)"
                         >
-                          {{ presetAdded.system }}
+                          <router-link
+                            :to="{
+                              name: 'PresetView',
+                              params: { id: presetAdded._id },
+                            }"
+                          >
+                            {{ presetAdded.system }}
+                          </router-link>
                         </td>
                         <td
                           class="hidden sm:table-cell"
                           @click="viewPreset(presetAdded._id)"
                         >
-                          {{ presetAdded.label }}
-                        </td>
-                        <td @click="viewPreset(presetAdded._id)">
-                          {{ presetAdded.presetType }}
+                          <router-link
+                            :to="{
+                              name: 'PresetView',
+                              params: { id: presetAdded._id },
+                            }"
+                          >
+                            {{ presetAdded.label }}
+                          </router-link>
                         </td>
                         <td
                           class="hidden sm:table-cell"
                           @click="viewPreset(presetAdded._id)"
                         >
-                          {{ presetAdded.author }}
+                          <router-link
+                            :to="{
+                              name: 'PresetView',
+                              params: { id: presetAdded._id },
+                            }"
+                          >
+                            {{ presetAdded.presetType }}
+                          </router-link>
+                        </td>
+                        <td
+                          class="hidden sm:table-cell"
+                          @click="viewPreset(presetAdded._id)"
+                        >
+                          <router-link
+                            :to="{
+                              name: 'PresetView',
+                              params: { id: presetAdded._id },
+                            }"
+                          >
+                            {{ presetAdded.author }}
+                          </router-link>
                         </td>
                       </VTr>
                     </template>
@@ -316,37 +368,86 @@
                         :key="presetUpdated._id"
                       >
                         <td @click="viewPreset(presetUpdated._id)">
-                          {{ formatDate(presetUpdated.createdDate) }}
+                          <router-link
+                            :to="{
+                              name: 'PresetView',
+                              params: { id: presetUpdated._id },
+                            }"
+                          >
+                            {{ formatDate(presetUpdated.createdDate) }}
+                          </router-link>
                         </td>
                         <td
                           class="hidden xl:table-cell"
                           @click="viewPreset(presetUpdated._id)"
                         >
-                          {{ presetUpdated.vendor }}
+                          <router-link
+                            :to="{
+                              name: 'PresetView',
+                              params: { id: presetUpdated._id },
+                            }"
+                          >
+                            {{ presetUpdated.vendor }}
+                          </router-link>
                         </td>
                         <td @click="viewPreset(presetUpdated._id)">
-                          {{ presetUpdated.aircraft }}
+                          <router-link
+                            :to="{
+                              name: 'PresetView',
+                              params: { id: presetUpdated._id },
+                            }"
+                          >
+                            {{ presetUpdated.aircraft }}
+                          </router-link>
                         </td>
                         <td
                           class="hidden xl:table-cell"
                           @click="viewPreset(presetUpdated._id)"
                         >
-                          {{ presetUpdated.system }}
+                          <router-link
+                            :to="{
+                              name: 'PresetView',
+                              params: { id: presetUpdated._id },
+                            }"
+                          >
+                            {{ presetUpdated.system }}
+                          </router-link>
                         </td>
                         <td @click="viewPreset(presetUpdated._id)">
-                          {{ presetUpdated.label }}
+                          <router-link
+                            :to="{
+                              name: 'PresetView',
+                              params: { id: presetUpdated._id },
+                            }"
+                          >
+                            {{ presetUpdated.label }}
+                          </router-link>
                         </td>
                         <td
                           class="hidden sm:table-cell"
                           @click="viewPreset(presetUpdated._id)"
                         >
-                          {{ presetUpdated.presetType }}
+                          <router-link
+                            :to="{
+                              name: 'PresetView',
+                              params: { id: presetUpdated._id },
+                            }"
+                          >
+                            {{ presetUpdated.presetType }}
+                          </router-link>
                         </td>
                         <td
                           class="hidden sm:table-cell"
                           @click="viewPreset(presetUpdated._id)"
                         >
-                          {{ presetUpdated.updatedBy }}
+                          <router-link
+                            :to="{
+                              name: 'PresetView',
+                              params: { id: presetUpdated._id },
+                            }"
+                          >
+                            {{ presetUpdated.updatedBy }}
+                          </router-link>
                         </td>
                       </VTr>
                     </template>
