@@ -327,7 +327,7 @@ export default {
     },
     exportSimvars() {
       this.eventSimvarDownload = true;
-      fetch(this.$hubHopApi.baseUrl + "/export/presets?type=simvar")
+      fetch(this.$hubHopApi.baseUrl + "/export/presets?type=simVars")
         .then((response) => response.blob())
         .then((blob) => {
           var url = window.URL.createObjectURL(blob);

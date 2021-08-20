@@ -230,7 +230,7 @@
           >
             <option value="">All Vendors</option>
             <option
-              v-for="vendor in uniqueVendors"
+              v-for="vendor in vendorList"
               :value="vendor"
               :key="vendor"
               >{{ vendor }}</option
@@ -257,7 +257,7 @@
           >
             <option value="">All Aircraft</option>
             <option
-              v-for="aircraft in uniqueAircraft"
+              v-for="aircraft in aircraftList"
               :value="aircraft"
               :key="aircraft"
               >{{ aircraft }}</option
@@ -290,7 +290,7 @@
           >
             <option value="">All Systems</option>
             <option
-              v-for="system in uniqueSystem"
+              v-for="system in systemList"
               :value="system"
               :key="system"
               >{{ system }}</option
@@ -526,6 +526,9 @@ export default {
       totalPages: 1,
       currentPage: this.$store.state.currentPage,
       selectedRows: [],
+      vendorList: [],
+      aircraftList: [],
+      systemList: [],
       filters: {
         aircraft: {
           value: this.$store.state.filterAircraft,
@@ -551,7 +554,63 @@ export default {
       return this.getAccessToken().then(() => this.getUserSettings());
     }
   },
+  watch: {
+    "filters.vendor.value": function() {
+      this.updateAircraftList();
+    },
+    "filters.aircraft.value": function() {
+      this.updateVendorList();
+      this.updateSystemList();
+    },
+    presets: function() {
+      this.updateVendorList();
+      this.updateAircraftList();
+      this.updateSystemList();
+    },
+  },
   methods: {
+    updateVendorList() {
+      this.vendorList = [
+        ...new Set(
+          this.presets
+            .filter((preset) => {
+              return (
+                this.filters.aircraft.value == "" ||
+                this.filters.aircraft.value == preset.aircraft
+              );
+            })
+            .map(({ vendor }) => vendor)
+        ),
+      ].sort();
+    },
+    updateAircraftList() {
+      this.aircraftList = [
+        ...new Set(
+          this.presets
+            .filter((preset) => {
+              return (
+                this.filters.vendor.value == "" ||
+                this.filters.vendor.value == preset.vendor
+              );
+            })
+            .map(({ aircraft }) => aircraft)
+        ),
+      ].sort();
+    },
+    updateSystemList() {
+      this.systemList = [
+        ...new Set(
+          this.presets
+            .filter((preset) => {
+              return (
+                this.filters.aircraft.value == "" ||
+                this.filters.aircraft.value == preset.aircraft
+              );
+            })
+            .map(({ system }) => system)
+        ),
+      ].sort();
+    },
     showExportModal() {
       this.exportModal = !this.exportModal;
     },
@@ -653,17 +712,17 @@ export default {
     },
     ...mapMutations(["setAccessToken", "setUserSettings"]),
   },
-  computed: {
-    uniqueVendors() {
-      return [...new Set(this.presets.map(({ vendor }) => vendor))].sort();
-    },
-    uniqueAircraft() {
-      return [...new Set(this.presets.map(({ aircraft }) => aircraft))].sort();
-    },
-    uniqueSystem() {
-      return [...new Set(this.presets.map(({ system }) => system))].sort();
-    },
-  },
+  // computed: {
+  //   uniqueVendors() {
+  //     return [...new Set(this.presets.map(({ vendor }) => vendor))].sort();
+  //   },
+  //   uniqueAircraft() {
+  //     return [...new Set(this.presets.map(({ aircraft }) => aircraft))].sort();
+  //   },
+  //   uniqueSystem() {
+  //     return [...new Set(this.presets.map(({ system }) => system))].sort();
+  //   },
+  // },
   mounted() {
     fetch(this.$hubHopApi.baseUrl + "/presets/")
       .then((res) => res.json())
