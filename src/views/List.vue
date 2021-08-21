@@ -43,7 +43,7 @@
               >
                 <option value="">All Vendors</option>
                 <option
-                  v-for="vendor in uniqueVendors"
+                  v-for="vendor in vendorList"
                   :value="vendor"
                   :key="vendor"
                   >{{ vendor }}</option
@@ -72,7 +72,7 @@
               >
                 <option value="">All Aircraft</option>
                 <option
-                  v-for="aircraft in uniqueAircraft"
+                  v-for="aircraft in aircraftList"
                   :value="aircraft"
                   :key="aircraft"
                   >{{ aircraft }}</option
@@ -107,7 +107,7 @@
               >
                 <option value="">All Systems</option>
                 <option
-                  v-for="system in uniqueSystem"
+                  v-for="system in systemList"
                   :value="system"
                   :key="system"
                   >{{ system }}</option
