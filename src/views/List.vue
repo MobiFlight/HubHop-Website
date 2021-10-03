@@ -37,7 +37,7 @@
                 />
               </svg>
               <select
-                @click="setFilterVendor"
+                @change="setFilterVendor"
                 v-model="filters.vendor.value"
                 class="bg-hhCard mr-5 px-1 py-1 w-40 text-sm rounded"
               >
@@ -46,8 +46,9 @@
                   v-for="vendor in vendorList"
                   :value="vendor"
                   :key="vendor"
-                  >{{ vendor }}</option
                 >
+                  {{ vendor }}
+                </option>
               </select>
             </div>
             <div class="flex items-center">
@@ -66,7 +67,7 @@
                 />
               </svg>
               <select
-                @click="setFilterAircraft"
+                @change="setFilterAircraft"
                 v-model="filters.aircraft.value"
                 class="bg-hhCard mr-5 px-1 py-1 w-40 text-sm rounded"
               >
@@ -75,8 +76,9 @@
                   v-for="aircraft in aircraftList"
                   :value="aircraft"
                   :key="aircraft"
-                  >{{ aircraft }}</option
                 >
+                  {{ aircraft }}
+                </option>
               </select>
             </div>
             <div class="flex items-center">
@@ -101,7 +103,7 @@
                 />
               </svg>
               <select
-                @click="setFilterSystem"
+                @change="setFilterSystem"
                 v-model="filters.system.value"
                 class="bg-hhCard mr-5 px-1 py-1 w-40 text-sm rounded"
               >
@@ -110,8 +112,9 @@
                   v-for="system in systemList"
                   :value="system"
                   :key="system"
-                  >{{ system }}</option
                 >
+                  {{ system }}
+                </option>
               </select>
             </div>
           </div>
@@ -132,12 +135,15 @@
                 />
               </svg>
               <select
-                @click="setFilterInputType"
+                @change="setFilterInputType"
                 v-model="filters.type.value"
                 class="bg-hhCard px-1 py-1 max-w-xs text-sm rounded"
               >
                 <option value="" selected>Select Input/Output</option>
                 <option value="Input">Input</option>
+                <option value="Input (Potentiometer)">
+                  Input (Potentiometer)
+                </option>
                 <option value="Output">Output</option>
               </select>
             </div>
@@ -224,17 +230,14 @@
             />
           </svg>
           <select
-            @click="setFilterVendor"
+            @change="setFilterVendor"
             v-model="filters.vendor.value"
             class="bg-hhCard mr-5 px-1 py-1 max-w-xs text-sm rounded"
           >
             <option value="">All Vendors</option>
-            <option
-              v-for="vendor in vendorList"
-              :value="vendor"
-              :key="vendor"
-              >{{ vendor }}</option
-            >
+            <option v-for="vendor in vendorList" :value="vendor" :key="vendor">
+              {{ vendor }}
+            </option>
           </select>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -251,7 +254,7 @@
             />
           </svg>
           <select
-            @click="setFilterAircraft"
+            @change="setFilterAircraft"
             v-model="filters.aircraft.value"
             class="bg-hhCard mr-5 px-1 py-1 max-w-xs text-sm rounded"
           >
@@ -260,8 +263,9 @@
               v-for="aircraft in aircraftList"
               :value="aircraft"
               :key="aircraft"
-              >{{ aircraft }}</option
             >
+              {{ aircraft }}
+            </option>
           </select>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -284,17 +288,14 @@
             />
           </svg>
           <select
-            @click="setFilterSystem"
+            @change="setFilterSystem"
             v-model="filters.system.value"
             class="bg-hhCard mr-5 px-1 py-1 max-w-xs text-sm rounded"
           >
             <option value="">All Systems</option>
-            <option
-              v-for="system in systemList"
-              :value="system"
-              :key="system"
-              >{{ system }}</option
-            >
+            <option v-for="system in systemList" :value="system" :key="system">
+              {{ system }}
+            </option>
           </select>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -311,12 +312,15 @@
             />
           </svg>
           <select
-            @click="setFilterInputType"
+            @change="setFilterInputType"
             v-model="filters.type.value"
             class="bg-hhCard mr-5 px-1 py-1 max-w-xs text-sm rounded"
           >
             <option value="" selected>Select Input/Output</option>
             <option value="Input">Input</option>
+            <option value="Input (Potentiometer)">
+              Input (Potentiometer)
+            </option>
             <option value="Output">Output</option>
           </select>
           <svg
@@ -378,7 +382,7 @@
         v-model:currentPage="currentPage"
         @totalPagesChanged="totalPages = $event"
         class="mx-auto text-base bg-hhCard bg-opacity-70 rounded"
-        style="width:100%"
+        style="width: 100%"
       >
         <template #head>
           <tr class="text-base">
@@ -390,9 +394,15 @@
             <th>Type</th>
           </tr>
         </template>
-        <template #body="{rows}">
+        <template #body="{ rows }">
           <VTr
-            class="hover:bg-hhOrange hover:font-bold transition rounded-lg hover:text-hhBG"
+            class="
+              hover:bg-hhOrange
+              hover:font-bold
+              transition
+              rounded-lg
+              hover:text-hhBG
+            "
             :row="preset"
             v-for="preset in rows"
             :key="preset._id"
@@ -533,15 +543,29 @@ export default {
         aircraft: {
           value: this.$store.state.filterAircraft,
           keys: ["aircraft"],
+          exact: true,
         },
-        vendor: { value: this.$store.state.filterVendor, keys: ["vendor"] },
-        system: { value: this.$store.state.filterSystem, keys: ["system"] },
-        name: { value: this.$store.state.filterName, keys: ["label"] },
+        vendor: {
+          value: this.$store.state.filterVendor,
+          keys: ["vendor"],
+          exact: true,
+        },
+        system: {
+          value: this.$store.state.filterSystem,
+          keys: ["system"],
+          exact: true,
+        },
+        name: {
+          value: this.$store.state.filterName,
+          keys: ["label"],
+          exact: true,
+        },
         type: {
           value: this.$store.state.filterInputType,
           keys: ["presetType"],
+          exact: true,
         },
-        status: { value: "", keys: ["status"] },
+        status: { value: "", keys: ["status"], exact: true },
       },
     };
   },
@@ -555,14 +579,14 @@ export default {
     }
   },
   watch: {
-    "filters.vendor.value": function() {
+    "filters.vendor.value": function () {
       this.updateAircraftList();
     },
-    "filters.aircraft.value": function() {
+    "filters.aircraft.value": function () {
       this.updateVendorList();
       this.updateSystemList();
     },
-    presets: function() {
+    presets: function () {
       this.updateVendorList();
       this.updateAircraftList();
       this.updateSystemList();
@@ -575,8 +599,8 @@ export default {
           this.presets
             .filter((preset) => {
               return (
-                this.filters.aircraft.value == "" ||
-                this.filters.aircraft.value == preset.aircraft
+                this.filters.aircraft.value === "" ||
+                this.filters.aircraft.value === preset.aircraft
               );
             })
             .map(({ vendor }) => vendor)
@@ -589,8 +613,8 @@ export default {
           this.presets
             .filter((preset) => {
               return (
-                this.filters.vendor.value == "" ||
-                this.filters.vendor.value == preset.vendor
+                this.filters.vendor.value === "" ||
+                this.filters.vendor.value === preset.vendor
               );
             })
             .map(({ aircraft }) => aircraft)
@@ -603,8 +627,8 @@ export default {
           this.presets
             .filter((preset) => {
               return (
-                this.filters.aircraft.value == "" ||
-                this.filters.aircraft.value == preset.aircraft
+                this.filters.aircraft.value === "" ||
+                this.filters.aircraft.value === preset.aircraft
               );
             })
             .map(({ system }) => system)
@@ -675,10 +699,20 @@ export default {
         this.$store.commit("setAccessToken", tokenResponse.accessToken);
       } catch (error) {
         console.error(
-          `"Silent token acquisition failed. Logging out..." + ${error}`
+          "Silent token acquisition failed. Using interactive mode"
         );
-        this.logout();
+        let tokenResponse = await msalInstance.acquireTokenPopup(request);
+        console.log(
+          `Access token acquired via interactive auth ${tokenResponse.accessToken}`
+        );
+        this.$store.commit("setAccessToken", tokenResponse.accessToken);
       }
+      // catch (error) {
+      //   console.error(
+      //     `"Silent token acquisition failed. Logging out..." + ${error}`
+      //   );
+      //   this.logout();
+      // }
     },
     async getUserSettings() {
       const url = this.$hubHopApi.baseUrl + "/settings/user";

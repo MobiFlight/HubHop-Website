@@ -21,7 +21,14 @@
               />
             </svg>
             <div
-              class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhBG
+                text-hhText
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
             >
               {{ preset.vendor }}
             </div>
@@ -42,7 +49,14 @@
               />
             </svg>
             <div
-              class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhBG
+                text-hhText
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
             >
               {{ preset.aircraft }}
             </div>
@@ -69,7 +83,14 @@
               />
             </svg>
             <div
-              class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhBG
+                text-hhText
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
             >
               {{ preset.system }}
             </div>
@@ -90,7 +111,14 @@
               />
             </svg>
             <div
-              class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhBG
+                text-hhText
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
             >
               {{ preset.presetType }}
             </div>
@@ -111,7 +139,14 @@
               />
             </svg>
             <div
-              class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhBG
+                text-hhText
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
             >
               {{ preset.status }}
             </div>
@@ -133,13 +168,27 @@
             </svg>
             <div
               v-if="preset.createdDate"
-              class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhBG
+                text-hhText
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
             >
               {{ formatDate(preset.createdDate) }}
             </div>
             <div
               v-if="!preset.createdDate"
-              class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhBG
+                text-hhText
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
             >
               Initial import
             </div>
@@ -160,7 +209,14 @@
               />
             </svg>
             <div
-              class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhBG
+                text-hhText
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
             >
               {{ preset.author }}
             </div>
@@ -181,7 +237,14 @@
               />
             </svg>
             <div
-              class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhBG
+                text-hhText
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
             >
               Version: {{ preset.version }}
             </div>
@@ -202,7 +265,14 @@
               />
             </svg>
             <div
-              class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhBG
+                text-hhText
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
             >
               Updated by: {{ preset.updatedBy }}
             </div>
@@ -223,7 +293,14 @@
               />
             </svg>
             <div
-              class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhBG
+                text-hhText
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
             >
               Reported: {{ preset.reported }} Times
             </div>
@@ -250,7 +327,17 @@
               />
             </svg>
             <div
-              class="flex bg-hhBG text-hhText justify-around text-center p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                flex
+                bg-hhBG
+                text-hhText
+                justify-around
+                text-center
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
             >
               <div v-if="preset.score">Score: {{ preset.score + score }}</div>
               <div v-else>Score: {{ 0 + score }}</div>
@@ -316,7 +403,14 @@
               />
             </svg>
             <div
-              class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhBG
+                text-hhText
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
             >
               {{ preset.label }}
             </div>
@@ -340,12 +434,31 @@
               id="preset-Code"
               v-model="preset.code"
               rows="4"
-              class="bg-hhBG text-hhText font-mono text-start p-1 w-full break-normal rounded-lg border border-hhOrange"
+              class="
+                bg-hhBG
+                text-hhText
+                font-mono
+                text-start
+                p-1
+                w-full
+                break-normal
+                rounded-lg
+                border border-hhOrange
+              "
             />
           </div>
           <div class="flex mt-1 flex-col items-end">
             <button
-              class="bg-hhOrange flex items-center text-hhBG font-bold text-sm px-2 rounded-lg"
+              class="
+                bg-hhOrange
+                flex
+                items-center
+                text-hhBG
+                font-bold
+                text-sm
+                px-2
+                rounded-lg
+              "
               @click="copyCode"
             >
               <svg
@@ -381,14 +494,31 @@
             </svg>
             <textarea
               disabled
-              rows="4"
-              class="bg-hhBG text-hhText text-start p-1 w-full rounded-lg border border-hhOrange"
+              rows="10"
+              class="
+                bg-hhBG
+                text-hhText text-start
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
               v-if="preset.description"
               v-model="preset.description"
             />
             <div
               v-if="!preset.description"
-              class="bg-hhBG text-hhText p-1 w-full flex place-content-center items-center rounded-lg border border-hhOrange"
+              class="
+                bg-hhBG
+                text-hhText
+                p-1
+                w-full
+                flex
+                place-content-center
+                items-center
+                rounded-lg
+                border border-hhOrange
+              "
             >
               No description available
             </div>
@@ -396,7 +526,21 @@
           <div class="flex mt-3 justify-end">
             <button
               ref="btnRef"
-              class="disabled:opacity-75 disabled:cursor-not-allowed flex items-center text-base px-2 text-hhText border-hhOrange rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+              class="
+                disabled:opacity-75
+                disabled:cursor-not-allowed
+                flex
+                items-center
+                text-base
+                px-2
+                text-hhText
+                border-hhOrange
+                rounded-md
+                focus:outline-none
+                focus-visible:ring-2
+                focus-visible:ring-offset-2
+                focus-visible:ring-blue-500
+              "
               @click="openReport = true"
             >
               <svg
@@ -437,7 +581,14 @@
               />
             </svg>
             <input
-              class="bg-hhCard text-hhText text-center p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhCard
+                text-hhText text-center
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
               v-model="preset.vendor"
             />
           </div>
@@ -457,7 +608,14 @@
               />
             </svg>
             <input
-              class="bg-hhCard text-hhText text-center p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhCard
+                text-hhText text-center
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
               v-model="preset.aircraft"
             />
           </div>
@@ -483,7 +641,14 @@
               />
             </svg>
             <input
-              class="bg-hhCard text-hhText text-center p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhCard
+                text-hhText text-center
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
               v-model="preset.system"
             />
           </div>
@@ -503,7 +668,14 @@
               />
             </svg>
             <input
-              class="bg-hhCard text-hhText text-center p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhCard
+                text-hhText text-center
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
               v-model="preset.presetType"
             />
           </div>
@@ -523,7 +695,14 @@
               />
             </svg>
             <input
-              class="bg-hhBG text-hhText text-center p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhBG
+                text-hhText text-center
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
               v-model="preset.status"
             />
           </div>
@@ -544,12 +723,26 @@
             </svg>
             <input
               v-if="preset.createdDate"
-              class="bg-hhBG text-hhText text-center p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhBG
+                text-hhText text-center
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
               v-model="preset.createdDate"
             />
             <div
               v-if="!preset.createdDate"
-              class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhBG
+                text-hhText
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
             >
               Initial import
             </div>
@@ -570,7 +763,14 @@
               />
             </svg>
             <input
-              class="bg-hhCard text-hhText text-center p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhCard
+                text-hhText text-center
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
               v-model="preset.author"
             />
           </div>
@@ -590,7 +790,14 @@
               />
             </svg>
             <div
-              class="bg-hhBG text-hhText text-center p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhBG
+                text-hhText text-center
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
             >
               Version: {{ preset.version }}
             </div>
@@ -611,7 +818,14 @@
               />
             </svg>
             <div
-              class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhBG
+                text-hhText
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
             >
               Updated by: {{ preset.updatedBy }}
             </div>
@@ -632,7 +846,14 @@
               />
             </svg>
             <div
-              class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhBG
+                text-hhText
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
             >
               Reported: {{ preset.reported }} Times
             </div>
@@ -659,7 +880,17 @@
               />
             </svg>
             <div
-              class="flex bg-hhBG text-hhText justify-around text-center p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                flex
+                bg-hhBG
+                text-hhText
+                justify-around
+                text-center
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
             >
               <div v-if="preset.score">Score: {{ preset.score + score }}</div>
               <div v-else>Score: {{ 0 + score }}</div>
@@ -725,7 +956,14 @@
               />
             </svg>
             <input
-              class="bg-hhCard text-hhText text-center p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhCard
+                text-hhText text-center
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
               v-model="preset.label"
             />
           </div>
@@ -748,12 +986,31 @@
               v-model="preset.code"
               id="preset-Code"
               rows="4"
-              class="bg-hhCard text-hhText font-mono text-start p-1 w-full break-normal rounded-lg border border-hhOrange"
+              class="
+                bg-hhCard
+                text-hhText
+                font-mono
+                text-start
+                p-1
+                w-full
+                break-normal
+                rounded-lg
+                border border-hhOrange
+              "
             />
           </div>
           <div class="flex mt-1 flex-col items-end">
             <button
-              class="bg-hhOrange flex items-center text-hhBG font-bold text-sm px-2 rounded-lg"
+              class="
+                bg-hhOrange
+                flex
+                items-center
+                text-hhBG
+                font-bold
+                text-sm
+                px-2
+                rounded-lg
+              "
               @click="copyCode"
             >
               <svg
@@ -788,15 +1045,36 @@
               />
             </svg>
             <textarea
-              rows="4"
-              class="bg-hhCard text-hhText text-start p-1 w-full rounded-lg border border-hhOrange"
+              rows="10"
+              class="
+                bg-hhCard
+                text-hhText text-start
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
               v-model="preset.description"
             />
           </div>
           <div class="flex mt-3 justify-end">
             <button
               ref="btnRef"
-              class="disabled:opacity-75 disabled:cursor-not-allowed flex items-center text-base px-2 text-hhText border-hhOrange rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+              class="
+                disabled:opacity-75
+                disabled:cursor-not-allowed
+                flex
+                items-center
+                text-base
+                px-2
+                text-hhText
+                border-hhOrange
+                rounded-md
+                focus:outline-none
+                focus-visible:ring-2
+                focus-visible:ring-offset-2
+                focus-visible:ring-blue-500
+              "
               @click="openReport = true"
             >
               <svg
@@ -825,9 +1103,7 @@
             <div class="mr-3 text-xl font-bold text-hhOrange" v-if="!edit">
               View
             </div>
-            <div class="mr-3 text-xl" v-else>
-              View
-            </div>
+            <div class="mr-3 text-xl" v-else>View</div>
             <div class="flex items-center">
               <!-- toggle -->
               <div class="relative">
@@ -844,23 +1120,45 @@
                 ></div>
                 <!-- dot -->
                 <div
-                  class="dot absolute w-8 h-8 bg-hhCard rounded-full shadow -left-1 -top-1 transition"
+                  class="
+                    dot
+                    absolute
+                    w-8
+                    h-8
+                    bg-hhCard
+                    rounded-full
+                    shadow
+                    -left-1
+                    -top-1
+                    transition
+                  "
                 ></div>
               </div>
               <!-- label -->
               <div class="ml-3 text-xl font-bold text-hhOrange" v-if="edit">
                 Edit
               </div>
-              <div class="ml-3 text-xl" v-else>
-                Edit
-              </div>
+              <div class="ml-3 text-xl" v-else>Edit</div>
             </div>
             <div></div>
           </label>
         </div>
         <div>
           <button
-            class="text-xl px-2 py-1 font-bold text-hhCard bg-hhOrange rounded-md hover:bg-orange-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+            class="
+              text-xl
+              px-2
+              py-1
+              font-bold
+              text-hhCard
+              bg-hhOrange
+              rounded-md
+              hover:bg-orange-300
+              focus:outline-none
+              focus-visible:ring-2
+              focus-visible:ring-offset-2
+              focus-visible:ring-blue-500
+            "
             @click="goBackCheck"
           >
             Back
@@ -869,7 +1167,21 @@
       </div>
       <div class="md:hidden flex justify-end mt-5">
         <button
-          class=" justify-end text-xl px-2 py-1 font-bold text-hhCard bg-hhOrange rounded-md hover:bg-orange-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+          class="
+            justify-end
+            text-xl
+            px-2
+            py-1
+            font-bold
+            text-hhCard
+            bg-hhOrange
+            rounded-md
+            hover:bg-orange-300
+            focus:outline-none
+            focus-visible:ring-2
+            focus-visible:ring-offset-2
+            focus-visible:ring-blue-500
+          "
           @click="updatePreset(preset.id)"
           v-if="edit"
         >
@@ -878,8 +1190,19 @@
       </div>
       <div class="md:hidden flex justify-end mt-5">
         <button
-          style="background-color: #A4031F"
-          class=" justify-end text-xl px-2 py-1 font-bold rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+          style="background-color: #a4031f"
+          class="
+            justify-end
+            text-xl
+            px-2
+            py-1
+            font-bold
+            rounded-md
+            focus:outline-none
+            focus-visible:ring-2
+            focus-visible:ring-offset-2
+            focus-visible:ring-blue-500
+          "
           v-if="roles.includes('Moderator')"
           @click="openDelete = true"
         >
@@ -887,7 +1210,15 @@
         </button>
       </div>
       <div
-        class="flex justify-between flex-col md:hidden mt-5 space-y-5 items-center"
+        class="
+          flex
+          justify-between
+          flex-col
+          md:hidden
+          mt-5
+          space-y-5
+          items-center
+        "
       >
         <div class="flex items-center justify-between">
           <div></div>
@@ -898,11 +1229,34 @@
           <div
             ref="tooltipRef"
             v-bind:class="{ hidden: !tooltipShow, block: tooltipShow }"
-            class="bg-hhBG border border-hhOrange text-hhText block z-50 font-normal leading-normal text-sm max-w-sm text-left no-underline break-words rounded-lg"
+            class="
+              bg-hhBG
+              border border-hhOrange
+              text-hhText
+              block
+              z-50
+              font-normal
+              leading-normal
+              text-sm
+              max-w-sm
+              text-left
+              no-underline
+              break-words
+              rounded-lg
+            "
           >
             <div>
               <div
-                class="bg-hhBG text-hhText opacity-75 font-semibold p-3 border-b border-solid border-hhOrange uppercase rounded-t-lg"
+                class="
+                  bg-hhBG
+                  text-hhText
+                  opacity-75
+                  font-semibold
+                  p-3
+                  border-b border-solid border-hhOrange
+                  uppercase
+                  rounded-t-lg
+                "
               >
                 Report preset
               </div>
@@ -934,7 +1288,14 @@
               />
             </svg>
             <div
-              class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhBG
+                text-hhText
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
             >
               {{ preset.vendor }}
             </div>
@@ -955,7 +1316,14 @@
               />
             </svg>
             <div
-              class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhBG
+                text-hhText
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
             >
               {{ preset.aircraft }}
             </div>
@@ -982,7 +1350,14 @@
               />
             </svg>
             <div
-              class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhBG
+                text-hhText
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
             >
               {{ preset.system }}
             </div>
@@ -1003,7 +1378,14 @@
               />
             </svg>
             <div
-              class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhBG
+                text-hhText
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
             >
               {{ preset.presetType }}
             </div>
@@ -1024,7 +1406,14 @@
               />
             </svg>
             <div
-              class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhBG
+                text-hhText
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
             >
               {{ preset.status }}
             </div>
@@ -1046,13 +1435,27 @@
             </svg>
             <div
               v-if="preset.createdDate"
-              class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhBG
+                text-hhText
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
             >
               {{ formatDate(preset.createdDate) }}
             </div>
             <div
               v-if="!preset.createdDate"
-              class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhBG
+                text-hhText
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
             >
               Initial import
             </div>
@@ -1073,7 +1476,14 @@
               />
             </svg>
             <div
-              class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhBG
+                text-hhText
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
             >
               {{ preset.author }}
             </div>
@@ -1094,7 +1504,14 @@
               />
             </svg>
             <div
-              class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhBG
+                text-hhText
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
             >
               Version: {{ preset.version }}
             </div>
@@ -1115,7 +1532,14 @@
               />
             </svg>
             <div
-              class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhBG
+                text-hhText
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
             >
               Updated by: {{ preset.updatedBy }}
             </div>
@@ -1136,7 +1560,14 @@
               />
             </svg>
             <div
-              class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhBG
+                text-hhText
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
             >
               Reported: {{ preset.reported }} Times
             </div>
@@ -1163,7 +1594,17 @@
               />
             </svg>
             <div
-              class="flex bg-hhBG text-hhText justify-around text-center p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                flex
+                bg-hhBG
+                text-hhText
+                justify-around
+                text-center
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
             >
               <div v-if="preset.score">Score: {{ preset.score + score }}</div>
               <div v-else>Score: {{ 0 + score }}</div>
@@ -1210,7 +1651,21 @@
               v-on:mouseenter="toggleTooltip()"
               v-on:mouseleave="toggleTooltip()"
               ref="btnRef"
-              class="disabled:opacity-75 disabled:cursor-not-allowed flex items-center text-base px-2 text-hhText border-hhOrange rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+              class="
+                disabled:opacity-75
+                disabled:cursor-not-allowed
+                flex
+                items-center
+                text-base
+                px-2
+                text-hhText
+                border-hhOrange
+                rounded-md
+                focus:outline-none
+                focus-visible:ring-2
+                focus-visible:ring-offset-2
+                focus-visible:ring-blue-500
+              "
               @click="openReport = true"
             >
               <svg
@@ -1256,7 +1711,15 @@
             Preset Name
           </div>
           <div
-            class="bg-hhBG text-hhText p-1 mt-2 w-full rounded-lg border border-hhOrange"
+            class="
+              bg-hhBG
+              text-hhText
+              p-1
+              mt-2
+              w-full
+              rounded-lg
+              border border-hhOrange
+            "
           >
             {{ preset.label }}
           </div>
@@ -1278,15 +1741,35 @@
             Code
           </div>
           <textarea
-            id="preset-Code"
             v-model="preset.code"
+            id="preset-Code-deskop"
             rows="4"
-            class="bg-hhBG text-hhText font-mono text-start mt-2 p-1 w-full break-normal rounded-lg border border-hhOrange"
+            class="
+              bg-hhBG
+              text-hhText
+              font-mono
+              text-start
+              mt-2
+              p-1
+              w-full
+              break-normal
+              rounded-lg
+              border border-hhOrange
+            "
           />
           <div class="flex flex-col items-end">
             <button
-              class="bg-hhOrange flex items-center text-hhBG font-bold text-sm px-2 rounded-lg"
-              @click="copyCode"
+              class="
+                bg-hhOrange
+                flex
+                items-center
+                text-hhBG
+                font-bold
+                text-sm
+                px-2
+                rounded-lg
+              "
+              @click="copyCodeDesktop"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -1323,14 +1806,33 @@
           </div>
           <textarea
             disabled
-            rows="4"
-            class="bg-hhBG text-hhText text-start mt-2 p-1 w-full rounded-lg border border-hhOrange"
+            rows="10"
+            class="
+              bg-hhBG
+              text-hhText text-start
+              mt-2
+              p-1
+              w-full
+              rounded-lg
+              border border-hhOrange
+            "
             v-if="preset.description"
             v-model="preset.description"
           />
           <div
             v-if="!preset.description"
-            class="bg-hhBG text-hhText p-1 mt-2 w-full flex place-content-center items-center rounded-lg border border-hhOrange"
+            class="
+              bg-hhBG
+              text-hhText
+              p-1
+              mt-2
+              w-full
+              flex
+              place-content-center
+              items-center
+              rounded-lg
+              border border-hhOrange
+            "
           >
             No description available
           </div>
@@ -1356,7 +1858,14 @@
               />
             </svg>
             <input
-              class="bg-hhCard text-hhText text-center p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhCard
+                text-hhText text-center
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
               v-model="preset.vendor"
             />
           </div>
@@ -1376,7 +1885,14 @@
               />
             </svg>
             <input
-              class="bg-hhCard text-hhText text-center p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhCard
+                text-hhText text-center
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
               v-model="preset.aircraft"
             />
           </div>
@@ -1402,7 +1918,14 @@
               />
             </svg>
             <input
-              class="bg-hhCard text-hhText text-center p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhCard
+                text-hhText text-center
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
               v-model="preset.system"
             />
           </div>
@@ -1422,7 +1945,14 @@
               />
             </svg>
             <input
-              class="bg-hhCard text-hhText text-center p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhCard
+                text-hhText text-center
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
               v-model="preset.presetType"
             />
           </div>
@@ -1442,7 +1972,14 @@
               />
             </svg>
             <input
-              class="bg-hhBG text-hhText text-center p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhBG
+                text-hhText text-center
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
               v-model="preset.status"
             />
           </div>
@@ -1463,12 +2000,26 @@
             </svg>
             <input
               v-if="preset.createdDate"
-              class="bg-hhBG text-hhText text-center p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhBG
+                text-hhText text-center
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
               v-model="preset.createdDate"
             />
             <div
               v-if="!preset.createdDate"
-              class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhBG
+                text-hhText
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
             >
               Initial import
             </div>
@@ -1489,7 +2040,14 @@
               />
             </svg>
             <input
-              class="bg-hhCard text-hhText text-center p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhCard
+                text-hhText text-center
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
               v-model="preset.author"
             />
           </div>
@@ -1509,7 +2067,14 @@
               />
             </svg>
             <div
-              class="bg-hhBG text-hhText text-center p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhBG
+                text-hhText text-center
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
             >
               Version: {{ preset.version }}
             </div>
@@ -1530,7 +2095,14 @@
               />
             </svg>
             <div
-              class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhBG
+                text-hhText
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
             >
               Updated by: {{ preset.updatedBy }}
             </div>
@@ -1551,7 +2123,14 @@
               />
             </svg>
             <div
-              class="bg-hhBG text-hhText p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhBG
+                text-hhText
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
             >
               Reported: {{ preset.reported }} Times
             </div>
@@ -1578,7 +2157,17 @@
               />
             </svg>
             <div
-              class="flex bg-hhBG text-hhText justify-around text-center p-1 w-full rounded-lg border border-hhOrange"
+              class="
+                flex
+                bg-hhBG
+                text-hhText
+                justify-around
+                text-center
+                p-1
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
             >
               <div v-if="preset.score">Score: {{ preset.score + score }}</div>
               <div v-else>Score: {{ 0 + score }}</div>
@@ -1625,7 +2214,21 @@
               v-on:mouseenter="toggleTooltip()"
               v-on:mouseleave="toggleTooltip()"
               ref="btnRef"
-              class="disabled:opacity-75 disabled:cursor-not-allowed flex items-center text-base px-2 text-hhText border-hhOrange rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+              class="
+                disabled:opacity-75
+                disabled:cursor-not-allowed
+                flex
+                items-center
+                text-base
+                px-2
+                text-hhText
+                border-hhOrange
+                rounded-md
+                focus:outline-none
+                focus-visible:ring-2
+                focus-visible:ring-offset-2
+                focus-visible:ring-blue-500
+              "
               @click="openReport = true"
             >
               <svg
@@ -1671,7 +2274,15 @@
             Preset Name
           </div>
           <input
-            class="bg-hhCard text-hhText text-center mt-2 p-1 w-full rounded-lg border border-hhOrange"
+            class="
+              bg-hhCard
+              text-hhText text-center
+              mt-2
+              p-1
+              w-full
+              rounded-lg
+              border border-hhOrange
+            "
             v-model="preset.label"
           />
           <div class="flex items-center justify-center mt-5">
@@ -1693,14 +2304,34 @@
           </div>
           <textarea
             v-model="preset.code"
-            id="preset-Code"
+            id="preset-Code-deskop"
             rows="4"
-            class="bg-hhCard text-hhText font-mono text-start mt-2 p-1 w-full break-normal rounded-lg border border-hhOrange"
+            class="
+              bg-hhCard
+              text-hhText
+              font-mono
+              text-start
+              mt-2
+              p-1
+              w-full
+              break-normal
+              rounded-lg
+              border border-hhOrange
+            "
           />
           <div class="flex flex-col items-end">
             <button
-              class="bg-hhOrange flex items-center text-hhBG font-bold text-sm px-2 rounded-lg"
-              @click="copyCode"
+              class="
+                bg-hhOrange
+                flex
+                items-center
+                text-hhBG
+                font-bold
+                text-sm
+                px-2
+                rounded-lg
+              "
+              @click="copyCodeDesktop"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -1736,8 +2367,16 @@
             Description
           </div>
           <textarea
-            rows="4"
-            class="bg-hhCard text-hhText text-start mt-2 p-1 w-full rounded-lg border border-hhOrange"
+            rows="10"
+            class="
+              bg-hhCard
+              text-hhText text-start
+              mt-2
+              p-1
+              w-full
+              rounded-lg
+              border border-hhOrange
+            "
             v-model="preset.description"
           />
         </div>
@@ -1746,8 +2385,19 @@
       <div class="hidden md:flex mt-5 justify-between items-center">
         <div class="flex space-x-5">
           <button
-            style="background-color: #A4031F"
-            class="text-xl ml-5 px-4 py-2 font-bold rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+            style="background-color: #a4031f"
+            class="
+              text-xl
+              ml-5
+              px-4
+              py-2
+              font-bold
+              rounded-md
+              focus:outline-none
+              focus-visible:ring-2
+              focus-visible:ring-offset-2
+              focus-visible:ring-blue-500
+            "
             v-if="roles.includes('Moderator')"
             @click="openDelete = true"
           >
@@ -1757,9 +2407,7 @@
             <div class="mr-3 text-xl font-bold text-hhOrange" v-if="!edit">
               View
             </div>
-            <div class="mr-3 text-xl" v-else>
-              View
-            </div>
+            <div class="mr-3 text-xl" v-else>View</div>
             <div class="flex items-center">
               <!-- toggle -->
               <div class="relative">
@@ -1776,16 +2424,25 @@
                 ></div>
                 <!-- dot -->
                 <div
-                  class="dot absolute w-8 h-8 bg-hhCard rounded-full shadow -left-1 -top-1 transition"
+                  class="
+                    dot
+                    absolute
+                    w-8
+                    h-8
+                    bg-hhCard
+                    rounded-full
+                    shadow
+                    -left-1
+                    -top-1
+                    transition
+                  "
                 ></div>
               </div>
               <!-- label -->
               <div class="ml-3 text-xl font-bold text-hhOrange" v-if="edit">
                 Edit
               </div>
-              <div class="ml-3 text-xl" v-else>
-                Edit
-              </div>
+              <div class="ml-3 text-xl" v-else>Edit</div>
             </div>
             <div></div>
           </label>
@@ -1794,11 +2451,34 @@
           <div
             ref="tooltipRef"
             v-bind:class="{ hidden: !tooltipShow, block: tooltipShow }"
-            class="bg-hhBG border border-hhOrange text-hhText block z-50 font-normal leading-normal text-sm max-w-sm text-left no-underline break-words rounded-lg"
+            class="
+              bg-hhBG
+              border border-hhOrange
+              text-hhText
+              block
+              z-50
+              font-normal
+              leading-normal
+              text-sm
+              max-w-sm
+              text-left
+              no-underline
+              break-words
+              rounded-lg
+            "
           >
             <div>
               <div
-                class="bg-hhBG text-hhText opacity-75 font-semibold p-3 border-b border-solid border-hhOrange uppercase rounded-t-lg"
+                class="
+                  bg-hhBG
+                  text-hhText
+                  opacity-75
+                  font-semibold
+                  p-3
+                  border-b border-solid border-hhOrange
+                  uppercase
+                  rounded-t-lg
+                "
               >
                 Report preset
               </div>
@@ -1816,7 +2496,18 @@
               :openReport="openReport"
             >
               <div
-                class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+                class="
+                  flex
+                  items-end
+                  justify-center
+                  min-h-screen
+                  pt-4
+                  px-4
+                  pb-20
+                  text-center
+                  sm:block
+                  sm:p-0
+                "
               >
                 <TransitionChild
                   as="confirmReport"
@@ -1828,7 +2519,13 @@
                   leave-to="opacity-0"
                 >
                   <DialogOverlay
-                    class="fixed inset-0 bg-hhBG bg-opacity-50 transition-opacity backdrop-filter backdrop-blur-sm"
+                    class="
+                      fixed
+                      inset-0
+                      bg-hhBG bg-opacity-50
+                      transition-opacity
+                      backdrop-filter backdrop-blur-sm
+                    "
                   />
                 </TransitionChild>
 
@@ -1847,12 +2544,38 @@
                   leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                 >
                   <div
-                    class="inline-block align-bottom bg-hhText rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+                    class="
+                      inline-block
+                      align-bottom
+                      bg-hhText
+                      rounded-lg
+                      text-left
+                      overflow-hidden
+                      shadow-xl
+                      transform
+                      transition-all
+                      sm:my-8
+                      sm:align-middle
+                      sm:max-w-lg
+                      sm:w-full
+                    "
                   >
                     <div class="bg-hhText px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                       <div class="sm:flex sm:items-start">
                         <div
-                          class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-200 sm:mx-0 sm:h-10 sm:w-10"
+                          class="
+                            mx-auto
+                            flex-shrink-0 flex
+                            items-center
+                            justify-center
+                            h-12
+                            w-12
+                            rounded-full
+                            bg-red-200
+                            sm:mx-0
+                            sm:h-10
+                            sm:w-10
+                          "
                         >
                           <ExclamationIcon
                             class="h-6 w-6 mr-1 text-red-600"
@@ -1874,11 +2597,19 @@
                               <select
                                 v-model="reportCategory"
                                 required
-                                class="bg-hhCard text-hhText px-2 py-1 w-full rounded-lg border border-hhOrange"
+                                class="
+                                  bg-hhCard
+                                  text-hhText
+                                  px-2
+                                  py-1
+                                  w-full
+                                  rounded-lg
+                                  border border-hhOrange
+                                "
                               >
-                                <option disabled selected value=""
-                                  >Pick an option</option
-                                >
+                                <option disabled selected value="">
+                                  Pick an option
+                                </option>
                                 <option>Not working since sim update</option>
                                 <option>Bad code</option>
                                 <option>Misleading</option>
@@ -1896,7 +2627,14 @@
                             <div class="flex flex-col">
                               <label>Describe your report</label>
                               <textarea
-                                class="break-words text-hhText bg-hhCard p-3 rounded-lg border border-hhOrange"
+                                class="
+                                  break-words
+                                  text-hhText
+                                  bg-hhCard
+                                  p-3
+                                  rounded-lg
+                                  border border-hhOrange
+                                "
                                 cols="30"
                                 rows="5"
                                 v-model="reportDescription"
@@ -1914,11 +2652,37 @@
                       </div>
                     </div>
                     <div
-                      class="bg-hhText px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse"
+                      class="
+                        bg-hhText
+                        px-4
+                        py-3
+                        sm:px-6
+                        sm:flex sm:flex-row-reverse
+                      "
                     >
                       <button
                         type="button"
-                        class="disabled:opacity-25 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
+                        class="
+                          disabled:opacity-25
+                          w-full
+                          inline-flex
+                          justify-center
+                          rounded-md
+                          border border-transparent
+                          shadow-sm
+                          px-4
+                          py-2
+                          bg-red-600
+                          text-base
+                          font-medium
+                          text-white
+                          hover:bg-red-700
+                          focus:outline-none
+                          focus:ring-2 focus:ring-offset-2 focus:ring-red-500
+                          sm:ml-3
+                          sm:w-auto
+                          sm:text-sm
+                        "
                         @click="reportPreset(id)"
                         :disabled="reportPresetClicked === true"
                       >
@@ -1947,7 +2711,28 @@
                       </button>
                       <button
                         type="button"
-                        class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                        class="
+                          mt-3
+                          w-full
+                          inline-flex
+                          justify-center
+                          rounded-md
+                          border border-gray-300
+                          shadow-sm
+                          px-4
+                          py-2
+                          bg-white
+                          text-base
+                          font-medium
+                          text-gray-700
+                          hover:bg-gray-50
+                          focus:outline-none
+                          focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
+                          sm:mt-0
+                          sm:ml-3
+                          sm:w-auto
+                          sm:text-sm
+                        "
                         @click="openReport = false"
                         ref="cancelButtonRef"
                       >
@@ -1961,14 +2746,42 @@
           </TransitionRoot>
 
           <button
-            class="text-xl ml-3 px-4 py-2 font-bold text-hhCard bg-hhOrange rounded-md hover:bg-orange-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+            class="
+              text-xl
+              ml-3
+              px-4
+              py-2
+              font-bold
+              text-hhCard
+              bg-hhOrange
+              rounded-md
+              hover:bg-orange-300
+              focus:outline-none
+              focus-visible:ring-2
+              focus-visible:ring-offset-2
+              focus-visible:ring-blue-500
+            "
             @click="updatePreset(preset.id)"
             v-if="edit"
           >
             Save changes
           </button>
           <button
-            class="text-xl px-4 py-2 font-bold text-hhCard bg-hhOrange rounded-md ml-2 hover:bg-orange-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+            class="
+              text-xl
+              px-4
+              py-2
+              font-bold
+              text-hhCard
+              bg-hhOrange
+              rounded-md
+              ml-2
+              hover:bg-orange-300
+              focus:outline-none
+              focus-visible:ring-2
+              focus-visible:ring-offset-2
+              focus-visible:ring-blue-500
+            "
             @click="goBackCheck"
           >
             Back
@@ -1982,7 +2795,18 @@
               :openDelete="openDelete"
             >
               <div
-                class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+                class="
+                  flex
+                  items-end
+                  justify-center
+                  min-h-screen
+                  pt-4
+                  px-4
+                  pb-20
+                  text-center
+                  sm:block
+                  sm:p-0
+                "
               >
                 <TransitionChild
                   as="confirmDelete"
@@ -1994,7 +2818,13 @@
                   leave-to="opacity-0"
                 >
                   <DialogOverlay
-                    class="fixed inset-0 bg-hhBG bg-opacity-50 transition-opacity backdrop-filter backdrop-blur-sm"
+                    class="
+                      fixed
+                      inset-0
+                      bg-hhBG bg-opacity-50
+                      transition-opacity
+                      backdrop-filter backdrop-blur-sm
+                    "
                   />
                 </TransitionChild>
 
@@ -2014,12 +2844,38 @@
                   leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                 >
                   <div
-                    class="inline-block align-bottom bg-hhText rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+                    class="
+                      inline-block
+                      align-bottom
+                      bg-hhText
+                      rounded-lg
+                      text-left
+                      overflow-hidden
+                      shadow-xl
+                      transform
+                      transition-all
+                      sm:my-8
+                      sm:align-middle
+                      sm:max-w-lg
+                      sm:w-full
+                    "
                   >
                     <div class="bg-hhText px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                       <div class="sm:flex sm:items-start">
                         <div
-                          class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-200 sm:mx-0 sm:h-10 sm:w-10"
+                          class="
+                            mx-auto
+                            flex-shrink-0 flex
+                            items-center
+                            justify-center
+                            h-12
+                            w-12
+                            rounded-full
+                            bg-red-200
+                            sm:mx-0
+                            sm:h-10
+                            sm:w-10
+                          "
                         >
                           <ExclamationIcon
                             class="h-6 w-6 mr-1 text-red-600"
@@ -2044,18 +2900,64 @@
                       </div>
                     </div>
                     <div
-                      class="bg-hhText px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse"
+                      class="
+                        bg-hhText
+                        px-4
+                        py-3
+                        sm:px-6
+                        sm:flex sm:flex-row-reverse
+                      "
                     >
                       <button
                         type="button"
-                        class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
+                        class="
+                          w-full
+                          inline-flex
+                          justify-center
+                          rounded-md
+                          border border-transparent
+                          shadow-sm
+                          px-4
+                          py-2
+                          bg-red-600
+                          text-base
+                          font-medium
+                          text-white
+                          hover:bg-red-700
+                          focus:outline-none
+                          focus:ring-2 focus:ring-offset-2 focus:ring-red-500
+                          sm:ml-3
+                          sm:w-auto
+                          sm:text-sm
+                        "
                         @click="deletePreset(preset.id)"
                       >
                         Delete
                       </button>
                       <button
                         type="button"
-                        class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                        class="
+                          mt-3
+                          w-full
+                          inline-flex
+                          justify-center
+                          rounded-md
+                          border border-gray-300
+                          shadow-sm
+                          px-4
+                          py-2
+                          bg-white
+                          text-base
+                          font-medium
+                          text-gray-700
+                          hover:bg-gray-50
+                          focus:outline-none
+                          focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
+                          sm:mt-0
+                          sm:ml-3
+                          sm:w-auto
+                          sm:text-sm
+                        "
                         @click="openDelete = false"
                         ref="cancelButtonRef"
                       >
@@ -2078,7 +2980,21 @@
         <div class="flex flex-col mt-10 justify-center items-center">
           <h1>This preset does not exist or has been deleted</h1>
           <button
-            class="text-xl px-2 py-1 mt-5 font-bold text-hhCard bg-hhOrange rounded-md hover:bg-orange-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+            class="
+              text-xl
+              px-2
+              py-1
+              mt-5
+              font-bold
+              text-hhCard
+              bg-hhOrange
+              rounded-md
+              hover:bg-orange-300
+              focus:outline-none
+              focus-visible:ring-2
+              focus-visible:ring-offset-2
+              focus-visible:ring-blue-500
+            "
             @click="goBackCheck"
           >
             Back
@@ -2147,6 +3063,27 @@ export default {
     },
     copyCode() {
       let codeToCopy = document.querySelector("#preset-Code");
+      codeToCopy.select();
+      try {
+        var successful = document.execCommand("copy");
+        var msg = successful ? "successful" : "unsuccessful";
+        console.log(msg);
+        this.$swal({
+          position: "bottom-end",
+          icon: "info",
+          title: '<h4 style="color:#D2D0D2">Copied to clipboard</h4>',
+          showConfirmButton: false,
+          background: "#33353e",
+          toast: true,
+          timer: 1000,
+        });
+      } catch (err) {
+        alert("Oops, unable to copy");
+      }
+      window.getSelection().removeAllRanges();
+    },
+    copyCodeDesktop() {
+      let codeToCopy = document.querySelector("#preset-Code-deskop");
       codeToCopy.select();
       try {
         var successful = document.execCommand("copy");
@@ -2400,7 +3337,7 @@ export default {
         });
       }
     },
-    toggleTooltip: function() {
+    toggleTooltip: function () {
       if (this.tooltipShow) {
         this.tooltipShow = false;
       } else {
