@@ -318,9 +318,7 @@
           >
             <option value="" selected>Select Input/Output</option>
             <option value="Input">Input</option>
-            <option value="Input (Potentiometer)">
-              Input (Potentiometer)
-            </option>
+            <option value="Input (Potentiometer)">Input (Potentiometer)</option>
             <option value="Output">Output</option>
           </select>
           <svg
@@ -483,6 +481,14 @@
             {{ totalPages }} total pages.
           </div>
         </div>
+        <div v-if="this.$store.state.refreshCycle === 'manual'">
+          Last updated:
+          {{
+            moment(this.$store.state.presets.timestamp).format(
+              "dddd, MMMM Do YYYY, HH:mm:ss"
+            )
+          }}
+        </div>
         <div class="flex items-center">
           <div class="flex item items-center">
             <label>Show number of rows:</label>
@@ -501,6 +507,44 @@
         </div>
       </div>
       <div class="flex justify-end">
+        <button
+          v-if="this.$store.state.refreshCycle === 'manual'"
+          @click="downloadPresets()"
+          class="
+            mt-2
+            mr-3
+            bg-hhOrange
+            flex
+            items-center
+            px-2
+            py-1
+            shadow-lg
+            rounded-lg
+            text-hhBG
+            font-bold
+          "
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="icon mr-1 icon-tabler icon-tabler-cloud-download"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="currentColor"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path
+              d="M19 18a3.5 3.5 0 0 0 0 -7h-1a5 4.5 0 0 0 -11 -2a4.6 4.4 0 0 0 -2.1 8.4"
+            ></path>
+            <line x1="12" y1="13" x2="12" y2="22"></line>
+            <polyline points="9 19 12 22 15 19"></polyline>
+          </svg>
+          <div>Download presets</div>
+        </button>
         <ExportModal v-if="loggedIn" />
       </div>
     </div>
@@ -515,6 +559,7 @@ import AddEventModal from "../components/AddEventModal.vue";
 import ExportModal from "../components/ExportModal.vue";
 import { PublicClientApplication } from "@azure/msal-browser";
 import { mapMutations } from "vuex";
+import moment from "moment";
 
 export default {
   name: "variables",
@@ -571,6 +616,7 @@ export default {
   },
 
   async created() {
+    this.moment = moment;
     this.$msalInstance = new PublicClientApplication(
       this.$store.state.msalConfig
     );
@@ -593,6 +639,16 @@ export default {
     },
   },
   methods: {
+    async downloadPresets() {
+      console.log("Downloading inital presets..."),
+        await fetch(this.$hubHopApi.baseUrl + "/presets/")
+          .then((res) => res.json())
+          .then((data) => (this.$store.state.presets.presets = data))
+          .then(
+            () => (this.presets = this.$store.state.presets.presets),
+            (this.$store.state.presets.timestamp = moment())
+          );
+    },
     updateVendorList() {
       this.vendorList = [
         ...new Set(
@@ -746,21 +802,37 @@ export default {
     },
     ...mapMutations(["setAccessToken", "setUserSettings"]),
   },
-  // computed: {
-  //   uniqueVendors() {
-  //     return [...new Set(this.presets.map(({ vendor }) => vendor))].sort();
-  //   },
-  //   uniqueAircraft() {
-  //     return [...new Set(this.presets.map(({ aircraft }) => aircraft))].sort();
-  //   },
-  //   uniqueSystem() {
-  //     return [...new Set(this.presets.map(({ system }) => system))].sort();
-  //   },
-  // },
   mounted() {
-    fetch(this.$hubHopApi.baseUrl + "/presets/")
-      .then((res) => res.json())
-      .then((data) => (this.presets = data));
+    if (
+      this.$store.state.refreshCycle === "default" ||
+      this.$store.state.refreshCycle === "dynamic"
+    ) {
+      return (
+        console.log("Default download mode. Downloading presets from Azure..."),
+        fetch(this.$hubHopApi.baseUrl + "/presets/")
+          .then((res) => res.json())
+          .then((data) => (this.presets = data))
+          .then(() => (this.$store.state.presets.timestamp = moment()))
+      );
+    }
+    if (this.$store.state.refreshCycle === "manual") {
+      if (!this.$store.state.presets.presets.length) {
+        return (
+          console.log("No presets found. Downloading inital presets..."),
+          fetch(this.$hubHopApi.baseUrl + "/presets/")
+            .then((res) => res.json())
+            .then(
+              (data) => (this.$store.state.presets.presets = data),
+              (this.$store.state.presets.timestamp = moment())
+            )
+            .then(() => (this.presets = this.$store.state.presets.presets))
+        );
+      }
+      return (
+        console.log("Manual download mode. Using downloaded presets."),
+        (this.presets = this.$store.state.presets.presets)
+      );
+    }
   },
 };
 </script>

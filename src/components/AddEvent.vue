@@ -21,7 +21,14 @@
               />
             </svg>
             <select
-              class="bg-hhCard text-hhText p-2 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhCard
+                text-hhText
+                p-2
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
               v-if="!newVendorPlus"
               v-model="vendor"
               required
@@ -31,19 +38,40 @@
                 v-for="vendor in uniqueVendors"
                 :value="vendor"
                 :key="vendor"
-                >{{ vendor }}</option
               >
+                {{ vendor }}
+              </option>
             </select>
             <input
               v-if="newVendorPlus"
               v-model="newVendor"
               placeholder="Type new vendor name"
-              class="bg-hhCard w-full text-hhText p-2 rounded-lg border border-hhOrange"
+              class="
+                bg-hhCard
+                w-full
+                text-hhText
+                p-2
+                rounded-lg
+                border border-hhOrange
+              "
               type="text"
             />
             <label
               for="vendor"
-              class="flex items-center ml-2 justify-center text-base text-hhCard bg-hhOrange rounded-md hover:bg-orange-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+              class="
+                flex
+                items-center
+                ml-2
+                justify-center
+                text-base text-hhCard
+                bg-hhOrange
+                rounded-md
+                hover:bg-orange-300
+                focus:outline-none
+                focus-visible:ring-2
+                focus-visible:ring-offset-2
+                focus-visible:ring-blue-500
+              "
             >
               <input type="checkbox" v-model="newVendorPlus" id="vendor" />
               <div class="square-vendor">
@@ -82,7 +110,14 @@
               />
             </svg>
             <select
-              class="bg-hhCard text-hhText p-2 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhCard
+                text-hhText
+                p-2
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
               v-if="!newAircraftPlus"
               v-model="aircraft"
               required
@@ -92,19 +127,40 @@
                 v-for="aircraft in uniqueAircraft"
                 :value="aircraft"
                 :key="aircraft"
-                >{{ aircraft }}</option
               >
+                {{ aircraft }}
+              </option>
             </select>
             <input
               v-if="newAircraftPlus"
               v-model="newAircraft"
               placeholder="Type new aircraft name"
-              class="bg-hhCard w-full text-hhText p-2 rounded-lg border border-hhOrange"
+              class="
+                bg-hhCard
+                w-full
+                text-hhText
+                p-2
+                rounded-lg
+                border border-hhOrange
+              "
               type="text"
             />
             <label
               for="aircraft"
-              class="flex items-center ml-2 justify-center text-base text-hhCard bg-hhOrange rounded-md hover:bg-orange-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+              class="
+                flex
+                items-center
+                ml-2
+                justify-center
+                text-base text-hhCard
+                bg-hhOrange
+                rounded-md
+                hover:bg-orange-300
+                focus:outline-none
+                focus-visible:ring-2
+                focus-visible:ring-offset-2
+                focus-visible:ring-blue-500
+              "
             >
               <input type="checkbox" v-model="newAircraftPlus" id="aircraft" />
               <div class="square-aircraft">
@@ -149,7 +205,14 @@
               />
             </svg>
             <select
-              class="bg-hhCard text-hhText p-2 w-full rounded-lg border border-hhOrange"
+              class="
+                bg-hhCard
+                text-hhText
+                p-2
+                w-full
+                rounded-lg
+                border border-hhOrange
+              "
               v-if="!newSystemPlus"
               v-model="system"
               required
@@ -159,19 +222,40 @@
                 v-for="system in uniqueSystems"
                 :value="system"
                 :key="system"
-                >{{ system }}</option
               >
+                {{ system }}
+              </option>
             </select>
             <input
               v-if="newSystemPlus"
               v-model="newSystem"
               placeholder="Type new system name"
-              class="bg-hhCard w-full text-hhText p-2 rounded-lg border border-hhOrange"
+              class="
+                bg-hhCard
+                w-full
+                text-hhText
+                p-2
+                rounded-lg
+                border border-hhOrange
+              "
               type="text"
             />
             <label
               for="system"
-              class="flex items-center ml-2 justify-center text-base text-hhCard bg-hhOrange rounded-md hover:bg-orange-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+              class="
+                flex
+                items-center
+                ml-2
+                justify-center
+                text-base text-hhCard
+                bg-hhOrange
+                rounded-md
+                hover:bg-orange-300
+                focus:outline-none
+                focus-visible:ring-2
+                focus-visible:ring-offset-2
+                focus-visible:ring-blue-500
+              "
             >
               <input type="checkbox" v-model="newSystemPlus" id="system" />
               <div class="square-system">
@@ -210,19 +294,37 @@
               />
             </svg>
             <select
-              class="bg-hhCard text-hhText p-2 w-80 rounded-lg border border-hhOrange"
+              class="
+                bg-hhCard
+                text-hhText
+                p-2
+                w-80
+                rounded-lg
+                border border-hhOrange
+              "
               v-model="presetType"
               required
             >
-              <option selected disabled value=""
-                >Input (e.g Switch) / Output (e.g. LED)</option
-              >
+              <option selected disabled value="">
+                Input (e.g Switch) / Output (e.g. LED)
+              </option>
               <option value="Input">Input (Button/Switch)</option>
+              <option value="Input (Potentiometer)">
+                Input (Potentiometer)
+              </option>
               <option value="Output">Output (LED/7-Segment)</option>
             </select>
             <label
               for="off"
-              class="flex items-center ml-2 justify-center text-base text-transparent bg-transparent rounded-md"
+              class="
+                flex
+                items-center
+                ml-2
+                justify-center
+                text-base text-transparent
+                bg-transparent
+                rounded-md
+              "
             >
               <input type="checkbox" v-model="newSystemPlus" id="system" />
               <div class="square-system">
@@ -251,7 +353,14 @@
             >Give a precise name</label
           >
           <input
-            class="bg-hhCard text-hhText p-2 mb-3 rounded-lg border border-hhOrange"
+            class="
+              bg-hhCard
+              text-hhText
+              p-2
+              mb-3
+              rounded-lg
+              border border-hhOrange
+            "
             type="text"
             v-model="label"
             placeholder="Alternator 1 On"
@@ -266,7 +375,16 @@
           <textarea
             cols="75"
             rows="5"
-            class="break-all text-hhText mb-3 text-base bg-hhCard p-3 rounded-lg border border-hhOrange"
+            class="
+              break-all
+              text-hhText
+              mb-3
+              text-base
+              bg-hhCard
+              p-3
+              rounded-lg
+              border border-hhOrange
+            "
             type="text"
             v-model="code"
             placeholder="(>L:somecode) (>K:somecodeToo) * near"
@@ -279,7 +397,14 @@
           <textarea
             cols="75"
             rows="5"
-            class="break-words text-hhText bg-hhCard p-3 rounded-lg border border-hhOrange"
+            class="
+              break-words
+              text-hhText
+              bg-hhCard
+              p-3
+              rounded-lg
+              border border-hhOrange
+            "
             type="text"
             v-model="description"
             placeholder="Anything"
@@ -296,14 +421,45 @@
     <button
       @click="submitPreset(false)"
       type="button"
-      class="mx-5 inline-flex justify-center text-base px-4 py-2 font-medium text-hhCard bg-hhOrange rounded-md hover:bg-orange-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+      class="
+        mx-5
+        inline-flex
+        justify-center
+        text-base
+        px-4
+        py-2
+        font-medium
+        text-hhCard
+        bg-hhOrange
+        rounded-md
+        hover:bg-orange-300
+        focus:outline-none
+        focus-visible:ring-2
+        focus-visible:ring-offset-2
+        focus-visible:ring-blue-500
+      "
     >
       Submit and add more
     </button>
     <button
       @click="submitPreset(true)"
       type="button"
-      class="inline-flex justify-center text-base px-4 py-2 font-medium text-hhCard bg-hhOrange rounded-md hover:bg-orange-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+      class="
+        inline-flex
+        justify-center
+        text-base
+        px-4
+        py-2
+        font-medium
+        text-hhCard
+        bg-hhOrange
+        rounded-md
+        hover:bg-orange-300
+        focus:outline-none
+        focus-visible:ring-2
+        focus-visible:ring-offset-2
+        focus-visible:ring-blue-500
+      "
     >
       Submit and close
     </button>
@@ -497,7 +653,7 @@ export default {
       this.v$.$validate();
       if (!this.v$.$error) {
         this.submitPreset();
-        setTimeout(function() {
+        setTimeout(function () {
           location.reload();
         }, 2000);
       }

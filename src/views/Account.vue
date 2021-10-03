@@ -1,15 +1,52 @@
 <template>
   <div
-    class="container mb-5 px-5 mx-auto md:flex md:space-x-5 min-h-screen -mt-10 md:mt-5"
+    class="
+      container
+      mb-5
+      px-5
+      mx-auto
+      md:flex
+      md:space-x-5
+      min-h-screen
+      -mt-10
+      md:mt-5
+    "
   >
     <div
-      class="bg-hhCard flex flex-col md:block justify-center rounded-lg shadow-lg py-5 mb-5 md:mb-0 w-full md:w-1/6 text-xs md:text-base "
+      class="
+        bg-hhCard
+        flex flex-col
+        md:block
+        justify-center
+        rounded-lg
+        shadow-lg
+        py-5
+        mb-5
+        md:mb-0
+        w-full
+        md:w-1/6
+        text-xs
+        md:text-base
+      "
     >
       <h3 class="border-b border-hhText pb-3 mx-3">Menu</h3>
       <div class="flex justify-center mt-3 mb-3 px-3">
         <button
           @click="profileActive"
-          class="flex justify-center md:flex-row items-center bg-hhOrange text-hhBG font-bold shadow-lg rounded-lg px-2 py-1 w-full"
+          class="
+            flex
+            justify-center
+            md:flex-row
+            items-center
+            bg-hhOrange
+            text-hhBG
+            font-bold
+            shadow-lg
+            rounded-lg
+            px-2
+            py-1
+            w-full
+          "
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -31,7 +68,20 @@
       <div class="flex justify-center px-3">
         <button
           @click="settingsActive"
-          class="flex justify-center md:flex-row items-center bg-hhOrange text-hhBG font-bold shadow-lg rounded-lg px-2 py-1 w-full"
+          class="
+            flex
+            justify-center
+            md:flex-row
+            items-center
+            bg-hhOrange
+            text-hhBG
+            font-bold
+            shadow-lg
+            rounded-lg
+            px-2
+            py-1
+            w-full
+          "
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -80,11 +130,29 @@
               </h3>
             </div>
             <div
-              class="bg-hhCard grid grid-cols-2 gap-2 px-5 py-3 my-5 rounded-lg shadow-lg"
+              class="
+                bg-hhCard
+                grid grid-cols-2
+                gap-2
+                px-5
+                py-3
+                my-5
+                rounded-lg
+                shadow-lg
+              "
             >
               <div class="bg-hhBG rounded-lg shadow-lg px-5">
                 <div
-                  class="flex items-center text-sm md:text-base lg:text-2xl py-2 justify-center border-b border-hhOrange"
+                  class="
+                    flex
+                    items-center
+                    text-sm
+                    md:text-base
+                    lg:text-2xl
+                    py-2
+                    justify-center
+                    border-b border-hhOrange
+                  "
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -102,14 +170,21 @@
                   >Added or edited presets
                 </div>
                 <div class="grid grid-rows-3 my-3">
-                  <div>
-                    To be added
-                  </div>
+                  <div>To be added</div>
                 </div>
               </div>
               <div class="bg-hhBG rounded-lg shadow-lg px-5">
                 <div
-                  class="flex items-center text-sm md:text-base lg:text-2xl py-2 justify-center border-b border-hhOrange"
+                  class="
+                    flex
+                    items-center
+                    text-sm
+                    md:text-base
+                    lg:text-2xl
+                    py-2
+                    justify-center
+                    border-b border-hhOrange
+                  "
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -127,15 +202,18 @@
                   >Top 3 Aircraft
                 </div>
                 <div class="grid grid-rows-3 my-3">
-                  <div>
-                    To be added
-                  </div>
+                  <div>To be added</div>
                 </div>
               </div>
             </div>
             <div class="bg-hhCard rounded-lg shadow-lg py-2 px-5 mb-3">
               <div
-                class="flex items-center justify-center border-b-2 border-hhCard"
+                class="
+                  flex
+                  items-center
+                  justify-center
+                  border-b-2 border-hhCard
+                "
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -151,9 +229,7 @@
                     d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                <h4 class="ml-1 mb-2 border-hhCard">
-                  User information
-                </h4>
+                <h4 class="ml-1 mb-2 border-hhCard">User information</h4>
               </div>
               <div class="items-center gap-5 my-5">
                 <div class="space-y-5">
@@ -173,7 +249,15 @@
                       />
                     </svg>
                     <label
-                      class="bg-hhBG w-full text-hhText p-2 text-left rounded-lg border border-hhOrange"
+                      class="
+                        bg-hhBG
+                        w-full
+                        text-hhText
+                        p-2
+                        text-left
+                        rounded-lg
+                        border border-hhOrange
+                      "
                       type="text"
                       >{{ account.username }}</label
                     >
@@ -194,7 +278,15 @@
                       />
                     </svg>
                     <label
-                      class="bg-hhBG w-full text-hhText p-2 text-left rounded-lg border border-hhOrange"
+                      class="
+                        bg-hhBG
+                        w-full
+                        text-hhText
+                        p-2
+                        text-left
+                        rounded-lg
+                        border border-hhOrange
+                      "
                       type="text"
                       >{{ account.name }}</label
                     >
@@ -215,22 +307,52 @@
                       />
                     </svg>
                     <label
-                      class="bg-hhBG w-full text-hhText p-2 text-left rounded-lg space-x-2 border border-hhOrange"
+                      class="
+                        bg-hhBG
+                        w-full
+                        text-hhText
+                        p-2
+                        text-left
+                        rounded-lg
+                        space-x-2
+                        border border-hhOrange
+                      "
                       type="text"
                     >
                       <label
-                        class="bg-blue-600 text-hhBG font-bold px-3 py-0.5 rounded-full"
+                        class="
+                          bg-blue-600
+                          text-hhBG
+                          font-bold
+                          px-3
+                          py-0.5
+                          rounded-full
+                        "
                         v-if="roles.includes('SuperAdmin')"
                         >Superadmin</label
                       >
                       <label
-                        class="bg-green-600 text-hhBG font-bold px-3 py-0.5 rounded-full"
+                        class="
+                          bg-green-600
+                          text-hhBG
+                          font-bold
+                          px-3
+                          py-0.5
+                          rounded-full
+                        "
                         v-if="roles.includes('Moderator')"
                       >
                         Moderator
                       </label>
                       <label
-                        class="bg-hhOrange text-hhBG font-bold px-3 py-0.5 rounded-full"
+                        class="
+                          bg-hhOrange
+                          text-hhBG
+                          font-bold
+                          px-3
+                          py-0.5
+                          rounded-full
+                        "
                       >
                         User
                       </label></label
@@ -268,7 +390,38 @@
               </h3>
             </div>
             <div class="bg-hhCard rounded-lg shadow-lg py-2 px-5 mb-3">
-              To be added
+              <div class="w-1/2">
+                <div>Refresh cycle</div>
+                <div class="text-xs -mt-2">
+                  Toggles if HubHop will download the preset list automatically or manually
+                </div>
+                <div
+                  class="bg-hhBG rounded-lg flex px-3 flex-col justify-center"
+                >
+                  <div class="flex items-center">
+                    <input
+                      v-model="refreshCycle"
+                      class="mr-1"
+                      value="dynamic"
+                      type="radio"
+                      name="refreshCycle"
+                      id="dynamic"
+                    />
+                    <label for="dynamic">Dynamic</label>
+                  </div>
+                  <div class="flex items-center">
+                    <input
+                      v-model="refreshCycle"
+                      class="mr-1"
+                      value="manual"
+                      type="radio"
+                      name="refreshCycle"
+                      id="manual"
+                    />
+                    <label for="manual">Manual</label>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </transition>
@@ -287,6 +440,7 @@ export default {
       profile: true,
       settings: false,
       account: undefined,
+      refreshCycle: this.$store.state.refreshCycle,
       roles: this.$store.state.userSettings.roles,
       view: {
         topOfPage: true,
@@ -302,6 +456,11 @@ export default {
   },
   beforeMount() {
     window.addEventListener("scroll", this.handleScroll);
+  },
+  watch: {
+    refreshCycle: function () {
+      this.$store.commit("setRefreshCycle", this.refreshCycle);
+    },
   },
   methods: {
     profileActive() {

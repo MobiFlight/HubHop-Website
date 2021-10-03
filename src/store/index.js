@@ -30,14 +30,25 @@ const store = createStore({
       filterName: "",
       currentPage: 1,
       pageSize: 15,
+      refreshCycle: "default",
+      presets: {
+        presets: [],
+        timestamp: ""
+      },
     };
   },
   mutations: {
     setAccessToken(state, token) {
       state.accessToken = token;
     },
+    setPresets(state, presets) {
+      state.presets = presets;
+    },
     setUserSettings(state, userSettings) {
       state.userSettings = userSettings;
+    },
+    setRefreshCycle(state, refreshCycle) {
+      state.refreshCycle = refreshCycle;
     },
     setLoggedIn(state, loggedIn) {
       state.loggedIn = loggedIn;
