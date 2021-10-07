@@ -603,7 +603,6 @@ export default {
         name: {
           value: this.$store.state.filterName,
           keys: ["label"],
-          exact: true,
         },
         type: {
           value: this.$store.state.filterInputType,
@@ -655,8 +654,8 @@ export default {
           this.presets
             .filter((preset) => {
               return (
-                this.filters.aircraft.value === "" ||
-                this.filters.aircraft.value === preset.aircraft
+                this.filters.aircraft.value == "" ||
+                this.filters.aircraft.value == preset.aircraft
               );
             })
             .map(({ vendor }) => vendor)
@@ -669,8 +668,8 @@ export default {
           this.presets
             .filter((preset) => {
               return (
-                this.filters.vendor.value === "" ||
-                this.filters.vendor.value === preset.vendor
+                this.filters.vendor.value == "" ||
+                this.filters.vendor.value == preset.vendor
               );
             })
             .map(({ aircraft }) => aircraft)
@@ -683,8 +682,8 @@ export default {
           this.presets
             .filter((preset) => {
               return (
-                this.filters.aircraft.value === "" ||
-                this.filters.aircraft.value === preset.aircraft
+                this.filters.aircraft.value == "" ||
+                this.filters.aircraft.value == preset.aircraft
               );
             })
             .map(({ system }) => system)
