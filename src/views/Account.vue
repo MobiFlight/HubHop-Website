@@ -391,10 +391,13 @@
             </div>
             <div class="bg-hhCard rounded-lg shadow-lg py-2 px-5 mb-3">
               <div class="w-1/2">
-                <div>Refresh cycle</div>
-                <div class="text-xs -mt-2">
-                  Toggles if HubHop will download the preset list automatically or manually
+                <div
+                  data-tip="Toggles if HubHop will download the preset list automatically or manually"
+                  class="tooltip"
+                >
+                  <div>Refresh cycle</div>
                 </div>
+
                 <div
                   class="bg-hhBG rounded-lg flex px-3 flex-col justify-center"
                 >
@@ -407,7 +410,12 @@
                       name="refreshCycle"
                       id="dynamic"
                     />
-                    <label for="dynamic">Dynamic</label>
+                    <div
+                      data-tip="Switches to dynamic mode. The preset list will be downloaded every time you enter the 'Preset list' page"
+                      class="tooltip"
+                    >
+                      <label for="dynamic">Dynamic</label>
+                    </div>
                   </div>
                   <div class="flex items-center">
                     <input
@@ -418,7 +426,12 @@
                       name="refreshCycle"
                       id="manual"
                     />
-                    <label for="manual">Manual</label>
+                    <div
+                      data-tip="Switches to manual mode. The preset list will be downloaded once you click the 'Download presets' button on the bottom of the 'Preset list' page"
+                      class="tooltip"
+                    >
+                      <label for="manual">Manual</label>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -458,7 +471,7 @@ export default {
     window.addEventListener("scroll", this.handleScroll);
   },
   watch: {
-    refreshCycle: function () {
+    refreshCycle: function() {
       this.$store.commit("setRefreshCycle", this.refreshCycle);
     },
   },

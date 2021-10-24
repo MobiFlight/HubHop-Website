@@ -3324,6 +3324,12 @@ export default {
       if (!this.v$.$error) {
         const url = this.$hubHopApi.baseUrl + "/presets/" + id;
         this.reportPresetClicked = true;
+        var addReport = () => {
+          if (!this.preset.reported) return 1;
+          {
+            return this.preset.reported +1;
+          }
+        };
 
         // post body data
         const preset = {
@@ -3349,7 +3355,7 @@ export default {
           updatedBy: this.$store.state.userSettings.username,
           description: this.preset.description,
           score: this.preset.score + 0,
-          reported: this.preset.reported + 1,
+          reported: addReport(),
           report_catergory: this.reportCategory,
           report_description: this.reportDescription,
         };
