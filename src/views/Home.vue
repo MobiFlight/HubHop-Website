@@ -30,6 +30,13 @@
             </router-link>
           </div>
         </div>
+        <div
+          class="text-2xl mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start"
+        >
+          <div class="text-lg">
+            <a class="flex items-center" href="https://www.mobiflight.com" target="_blank">Created and sponsored by Mobiflight and the Mobiflight community<img class="ml-2 h-7" src="../assets/mf_logo.jpg" alt="Mobiflight Logo" /></a>
+          </div>
+        </div>
       </div>
       <div class="hidden lg:block">
         <img src="../assets/logo.png" alt="HubHop Logo" />
