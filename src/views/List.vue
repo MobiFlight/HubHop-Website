@@ -384,7 +384,7 @@
       >
         <template #head>
           <tr class="text-base">
-            <th class="hidden md:table-cell">Score</th>
+            <!-- <th class="hidden md:table-cell">Score</th> -->
             <th class="hidden md:table-cell">Vendor</th>
             <th>Aircraft</th>
             <th class="hidden md:table-cell">System</th>
@@ -405,7 +405,7 @@
             v-for="preset in rows"
             :key="preset._id"
           >
-            <td
+            <!-- <td
               @click="viewPreset(preset.id)"
               class="hidden md:table-cell"
               v-if="preset.score"
@@ -415,8 +415,8 @@
               >
                 {{ preset.score }}
               </router-link>
-            </td>
-            <td
+            </td> -->
+            <!-- <td
               @click="viewPreset(preset.id)"
               class="hidden md:table-cell"
               v-else
@@ -426,7 +426,7 @@
               >
                 No score
               </router-link>
-            </td>
+            </td> -->
             <td
               @click="viewPreset(preset.id)"
               class="py-1.5 hidden md:table-cell"

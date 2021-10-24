@@ -272,7 +272,7 @@
                           </router-link>
                         </td>
                         <td
-                          class="hidden sm:table-cell"
+                          class="sm:table-cell"
                           @click="viewPreset(presetAdded._id)"
                         >
                           <router-link

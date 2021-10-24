@@ -123,7 +123,7 @@
               {{ preset.presetType }}
             </div>
           </div>
-          <div class="flex items-center">
+          <!-- <div class="flex items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="text-hhText mr-2 h-8 w-8"
@@ -150,7 +150,7 @@
             >
               {{ preset.status }}
             </div>
-          </div>
+          </div> -->
           <div class="flex items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -305,7 +305,7 @@
               Reported: {{ preset.reported }} Times
             </div>
           </div>
-          <div class="flex items-center">
+          <!-- <div class="flex items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="text-hhText mr-2 h-8 w-8"
@@ -378,7 +378,7 @@
                 </button>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="mt-5 w-full">
           <div class="flex items-center">
@@ -679,7 +679,7 @@
               v-model="preset.presetType"
             />
           </div>
-          <div class="flex items-center">
+          <!-- <div class="flex items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="text-hhText mr-2 h-8 w-8"
@@ -705,7 +705,7 @@
               "
               v-model="preset.status"
             />
-          </div>
+          </div> -->
           <div class="flex items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -858,7 +858,7 @@
               Reported: {{ preset.reported }} Times
             </div>
           </div>
-          <div class="flex items-center">
+          <!-- <div class="flex items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="text-hhText mr-2 h-8 w-8"
@@ -931,7 +931,7 @@
                 </button>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="w-full">
           <div class="flex items-center mt-5">
@@ -1099,7 +1099,11 @@
       <!-- Buttons -->
       <div class="md:hidden flex items-center justify-between mt-5">
         <div>
-          <label for="toogleEdit" class="flex items-center cursor-pointer">
+          <label
+            v-if="preset.vendor !== 'Microsoft' || roles.includes('Moderator')"
+            for="toogleEdit"
+            class="flex items-center cursor-pointer"
+          >
             <div class="mr-3 text-xl font-bold text-hhOrange" v-if="!edit">
               View
             </div>
@@ -1390,7 +1394,7 @@
               {{ preset.presetType }}
             </div>
           </div>
-          <div class="flex items-center">
+          <!-- <div class="flex items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="text-hhText mr-2 h-8 w-8"
@@ -1417,7 +1421,7 @@
             >
               {{ preset.status }}
             </div>
-          </div>
+          </div> -->
           <div class="flex items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -1572,7 +1576,7 @@
               Reported: {{ preset.reported }} Times
             </div>
           </div>
-          <div class="flex items-center">
+          <!-- <div class="flex items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="text-hhText mr-2 h-8 w-8"
@@ -1645,7 +1649,7 @@
                 </button>
               </div>
             </div>
-          </div>
+          </div> -->
           <div class="flex justify-end">
             <button
               v-on:mouseenter="toggleTooltip()"
@@ -1956,7 +1960,7 @@
               v-model="preset.presetType"
             />
           </div>
-          <div class="flex items-center">
+          <!-- <div class="flex items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="text-hhText mr-2 h-8 w-8"
@@ -1982,7 +1986,7 @@
               "
               v-model="preset.status"
             />
-          </div>
+          </div> -->
           <div class="flex items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -1998,7 +2002,7 @@
                 d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
               />
             </svg>
-            <input
+            <div
               v-if="preset.createdDate"
               class="
                 bg-hhBG
@@ -2008,8 +2012,9 @@
                 rounded-lg
                 border border-hhOrange
               "
-              v-model="preset.createdDate"
-            />
+            >
+              {{ formatDate(preset.createdDate) }}
+            </div>
             <div
               v-if="!preset.createdDate"
               class="
@@ -2135,7 +2140,7 @@
               Reported: {{ preset.reported }} Times
             </div>
           </div>
-          <div class="flex items-center">
+          <!-- <div class="flex items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="text-hhText mr-2 h-8 w-8"
@@ -2208,7 +2213,7 @@
                 </button>
               </div>
             </div>
-          </div>
+          </div> -->
           <div class="flex justify-end">
             <button
               v-on:mouseenter="toggleTooltip()"
@@ -2403,7 +2408,11 @@
           >
             Delete
           </button>
-          <label v-if="preset.vendor !== 'Microsoft' || roles.includes('Moderator')" for="toogleEdit" class="flex items-center cursor-pointer">
+          <label
+            v-if="preset.vendor !== 'Microsoft' || roles.includes('Moderator')"
+            for="toogleEdit"
+            class="flex items-center cursor-pointer"
+          >
             <div class="mr-3 text-xl font-bold text-hhOrange" v-if="!edit">
               View
             </div>
@@ -3337,7 +3346,7 @@ export default {
         });
       }
     },
-    toggleTooltip: function () {
+    toggleTooltip: function() {
       if (this.tooltipShow) {
         this.tooltipShow = false;
       } else {
