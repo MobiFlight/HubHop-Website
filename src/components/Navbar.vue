@@ -193,6 +193,13 @@ export default {
   beforeMount() {
     window.addEventListener("scroll", this.handleScroll);
   },
+  watch: {
+    "$store.state.loggedIn": function() {
+      if (this.$store.state.loggedIn === true) {
+        location.reload();
+      }
+    },
+  },
   methods: {
     toggleNavbar: function() {
       this.menuShow = !this.menuShow;
@@ -205,8 +212,8 @@ export default {
           const myAccounts = this.$msalInstance.getAllAccounts();
           this.account = myAccounts[0];
           this.$msalInstance;
-          this.$store.commit("setLoggedIn", true);
           this.getAccessToken().then(() => this.getUserSettings());
+          this.$store.commit("setLoggedIn", true);
         })
         .catch((error) => {
           console.error(`error during authentication: ${error}`);

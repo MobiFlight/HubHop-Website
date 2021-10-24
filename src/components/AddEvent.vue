@@ -765,6 +765,7 @@ export default {
             },
           });
         });
+        this.v$.$reset();
       }
     },
   },

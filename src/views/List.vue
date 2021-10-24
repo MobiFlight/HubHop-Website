@@ -525,6 +525,28 @@
           "
         >
           <svg
+            v-if="downloadingPresets === true"
+            class="animate-spin mr-1 h-5 w-5 text-hhBG"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
+          <svg
+            v-if="downloadingPresets === false"
             xmlns="http://www.w3.org/2000/svg"
             class="icon mr-1 icon-tabler icon-tabler-cloud-download"
             width="24"
@@ -611,6 +633,7 @@ export default {
         },
         status: { value: "", keys: ["status"], exact: true },
       },
+      downloadingPresets: false,
     };
   },
 
@@ -624,14 +647,14 @@ export default {
     }
   },
   watch: {
-    "filters.vendor.value": function () {
+    "filters.vendor.value": function() {
       this.updateAircraftList();
     },
-    "filters.aircraft.value": function () {
+    "filters.aircraft.value": function() {
       this.updateVendorList();
       this.updateSystemList();
     },
-    presets: function () {
+    presets: function() {
       this.updateVendorList();
       this.updateAircraftList();
       this.updateSystemList();
@@ -639,14 +662,17 @@ export default {
   },
   methods: {
     async downloadPresets() {
-      console.log("Downloading inital presets..."),
-        await fetch(this.$hubHopApi.baseUrl + "/presets/")
-          .then((res) => res.json())
-          .then((data) => (this.$store.state.presets.presets = data))
-          .then(
-            () => (this.presets = this.$store.state.presets.presets),
-            (this.$store.state.presets.timestamp = moment())
-          );
+      this.downloadingPresets = true;
+      const response = await fetch(this.$hubHopApi.baseUrl + "/presets/");
+      const data = await response.json();
+      if (response.status != 200)
+        return alert("Something went wrong... Try again");
+      {
+        this.$store.state.presets.presets = data;
+        this.presets = this.$store.state.presets.presets;
+        this.$store.state.presets.timestamp = moment();
+        this.downloadingPresets = false;
+      }
     },
     updateVendorList() {
       this.vendorList = [
@@ -762,12 +788,6 @@ export default {
         );
         this.$store.commit("setAccessToken", tokenResponse.accessToken);
       }
-      // catch (error) {
-      //   console.error(
-      //     `"Silent token acquisition failed. Logging out..." + ${error}`
-      //   );
-      //   this.logout();
-      // }
     },
     async getUserSettings() {
       const url = this.$hubHopApi.baseUrl + "/settings/user";

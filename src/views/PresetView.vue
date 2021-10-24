@@ -2403,7 +2403,7 @@
           >
             Delete
           </button>
-          <label for="toogleEdit" class="flex items-center cursor-pointer">
+          <label v-if="preset.vendor !== 'Microsoft' || roles.includes('Moderator')" for="toogleEdit" class="flex items-center cursor-pointer">
             <div class="mr-3 text-xl font-bold text-hhOrange" v-if="!edit">
               View
             </div>
