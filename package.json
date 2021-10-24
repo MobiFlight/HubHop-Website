@@ -18,6 +18,7 @@
     "@vuelidate/core": "^2.0.0-alpha.19",
     "@vuelidate/validators": "^2.0.0-alpha.16",
     "core-js": "^3.6.5",
+    "daisyui": "^1.16.0",
     "json-server": "^0.16.3",
     "moment": "^2.29.1",
     "node-sass": "^6.0.0",
