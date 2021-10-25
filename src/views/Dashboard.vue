@@ -9,7 +9,7 @@
       <div class="flex justify-center mt-3 mb-3 px-3">
         <button
           @click="dashboardActive()"
-          class="flex justify-center xl:flex-row items-center bg-hhOrange text-hhBG font-bold shadow-lg rounded-lg px-2 py-1 w-full"
+          class="flex justify-start xl:flex-row items-center bg-hhOrange text-hhBG font-bold shadow-lg rounded-lg px-2 py-1 w-full"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -28,10 +28,37 @@
           Dashboard
         </button>
       </div>
-      <div class="flex justify-center px-3">
+      <div class="flex justify-start mt-3 mb-3 px-3">
+        <button
+          @click="reportedActive()"
+          class="flex justify-start xl:flex-row items-center bg-hhOrange text-hhBG font-bold shadow-lg rounded-lg px-2 py-1 w-full"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="icon mr-1 icon-tabler icon-tabler-message-report"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path
+              d="M4 21v-13a3 3 0 0 1 3 -3h10a3 3 0 0 1 3 3v6a3 3 0 0 1 -3 3h-9l-4 4"
+            ></path>
+            <line x1="12" y1="8" x2="12" y2="11"></line>
+            <line x1="12" y1="14" x2="12" y2="14.01"></line>
+          </svg>
+          Reported presets
+        </button>
+      </div>
+      <div class="flex justify-start px-3">
         <button
           @click="changelogActive()"
-          class="flex justify-center xl:flex-row items-center bg-hhOrange text-hhBG font-bold shadow-lg rounded-lg px-2 py-1 w-full"
+          class="flex justify-start xl:flex-row items-center bg-hhOrange text-hhBG font-bold shadow-lg rounded-lg px-2 py-1 w-full"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -59,7 +86,7 @@
 
       <!-- Updated events -->
       <transition name="fade" mode="out-in">
-        <UpdatedPresets v-if="updatedPresets" />
+        <ReportedPresets v-if="reported" />
       </transition>
 
       <!-- Hubhop Issues -->
@@ -72,45 +99,45 @@
 
 <script>
 import GeneralDashboard from "../components/GeneralDashboard.vue";
-import UpdatedPresets from "../components/UpdatedPresets.vue";
+import ReportedPresets from "../components/ReportedPresets.vue";
 import Issues from "../components/Issues.vue";
 
 export default {
   name: "dashboard",
-  components: { GeneralDashboard, UpdatedPresets, Issues },
+  components: { GeneralDashboard, ReportedPresets, Issues },
   data() {
     return {
       dashboard: true,
-      updatedPresets: false,
+      reported: false,
       changelog: false,
     };
   },
   methods: {
     dashboardActive() {
-      if (this.updatedPresets || this.changelog) {
+      if (this.reported || this.changelog) {
         setTimeout(() => {
           this.dashboard = true;
         }, 500);
-        this.updatedPresets = false;
+        this.reported = false;
         this.changelog = false;
       }
     },
-    updatedActive() {
+    reportedActive() {
       if (this.dashboard || this.changelog) {
         setTimeout(() => {
-          this.updatedPresets = true;
+          this.reported = true;
         }, 500);
         this.dashboard = false;
         this.changelog = false;
       }
     },
     changelogActive() {
-      if (this.dashboard || this.updatedPresets) {
+      if (this.dashboard || this.reported) {
         setTimeout(() => {
           this.changelog = true;
         }, 500);
         this.dashboard = false;
-        this.updatedPresets = false;
+        this.reported = false;
       }
     },
   },

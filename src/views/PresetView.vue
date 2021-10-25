@@ -2445,6 +2445,72 @@
             Delete
           </button>
           <label
+            v-if="roles.includes('Moderator')"
+            for="modal-fixed"
+            class="text-xl
+              px-4
+              py-2
+              font-bold
+              text-hhText
+              bg-green-700
+              rounded-md
+              ml-2
+              cursor-pointer
+              hover:bg-green-900
+              focus:outline-none
+              focus-visible:ring-2
+              focus-visible:ring-offset-2
+              focus-visible:ring-blue-500"
+            >Fixed preset</label
+          >
+          <input type="checkbox" id="modal-fixed" class="modal-toggle" />
+          <div class="modal">
+            <div class="modal-box">
+              <p>
+                Do you want to mark the preset as fixed?
+              </p>
+              <div class="modal-action">
+                <button
+                  @click="fixedPreset(id)"
+                  class="
+              px-4
+              py-2
+              font-bold
+              text-hhText
+              bg-green-700
+              rounded-md
+              ml-2
+              cursor-pointer
+              hover:bg-green-900
+              focus:outline-none
+              focus-visible:ring-2
+              focus-visible:ring-offset-2
+              focus-visible:ring-blue-500"
+                >
+                  Preset is fixed
+                </button>
+                <label
+                  for="modal-fixed"
+                  class="
+              px-4
+              py-2
+              font-bold
+              text-hhCard
+              bg-hhOrange
+              rounded-md
+              ml-2
+              cursor-pointer
+              hover:bg-orange-300
+              focus:outline-none
+              focus-visible:ring-2
+              focus-visible:ring-offset-2
+              focus-visible:ring-blue-500"
+                  >Close</label
+                >
+              </div>
+            </div>
+          </div>
+          <label
             v-if="preset.vendor !== 'Microsoft' || roles.includes('Moderator')"
             for="toogleEdit"
             class="flex items-center cursor-pointer"
@@ -3327,7 +3393,7 @@ export default {
         var addReport = () => {
           if (!this.preset.reported) return 1;
           {
-            return this.preset.reported +1;
+            return this.preset.reported + 1;
           }
         };
 
@@ -3387,6 +3453,68 @@ export default {
           });
         });
       }
+    },
+    fixedPreset(id) {
+      console.log("Fixed");
+      const myAccounts = this.$msalInstance.getAllAccounts();
+      this.account = myAccounts[0];
+      const url = this.$hubHopApi.baseUrl + "/presets/" + id;
+
+      // post body data
+      const preset = {
+        path:
+          this.preset.vendor +
+          "." +
+          this.preset.aircraft +
+          "." +
+          this.preset.system +
+          "." +
+          this.preset.label,
+        vendor: this.preset.vendor,
+        aircraft: this.preset.aircraft,
+        system: this.preset.system,
+        code: this.preset.code,
+        label: this.preset.label,
+        tags: this.preset.tags,
+        presetType: this.preset.presetType,
+        version: this.preset.version,
+        status: "Updated",
+        createdDate: new Date().toUTCString(),
+        author: this.preset.author,
+        updatedBy: this.$store.state.userSettings.username,
+        description: this.preset.description,
+        score: this.preset.score + 0,
+        reported: 0,
+        report_catergory: "",
+        report_description: "",
+      };
+
+      const options = {
+        method: "PUT",
+        body: JSON.stringify(preset),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + this.$store.state.accessToken,
+        },
+      };
+      // send POST request
+      fetch(url, options).then((res) => {
+        if (res.status != 201) return;
+        this.$swal({
+          position: "center",
+          icon: "success",
+          title:
+            '<h4 style="color:#D2D0D2">The event/variable as been marked as fixed</h4>',
+          showConfirmButton: false,
+          background: "#33353e",
+          toast: true,
+          timer: 2000,
+          willClose: () => {
+            this.reportPresetClicked = false;
+            location.reload();
+          },
+        });
+      });
     },
     toggleTooltip: function() {
       if (this.tooltipShow) {
