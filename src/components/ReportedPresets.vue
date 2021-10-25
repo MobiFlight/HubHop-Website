@@ -202,7 +202,7 @@ export default {
   computed: {
     reportedPresets: function() {
       return this.presets.filter((report) => {
-        return (this.reports = report.reported > 0);
+        return report.reported > 0;
       });
     },
   },
