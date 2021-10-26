@@ -150,36 +150,6 @@
               :maxPageLinks="10"
             />
           </div>
-          <!-- <table class="table w-full table-compact">
-            <tr class="text-base text-left">
-              <th>Vendor</th>
-              <th>Aircraft</th>
-              <th>System</th>
-              <th>Preset name</th>
-              <th>Type</th>
-              <th>Number of reports</th>
-              <th>Report Category</th>
-              <th>Report Description</th>
-            </tr>
-            <tr
-              class="text-left"
-              v-for="preset in reportedPresets"
-              :key="preset.id"
-            >
-              <td>{{ preset.vendor }}</td>
-              <td>{{ preset.aircraft }}</td>
-              <td>{{ preset.system }}</td>
-              <td>{{ preset.label }}</td>
-              <td>{{ preset.presetType }}</td>
-              <td>{{ preset.reported }}</td>
-              <td>
-                {{ preset.report_catergory }}
-              </td>
-              <td>
-                {{ preset.report_description }}
-              </td>
-            </tr>
-          </table> -->
         </div>
         <div class="container mx-auto" v-else>
           <div class="spinnerSmall flex justify-center items-center"></div>
@@ -195,7 +165,6 @@ export default {
   data() {
     return {
       presets: [],
-      reports: [],
       currentPage: 1,
     };
   },

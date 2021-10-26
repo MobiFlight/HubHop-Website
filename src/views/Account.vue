@@ -427,7 +427,7 @@
                       id="manual"
                     />
                     <div
-                      data-tip="Switches to manual mode. The preset list will be downloaded once you click the 'Download presets' button on the bottom of the 'Preset list' page"
+                      data-tip="Switches to manual mode. The preset list will be downloaded once you click the 'Download presets' button at the bottom of the 'Preset list' page"
                       class="tooltip"
                     >
                       <label for="manual">Manual</label>
