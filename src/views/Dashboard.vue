@@ -28,7 +28,7 @@
           Dashboard
         </button>
       </div>
-      <div class="flex justify-start mt-3 mb-3 px-3">
+      <div class="flex justify-start mb-3 px-3">
         <button
           @click="reportedActive()"
           class="flex justify-start xl:flex-row items-center bg-hhOrange text-hhBG font-bold shadow-lg rounded-lg px-2 py-1 w-full"
@@ -79,19 +79,19 @@
       </div>
     </div>
     <div class="mx-auto w-full xl:px-0 xl:w-5/6">
-      <!-- Added presets -->
+      <!-- General Dashboard -->
       <transition name="fade" mode="out-in">
-        <GeneralDashboard v-if="dashboard" />
+        <GeneralDashboard class="-mt-2" v-if="dashboard" />
       </transition>
 
-      <!-- Updated events -->
+      <!-- Reported events -->
       <transition name="fade" mode="out-in">
-        <ReportedPresets v-if="reported" />
+        <ReportedPresets class="-mt-2" v-if="reported" />
       </transition>
 
       <!-- Hubhop Issues -->
       <transition name="fade" mode="out-in">
-        <Issues v-if="changelog" />
+        <Issues class="-mt-2" v-if="changelog" />
       </transition>
     </div>
   </div>

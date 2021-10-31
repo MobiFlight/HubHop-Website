@@ -189,6 +189,9 @@ export default {
     );
     const myAccounts = this.$msalInstance.getAllAccounts();
     this.account = myAccounts[0];
+    if (this.$store.state.loggedIn == true) {
+      return this.getAccessToken().then(() => this.getUserSettings());
+    }
   },
   beforeMount() {
     window.addEventListener("scroll", this.handleScroll);
@@ -196,7 +199,9 @@ export default {
   watch: {
     "$store.state.loggedIn": function() {
       if (this.$store.state.loggedIn === true) {
-        location.reload();
+        setTimeout(() => {
+          location.reload();
+        }, 2000);
       }
     },
   },

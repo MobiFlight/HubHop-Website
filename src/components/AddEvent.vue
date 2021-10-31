@@ -418,6 +418,133 @@
     </div>
   </div>
   <div class="flex justify-end mt-5">
+    <label
+      for="my-modal-2"
+      class="modal-button
+        inline-flex
+        justify-center
+        text-base
+        px-4
+        py-2
+        font-medium
+        text-hhCard
+        bg-hhOrange
+        rounded-md
+        hover:bg-orange-300
+        focus:outline-none
+        focus-visible:ring-2
+        focus-visible:ring-offset-2
+        focus-visible:ring-blue-500"
+      >Bulk upload</label
+    >
+    <input type="checkbox" id="my-modal-2" class="modal-toggle" />
+    <div class="modal">
+      <div class="modal-box bg-hhBG">
+        <h1 class="text-xl mb-3">Bulk upload</h1>
+        <p class="mb-3">
+          If you want to upload many presets at once, you can download or open
+          the import-file and post it on the
+          <a
+            class="inline-flex
+        justify-center
+        px-1
+        text-hhCard
+        bg-hhOrange
+        rounded-md
+        hover:bg-orange-300
+        focus:outline-none
+        focus-visible:ring-2
+        focus-visible:ring-offset-2
+        focus-visible:ring-blue-500"
+            href="https://discord.gg/pQ9p4krJ"
+            target="_blank"
+            >Discord
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="icon icon-tabler icon-tabler-external-link"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+              <path
+                d="M11 7h-5a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-5"
+              ></path>
+              <line x1="10" y1="14" x2="20" y2="4"></line>
+              <polyline points="15 4 20 4 20 9"></polyline></svg
+          ></a>
+          bulk-upload channel.
+        </p>
+        <a
+        href="/files/import_events_yourName.xlsx"
+        download
+        class="inline-flex
+        justify-center
+        text-base
+        px-4
+        py-2
+        font-medium
+        text-hhCard
+        bg-hhOrange
+        rounded-md
+        hover:bg-orange-300
+        focus:outline-none
+        focus-visible:ring-2
+        focus-visible:ring-offset-2
+        focus-visible:ring-blue-500
+        mb-3"
+        >
+          Download import-file (MS-Excel required)
+        </a>
+        <a
+          class="inline-flex
+        justify-center
+        text-base
+        px-4
+        py-2
+        font-medium
+        text-hhCard
+        bg-hhOrange
+        rounded-md
+        hover:bg-orange-300
+        focus:outline-none
+        focus-visible:ring-2
+        focus-visible:ring-offset-2
+        focus-visible:ring-blue-500"
+          href="https://docs.google.com/spreadsheets/d/1HHDvuA1rgdLZvdy0MTXB3QNIxba4iZZUcit8TQysD_k/edit?usp=sharing"
+          target="_blank"
+        >
+          Open import-file (Google-Account required)
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="icon icon-tabler icon-tabler-external-link"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path
+              d="M11 7h-5a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-5"
+            ></path>
+            <line x1="10" y1="14" x2="20" y2="4"></line>
+            <polyline points="15 4 20 4 20 9"></polyline>
+          </svg>
+        </a>
+        <div class="modal-action">
+          <label for="my-modal-2" class="btn">Close</label>
+        </div>
+      </div>
+    </div>
     <button
       @click="submitPreset(false)"
       type="button"
@@ -653,7 +780,7 @@ export default {
       this.v$.$validate();
       if (!this.v$.$error) {
         this.submitPreset();
-        setTimeout(function () {
+        setTimeout(function() {
           location.reload();
         }, 2000);
       }
