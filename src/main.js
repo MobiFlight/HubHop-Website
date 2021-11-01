@@ -1,4 +1,7 @@
 import { createApp } from "vue";
+import { createHead } from '@vueuse/head'
+
+
 import App from "./App.vue";
 import router from "./router";
 import "./index.css";
@@ -11,6 +14,7 @@ import hubHopApi from "./services/hubhop-api";
 
 
 const app = createApp(App)
+const head = createHead()
 app.config.globalProperties.$msalInstance = {};
 app.config.globalProperties.$hubHopApi = hubHopApi;
 app.use(router)
@@ -18,4 +22,5 @@ app.use(router)
 .use(VueSweetalert2)
 .use(VueFinalModal)
 .use(store)
+.use(head)
 .mount("#app");

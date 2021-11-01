@@ -1,5 +1,14 @@
 <template>
   <div class="container px-3 mx-auto text-base mb-10 min-h-screen">
+    <Head>
+      <title>Hubhop Preset List</title>
+      <meta property="og:title" content="Hubhop Preset List" />
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content="https://hubhop.mobiflight.com/#/list" />
+      <meta property="og:image" content="../src/assets/logo.png" />
+      <meta property="og:description" content="List of all presets, documented by the community for the community." />
+      <meta name="theme-color" content="#FFA047" />
+    </Head>
     <!-- Mobile filter -->
     <div class="block 2xl:hidden -mt-10">
       <h4 class="flex mb-5 items-center">
@@ -582,12 +591,14 @@ import ExportModal from "../components/ExportModal.vue";
 import { PublicClientApplication } from "@azure/msal-browser";
 import { mapMutations } from "vuex";
 import moment from "moment";
+import { Head } from "@vueuse/head";
 
 export default {
   name: "variables",
   components: {
     AddEventModal,
     ExportModal,
+    Head,
   },
   data() {
     return {

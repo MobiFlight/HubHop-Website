@@ -1,5 +1,14 @@
 <template>
   <div>
+    <Head v-if="preset">
+      <title>{{ preset.label }}</title>
+      <meta property="og:title" content= {{preset.label}} />
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content= {{currentUrl}} />
+      <meta property="og:image" content="../src/assets/logo.png" />
+      <meta property="og:description" content= {{preset.description}} />
+      <meta name="theme-color" content="#FFA047" />
+    </Head>
     <div class="min-h-screen text-lg p-5 mb-3 container mx-auto" v-if="preset">
       <!-- Mobile View -->
       <!-- View -->
@@ -3131,6 +3140,7 @@ import { createPopper } from "@popperjs/core";
 import useClipboard from "vue-clipboard3";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
+import { Head } from "@vueuse/head";
 
 export default {
   props: ["id"],
@@ -3158,11 +3168,13 @@ export default {
     TransitionChild,
     TransitionRoot,
     ExclamationIcon,
+    Head,
   },
   async created() {
     this.$msalInstance = new PublicClientApplication(
       this.$store.state.msalConfig
     );
+    this.currentUrl = window.location.href;
   },
   methods: {
     goBackCheck() {

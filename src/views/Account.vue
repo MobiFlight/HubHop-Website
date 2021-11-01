@@ -12,6 +12,18 @@
       md:mt-5
     "
   >
+    <Head>
+      <title>Hubhop Account</title>
+      <meta property="og:title" content="Hubhop Account" />
+      <meta property="og:type" content="website" />
+      <meta
+        property="og:url"
+        content="https://hubhop.mobiflight.com/#/account"
+      />
+      <meta property="og:image" content="../src/assets/logo.png" />
+      <meta property="og:description" content="Account settings of Hubhop" />
+      <meta name="theme-color" content="#FFA047" />
+    </Head>
     <div
       class="
         bg-hhCard
@@ -445,9 +457,11 @@
 
 <script>
 import { PublicClientApplication } from "@azure/msal-browser";
+import { Head } from "@vueuse/head";
 
 export default {
   Name: "Add",
+  components: { Head },
   data() {
     return {
       profile: true,

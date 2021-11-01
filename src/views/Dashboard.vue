@@ -2,6 +2,18 @@
   <div
     class="container mb-5 px-5 mx-auto xl:flex xl:space-x-5 min-h-screen -mt-10 xl:mt-5"
   >
+    <Head>
+      <title>Hubhop Dashboard</title>
+      <meta property="og:title" content="Hubhop Dashboard" />
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content="https://hubhop.mobiflight.com/#/dashboard" />
+      <meta property="og:image" content="../src/assets/logo.png" />
+      <meta
+        property="og:description"
+        content="Dashboard of all presets, documented by the community for the community."
+      />
+      <meta name="theme-color" content="#FFA047" />
+    </Head>
     <div
       class="bg-hhCard flex flex-col xl:block justify-center rounded-lg shadow-lg py-5 mb-5 xl:mb-0 w-full xl:w-1/6 text-xs xl:text-base "
     >
@@ -101,10 +113,11 @@
 import GeneralDashboard from "../components/GeneralDashboard.vue";
 import ReportedPresets from "../components/ReportedPresets.vue";
 import Issues from "../components/Issues.vue";
+import { Head } from "@vueuse/head";
 
 export default {
   name: "dashboard",
-  components: { GeneralDashboard, ReportedPresets, Issues },
+  components: { GeneralDashboard, ReportedPresets, Issues, Head },
   data() {
     return {
       dashboard: true,
