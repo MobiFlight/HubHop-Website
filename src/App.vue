@@ -1,4 +1,5 @@
 <template>
+  <metainfo></metainfo>
   <Navbar />
   <div class="py-16"></div>
   <router-view v-slot="{ Component }">
@@ -12,12 +13,58 @@
 <script>
 import Navbar from "@/components/Navbar.vue";
 import Footer from "@/components/Footer.vue";
+import { useMeta } from "vue-meta";
+import { computed } from "@vue/runtime-core";
 
 export default {
   name: "App",
+  data() {
+    return {
+      title: "Hubhop",
+    };
+  },
   components: { Navbar, Footer },
   mounted() {
-    if (this.$store.state.refreshCycle == "default" || this.$store.state.refreshCycle == "") {
+    useMeta(
+      computed(() => ({
+        title: this.title,
+        description:
+          "HubHop is an API which consolidates Microsoft Flight Simulator 2020 variables and events and provides unique, understandable and standardized events and variables.",
+        meta: [
+          {
+            vmid: "og:description",
+            property: "og:description",
+            content:
+              "HubHop is an API which consolidates Microsoft Flight Simulator 2020 variables and events and provides unique, understandable and standardized events and variables.",
+          },
+          { property: "og:type", vmid: "og:type", content: "website" },
+          {
+            property: "og:url",
+            vmid: "og:url",
+            content: window.location.href,
+          },
+          {
+            property: "og:image",
+            vmid: "og:image",
+            content: "../src/assets/logo.png",
+          },
+          {
+            property: "og:title",
+            vmid: "og:title",
+            content: this.title,
+          },
+          {
+            name: "theme-color",
+            vmid: "theme-color",
+            content: "#FFA047",
+          },
+        ],
+      }))
+    );
+    if (
+      this.$store.state.refreshCycle == "default" ||
+      this.$store.state.refreshCycle == ""
+    ) {
       this.$store.commit("setRefreshCycle", "default");
     }
   },

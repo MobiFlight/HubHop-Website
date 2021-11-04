@@ -1,17 +1,5 @@
 <template>
   <header class="min-h-screen">
-    <Head>
-      <title>Hubhop</title>
-      <meta property="og:title" content="Hubhop Home" />
-      <meta property="og:type" content="website" />
-      <meta property="og:url" content="https://hubhop.mobiflight.com/#/" />
-      <meta property="og:image" content="../src/assets/logo.png" />
-      <meta
-        property="og:description"
-        content="List of all presets, documented by the community for the community."
-      />
-      <meta name="theme-color" content="#FFA047" />
-    </Head>
     <div
       class="container flex justify-between mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28"
     >
@@ -67,10 +55,8 @@
 </template>
 
 <script>
-import { Head } from "@vueuse/head";
 
 export default {
   name: "Home",
-  components: { Head },
 };
 </script>
