@@ -197,7 +197,7 @@ export default {
     window.addEventListener("scroll", this.handleScroll);
   },
   watch: {
-    "$store.state.loggedIn": function() {
+    "$store.state.loggedIn": function () {
       if (this.$store.state.loggedIn === true) {
         setTimeout(() => {
           location.reload();
@@ -206,7 +206,7 @@ export default {
     },
   },
   methods: {
-    toggleNavbar: function() {
+    toggleNavbar: function () {
       this.menuShow = !this.menuShow;
     },
     ...mapMutations(["setAccessToken", "setUserSettings"]),
@@ -251,7 +251,11 @@ export default {
         console.error(
           `"Silent token acquisition failed. Using interactive mode" + ${error}`
         );
-        this.logout();
+        let tokenResponse = await msalInstance.acquireTokenPopup(request);
+        console.log(
+          `Access token acquired via interactive auth ${tokenResponse.accessToken}`
+        );
+        this.$store.commit("setAccessToken", tokenResponse.accessToken);
       }
       return console.log("This Account is: " + this.account);
     },
@@ -293,7 +297,7 @@ export default {
         if (!this.view.topOfPage) this.view.topOfPage = true;
       }
     },
-    scrollTop: function() {
+    scrollTop: function () {
       this.intervalId = setInterval(() => {
         if (window.pageYOffset === 0) {
           clearInterval(this.intervalId);
@@ -301,7 +305,7 @@ export default {
         window.scroll(0, window.pageYOffset - 50);
       }, 20);
     },
-    scrollListener: function() {
+    scrollListener: function () {
       this.visible = window.scrollY > 150;
     },
     mounted() {
@@ -313,7 +317,7 @@ export default {
       this.account = accounts[0];
       console.log(this.account);
     },
-    beforeUnmount: function() {
+    beforeUnmount: function () {
       window.removeEventListener("scroll", this.scrollListener);
     },
   },
