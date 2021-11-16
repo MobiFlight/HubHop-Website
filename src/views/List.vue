@@ -395,8 +395,7 @@
         <template #body="{ rows }">
           <VTr
             class="
-              hover:bg-hhOrange
-              hover:font-bold
+              hover:bg-hhOrange hover:font-bold
               transition
               rounded-lg
               hover:text-hhBG
@@ -647,14 +646,14 @@ export default {
     }
   },
   watch: {
-    "filters.vendor.value": function() {
+    "filters.vendor.value": function () {
       this.updateAircraftList();
     },
-    "filters.aircraft.value": function() {
+    "filters.aircraft.value": function () {
       this.updateVendorList();
       this.updateSystemList();
     },
-    presets: function() {
+    presets: function () {
       this.updateVendorList();
       this.updateAircraftList();
       this.updateSystemList();
@@ -831,7 +830,11 @@ export default {
         fetch(this.$hubHopApi.baseUrl + "/presets/")
           .then((res) => res.json())
           .then((data) => (this.presets = data))
-          .then(() => (this.$store.state.presets.timestamp = moment()))
+          .then(
+            (data) => (this.$store.state.presets.presets = data),
+            (this.$store.state.presets.timestamp = moment())
+          )
+          .then(() => (this.presets = this.$store.state.presets.presets))
       );
     }
     if (this.$store.state.refreshCycle === "manual") {
