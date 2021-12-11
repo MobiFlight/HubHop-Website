@@ -819,42 +819,79 @@ export default {
         });
     },
     ...mapMutations(["setAccessToken", "setUserSettings"]),
+    getLastPreset() {
+      const url = this.$hubHopApi.baseUrl + "/statistics/last";
+      const options = {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + this.$store.state.accessToken,
+        },
+      };
+      fetch(url, options)
+        .then((response) => response.json())
+        .then((lastPreset) => {
+          for (let index = 0; index < lastPreset.length; index++) {
+            const preset = lastPreset[index];
+            this.$store.commit("setLastListEdit", preset.createdDate)
+          }
+        });
+    },
   },
   mounted() {
-    if (
-      this.$store.state.refreshCycle === "default" ||
-      this.$store.state.refreshCycle === "dynamic"
-    ) {
-      return (
-        console.log("Default download mode. Downloading presets from Azure..."),
-        fetch(this.$hubHopApi.baseUrl + "/presets/")
-          .then((res) => res.json())
-          .then((data) => (this.presets = data))
-          .then(
-            (data) => (this.$store.state.presets.presets = data),
-            (this.$store.state.presets.timestamp = moment())
-          )
-          .then(() => (this.presets = this.$store.state.presets.presets))
-      );
-    }
-    if (this.$store.state.refreshCycle === "manual") {
-      if (!this.$store.state.presets.presets.length) {
-        return (
-          console.log("No presets found. Downloading inital presets..."),
-          fetch(this.$hubHopApi.baseUrl + "/presets/")
-            .then((res) => res.json())
-            .then(
-              (data) => (this.$store.state.presets.presets = data),
-              (this.$store.state.presets.timestamp = moment())
-            )
-            .then(() => (this.presets = this.$store.state.presets.presets))
+    this.getLastPreset();
+    if (moment(this.$store.state.lastListEdit) > moment(this.$store.state.lastListDownload)) {
+      console.log("es gibt änderungen");
+      fetch(this.$hubHopApi.baseUrl + "/presets/")
+        .then((res) => res.json())
+        .then((data) => (this.presets = data))
+        .then(
+          (data) => this.$store.commit("setPresets", data),
+          this.$store.commit("setLastListDownload", moment())
         );
-      }
-      return (
-        console.log("Manual download mode. Using downloaded presets."),
-        (this.presets = this.$store.state.presets.presets)
-      );
+    } else {
+      console.log("es gibt keine änderungen");
+      this.presets = this.$store.state.presets;
     }
+
+    // .then(() => (this.presets = this.$store.state.presets.presets));
+    // if (moment() <= this.$store.state.lastListEdit) {
+    //   console.log("früher: " + this.$store.state.lastListEdit);
+    // } else console.log("später: " + this.$store.state.lastListEdit);
+    // if (
+    //   this.$store.state.refreshCycle === "default" ||
+    //   this.$store.state.refreshCycle === "dynamic"
+    // ) {
+    //   return (
+    //     console.log("Default download mode. Downloading presets from Azure..."),
+    //     fetch(this.$hubHopApi.baseUrl + "/presets/")
+    //       .then((res) => res.json())
+    //       .then((data) => (this.presets = data))
+    //       .then(
+    //         (data) => (this.$store.state.presets.presets = data),
+    //         (this.$store.state.presets.timestamp = moment())
+    //       )
+    //       .then(() => (this.presets = this.$store.state.presets.presets))
+    //   );
+    // }
+    // if (this.$store.state.refreshCycle === "manual") {
+    //   if (!this.$store.state.presets.presets.length) {
+    //     return (
+    //       console.log("No presets found. Downloading inital presets..."),
+    //       fetch(this.$hubHopApi.baseUrl + "/presets/")
+    //         .then((res) => res.json())
+    //         .then(
+    //           (data) => (this.$store.state.presets.presets = data),
+    //           (this.$store.state.presets.timestamp = moment())
+    //         )
+    //         .then(() => (this.presets = this.$store.state.presets.presets))
+    //     );
+    //   }
+    //   return (
+    //     console.log("Manual download mode. Using downloaded presets."),
+    //     (this.presets = this.$store.state.presets.presets)
+    //   );
+    // }
   },
 };
 </script>

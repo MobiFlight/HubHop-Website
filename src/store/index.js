@@ -31,10 +31,10 @@ const store = createStore({
       currentPage: 1,
       pageSize: 15,
       refreshCycle: "default",
-      presets: {
-        presets: [],
-        timestamp: ""
-      },
+      presets: [],
+      timestamp: "",
+      lastListEdit: null,
+      lastListDownload: null,
     };
   },
   mutations: {
@@ -73,6 +73,12 @@ const store = createStore({
     },
     setPageSize(state, pageSize) {
       state.pageSize = pageSize;
+    },
+    setLastListEdit(state, lastListEdit) {
+      state.lastListEdit = lastListEdit;
+    },
+    setLastListDownload(state, lastListDownload) {
+      state.lastListDownload = lastListDownload;
     },
   },
   plugins: [createPersistedState()],

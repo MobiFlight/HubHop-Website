@@ -21,10 +21,32 @@ export default {
   data() {
     return {
       title: "Hubhop",
+      lastListEdit: "",
     };
   },
   components: { Navbar, Footer },
+  methods: {
+    getLastPreset() {
+      const url = this.$hubHopApi.baseUrl + "/statistics/last";
+      const options = {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + this.$store.state.accessToken,
+        },
+      };
+      fetch(url, options)
+        .then((response) => response.json())
+        .then((lastPreset) => {
+          for (let index = 0; index < lastPreset.length; index++) {
+            const preset = lastPreset[index];
+            this.$store.commit("setLastListEdit", preset.createdDate)
+          }
+        });
+    },
+  },
   mounted() {
+    this.getLastPreset();
     useMeta(
       computed(() => ({
         title: this.title,
