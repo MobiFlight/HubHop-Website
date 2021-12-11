@@ -833,15 +833,14 @@ export default {
         .then((lastPreset) => {
           for (let index = 0; index < lastPreset.length; index++) {
             const preset = lastPreset[index];
-            this.$store.commit("setLastListEdit", preset.createdDate)
+            this.$store.commit("setLastListEdit", preset.createdDate);
           }
         });
     },
   },
   mounted() {
     this.getLastPreset();
-    if (moment(this.$store.state.lastListEdit) > moment(this.$store.state.lastListDownload)) {
-      console.log("es gibt änderungen");
+    if (this.$store.state.lastListDownload == null) {
       fetch(this.$hubHopApi.baseUrl + "/presets/")
         .then((res) => res.json())
         .then((data) => (this.presets = data))
@@ -850,8 +849,22 @@ export default {
           this.$store.commit("setLastListDownload", moment())
         );
     } else {
-      console.log("es gibt keine änderungen");
-      this.presets = this.$store.state.presets;
+      if (
+        moment(this.$store.state.lastListEdit) >
+        moment(this.$store.state.lastListDownload)
+      ) {
+        console.log("es gibt änderungen");
+        fetch(this.$hubHopApi.baseUrl + "/presets/")
+          .then((res) => res.json())
+          .then((data) => (this.presets = data))
+          .then(
+            (data) => this.$store.commit("setPresets", data),
+            this.$store.commit("setLastListDownload", moment())
+          );
+      } else {
+        console.log("es gibt keine änderungen");
+        this.presets = this.$store.state.presets;
+      }
     }
 
     // .then(() => (this.presets = this.$store.state.presets.presets));
