@@ -594,12 +594,13 @@
           bottom-5
           md:ml-auto md:mr-5
           bg-hhOrange
-          md:w-1/3
           rounded-box
           text-hhBG
           md:text-base
           text-sm
           mx-3
+          font-bold
+          md:w-1/3
         "
       >
         <div class="flex items-center p-3">
@@ -631,12 +632,13 @@
           bottom-5
           md:ml-auto md:mr-5
           bg-hhOrange
-          md:w-1/3
           rounded-box
           text-hhBG
           md:text-base
           text-sm
           mx-3
+          font-bold
+          md:w-1/3
         "
       >
         <div class="flex items-center p-3">
@@ -653,10 +655,7 @@
               d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
             ></path>
           </svg>
-          <label
-            >No updates found online. No download needed and using cached
-            list.</label
-          >
+          <label>No updates found online. No download needed.</label>
         </div>
       </div>
     </transition>
@@ -674,6 +673,7 @@
           md:text-base
           text-sm
           mx-3
+          font-bold
         "
       >
         <div class="flex items-center p-3">
