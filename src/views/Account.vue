@@ -5,8 +5,7 @@
       mb-5
       px-5
       mx-auto
-      md:flex
-      md:space-x-5
+      md:flex md:space-x-5
       min-h-screen
       -mt-10
       md:mt-5
@@ -65,7 +64,7 @@
           Your Profile
         </button>
       </div>
-      <div class="flex justify-center px-3">
+      <!-- <div class="flex justify-center px-3">
         <button
           @click="settingsActive"
           class="
@@ -105,7 +104,7 @@
           </svg>
           Your Settings
         </button>
-      </div>
+      </div> -->
     </div>
     <div class="mx-auto w-full md:px-0 md:w-5/6">
       <div class="container mx-auto">
@@ -363,7 +362,7 @@
             </div>
           </div>
         </transition>
-        <transition name="fade" mode="out-in">
+        <!-- <transition name="fade" mode="out-in">
           <div v-if="settings" class="rounded-lg flex-1 space-y-3">
             <div class="bg-hhCard rounded-lg shadow-lg py-3">
               <h3 class="flex items-center justify-center border-hhText mx-6">
@@ -437,7 +436,7 @@
               </div>
             </div>
           </div>
-        </transition>
+        </transition> -->
       </div>
     </div>
   </div>
@@ -471,7 +470,7 @@ export default {
     window.addEventListener("scroll", this.handleScroll);
   },
   watch: {
-    refreshCycle: function() {
+    refreshCycle: function () {
       this.$store.commit("setRefreshCycle", this.refreshCycle);
     },
   },

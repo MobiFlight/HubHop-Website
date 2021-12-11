@@ -1,220 +1,207 @@
 <template>
-  <div class="container px-3 mx-auto text-base mb-10 min-h-screen">
-    <!-- Mobile filter -->
-    <div class="block 2xl:hidden -mt-10">
-      <h4 class="flex mb-5 items-center">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="mr-2 h-6 w-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
-          /></svg
-        >Filter
-      </h4>
-      <transition name="slide-fade">
-        <div v-if="filterShow" class="grid grid-cols-2 gap-10 justify-between">
-          <div class="flex items-start space-y-3 flex-col">
-            <div class="flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="hidden sm:block mr-2 h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                />
-              </svg>
-              <select
-                @change="setFilterVendor"
-                v-model="filters.vendor.value"
-                class="bg-hhCard mr-5 px-1 py-1 w-40 text-sm rounded"
-              >
-                <option value="">All Vendors</option>
-                <option
-                  v-for="vendor in vendorList"
-                  :value="vendor"
-                  :key="vendor"
+  <div class="">
+    <div class="container px-3 mx-auto text-base mb-10 min-h-screen">
+      <!-- Mobile filter -->
+      <div class="block 2xl:hidden -mt-10">
+        <h4 class="flex mb-5 items-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="mr-2 h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+            /></svg
+          >Filter
+        </h4>
+        <transition name="slide-fade">
+          <div
+            v-if="filterShow"
+            class="grid grid-cols-2 gap-10 justify-between"
+          >
+            <div class="flex items-start space-y-3 flex-col">
+              <div class="flex items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="hidden sm:block mr-2 h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
                 >
-                  {{ vendor }}
-                </option>
-              </select>
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                  />
+                </svg>
+                <select
+                  @change="setFilterVendor"
+                  v-model="filters.vendor.value"
+                  class="bg-hhCard mr-5 px-1 py-1 w-40 text-sm rounded"
+                >
+                  <option value="">All Vendors</option>
+                  <option
+                    v-for="vendor in vendorList"
+                    :value="vendor"
+                    :key="vendor"
+                  >
+                    {{ vendor }}
+                  </option>
+                </select>
+              </div>
+              <div class="flex items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="hidden sm:block mr-2 h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                  />
+                </svg>
+                <select
+                  @change="setFilterAircraft"
+                  v-model="filters.aircraft.value"
+                  class="bg-hhCard mr-5 px-1 py-1 w-40 text-sm rounded"
+                >
+                  <option value="">All Aircraft</option>
+                  <option
+                    v-for="aircraft in aircraftList"
+                    :value="aircraft"
+                    :key="aircraft"
+                  >
+                    {{ aircraft }}
+                  </option>
+                </select>
+              </div>
+              <div class="flex items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="hidden sm:block mr-2 h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                </svg>
+                <select
+                  @change="setFilterSystem"
+                  v-model="filters.system.value"
+                  class="bg-hhCard mr-5 px-1 py-1 w-40 text-sm rounded"
+                >
+                  <option value="">All Systems</option>
+                  <option
+                    v-for="system in systemList"
+                    :value="system"
+                    :key="system"
+                  >
+                    {{ system }}
+                  </option>
+                </select>
+              </div>
             </div>
-            <div class="flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="hidden sm:block mr-2 h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                />
-              </svg>
-              <select
-                @change="setFilterAircraft"
-                v-model="filters.aircraft.value"
-                class="bg-hhCard mr-5 px-1 py-1 w-40 text-sm rounded"
-              >
-                <option value="">All Aircraft</option>
-                <option
-                  v-for="aircraft in aircraftList"
-                  :value="aircraft"
-                  :key="aircraft"
+            <div class="flex items-start space-y-3 flex-col">
+              <div class="flex items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="hidden sm:block mr-2 h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
                 >
-                  {{ aircraft }}
-                </option>
-              </select>
-            </div>
-            <div class="flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="hidden sm:block mr-2 h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                />
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                />
-              </svg>
-              <select
-                @change="setFilterSystem"
-                v-model="filters.system.value"
-                class="bg-hhCard mr-5 px-1 py-1 w-40 text-sm rounded"
-              >
-                <option value="">All Systems</option>
-                <option
-                  v-for="system in systemList"
-                  :value="system"
-                  :key="system"
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
+                  />
+                </svg>
+                <select
+                  @change="setFilterInputType"
+                  v-model="filters.type.value"
+                  class="bg-hhCard px-1 py-1 max-w-xs text-sm rounded"
                 >
-                  {{ system }}
-                </option>
-              </select>
+                  <option value="" selected>Select Input/Output</option>
+                  <option value="Input">Input</option>
+                  <option value="Input (Potentiometer)">
+                    Input (Potentiometer)
+                  </option>
+                  <option value="Output">Output</option>
+                </select>
+              </div>
+              <div class="flex items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="hidden sm:block mr-2 h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 16l2.879-2.879m0 0a3 3 0 104.243-4.242 3 3 0 00-4.243 4.242zM21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <input
+                  class="bg-hhCard px-1 py-1 w-36 text-sm rounded"
+                  placeholder="Search Preset Name"
+                  @keyup="setFilterName"
+                  v-model="filters.name.value"
+                />
+              </div>
+              <div class="flex items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="hidden sm:block mr-2 h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"
+                  />
+                </svg>
+                <button
+                  @click="resetFilters"
+                  class="bg-hhBG px-1 py-1 max-w-xs text-sm rounded"
+                >
+                  Reset filters
+                </button>
+              </div>
             </div>
           </div>
-          <div class="flex items-start space-y-3 flex-col">
-            <div class="flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="hidden sm:block mr-2 h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
-                />
-              </svg>
-              <select
-                @change="setFilterInputType"
-                v-model="filters.type.value"
-                class="bg-hhCard px-1 py-1 max-w-xs text-sm rounded"
-              >
-                <option value="" selected>Select Input/Output</option>
-                <option value="Input">Input</option>
-                <option value="Input (Potentiometer)">
-                  Input (Potentiometer)
-                </option>
-                <option value="Output">Output</option>
-              </select>
-            </div>
-            <div class="flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="hidden sm:block mr-2 h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M8 16l2.879-2.879m0 0a3 3 0 104.243-4.242 3 3 0 00-4.243 4.242zM21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              <input
-                class="bg-hhCard px-1 py-1 w-36 text-sm rounded"
-                placeholder="Search Preset Name"
-                @keyup="setFilterName"
-                v-model="filters.name.value"
-              />
-            </div>
-            <div class="flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="hidden sm:block mr-2 h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"
-                />
-              </svg>
-              <button
-                @click="resetFilters"
-                class="bg-hhBG px-1 py-1 max-w-xs text-sm rounded"
-              >
-                Reset filters
-              </button>
-            </div>
-          </div>
-        </div>
-      </transition>
-    </div>
-    <!-- Desktop filter -->
-    <div class="hidden 2xl:block">
-      <h2 class="flex mb-5 items-center">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="mr-2 h-6 w-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
-          /></svg
-        >Filter
-      </h2>
-      <div class="flex justify-between items-center mb-5">
-        <div class="flex items-center">
+        </transition>
+      </div>
+      <!-- Desktop filter -->
+      <div class="hidden 2xl:block">
+        <h2 class="flex mb-5 items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="mr-2 h-6 w-6"
@@ -226,125 +213,12 @@
               stroke-linecap="round"
               stroke-linejoin="round"
               stroke-width="2"
-              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-            />
-          </svg>
-          <select
-            @change="setFilterVendor"
-            v-model="filters.vendor.value"
-            class="bg-hhCard mr-5 px-1 py-1 max-w-xs text-sm rounded"
-          >
-            <option value="">All Vendors</option>
-            <option v-for="vendor in vendorList" :value="vendor" :key="vendor">
-              {{ vendor }}
-            </option>
-          </select>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="mr-2 h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-            />
-          </svg>
-          <select
-            @change="setFilterAircraft"
-            v-model="filters.aircraft.value"
-            class="bg-hhCard mr-5 px-1 py-1 max-w-xs text-sm rounded"
-          >
-            <option value="">All Aircraft</option>
-            <option
-              v-for="aircraft in aircraftList"
-              :value="aircraft"
-              :key="aircraft"
-            >
-              {{ aircraft }}
-            </option>
-          </select>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="mr-2 h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-            />
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-            />
-          </svg>
-          <select
-            @change="setFilterSystem"
-            v-model="filters.system.value"
-            class="bg-hhCard mr-5 px-1 py-1 max-w-xs text-sm rounded"
-          >
-            <option value="">All Systems</option>
-            <option v-for="system in systemList" :value="system" :key="system">
-              {{ system }}
-            </option>
-          </select>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="mr-2 h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
-            />
-          </svg>
-          <select
-            @change="setFilterInputType"
-            v-model="filters.type.value"
-            class="bg-hhCard mr-5 px-1 py-1 max-w-xs text-sm rounded"
-          >
-            <option value="" selected>Select Input/Output</option>
-            <option value="Input">Input</option>
-            <option value="Input (Potentiometer)">Input (Potentiometer)</option>
-            <option value="Output">Output</option>
-          </select>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="mr-2 h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M8 16l2.879-2.879m0 0a3 3 0 104.243-4.242 3 3 0 00-4.243 4.242zM21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          <input
-            class="bg-hhCard px-1 py-1 max-w-xs text-sm rounded"
-            placeholder="Search Preset Name"
-            @keyup="setFilterName"
-            v-model="filters.name.value"
-          />
-          <button
-            @click="resetFilters"
-            class="ml-5 flex items-center text-sm p-1 bg-hhBG rounded"
-          >
+              d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+            /></svg
+          >Filter
+        </h2>
+        <div class="flex justify-between items-center mb-5">
+          <div class="flex items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="mr-2 h-6 w-6"
@@ -356,55 +230,194 @@
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
-                d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"
+                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
               />
             </svg>
-            Reset filters
-          </button>
+            <select
+              @change="setFilterVendor"
+              v-model="filters.vendor.value"
+              class="bg-hhCard mr-5 px-1 py-1 max-w-xs text-sm rounded"
+            >
+              <option value="">All Vendors</option>
+              <option
+                v-for="vendor in vendorList"
+                :value="vendor"
+                :key="vendor"
+              >
+                {{ vendor }}
+              </option>
+            </select>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="mr-2 h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+              />
+            </svg>
+            <select
+              @change="setFilterAircraft"
+              v-model="filters.aircraft.value"
+              class="bg-hhCard mr-5 px-1 py-1 max-w-xs text-sm rounded"
+            >
+              <option value="">All Aircraft</option>
+              <option
+                v-for="aircraft in aircraftList"
+                :value="aircraft"
+                :key="aircraft"
+              >
+                {{ aircraft }}
+              </option>
+            </select>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="mr-2 h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+              />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+              />
+            </svg>
+            <select
+              @change="setFilterSystem"
+              v-model="filters.system.value"
+              class="bg-hhCard mr-5 px-1 py-1 max-w-xs text-sm rounded"
+            >
+              <option value="">All Systems</option>
+              <option
+                v-for="system in systemList"
+                :value="system"
+                :key="system"
+              >
+                {{ system }}
+              </option>
+            </select>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="mr-2 h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
+              />
+            </svg>
+            <select
+              @change="setFilterInputType"
+              v-model="filters.type.value"
+              class="bg-hhCard mr-5 px-1 py-1 max-w-xs text-sm rounded"
+            >
+              <option value="" selected>Select Input/Output</option>
+              <option value="Input">Input</option>
+              <option value="Input (Potentiometer)">
+                Input (Potentiometer)
+              </option>
+              <option value="Output">Output</option>
+            </select>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="mr-2 h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 16l2.879-2.879m0 0a3 3 0 104.243-4.242 3 3 0 00-4.243 4.242zM21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <input
+              class="bg-hhCard px-1 py-1 max-w-xs text-sm rounded"
+              placeholder="Search Preset Name"
+              @keyup="setFilterName"
+              v-model="filters.name.value"
+            />
+            <button
+              @click="resetFilters"
+              class="ml-5 flex items-center text-sm p-1 bg-hhBG rounded"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="mr-2 h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"
+                />
+              </svg>
+              Reset filters
+            </button>
+          </div>
+          <AddEventModal />
         </div>
+      </div>
+      <div class="flex 2xl:hidden justify-end my-3">
         <AddEventModal />
       </div>
-    </div>
-    <div class="flex 2xl:hidden justify-end my-3">
-      <AddEventModal />
-    </div>
-
-    <!-- Preset List -->
-    <div v-if="presets.length">
-      <VTable
-        ref="presetList"
-        :filters="filters"
-        :data="presets"
-        :hideSortIcons="true"
-        :pageSize="pageSize"
-        v-model:currentPage="currentPage"
-        @totalPagesChanged="totalPages = $event"
-        class="mx-auto text-base bg-hhCard bg-opacity-70 rounded"
-        style="width: 100%"
-      >
-        <template #head>
-          <tr class="text-base">
-            <!-- <th class="hidden md:table-cell">Score</th> -->
-            <th class="hidden md:table-cell">Vendor</th>
-            <th>Aircraft</th>
-            <th class="hidden md:table-cell">System</th>
-            <th>Preset name</th>
-            <th>Type</th>
-          </tr>
-        </template>
-        <template #body="{ rows }">
-          <VTr
-            class="
-              hover:bg-hhOrange hover:font-bold
-              transition
-              rounded-lg
-              hover:text-hhBG
-            "
-            :row="preset"
-            v-for="preset in rows"
-            :key="preset._id"
-          >
-            <!-- <td
+      <!-- Preset List -->
+      <div v-if="presets.length">
+        <VTable
+          ref="presetList"
+          :filters="filters"
+          :data="presets"
+          :hideSortIcons="true"
+          :pageSize="pageSize"
+          v-model:currentPage="currentPage"
+          @totalPagesChanged="totalPages = $event"
+          class="mx-auto text-base bg-hhCard bg-opacity-70 rounded"
+          style="width: 100%"
+        >
+          <template #head>
+            <tr class="text-base">
+              <!-- <th class="hidden md:table-cell">Score</th> -->
+              <th class="hidden md:table-cell">Vendor</th>
+              <th>Aircraft</th>
+              <th class="hidden md:table-cell">System</th>
+              <th>Preset name</th>
+              <th>Type</th>
+            </tr>
+          </template>
+          <template #body="{ rows }">
+            <VTr
+              class="
+                hover:bg-hhOrange hover:font-bold
+                transition
+                rounded-lg
+                hover:text-hhBG
+              "
+              :row="preset"
+              v-for="preset in rows"
+              :key="preset._id"
+            >
+              <!-- <td
               @click="viewPreset(preset.id)"
               class="hidden md:table-cell"
               v-if="preset.score"
@@ -415,7 +428,7 @@
                 {{ preset.score }}
               </router-link>
             </td> -->
-            <!-- <td
+              <!-- <td
               @click="viewPreset(preset.id)"
               class="hidden md:table-cell"
               v-else
@@ -426,152 +439,255 @@
                 No score
               </router-link>
             </td> -->
-            <td
-              @click="viewPreset(preset.id)"
-              class="py-1.5 hidden md:table-cell"
-            >
-              <router-link
-                :to="{ name: 'PresetView', params: { id: preset.id } }"
+              <td
+                @click="viewPreset(preset.id)"
+                class="py-1.5 hidden md:table-cell"
               >
-                {{ preset.vendor }}
-              </router-link>
-            </td>
-            <td @click="viewPreset(preset.id)">
-              <router-link
-                :to="{ name: 'PresetView', params: { id: preset.id } }"
+                <router-link
+                  :to="{ name: 'PresetView', params: { id: preset.id } }"
+                >
+                  {{ preset.vendor }}
+                </router-link>
+              </td>
+              <td @click="viewPreset(preset.id)">
+                <router-link
+                  :to="{ name: 'PresetView', params: { id: preset.id } }"
+                >
+                  {{ preset.aircraft }}
+                </router-link>
+              </td>
+              <td @click="viewPreset(preset.id)" class="hidden md:table-cell">
+                <router-link
+                  :to="{ name: 'PresetView', params: { id: preset.id } }"
+                >
+                  {{ preset.system }}
+                </router-link>
+              </td>
+              <td @click="viewPreset(preset.id)">
+                <router-link
+                  :to="{ name: 'PresetView', params: { id: preset.id } }"
+                >
+                  {{ preset.label }}
+                </router-link>
+              </td>
+              <td @click="viewPreset(preset.id)">
+                <router-link
+                  :to="{ name: 'PresetView', params: { id: preset.id } }"
+                >
+                  {{ preset.presetType }}
+                </router-link>
+              </td>
+            </VTr>
+          </template>
+        </VTable>
+        <div class="flex flex-col md:flex-row items-center justify-between">
+          <div class="flex items-center">
+            <div class="flex flex-col md:flex-row items-center mr-3">
+              <VTPagination
+                class=""
+                v-model:currentPage="currentPage"
+                @click="setCurrentPage"
+                :total-pages="totalPages"
+                :maxPageLinks="10"
+              />
+              {{ totalPages }} total pages.
+            </div>
+          </div>
+          <div v-if="this.$store.state.refreshCycle === 'manual'">
+            Last updated:
+            {{
+              moment(this.$store.state.presets.timestamp).format(
+                "dddd, MMMM Do YYYY, HH:mm:ss"
+              )
+            }}
+          </div>
+          <div class="flex items-center">
+            <div class="flex item items-center">
+              <label>Show number of rows:</label>
+              <select
+                @click="setPageSize"
+                class="bg-hhCard text-hhText ml-1 text-left px-2 rounded-lg"
+                v-model.number="pageSize"
               >
-                {{ preset.aircraft }}
-              </router-link>
-            </td>
-            <td @click="viewPreset(preset.id)" class="hidden md:table-cell">
-              <router-link
-                :to="{ name: 'PresetView', params: { id: preset.id } }"
-              >
-                {{ preset.system }}
-              </router-link>
-            </td>
-            <td @click="viewPreset(preset.id)">
-              <router-link
-                :to="{ name: 'PresetView', params: { id: preset.id } }"
-              >
-                {{ preset.label }}
-              </router-link>
-            </td>
-            <td @click="viewPreset(preset.id)">
-              <router-link
-                :to="{ name: 'PresetView', params: { id: preset.id } }"
-              >
-                {{ preset.presetType }}
-              </router-link>
-            </td>
-          </VTr>
-        </template>
-      </VTable>
-      <div class="flex flex-col md:flex-row items-center justify-between">
-        <div class="flex items-center">
-          <div class="flex flex-col md:flex-row items-center mr-3">
-            <VTPagination
-              class=""
-              v-model:currentPage="currentPage"
-              @click="setCurrentPage"
-              :total-pages="totalPages"
-              :maxPageLinks="10"
-            />
-            {{ totalPages }} total pages.
+                <option selected value="15">15</option>
+                <option>25</option>
+                <option>50</option>
+                <option>75</option>
+                <option>100</option>
+              </select>
+            </div>
           </div>
         </div>
-        <div v-if="this.$store.state.refreshCycle === 'manual'">
-          Last updated:
-          {{
-            moment(this.$store.state.presets.timestamp).format(
-              "dddd, MMMM Do YYYY, HH:mm:ss"
-            )
-          }}
-        </div>
-        <div class="flex items-center">
-          <div class="flex item items-center">
-            <label>Show number of rows:</label>
-            <select
-              @click="setPageSize"
-              class="bg-hhCard text-hhText ml-1 text-left px-2 rounded-lg"
-              v-model.number="pageSize"
-            >
-              <option selected value="15">15</option>
-              <option>25</option>
-              <option>50</option>
-              <option>75</option>
-              <option>100</option>
-            </select>
-          </div>
-        </div>
-      </div>
-      <div class="flex justify-end">
-        <button
-          v-if="this.$store.state.refreshCycle === 'manual'"
-          @click="downloadPresets()"
-          class="
-            mt-2
-            mr-3
-            bg-hhOrange
-            flex
-            items-center
-            px-2
-            py-1
-            shadow-lg
-            rounded-lg
-            text-hhBG
-            font-bold
-          "
-        >
-          <svg
-            v-if="downloadingPresets === true"
-            class="animate-spin mr-1 h-5 w-5 text-hhBG"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
+        <div class="flex justify-end">
+          <button
+            v-if="this.$store.state.refreshCycle === 'manual'"
+            @click="downloadPresets()"
+            class="
+              mt-2
+              mr-3
+              bg-hhOrange
+              flex
+              items-center
+              px-2
+              py-1
+              shadow-lg
+              rounded-lg
+              text-hhBG
+              font-bold
+            "
           >
-            <circle
-              class="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
+            <svg
+              v-if="downloadingPresets === true"
+              class="animate-spin mr-1 h-5 w-5 text-hhBG"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              ></circle>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+            <svg
+              v-if="downloadingPresets === false"
+              xmlns="http://www.w3.org/2000/svg"
+              class="icon mr-1 icon-tabler icon-tabler-cloud-download"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              stroke-width="2"
               stroke="currentColor"
-              stroke-width="4"
-            ></circle>
-            <path
-              class="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-            ></path>
-          </svg>
-          <svg
-            v-if="downloadingPresets === false"
-            xmlns="http://www.w3.org/2000/svg"
-            class="icon mr-1 icon-tabler icon-tabler-cloud-download"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            stroke-width="2"
-            stroke="currentColor"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-            <path
-              d="M19 18a3.5 3.5 0 0 0 0 -7h-1a5 4.5 0 0 0 -11 -2a4.6 4.4 0 0 0 -2.1 8.4"
-            ></path>
-            <line x1="12" y1="13" x2="12" y2="22"></line>
-            <polyline points="9 19 12 22 15 19"></polyline>
-          </svg>
-          <div>Download presets</div>
-        </button>
-        <ExportModal v-if="loggedIn" />
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+              <path
+                d="M19 18a3.5 3.5 0 0 0 0 -7h-1a5 4.5 0 0 0 -11 -2a4.6 4.4 0 0 0 -2.1 8.4"
+              ></path>
+              <line x1="12" y1="13" x2="12" y2="22"></line>
+              <polyline points="9 19 12 22 15 19"></polyline>
+            </svg>
+            <div>Download presets</div>
+          </button>
+          <ExportModal v-if="loggedIn" />
+        </div>
+      </div>
+      <div class="container mx-auto" v-else>
+        <div class="spinner"></div>
       </div>
     </div>
-    <div class="container mx-auto" v-else>
-      <div class="spinner"></div>
-    </div>
+    <transition name="fade">
+      <div
+        v-if="listUpdated"
+        class="
+          sticky
+          bottom-5
+          ml-auto
+          mr-5
+          bg-hhOrange
+          w-1/3
+          rounded-box
+          text-hhBG
+        "
+      >
+        <div class="flex items-center p-3">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            class="w-6 h-6 mx-2 stroke-current"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            ></path>
+          </svg>
+          <label
+            >New presets found online. Hubhop will download the latest
+            presets.</label
+          >
+        </div>
+      </div>
+    </transition>
+    <transition name="fade">
+      <div
+        v-if="listCached"
+        class="
+          sticky
+          bottom-5
+          ml-auto
+          mr-5
+          bg-hhOrange
+          w-1/3
+          rounded-box
+          text-hhBG
+        "
+      >
+        <div class="flex items-center p-3">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            class="w-6 h-6 mx-2 stroke-current"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            ></path>
+          </svg>
+          <label
+            >No updates found online. No download needed and using cached
+            list.</label
+          >
+        </div>
+      </div>
+    </transition>
+    <transition name="fade">
+      <div
+        v-if="listNew"
+        class="
+          sticky
+          bottom-5
+          ml-auto
+          mr-5
+          bg-hhOrange
+          w-1/3
+          rounded-box
+          text-hhBG
+        "
+      >
+        <div class="flex items-center p-3">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            class="w-6 h-6 mx-2 stroke-current"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            ></path>
+          </svg>
+          <label>Downloading initial presets from hubhop.</label>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -633,6 +749,9 @@ export default {
         status: { value: "", keys: ["status"], exact: true },
       },
       downloadingPresets: false,
+      listUpdated: false,
+      listCached: false,
+      listNew: false,
     };
   },
 
@@ -838,6 +957,32 @@ export default {
         });
     },
   },
+  // updated() {
+  //   if (
+  //     moment(this.$store.state.lastListEdit) >
+  //     moment(this.$store.state.lastListDownload)
+  //   ) {
+  //     this.listUpdated = true;
+  //     setTimeout(() => {
+  //       this.listUpdated = false;
+  //     }, 5000);
+  //     console.log("es gibt änderungen");
+  //     fetch(this.$hubHopApi.baseUrl + "/presets/")
+  //       .then((res) => res.json())
+  //       .then((data) => (this.presets = data))
+  //       .then(
+  //         (data) => this.$store.commit("setPresets", data),
+  //         this.$store.commit("setLastListDownload", moment())
+  //       );
+  //   } else {
+  //     this.listCached = true;
+  //     setTimeout(() => {
+  //       this.listCached = false;
+  //     }, 5000);
+  //     console.log("es gibt keine änderungen");
+  //     this.presets = this.$store.state.presets;
+  //   }
+  // },
   mounted() {
     this.getLastPreset();
     if (this.$store.state.lastListDownload == null) {
@@ -846,13 +991,21 @@ export default {
         .then((data) => (this.presets = data))
         .then(
           (data) => this.$store.commit("setPresets", data),
-          this.$store.commit("setLastListDownload", moment())
+          this.$store.commit("setLastListDownload", moment()),
+          (this.listNew = true),
+          setTimeout(() => {
+            this.listNew = false;
+          }, 5000)
         );
     } else {
       if (
         moment(this.$store.state.lastListEdit) >
         moment(this.$store.state.lastListDownload)
       ) {
+        this.listUpdated = true;
+        setTimeout(() => {
+          this.listUpdated = false;
+        }, 5000);
         console.log("es gibt änderungen");
         fetch(this.$hubHopApi.baseUrl + "/presets/")
           .then((res) => res.json())
@@ -862,6 +1015,10 @@ export default {
             this.$store.commit("setLastListDownload", moment())
           );
       } else {
+        this.listCached = true;
+        setTimeout(() => {
+          this.listCached = false;
+        }, 5000);
         console.log("es gibt keine änderungen");
         this.presets = this.$store.state.presets;
       }

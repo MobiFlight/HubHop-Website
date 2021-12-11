@@ -81,17 +81,17 @@
     <div class="mx-auto w-full xl:px-0 xl:w-5/6">
       <!-- General Dashboard -->
       <transition name="fade" mode="out-in">
-        <GeneralDashboard class="-mt-2" v-if="dashboard" />
+        <GeneralDashboard class="" v-if="dashboard" />
       </transition>
 
       <!-- Reported events -->
       <transition name="fade" mode="out-in">
-        <ReportedPresets class="-mt-2" v-if="reported" />
+        <ReportedPresets class="" v-if="reported" />
       </transition>
 
       <!-- Hubhop Issues -->
       <transition name="fade" mode="out-in">
-        <Issues class="-mt-2" v-if="changelog" />
+        <Issues class="" v-if="changelog" />
       </transition>
     </div>
   </div>

@@ -528,8 +528,7 @@
             <button
               ref="btnRef"
               class="
-                disabled:opacity-75
-                disabled:cursor-not-allowed
+                disabled:opacity-75 disabled:cursor-not-allowed
                 flex
                 items-center
                 text-base
@@ -1062,8 +1061,7 @@
             <button
               ref="btnRef"
               class="
-                disabled:opacity-75
-                disabled:cursor-not-allowed
+                disabled:opacity-75 disabled:cursor-not-allowed
                 flex
                 items-center
                 text-base
@@ -1675,8 +1673,7 @@
               v-on:mouseleave="toggleTooltip()"
               ref="btnRef"
               class="
-                disabled:opacity-75
-                disabled:cursor-not-allowed
+                disabled:opacity-75 disabled:cursor-not-allowed
                 flex
                 items-center
                 text-base
@@ -2257,8 +2254,7 @@
               v-on:mouseleave="toggleTooltip()"
               ref="btnRef"
               class="
-                disabled:opacity-75
-                disabled:cursor-not-allowed
+                disabled:opacity-75 disabled:cursor-not-allowed
                 flex
                 items-center
                 text-base
@@ -2448,7 +2444,8 @@
           <label
             v-if="roles.includes('Moderator')"
             for="modal-fixed"
-            class="text-xl
+            class="
+              text-xl
               px-4
               py-2
               font-bold
@@ -2461,51 +2458,52 @@
               focus:outline-none
               focus-visible:ring-2
               focus-visible:ring-offset-2
-              focus-visible:ring-blue-500"
+              focus-visible:ring-blue-500
+            "
             >Fixed preset</label
           >
           <input type="checkbox" id="modal-fixed" class="modal-toggle" />
           <div class="modal">
             <div class="modal-box">
-              <p>
-                Do you want to mark the preset as fixed?
-              </p>
+              <p>Do you want to mark the preset as fixed?</p>
               <div class="modal-action">
                 <button
                   @click="fixedPreset(id)"
                   class="
-              px-4
-              py-2
-              font-bold
-              text-hhText
-              bg-green-700
-              rounded-md
-              ml-2
-              cursor-pointer
-              hover:bg-green-900
-              focus:outline-none
-              focus-visible:ring-2
-              focus-visible:ring-offset-2
-              focus-visible:ring-blue-500"
+                    px-4
+                    py-2
+                    font-bold
+                    text-hhText
+                    bg-green-700
+                    rounded-md
+                    ml-2
+                    cursor-pointer
+                    hover:bg-green-900
+                    focus:outline-none
+                    focus-visible:ring-2
+                    focus-visible:ring-offset-2
+                    focus-visible:ring-blue-500
+                  "
                 >
                   Preset is fixed
                 </button>
                 <label
                   for="modal-fixed"
                   class="
-              px-4
-              py-2
-              font-bold
-              text-hhCard
-              bg-hhOrange
-              rounded-md
-              ml-2
-              cursor-pointer
-              hover:bg-orange-300
-              focus:outline-none
-              focus-visible:ring-2
-              focus-visible:ring-offset-2
-              focus-visible:ring-blue-500"
+                    px-4
+                    py-2
+                    font-bold
+                    text-hhCard
+                    bg-hhOrange
+                    rounded-md
+                    ml-2
+                    cursor-pointer
+                    hover:bg-orange-300
+                    focus:outline-none
+                    focus-visible:ring-2
+                    focus-visible:ring-offset-2
+                    focus-visible:ring-blue-500
+                  "
                   >Close</label
                 >
               </div>
@@ -2617,8 +2615,7 @@
                   px-4
                   pb-20
                   text-center
-                  sm:block
-                  sm:p-0
+                  sm:block sm:p-0
                 "
               >
                 <TransitionChild
@@ -2666,10 +2663,7 @@
                       shadow-xl
                       transform
                       transition-all
-                      sm:my-8
-                      sm:align-middle
-                      sm:max-w-lg
-                      sm:w-full
+                      sm:my-8 sm:align-middle sm:max-w-lg sm:w-full
                     "
                   >
                     <div class="bg-hhText px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
@@ -2684,9 +2678,7 @@
                             w-12
                             rounded-full
                             bg-red-200
-                            sm:mx-0
-                            sm:h-10
-                            sm:w-10
+                            sm:mx-0 sm:h-10 sm:w-10
                           "
                         >
                           <ExclamationIcon
@@ -2768,8 +2760,7 @@
                         bg-hhText
                         px-4
                         py-3
-                        sm:px-6
-                        sm:flex sm:flex-row-reverse
+                        sm:px-6 sm:flex sm:flex-row-reverse
                       "
                     >
                       <button
@@ -2790,10 +2781,10 @@
                           text-white
                           hover:bg-red-700
                           focus:outline-none
-                          focus:ring-2 focus:ring-offset-2 focus:ring-red-500
-                          sm:ml-3
-                          sm:w-auto
-                          sm:text-sm
+                          focus:ring-2
+                          focus:ring-offset-2
+                          focus:ring-red-500
+                          sm:ml-3 sm:w-auto sm:text-sm
                         "
                         @click="reportPreset(id)"
                         :disabled="reportPresetClicked === true"
@@ -2839,11 +2830,10 @@
                           text-gray-700
                           hover:bg-gray-50
                           focus:outline-none
-                          focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
-                          sm:mt-0
-                          sm:ml-3
-                          sm:w-auto
-                          sm:text-sm
+                          focus:ring-2
+                          focus:ring-offset-2
+                          focus:ring-indigo-500
+                          sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm
                         "
                         @click="openReport = false"
                         ref="cancelButtonRef"
@@ -2916,8 +2906,7 @@
                   px-4
                   pb-20
                   text-center
-                  sm:block
-                  sm:p-0
+                  sm:block sm:p-0
                 "
               >
                 <TransitionChild
@@ -2966,10 +2955,7 @@
                       shadow-xl
                       transform
                       transition-all
-                      sm:my-8
-                      sm:align-middle
-                      sm:max-w-lg
-                      sm:w-full
+                      sm:my-8 sm:align-middle sm:max-w-lg sm:w-full
                     "
                   >
                     <div class="bg-hhText px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
@@ -2984,9 +2970,7 @@
                             w-12
                             rounded-full
                             bg-red-200
-                            sm:mx-0
-                            sm:h-10
-                            sm:w-10
+                            sm:mx-0 sm:h-10 sm:w-10
                           "
                         >
                           <ExclamationIcon
@@ -3016,8 +3000,7 @@
                         bg-hhText
                         px-4
                         py-3
-                        sm:px-6
-                        sm:flex sm:flex-row-reverse
+                        sm:px-6 sm:flex sm:flex-row-reverse
                       "
                     >
                       <button
@@ -3037,10 +3020,10 @@
                           text-white
                           hover:bg-red-700
                           focus:outline-none
-                          focus:ring-2 focus:ring-offset-2 focus:ring-red-500
-                          sm:ml-3
-                          sm:w-auto
-                          sm:text-sm
+                          focus:ring-2
+                          focus:ring-offset-2
+                          focus:ring-red-500
+                          sm:ml-3 sm:w-auto sm:text-sm
                         "
                         @click="deletePreset(preset.id)"
                       >
@@ -3064,11 +3047,10 @@
                           text-gray-700
                           hover:bg-gray-50
                           focus:outline-none
-                          focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
-                          sm:mt-0
-                          sm:ml-3
-                          sm:w-auto
-                          sm:text-sm
+                          focus:ring-2
+                          focus:ring-offset-2
+                          focus:ring-indigo-500
+                          sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm
                         "
                         @click="openDelete = false"
                         ref="cancelButtonRef"
@@ -3519,7 +3501,7 @@ export default {
         });
       });
     },
-    toggleTooltip: function() {
+    toggleTooltip: function () {
       if (this.tooltipShow) {
         this.tooltipShow = false;
       } else {
@@ -3535,6 +3517,24 @@ export default {
       return new Intl.DateTimeFormat("default", { dateStyle: "short" }).format(
         date
       );
+    },
+    getLastPreset() {
+      const url = this.$hubHopApi.baseUrl + "/statistics/last";
+      const options = {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + this.$store.state.accessToken,
+        },
+      };
+      fetch(url, options)
+        .then((response) => response.json())
+        .then((lastPreset) => {
+          for (let index = 0; index < lastPreset.length; index++) {
+            const preset = lastPreset[index];
+            this.$store.commit("setLastListEdit", preset.createdDate);
+          }
+        });
     },
     updatePreset(id, onSuccessReload) {
       const myAccounts = this.$msalInstance.getAllAccounts();
@@ -3591,7 +3591,8 @@ export default {
           timer: 2000,
           willClose: () => {
             if (onSuccessReload) location.reload();
-            this.$router.go(-1);
+            this.getLastPreset();
+            this.$router.push(`/list`);
           },
         });
       });
@@ -3611,34 +3612,34 @@ export default {
       computed(() => ({
         title: this.preset?.label ?? "Loading...",
         description: this.preset?.description ?? "No description available",
-            meta: [
-              {
-                vmid: "og:description",
-                property: "og:description",
-                content: this.preset?.description ?? "No description available",
-              },
-              { property: "og:type", vmid: "og:type", content: "website" },
-              {
-                property: "og:url",
-                vmid: "og:url",
-                content: window.location.href,
-              },
-              {
-                property: "og:image",
-                vmid: "og:image",
-                content: "../src/assets/logo.png",
-              },
-              {
-                property: "og:title",
-                vmid: "og:title",
-                content: this.preset?.label ?? "Loading...",
-              },
-              {
-                name: "theme-color",
-                vmid: "theme-color",
-                content: "#FFA047",
-              },
-            ],
+        meta: [
+          {
+            vmid: "og:description",
+            property: "og:description",
+            content: this.preset?.description ?? "No description available",
+          },
+          { property: "og:type", vmid: "og:type", content: "website" },
+          {
+            property: "og:url",
+            vmid: "og:url",
+            content: window.location.href,
+          },
+          {
+            property: "og:image",
+            vmid: "og:image",
+            content: "../src/assets/logo.png",
+          },
+          {
+            property: "og:title",
+            vmid: "og:title",
+            content: this.preset?.label ?? "Loading...",
+          },
+          {
+            name: "theme-color",
+            vmid: "theme-color",
+            content: "#FFA047",
+          },
+        ],
       }))
     );
   },
