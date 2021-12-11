@@ -592,12 +592,14 @@
         class="
           sticky
           bottom-5
-          ml-auto
-          mr-5
+          md:ml-auto md:mr-5
           bg-hhOrange
-          w-1/3
+          md:w-1/3
           rounded-box
           text-hhBG
+          md:text-base
+          text-sm
+          mx-3
         "
       >
         <div class="flex items-center p-3">
@@ -627,12 +629,14 @@
         class="
           sticky
           bottom-5
-          ml-auto
-          mr-5
+          md:ml-auto md:mr-5
           bg-hhOrange
-          w-1/3
+          md:w-1/3
           rounded-box
           text-hhBG
+          md:text-base
+          text-sm
+          mx-3
         "
       >
         <div class="flex items-center p-3">
@@ -662,12 +666,14 @@
         class="
           sticky
           bottom-5
-          ml-auto
-          mr-5
+          md:ml-auto md:mr-5
           bg-hhOrange
-          w-1/3
+          md:w-1/3
           rounded-box
           text-hhBG
+          md:text-base
+          text-sm
+          mx-3
         "
       >
         <div class="flex items-center p-3">
