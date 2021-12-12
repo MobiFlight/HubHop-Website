@@ -2,7 +2,7 @@
   <metainfo></metainfo>
   <Navbar />
   <div class="py-16"></div>
-  <router-view v-slot="{ Component }">
+  <router-view class="min-h-screen" v-slot="{ Component }">
     <transition name="fade" mode="out-in">
       <component :is="Component" />
     </transition>

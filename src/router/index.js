@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import Home from "../views/Home.vue";
-import Team from "../views/Team.vue";
+import Team from "../views/Tools.vue";
 import Api from "../views/Dashboard.vue";
 import List from "../views/List.vue";
 import Add from "../views/Account.vue";
@@ -20,8 +20,8 @@ const routes = [
     component: Home,
   },
   {
-    path: "/team",
-    name: "Team",
+    path: "/tools",
+    name: "Tools",
     component: Team,
   },
   {
