@@ -3580,6 +3580,7 @@ export default {
       fetch(url, options).then((res) => {
         console.log(res);
         if (res.status != 201) return;
+        this.getLastPreset();
         this.$swal({
           position: "center",
           icon: "success",
@@ -3591,8 +3592,9 @@ export default {
           timer: 2000,
           willClose: () => {
             if (onSuccessReload) location.reload();
-            this.getLastPreset();
-            this.$router.push(`/list`);
+            setTimeout(() => {
+              this.$router.push(`/list`);
+            }, 500);
           },
         });
       });
