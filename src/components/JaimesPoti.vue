@@ -68,7 +68,9 @@
             />
           </div>
         </div>
-        <div class="text-left">Note: The scale can be inverted by inverting the Min and Max values.</div>
+        <div class="text-left">
+          Note: The scale can be inverted by inverting the Min and Max values.
+        </div>
       </div>
     </div>
     <!-- RPN code -->
@@ -126,6 +128,12 @@ export default {
           min: "0",
           max: "100",
           event: "2:LIGHT_POTENTIOMETER",
+        },
+        {
+          name: "Com volume",
+          min: "0",
+          max: "100",
+          event: "COM1_VOL_SET",
         },
         {
           name: "Mixture",
