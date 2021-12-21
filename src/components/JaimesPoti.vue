@@ -68,9 +68,44 @@
             />
           </div>
         </div>
-        <div class="text-left">
+        <div class="text-left text-sm">
           Note: The scale can be inverted by inverting the Min and Max values.
         </div>
+        <button
+          class="
+            bg-hhOrange
+            flex
+            justify-center
+            items-center
+            mx-auto
+            px-10
+            py-1
+            text-hhBG
+            font-bold
+            rounded-box
+            text-base
+          "
+          @click="invertMinMax"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="icon mr-1 icon-tabler icon-tabler-exchange"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <circle cx="5" cy="18" r="2"></circle>
+            <circle cx="19" cy="6" r="2"></circle>
+            <path d="M19 8v5a5 5 0 0 1 -5 5h-3l3 -3m0 6l-3 -3"></path>
+            <path d="M5 16v-5a5 5 0 0 1 5 -5h3l-3 -3m0 6l3 -3"></path></svg
+          >Invert values
+        </button>
       </div>
     </div>
     <!-- RPN code -->
@@ -292,6 +327,13 @@ export default {
     },
   },
   methods: {
+    invertMinMax() {
+      var max2 = this.eir_min;
+      var min2 = this.eir_max;
+
+      this.eir_max = max2;
+      this.eir_min = min2;
+    },
     copyCodeDesktop() {
       let codeToCopy = document.querySelector("#rpn_code");
       codeToCopy.select();
@@ -356,5 +398,9 @@ export default {
 <style scoped>
 .input-primary:focus {
   box-shadow: 0 0 0 0px hsl(var(--b1)), 0 0 0 0px hsl(var(--p));
+}
+
+.label-text {
+  @apply text-base;
 }
 </style>
