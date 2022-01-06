@@ -1097,9 +1097,11 @@
       </div>
       <!-- Buttons -->
       <div class="md:hidden flex items-center justify-between mt-5">
-        <div>
+        <div
+          v-if="preset.vendor !== 'Microsoft' || roles.includes('Moderator')"
+        >
           <label
-            v-if="preset.vendor !== 'Microsoft' || roles.includes('Moderator')"
+            v-if="roles.includes('Moderator') || username === preset.author"
             for="toogleEdit"
             class="flex items-center cursor-pointer"
           >
@@ -2509,53 +2511,57 @@
               </div>
             </div>
           </div>
-          <label
+          <div
             v-if="preset.vendor !== 'Microsoft' || roles.includes('Moderator')"
-            for="toogleEdit"
-            class="flex items-center cursor-pointer"
           >
-            <div class="mr-3 text-xl font-bold text-hhOrange" v-if="!edit">
-              View
-            </div>
-            <div class="mr-3 text-xl" v-else>View</div>
-            <div class="flex items-center">
-              <!-- toggle -->
-              <div class="relative">
-                <!-- input -->
-                <input
-                  id="toogleEdit"
-                  type="checkbox"
-                  class="sr-only"
-                  v-model="edit"
-                />
-                <!-- line -->
-                <div
-                  class="w-14 h-6 bg-gray-400 rounded-full shadow-inner"
-                ></div>
-                <!-- dot -->
-                <div
-                  class="
-                    dot
-                    absolute
-                    w-8
-                    h-8
-                    bg-hhCard
-                    rounded-full
-                    shadow
-                    -left-1
-                    -top-1
-                    transition
-                  "
-                ></div>
+            <label
+              v-if="roles.includes('Moderator') || username === preset.author"
+              for="toogleEdit"
+              class="flex items-center cursor-pointer"
+            >
+              <div class="mr-3 text-xl font-bold text-hhOrange" v-if="!edit">
+                View
               </div>
-              <!-- label -->
-              <div class="ml-3 text-xl font-bold text-hhOrange" v-if="edit">
-                Edit
+              <div class="mr-3 text-xl" v-else>View</div>
+              <div class="flex items-center">
+                <!-- toggle -->
+                <div class="relative">
+                  <!-- input -->
+                  <input
+                    id="toogleEdit"
+                    type="checkbox"
+                    class="sr-only"
+                    v-model="edit"
+                  />
+                  <!-- line -->
+                  <div
+                    class="w-14 h-6 bg-gray-400 rounded-full shadow-inner"
+                  ></div>
+                  <!-- dot -->
+                  <div
+                    class="
+                      dot
+                      absolute
+                      w-8
+                      h-8
+                      bg-hhCard
+                      rounded-full
+                      shadow
+                      -left-1
+                      -top-1
+                      transition
+                    "
+                  ></div>
+                </div>
+                <!-- label -->
+                <div class="ml-3 text-xl font-bold text-hhOrange" v-if="edit">
+                  Edit
+                </div>
+                <div class="ml-3 text-xl" v-else>Edit</div>
               </div>
-              <div class="ml-3 text-xl" v-else>Edit</div>
-            </div>
-            <div></div>
-          </label>
+              <div></div>
+            </label>
+          </div>
         </div>
         <div class="flex items-center justify-center">
           <div
@@ -3128,6 +3134,7 @@ export default {
       preset: null,
       edit: false,
       roles: this.$store.state.userSettings.roles,
+      username: this.$store.state.userSettings.username,
       reportPresetClicked: undefined,
       tooltipShow: false,
       score: "",
