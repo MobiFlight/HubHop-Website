@@ -162,7 +162,7 @@ export default {
           name: "Light pot",
           min: "0",
           max: "100",
-          event: "2:LIGHT_POTENTIOMETER",
+          event: "2:LIGHT_POTENTIOMETER_SET",
         },
         {
           name: "Com volume",
