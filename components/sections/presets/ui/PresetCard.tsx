@@ -3,15 +3,13 @@ import { AnimatePresence, motion } from "framer-motion";
 import PresetHistoryList from "../singlePresetView/PresetHistoryList";
 import DeleteButton from "./deletePreset/DeleteButton";
 import EditToggle from "./editPreset/EditToggle";
-import FixedPresetButton from "./reportPreset/FixedPresetButton";
 import PresetPreviewLabel from "./PresetInputLabel";
-import ReportPresetButton from "./reportPreset/ReportPresetButton";
 import SavePresetButton from "./editPreset/SavePresetButton";
 import ReportPresetModal from "./reportPreset/ReportPresetModal";
 import DeleteConfirmationModal from "./deletePreset/DeleteConfirmationModal";
 import OpenPresetButton from "./OpenPresetButton";
 import FixedPresetModal from "./reportPreset/FixedPresetModal";
-import { AuthenticatedTemplate } from "@azure/msal-react";
+import { db } from "../../../../services/db";
 
 interface Props {
   id: string;
@@ -72,7 +70,6 @@ const PresetCard: React.FC<Props> = ({
   showingHistory,
   text,
   card,
-  data,
   deletedToast,
   reportedToast,
   savedToast,
@@ -87,7 +84,7 @@ const PresetCard: React.FC<Props> = ({
   const [editTooltip, seteditTooltip] = useState(false);
   const [deleteTooltip, setDeleteTooltip] = useState(false);
 
-  function editPreset() {
+  async function editPreset() {
     setEditButton(true);
     const url = process.env.NEXT_PUBLIC_HUBHOP_API_BASEURL + "/presets/" + id;
 
@@ -120,13 +117,14 @@ const PresetCard: React.FC<Props> = ({
     };
 
     // send POST request
-    fetch(url, options).then((res) => {
+    fetch(url, options).then(async (res) => {
       if (res.status != 201) {
         alert("Error occured");
       }
-      const localStoragePresets = JSON.parse(
-        sessionStorage.getItem("presets") || ""
-      );
+      const localStoragePresets = (await db.presets.toArray()) || [];
+      // const localStoragePresets = JSON.parse(
+      //   sessionStorage.getItem("presets") || ""
+      // );
       let result = localStoragePresets.map((x: any) =>
         x.id === id
           ? {
@@ -156,7 +154,9 @@ const PresetCard: React.FC<Props> = ({
             }
           : x
       );
-      sessionStorage.setItem("presets", JSON.stringify(result));
+      // sessionStorage.setItem("presets", JSON.stringify(result));
+      await db.presets.clear().then(() => db.presets.bulkAdd(result));
+      // await db.presets.bulkAdd(result);
       setEditButton(false);
       savedToast();
     });

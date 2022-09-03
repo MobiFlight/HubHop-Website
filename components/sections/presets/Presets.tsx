@@ -9,14 +9,12 @@ import Toast from "../Shared/Toast";
 import { BsCheck2Square } from "react-icons/bs";
 import { getAccessToken } from "../../../services/msalFunctions";
 import { msalInstance } from "../../../services/msal";
+import { db } from "../../../services/db";
+import { useLiveQuery } from "dexie-react-hooks";
 
 const Presets: React.FC = () => {
   const [loading, setLoading] = useState(false);
-  const [presets, setPresets] = useState<any[]>(
-    sessionStorage.getItem("presets")
-      ? JSON.parse(sessionStorage.getItem("presets") || "")
-      : []
-  );
+  const [presets, setPresets] = useState<any[]>([]);
   const [filteredPresets, setFilteredPresets] = useState(
     localStorage.getItem("searchFilter") === ""
       ? ""
@@ -65,9 +63,11 @@ const Presets: React.FC = () => {
     );
     const fetchedPresets = await res.json();
     const today = new Date();
+
     return (
       localStorage.setItem("fetched", today.toISOString()),
-      sessionStorage.setItem("presets", JSON.stringify(fetchedPresets)),
+      // sessionStorage.setItem("presets", JSON.stringify(fetchedPresets)),
+      db.presets.clear().then(() => db.presets.bulkAdd(fetchedPresets)),
       setPresets(fetchedPresets)
     );
   };
@@ -77,14 +77,13 @@ const Presets: React.FC = () => {
       setLoading(true);
       await last();
       setLoading(false);
-
-      if (!sessionStorage.getItem("presets")) {
+      if ((await db.presets.count()).toFixed() === "0") {
         setLoading(true);
         await fetchPresets();
         setLoading(false);
       } else {
         setLoading(true);
-        setPresets(JSON.parse(sessionStorage.getItem("presets") || ""));
+        setPresets((await db.presets.orderBy("vendor").toArray()) || []);
         setLoading(false);
       }
 
@@ -100,11 +99,12 @@ const Presets: React.FC = () => {
     fetchRoutine();
   }, []);
 
-  useEffect(() => {
-    if (sessionStorage.getItem("presets")) {
-      setPresets(JSON.parse(sessionStorage.getItem("presets") || ""));
-    }
-  }, [sessionStorage.getItem("presets")]);
+  // useEffect(() => {
+  //   async function getPresets
+  //   if ((await db.presets.count()).toFixed() != "0") {
+  //     setPresets(JSON.parse(sessionStorage.getItem("presets") || ""));
+  //   }
+  // }, [sessionStorage.getItem("presets")]);
 
   useEffect(() => {
     const myAccounts = msalInstance.getAllAccounts();
@@ -177,26 +177,33 @@ const Presets: React.FC = () => {
     }
   });
 
-  function deleteToast() {
+  async function deleteToast() {
     setDeletedToast(true);
+    setPresets((await db.presets.orderBy("vendor").toArray()) || []);
+
     setTimeout(() => {
       setDeletedToast(false);
     }, 5000);
   }
-  function reportToast() {
+  async function reportToast() {
     setReportedToast(true);
+    setPresets((await db.presets.orderBy("vendor").toArray()) || []);
+
     setTimeout(() => {
       setReportedToast(false);
     }, 5000);
   }
-  function fixToast() {
+  async function fixToast() {
     setFixedToast(true);
+    setPresets((await db.presets.orderBy("vendor").toArray()) || []);
+
     setTimeout(() => {
       setFixedToast(false);
     }, 5000);
   }
-  function saveToast() {
+  async function saveToast() {
     setSavedToast(true);
+    setPresets((await db.presets.orderBy("vendor").toArray()) || []);
     setTimeout(() => {
       setSavedToast(false);
     }, 5000);
@@ -308,11 +315,11 @@ const Presets: React.FC = () => {
               setAddModalOpen={async () => {
                 setAddModalOpen(false);
                 await last();
-                if (!sessionStorage.getItem("presets")) {
+                if ((await db.presets.count()).toFixed() === "0") {
                   await fetchPresets();
                 } else {
                   setPresets(
-                    JSON.parse(sessionStorage.getItem("presets") || "")
+                    (await db.presets.orderBy("vendor").toArray()) || []
                   );
                 }
                 if (

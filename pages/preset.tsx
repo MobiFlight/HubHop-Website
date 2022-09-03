@@ -4,15 +4,12 @@ import { useEffect, useState } from "react";
 import { BsCheck2Square } from "react-icons/bs";
 import PresetView from "../components/sections/presets/singlePresetView/PresetView";
 import Toast from "../components/sections/Shared/Toast";
+import { db } from "../services/db";
 
 const Preset: React.FC = () => {
   const router = useRouter();
   const { id } = router.query;
-  const [presets, setPresets] = useState<any[]>(
-    sessionStorage.getItem("presets")
-      ? JSON.parse(sessionStorage.getItem("presets") || "")
-      : []
-  );
+  const [presets, setPresets] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [history, setHistory] = useState([]);
   const [deletedToast, setDeletedToast] = useState(false);
@@ -26,9 +23,12 @@ const Preset: React.FC = () => {
     );
     const fetchedPresets = await res.json();
     const today = new Date();
+    try {
+      await db.presets.bulkAdd(fetchedPresets);
+    } catch (error) {}
     return (
       localStorage.setItem("fetched", today.toISOString()),
-      sessionStorage.setItem("presets", JSON.stringify(fetchedPresets)),
+      // sessionStorage.setItem("presets", JSON.stringify(fetchedPresets)),
       setPresets(fetchedPresets),
       console.log("Fetched single preset")
     );
@@ -47,9 +47,9 @@ const Preset: React.FC = () => {
       if (!id) {
         return;
       }
-      if (sessionStorage.length) {
+      if (db.presets) {
         setLoading(true);
-        setPresets(JSON.parse(sessionStorage.getItem("presets") || ""));
+        setPresets((await db.presets.toArray()) || []);
         await fetchHistory();
         setLoading(false);
       } else {
@@ -64,10 +64,14 @@ const Preset: React.FC = () => {
   }, [id]);
 
   useEffect(() => {
-    if (sessionStorage.getItem("presets")) {
-      setPresets(JSON.parse(sessionStorage.getItem("presets") || ""));
+    async function getPresetsFromDexie() {
+      if (db.presets) {
+        setPresets((await db.presets.toArray()) || []);
+      }
     }
-  }, [sessionStorage.getItem("presets")]);
+    getPresetsFromDexie();
+    return;
+  }, [db.presets]);
 
   const filterPreset = presets.filter((singlePreset) => {
     if (singlePreset.id === id) {

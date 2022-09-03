@@ -1,6 +1,7 @@
 import Modal from "../../../Shared/Modal";
 import DeleteButton from "./DeleteButton";
 import { FiAlertTriangle } from "react-icons/fi";
+import { db } from "../../../../../services/db";
 
 interface Props {
   label: string;
@@ -22,17 +23,18 @@ const DeleteConfirmationModal: React.FC<Props> = ({
       headers: {
         Authorization: "Bearer " + localStorage.getItem("accessToken"),
       },
-    }).then((res) => {
+    }).then(async (res) => {
       if (res.status != 200) {
         alert("Error occured");
       }
-      const localStoragePresets = JSON.parse(
-        sessionStorage.getItem("presets") || ""
-      );
+      const localStoragePresets = (await db.presets.toArray()) || [];
       let result = localStoragePresets.filter(
         (item: any) => item.id !== presetId
       );
-      sessionStorage.setItem("presets", JSON.stringify(result));
+      try {
+        await db.presets.bulkAdd(result);
+      } catch (error) {}
+      // sessionStorage.setItem("presets", JSON.stringify(result));
       deletedToast();
     });
   }

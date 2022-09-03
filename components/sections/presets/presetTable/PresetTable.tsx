@@ -193,7 +193,7 @@ const PresetTable: React.FC<Props> = ({
       : parseInt(localStorage.getItem("pagination") || "15")
   );
 
-  const rowsPerPage = [15, 20, 30, 50, 100]
+  const rowsPerPage = [15, 20, 30, 50, 100];
 
   return (
     <div className="relative flex w-full flex-col rounded-lg bg-hhCard/30">
@@ -232,7 +232,11 @@ const PresetTable: React.FC<Props> = ({
         theme="hubhop"
         paginationPerPage={userPagination}
         paginationRowsPerPageOptions={rowsPerPage}
-        onChangeRowsPerPage={(currentRowsPerPage) => (setUserPagination(currentRowsPerPage), localStorage.setItem("pagination", currentRowsPerPage.toString())) }
+        onChangeRowsPerPage={(currentRowsPerPage) => (
+          setUserPagination(currentRowsPerPage),
+          localStorage.setItem("pagination", currentRowsPerPage.toString())
+        )}
+        defaultSortFieldId={1}
       />
     </div>
   );
