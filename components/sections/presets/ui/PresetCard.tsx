@@ -303,17 +303,6 @@ const PresetCard: React.FC<Props> = ({
               >
                 <DeleteButton />
               </div>
-              {/* <div onClick={() => setReportModalOpen(true)}>
-                  <ReportPresetButton />
-                </div>
-                {localStorage
-                  .getItem("roles")
-                  ?.toLocaleLowerCase()
-                  .includes("moderator") && (
-                  <div onClick={() => setFixedModalOpen(true)}>
-                    <FixedPresetButton />
-                  </div>
-                )} */}
             </div>
             <div className="flex flex-col-reverse justify-between space-y-2 space-y-reverse xl:flex-row xl:items-center xl:space-y-0 xl:space-x-5">
               <AnimatePresence>

@@ -157,62 +157,67 @@ const PresetHistoryList: React.FC<Props> = ({
                           }
                         />
                       </div>
-                      <div
-                        onClick={() =>
-                          revertHistory(
-                            history.version > 1
-                              ? {
-                                  path:
-                                    history.vendor +
-                                    "." +
-                                    history.aircraft +
-                                    "." +
-                                    history.system +
-                                    "." +
-                                    history.presetType +
-                                    "." +
-                                    history.label,
-                                  updatedBy: history.updatedBy,
-                                  createdDate: history.createdDate,
-                                  version: history.version,
-                                  reported: history.reported,
-                                  vendor: history.vendor,
-                                  aircraft: history.aircraft,
-                                  system: history.system,
-                                  presetType: history.presetType,
-                                  label: history.label,
-                                  code: history.code,
-                                  description: history.description,
-                                }
-                              : {
-                                  path:
-                                    history.vendor +
-                                    "." +
-                                    history.aircraft +
-                                    "." +
-                                    history.system +
-                                    "." +
-                                    history.presetType +
-                                    "." +
-                                    history.label,
-                                  author: history.author,
-                                  createdDate: history.createdDate,
-                                  version: history.version,
-                                  reported: history.reported,
-                                  vendor: history.vendor,
-                                  aircraft: history.aircraft,
-                                  system: history.system,
-                                  presetType: history.presetType,
-                                  label: history.label,
-                                  code: history.code,
-                                  description: history.description,
-                                }
-                          )
-                        }
-                        className="my-auto h-fit cursor-pointer text-center"
-                      >
-                        <ButtonOrange>Revert to version</ButtonOrange>
-                      </div>
+                      {localStorage
+                        .getItem("roles")
+                        ?.toLowerCase()
+                        .includes("moderator") && (
+                        <div
+                          onClick={() =>
+                            revertHistory(
+                              history.version > 1
+                                ? {
+                                    path:
+                                      history.vendor +
+                                      "." +
+                                      history.aircraft +
+                                      "." +
+                                      history.system +
+                                      "." +
+                                      history.presetType +
+                                      "." +
+                                      history.label,
+                                    updatedBy: history.updatedBy,
+                                    createdDate: history.createdDate,
+                                    version: history.version,
+                                    reported: history.reported,
+                                    vendor: history.vendor,
+                                    aircraft: history.aircraft,
+                                    system: history.system,
+                                    presetType: history.presetType,
+                                    label: history.label,
+                                    code: history.code,
+                                    description: history.description,
+                                  }
+                                : {
+                                    path:
+                                      history.vendor +
+                                      "." +
+                                      history.aircraft +
+                                      "." +
+                                      history.system +
+                                      "." +
+                                      history.presetType +
+                                      "." +
+                                      history.label,
+                                    author: history.author,
+                                    createdDate: history.createdDate,
+                                    version: history.version,
+                                    reported: history.reported,
+                                    vendor: history.vendor,
+                                    aircraft: history.aircraft,
+                                    system: history.system,
+                                    presetType: history.presetType,
+                                    label: history.label,
+                                    code: history.code,
+                                    description: history.description,
+                                  }
+                            )
+                          }
+                          className="my-auto h-fit cursor-pointer text-center"
+                        >
+                          <ButtonOrange>Revert to version</ButtonOrange>
+                        </div>
+                      )}
                     </div>
                   </div>
                 );
