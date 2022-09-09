@@ -18,6 +18,7 @@ const GeneralStats: React.FC<Props> = ({ presets, stats }) => {
   const [contModal, setContModal] = useState(false);
   const [singleCont, setSingleCont] = useState("");
   const [contSearch, setContSearch] = useState("");
+  const [contPresetSearch, setContPresetSearch] = useState("");
   const [cont, setCont] = useState<any>([]);
 
   const columns: any = [
@@ -230,7 +231,9 @@ const GeneralStats: React.FC<Props> = ({ presets, stats }) => {
           <Modal
             title="Contributors"
             closeModal={() => (setModal(false), setContSearch(""))}
+            closeModalX={() => setModal(false)}
             position="fixed"
+            height={true}
           >
             <input
               placeholder="Search contributor"
@@ -261,16 +264,39 @@ const GeneralStats: React.FC<Props> = ({ presets, stats }) => {
                   title={"Presets by " + singleCont}
                   position="fixed"
                   closeModal={() => setContModal(false)}
-                  height={true}
+                  closeModalX={() => setContModal(false)}
                 >
+                  <input
+                    placeholder="Search contributor"
+                    className={`w-1/4 rounded-lg border bg-hhBG px-3 py-1 text-sm text-hhText`}
+                    onChange={(e) => setContPresetSearch(e.target.value)}
+                  />
                   <div className="w-[70vw]">
                     <DataTable
                       columns={columnSingle}
-                      data={presets.filter(
-                        (cont: any) =>
-                          cont.author === singleCont ||
-                          cont.updatedBy === singleCont
-                      )}
+                      data={presets
+                        .filter(
+                          (cont: any) =>
+                            cont.author === singleCont ||
+                            cont.updatedBy === singleCont
+                        )
+                        .filter(
+                          (na: any) =>
+                            na.label.toLowerCase().includes(contPresetSearch) ||
+                            na.vendor
+                              .toLowerCase()
+                              .includes(contPresetSearch) ||
+                            na.aircraft
+                              .toLowerCase()
+                              .includes(contPresetSearch) ||
+                            na.system
+                              .toLowerCase()
+                              .includes(contPresetSearch) ||
+                            na.presetType
+                              .toLowerCase()
+                              .includes(contPresetSearch) ||
+                            na.code.toLowerCase().includes(contPresetSearch)
+                        )}
                       customStyles={customStyles}
                       pagination
                       highlightOnHover
