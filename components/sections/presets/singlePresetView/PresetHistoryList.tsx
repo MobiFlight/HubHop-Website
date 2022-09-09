@@ -3,13 +3,19 @@ import { AiOutlineLoading } from "react-icons/ai";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BsArrowUpCircle } from "react-icons/bs";
+import ButtonOrange from "../../Shared/ButtonOrange";
 
 interface Props {
   presetHistory: any;
   loading: boolean;
+  revertHistory: Function;
 }
 
-const PresetHistoryList: React.FC<Props> = ({ presetHistory, loading }) => {
+const PresetHistoryList: React.FC<Props> = ({
+  presetHistory,
+  loading,
+  revertHistory,
+}) => {
   const divVariants = {
     expanded: {
       height: "34vh",
@@ -28,6 +34,7 @@ const PresetHistoryList: React.FC<Props> = ({ presetHistory, loading }) => {
   };
 
   const [historyOpen, setHistoryOpen] = useState(false);
+
   return (
     <div className="rounded-lg bg-hhCard/30 transition-all">
       <button
@@ -149,6 +156,62 @@ const PresetHistoryList: React.FC<Props> = ({ presetHistory, loading }) => {
                               : "No description available"
                           }
                         />
+                      </div>
+                      <div
+                        onClick={() =>
+                          revertHistory(
+                            history.version > 1
+                              ? {
+                                  path:
+                                    history.vendor +
+                                    "." +
+                                    history.aircraft +
+                                    "." +
+                                    history.system +
+                                    "." +
+                                    history.presetType +
+                                    "." +
+                                    history.label,
+                                  updatedBy: history.updatedBy,
+                                  createdDate: history.createdDate,
+                                  version: history.version,
+                                  reported: history.reported,
+                                  vendor: history.vendor,
+                                  aircraft: history.aircraft,
+                                  system: history.system,
+                                  presetType: history.presetType,
+                                  label: history.label,
+                                  code: history.code,
+                                  description: history.description,
+                                }
+                              : {
+                                  path:
+                                    history.vendor +
+                                    "." +
+                                    history.aircraft +
+                                    "." +
+                                    history.system +
+                                    "." +
+                                    history.presetType +
+                                    "." +
+                                    history.label,
+                                  author: history.author,
+                                  createdDate: history.createdDate,
+                                  version: history.version,
+                                  reported: history.reported,
+                                  vendor: history.vendor,
+                                  aircraft: history.aircraft,
+                                  system: history.system,
+                                  presetType: history.presetType,
+                                  label: history.label,
+                                  code: history.code,
+                                  description: history.description,
+                                }
+                          )
+                        }
+                        className="my-auto h-fit cursor-pointer text-center"
+                      >
+                        <ButtonOrange>Revert to version</ButtonOrange>
                       </div>
                     </div>
                   </div>

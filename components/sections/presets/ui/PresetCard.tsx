@@ -10,6 +10,9 @@ import DeleteConfirmationModal from "./deletePreset/DeleteConfirmationModal";
 import OpenPresetButton from "./OpenPresetButton";
 import FixedPresetModal from "./reportPreset/FixedPresetModal";
 import { db } from "../../../../services/db";
+import Modal from "../../Shared/Modal";
+import ButtonOrange from "../../Shared/ButtonOrange";
+import ButtonDark from "../../Shared/ButtonDark";
 
 interface Props {
   id: string;
@@ -83,6 +86,10 @@ const PresetCard: React.FC<Props> = ({
   const [editButton, setEditButton] = useState(false);
   const [editTooltip, seteditTooltip] = useState(false);
   const [deleteTooltip, setDeleteTooltip] = useState(false);
+  const [revertObject, setRevertObject] = useState({});
+  const [revertModal, setRevertModal] = useState(false);
+
+  console.log(revertObject);
 
   async function editPreset() {
     setEditButton(true);
@@ -122,9 +129,6 @@ const PresetCard: React.FC<Props> = ({
         alert("Error occured");
       }
       const localStoragePresets = (await db.presets.toArray()) || [];
-      // const localStoragePresets = JSON.parse(
-      //   sessionStorage.getItem("presets") || ""
-      // );
       let result = localStoragePresets.map((x: any) =>
         x.id === id
           ? {
@@ -154,11 +158,44 @@ const PresetCard: React.FC<Props> = ({
             }
           : x
       );
-      // sessionStorage.setItem("presets", JSON.stringify(result));
       await db.presets.clear().then(() => db.presets.bulkAdd(result));
-      // await db.presets.bulkAdd(result);
       setEditButton(false);
       savedToast();
+    });
+  }
+  async function revertPreset() {
+    const url = process.env.NEXT_PUBLIC_HUBHOP_API_BASEURL + "/presets/" + id;
+
+    // post body data
+    const preset = revertObject;
+
+    // request options
+    const options = {
+      method: "PUT",
+      body: JSON.stringify(preset),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("accessToken"),
+      },
+    };
+
+    // send POST request
+    fetch(url, options).then(async (res) => {
+      if (res.status != 201) {
+        alert("Error occured");
+      }
+      const localStoragePresets = (await db.presets.toArray()) || [];
+      let result = localStoragePresets.map((x: any) =>
+        x.id === id
+          ? {
+              ...x,
+              revertObject,
+            }
+          : x
+      );
+      await db.presets.clear().then(() => db.presets.bulkAdd(result));
+      savedToast();
+      setRevertModal(false)
     });
   }
 
@@ -346,7 +383,13 @@ const PresetCard: React.FC<Props> = ({
         {showHistory && (
           <div className="flex flex-col">
             {version > "1" ? (
-              <PresetHistoryList presetHistory={history} loading={loading} />
+              <PresetHistoryList
+                presetHistory={history}
+                loading={loading}
+                revertHistory={(o: any) => (
+                  setRevertObject(o), setRevertModal(true)
+                )}
+              />
             ) : (
               <div className="rounded-lg bg-hhCard/30 p-3 text-xl text-hhText/50 transition-all">
                 No History available
@@ -415,6 +458,32 @@ const PresetCard: React.FC<Props> = ({
               label={label}
               fixedToast={fixedToast}
             />
+          </motion.div>
+        )}
+        {revertModal && (
+          <motion.div
+            key="RevertModal"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.05 }}
+          >
+            <Modal
+              title="Revert Preset"
+              closeModal={() => setRevertModal(false)}
+              position={"fixed"}
+              height={true}
+            >
+              <p>Are you sure you want to rever this preset?</p>
+              <div className="mt-5 flex justify-between">
+                <button onClick={() => setRevertModal(false)}>
+                  <ButtonDark>No</ButtonDark>
+                </button>
+                <button onClick={revertPreset}>
+                  <ButtonOrange>Yes</ButtonOrange>
+                </button>
+              </div>
+            </Modal>
           </motion.div>
         )}
       </AnimatePresence>
