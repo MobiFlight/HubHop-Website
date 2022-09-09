@@ -251,8 +251,8 @@ const GeneralStats: React.FC<Props> = ({ presets, stats }) => {
                 highlightOnHover
                 responsive={true}
                 theme="hubhop"
-                paginationPerPage={10}
-                paginationRowsPerPageOptions={[10, 20, 30, 50, 100]}
+                paginationPerPage={5}
+                paginationRowsPerPageOptions={[5, 10, 20, 30, 50, 100]}
                 defaultSortFieldId={2}
                 defaultSortAsc={false}
                 onRowClicked={(row: any) => (
@@ -267,7 +267,7 @@ const GeneralStats: React.FC<Props> = ({ presets, stats }) => {
                   closeModalX={() => setContModal(false)}
                 >
                   <input
-                    placeholder="Search contributor"
+                    placeholder="Search preset"
                     className={`w-1/4 rounded-lg border bg-hhBG px-3 py-1 text-sm text-hhText`}
                     onChange={(e) => setContPresetSearch(e.target.value)}
                   />
@@ -296,16 +296,19 @@ const GeneralStats: React.FC<Props> = ({ presets, stats }) => {
                               .toLowerCase()
                               .includes(contPresetSearch) ||
                             na.code.toLowerCase().includes(contPresetSearch)
+                        )
+                        .sort(
+                          (a: any, b: any) =>
+                            new Date(b.createdDate).valueOf() -
+                            new Date(a.createdDate).valueOf()
                         )}
                       customStyles={customStyles}
                       pagination
                       highlightOnHover
                       responsive={true}
                       theme="hubhop"
-                      paginationPerPage={10}
-                      paginationRowsPerPageOptions={[10, 20, 30, 50, 100]}
-                      defaultSortFieldId={1}
-                      defaultSortAsc={false}
+                      paginationPerPage={5}
+                      paginationRowsPerPageOptions={[5, 10, 20, 30, 50, 100]}
                       onRowClicked={(row: any) =>
                         window.open(
                           "https://hubhop.mobiflight.com/preset/?id=" + row.id,

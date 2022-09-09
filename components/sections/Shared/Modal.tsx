@@ -26,7 +26,7 @@ const Modal: React.FC<Props> = ({
       >
         <div
           className={`mx-auto flex flex-col rounded-lg bg-hhCard ${
-            height ? "h-[80vh]" : "h-fit"
+            height ? "min-h-[50vh]" : "h-fit"
           }`}
           onClick={(e) => e.stopPropagation()}
         >
