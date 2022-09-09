@@ -5,6 +5,7 @@ interface Props {
   closeModal: Function;
   position: string;
   closeModalX?: any;
+  height?: boolean;
 }
 
 const Modal: React.FC<Props> = ({
@@ -13,6 +14,7 @@ const Modal: React.FC<Props> = ({
   closeModal,
   position,
   closeModalX,
+  height,
 }) => {
   return (
     <div>
@@ -23,7 +25,9 @@ const Modal: React.FC<Props> = ({
         } top-0 left-0 z-50 flex h-full w-full items-center justify-center bg-black/60 backdrop-blur-sm`}
       >
         <div
-          className="mx-auto flex flex-col rounded-lg bg-hhCard"
+          className={`mx-auto flex flex-col rounded-lg bg-hhCard ${
+            !height ? "h-[90vh]" : "h-fit"
+          }`}
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex items-center justify-between rounded-t-lg bg-hhBG/50 px-5 py-2">

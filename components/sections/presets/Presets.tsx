@@ -164,16 +164,62 @@ const Presets: React.FC = () => {
 
   const filteredItems = filteredInputTypeList.filter((preset) => {
     if (preset.description) {
-      return (
-        preset.label.toLowerCase().includes(filteredPresets.toLowerCase()) ||
-        preset.code.toLowerCase().includes(filteredPresets.toLowerCase()) ||
-        preset.description.toLowerCase().includes(filteredPresets.toLowerCase())
-      );
+      if (preset.author) {
+        return (
+          preset.label.toLowerCase().includes(filteredPresets.toLowerCase()) ||
+          preset.author.toLowerCase().includes(filteredPresets.toLowerCase()) ||
+          preset.code.toLowerCase().includes(filteredPresets.toLowerCase()) ||
+          preset.description
+            .toLowerCase()
+            .includes(filteredPresets.toLowerCase())
+        );
+      }
+      if (preset.updatedBy) {
+        return (
+          preset.label.toLowerCase().includes(filteredPresets.toLowerCase()) ||
+          preset.updatedBy
+            .toLowerCase()
+            .includes(filteredPresets.toLowerCase()) ||
+          preset.code.toLowerCase().includes(filteredPresets.toLowerCase()) ||
+          preset.description
+            .toLowerCase()
+            .includes(filteredPresets.toLowerCase())
+        );
+      } else {
+        return (
+          preset.label.toLowerCase().includes(filteredPresets.toLowerCase()) ||
+          preset.code.toLowerCase().includes(filteredPresets.toLowerCase()) ||
+          preset.description
+            .toLowerCase()
+            .includes(filteredPresets.toLowerCase())
+        );
+      }
     } else {
-      return (
-        preset.label.toLowerCase().includes(filteredPresets.toLowerCase()) ||
-        preset.code.toLowerCase().includes(filteredPresets.toLowerCase())
-      );
+      if (preset.author) {
+        return (
+          preset.label.toLowerCase().includes(filteredPresets.toLowerCase()) ||
+          preset.author.toLowerCase().includes(filteredPresets.toLowerCase()) ||
+          preset.code.toLowerCase().includes(filteredPresets.toLowerCase())
+        );
+      }
+      if (preset.updatedBy) {
+        return (
+          preset.label.toLowerCase().includes(filteredPresets.toLowerCase()) ||
+          preset.updatedBy
+            .toLowerCase()
+            .includes(filteredPresets.toLowerCase()) ||
+          preset.code.toLowerCase().includes(filteredPresets.toLowerCase())
+        );
+      } else {
+        return (
+          preset.label.toLowerCase().includes(filteredPresets.toLowerCase()) ||
+          preset.code.toLowerCase().includes(filteredPresets.toLowerCase())
+        );
+      }
+      // return (
+      //   preset.label.toLowerCase().includes(filteredPresets.toLowerCase()) ||
+      //   preset.code.toLowerCase().includes(filteredPresets.toLowerCase())
+      // );
     }
   });
 
