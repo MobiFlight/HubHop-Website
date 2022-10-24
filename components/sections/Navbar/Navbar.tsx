@@ -301,14 +301,14 @@ const Navbar: React.FC = () => {
               </button>
             </UnauthenticatedTemplate>
           </div>
-          <div
+          <button
             onClick={openMobileMenu}
             className="flex items-center justify-center text-4xl xl:hidden"
           >
-            <motion.button whileTap={{ scale: 0.3 }}>
+            <button>
               {mobileMenu ? <MdOutlineClose /> : <AiOutlineMenu />}
-            </motion.button>
-          </div>
+            </button>
+          </button>
         </div>
       </nav>
     </header>
