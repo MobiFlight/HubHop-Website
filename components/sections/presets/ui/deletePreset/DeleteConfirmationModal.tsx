@@ -17,24 +17,41 @@ const DeleteConfirmationModal: React.FC<Props> = ({
   deletedToast,
 }) => {
   function deletePreset() {
-    fetch(process.env.NEXT_PUBLIC_HUBHOP_API_BASEURL + "/presets/" + presetId, {
-      credentials: "include",
-      method: "DELETE",
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("accessToken"),
-      },
-    }).then(async (res) => {
+    fetch(
+      process.env.NEXT_PUBLIC_HUBHOP_API_BASEURL +
+        "/" +
+        localStorage.getItem("simType") +
+        "/presets/" +
+        presetId,
+      {
+        credentials: "include",
+        method: "DELETE",
+        redirect: "follow",
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("accessToken"),
+        },
+      }
+    ).then(async (res) => {
       if (res.status != 200) {
         alert("Error occured");
       }
-      const localStoragePresets = (await db.presets.toArray()) || [];
+      const localStoragePresets =
+        localStorage.getItem("simType") === "msfs2020"
+          ? (await db.presetsMsfs.toArray()) || []
+          : (await db.presetsXplane.toArray()) || [];
+
       let result = localStoragePresets.filter(
         (item: any) => item.id !== presetId
       );
       try {
-        await db.presets.bulkAdd(result);
+        localStorage.getItem("simType") === "msfs2020"
+          ? await db.presetsMsfs
+              .clear()
+              .then(() => db.presetsMsfs.bulkAdd(result))
+          : await db.presetsXplane
+              .clear()
+              .then(() => db.presetsXplane.bulkAdd(result));
       } catch (error) {}
-      // sessionStorage.setItem("presets", JSON.stringify(result));
       deletedToast();
     });
   }

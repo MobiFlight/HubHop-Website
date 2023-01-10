@@ -29,6 +29,11 @@ const Layout = ({ children, title = "Hubhop" }: Props) => {
     window.scrollTo(0, 0);
   }
 
+  useEffect(() => {
+    localStorage.getItem("simType") === null &&
+      localStorage.setItem("simType", "msfs2020");
+  }, []);
+
   const banner = "../../public/images/logo-big-banner.png";
 
   return (
@@ -69,7 +74,7 @@ const Layout = ({ children, title = "Hubhop" }: Props) => {
           >
             <button
               onClick={() => toTop()}
-              className="fixed right-5 bottom-5 rounded-xl bg-hhOrange p-4 text-2xl font-bold text-hhBG"
+              className="fixed right-5 bottom-5 rounded-xl bg-hhOrange p-1.5 text-2xl font-bold text-hhBG"
             >
               <FiArrowUpCircle />
             </button>

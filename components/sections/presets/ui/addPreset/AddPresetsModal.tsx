@@ -19,6 +19,8 @@ import { AiOutlineLoading } from "react-icons/ai";
 import { AnimatePresence, motion } from "framer-motion";
 import Toast from "../../../Shared/Toast";
 import { AuthenticatedTemplate } from "@azure/msal-react";
+import { RiListSettingsLine } from "react-icons/ri";
+import { db } from "../../../../../services/db";
 
 interface Props {
   setAddModalOpen: Function;
@@ -46,6 +48,11 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
       ? ""
       : localStorage.getItem("presetTypeFilter") || ""
   );
+  const [filteredCodeTypes, setFilteredCodeTypes] = useState(
+    localStorage.getItem("codeTypeFilter") === ""
+      ? ""
+      : localStorage.getItem("codeTypeFilter") || ""
+  );
   const [label, setLabel] = useState("");
   const [code, setCode] = useState("");
   const [description, setDescription] = useState("");
@@ -53,6 +60,7 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
   const [addAircraft, setAddAircraft] = useState(false);
   const [addSystem, setAddSystem] = useState(false);
   const [addPresetType, setAddPresetType] = useState(false);
+  const [addCodeType, setAddCodeType] = useState(false);
   const [buttonSubmit, setButtonSubmit] = useState(false);
   const [bulkUpload, setBulkUpload] = useState(false);
   const [presetToast, setPresetToast] = useState(false);
@@ -142,6 +150,7 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
       setFilteredAircrafts(value.aircrafts);
       setFilteredSystems(value.systems);
       setFilteredPresetTypes(value.presetTypes);
+      setFilteredCodeTypes(value.codeTypes);
       setCode(value.code);
       setLabel(value.label);
       setDescription(value.description);
@@ -171,42 +180,70 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
     >
       <div className="w-[70vw]">
         <form
-          onSubmit={handleSubmit((data) => {
+          onSubmit={handleSubmit(async (data) => {
             setButtonSubmit(true);
-            const url = process.env.NEXT_PUBLIC_HUBHOP_API_BASEURL + "/presets";
+            const url =
+              process.env.NEXT_PUBLIC_HUBHOP_API_BASEURL +
+              "/" +
+              localStorage.getItem("simType") +
+              "/presets";
 
             // post body data
-            const preset = {
-              path:
-                (data.vendors == "" ? data.addVendors : data.vendors) +
-                "." +
-                (data.aircrafts == "" ? data.addAircrafts : data.aircrafts) +
-                "." +
-                (data.systems == "" ? data.addSystems : data.systems) +
-                "." +
-                (data.presetTypes == ""
-                  ? data.addPresetTypes
-                  : data.presetTypes) +
-                "." +
-                data.label,
-              vendor: data.vendors == "" ? data.addVendors : data.vendors,
-              aircraft:
-                data.aircrafts == "" ? data.addAircrafts : data.aircrafts,
-              system: data.systems == "" ? data.addSystems : data.systems,
-              code: data.code,
-              label: data.label,
-              presetType:
-                data.presetTypes == "" ? data.addPresetTypes : data.presetTypes,
-              status: "Submitted",
-              createdDate: new Date().toUTCString(),
-              author: localStorage.getItem("username"),
-              description: data.description,
-            };
+            const preset =
+              localStorage.getItem("simType") === "msfs2020"
+                ? {
+                    path:
+                      (data.vendors == "" ? data.addVendors : data.vendors) +
+                      "." +
+                      (data.aircrafts == ""
+                        ? data.addAircrafts
+                        : data.aircrafts) +
+                      "." +
+                      (data.systems == "" ? data.addSystems : data.systems) +
+                      "." +
+                      (data.presetTypes == ""
+                        ? data.addPresetTypes
+                        : data.presetTypes) +
+                      "." +
+                      data.label,
+                    vendor: data.vendors == "" ? data.addVendors : data.vendors,
+                    aircraft:
+                      data.aircrafts == "" ? data.addAircrafts : data.aircrafts,
+                    system: data.systems == "" ? data.addSystems : data.systems,
+                    code: data.code,
+                    label: data.label,
+                    presetType:
+                      data.presetTypes == ""
+                        ? data.addPresetTypes
+                        : data.presetTypes,
+                    status: "Submitted",
+                    createdDate: new Date().toUTCString(),
+                    author: localStorage.getItem("username"),
+                    description: data.description,
+                  }
+                : {
+                    vendor: data.vendors == "" ? data.addVendors : data.vendors,
+                    aircraft:
+                      data.aircrafts == "" ? data.addAircrafts : data.aircrafts,
+                    system: data.systems == "" ? data.addSystems : data.systems,
+                    code: data.code,
+                    label: data.label,
+                    presetType:
+                      data.presetTypes == ""
+                        ? data.addPresetTypes
+                        : data.presetTypes,
+                    codeType: data.codeTypes,
+                    status: "Submitted",
+                    createdDate: new Date().toUTCString(),
+                    author: localStorage.getItem("username"),
+                    description: data.description,
+                  };
 
             // request options
-            const options = {
+            const options: any = {
               method: "POST",
               body: JSON.stringify(preset),
+              redirect: "follow",
               headers: {
                 "Content-Type": "application/json",
                 Authorization: "Bearer " + localStorage.getItem("accessToken"),
@@ -218,6 +255,7 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
               if (res.status != 200) {
                 presetAddedError();
               }
+
               resetField("label", { defaultValue: "" });
               resetField("code", { defaultValue: "" });
               resetField("description", { defaultValue: "" });
@@ -244,10 +282,10 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                         <input
                           placeholder="Provide a vendor name"
                           type={"text"}
-                          className={`w-full rounded-lg border bg-hhBG px-3 py-1 text-hhText ${
+                          className={`w-full rounded-lg border bg-hhBG/75 px-3 py-1 text-hhText ${
                             errors.addVendors
                               ? "border-red-500"
-                              : "border-hhOrange"
+                              : "border-hhOrange/75"
                           }`}
                           {...register("addVendors", {
                             required: "Provide a vendor name",
@@ -255,10 +293,10 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                         />
                       ) : (
                         <select
-                          className={`w-full rounded-lg border bg-hhBG px-3 py-1 text-hhText ${
+                          className={`w-full rounded-lg border bg-hhBG/75 px-3 py-1 text-hhText ${
                             errors.vendors
                               ? "border-red-500"
-                              : "border-hhOrange"
+                              : "border-hhOrange/75"
                           }`}
                           value={filteredVendors}
                           {...register("vendors", {
@@ -270,8 +308,8 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                             new Set(
                               presets.map((item: any) => item.vendor).sort()
                             )
-                          ).map((o) => (
-                            <option key={o as any}>{o as String[]}</option>
+                          ).map((o, i) => (
+                            <option key={i as any}>{o as String[]}</option>
                           ))}
                         </select>
                       )}
@@ -305,10 +343,10 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                     {addAircraft ? (
                       <input
                         placeholder="Provide an aircraft name"
-                        className={`w-full rounded-lg border bg-hhBG px-3 py-1 text-hhText ${
+                        className={`w-full rounded-lg border bg-hhBG/75 px-3 py-1 text-hhText ${
                           errors.addAircrafts
                             ? "border-red-500"
-                            : "border-hhOrange"
+                            : "border-hhOrange/75"
                         }`}
                         {...register("addAircrafts", {
                           required: "Provide an aircraft name",
@@ -316,10 +354,10 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                       />
                     ) : (
                       <select
-                        className={`w-full rounded-lg border bg-hhBG px-3 py-1 text-hhText ${
+                        className={`w-full rounded-lg border bg-hhBG/75 px-3 py-1 text-hhText ${
                           errors.aircrafts
                             ? "border-red-500"
-                            : "border-hhOrange"
+                            : "border-hhOrange/75"
                         }`}
                         value={filteredAircrafts}
                         {...register("aircrafts", {
@@ -331,11 +369,11 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                           new Set(
                             presets.map((item: any) => item.aircraft).sort()
                           )
-                        ).map((o) => (
-                          <option key={o as any}>{o as String[]}</option>
+                        ).map((o, i) => (
+                          <option key={i as any}>{o as String[]}</option>
                         ))}
-                        {/* {uniqueAircraft.map((o) => (
-                          <option key={o as any}>{o as String[]}</option>
+                        {/* {uniqueAircraft.map((o, i) => (
+                          <option key={i as any}>{o as String[]}</option>
                         ))} */}
                       </select>
                     )}
@@ -368,10 +406,10 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                     {addSystem ? (
                       <input
                         placeholder="Provide a system name"
-                        className={`w-full rounded-lg border bg-hhBG px-3 py-1 text-hhText ${
+                        className={`w-full rounded-lg border bg-hhBG/75 px-3 py-1 text-hhText ${
                           errors.addSystems
                             ? "border-red-500"
-                            : "border-hhOrange"
+                            : "border-hhOrange/75"
                         }`}
                         {...register("addSystems", {
                           required: "Provide a system name",
@@ -379,8 +417,10 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                       />
                     ) : (
                       <select
-                        className={`w-full rounded-lg border bg-hhBG px-3 py-1 text-hhText ${
-                          errors.systems ? "border-red-500" : "border-hhOrange"
+                        className={`w-full rounded-lg border bg-hhBG/75 px-3 py-1 text-hhText ${
+                          errors.systems
+                            ? "border-red-500"
+                            : "border-hhOrange/75"
                         }`}
                         value={filteredSystems}
                         {...register("systems", { required: "Select System" })}
@@ -390,11 +430,11 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                           new Set(
                             presets.map((item: any) => item.system).sort()
                           )
-                        ).map((o) => (
-                          <option key={o as any}>{o as String[]}</option>
+                        ).map((o, i) => (
+                          <option key={i as any}>{o as String[]}</option>
                         ))}
-                        {/* {uniqueSystem.map((o) => (
-                          <option key={o as any}>{o as String[]}</option>
+                        {/* {uniqueSystem.map((o, i) => (
+                          <option key={i as any}>{o as String[]}</option>
                         ))} */}
                       </select>
                     )}
@@ -435,10 +475,10 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                       <input
                         type={"text"}
                         placeholder={"Provide action type"}
-                        className={`w-full rounded-lg border bg-hhBG px-3 py-1 text-hhText ${
+                        className={`w-full rounded-lg border bg-hhBG/75 px-3 py-1 text-hhText ${
                           errors.addPresetTypes
                             ? "border-red-500"
-                            : "border-hhOrange"
+                            : "border-hhOrange/75"
                         }`}
                         {...register("addPresetTypes", {
                           required: "Provide action type",
@@ -446,10 +486,10 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                       />
                     ) : (
                       <select
-                        className={`w-full rounded-lg border bg-hhBG px-3 py-1 text-hhText ${
+                        className={`w-full rounded-lg border bg-hhBG/75 px-3 py-1 text-hhText ${
                           errors.addPresetTypes
                             ? "border-red-500"
-                            : "border-hhOrange"
+                            : "border-hhOrange/75"
                         }`}
                         value={filteredPresetTypes}
                         {...register("presetTypes", {
@@ -461,12 +501,9 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                           new Set(
                             presets.map((item: any) => item.presetType).sort()
                           )
-                        ).map((o) => (
-                          <option key={o as any}>{o as String[]}</option>
+                        ).map((o, i) => (
+                          <option key={i as any}>{o as String[]}</option>
                         ))}
-                        {/* {uniqueType.map((o) => (
-                          <option key={o as any}>{o as String[]}</option>
-                        ))} */}
                       </select>
                     )}
                     <AuthenticatedTemplate>
@@ -485,6 +522,72 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                       )}
                     </AuthenticatedTemplate>
                   </div>
+                  {localStorage.getItem("simType") === "xplane" && (
+                    <div>
+                      <div className="mt-3 flex items-center space-x-1">
+                        <div className="flex space-x-1">
+                          <RiListSettingsLine />
+                        </div>
+                        <label htmlFor="searchfield">Select Code Type</label>
+                      </div>
+                      <div className="flex space-x-2">
+                        {addCodeType ? (
+                          <input
+                            type={"text"}
+                            placeholder={"Provide code type"}
+                            className={`w-full rounded-lg border bg-hhBG/75 px-3 py-1 text-hhText ${
+                              errors.addCodeTypes
+                                ? "border-red-500"
+                                : "border-hhOrange/75"
+                            }`}
+                            {...register("addCodeTypes", {
+                              required: "Provide code type",
+                            })}
+                          />
+                        ) : (
+                          <select
+                            className={`w-full rounded-lg border bg-hhBG/75 px-3 py-1 text-hhText ${
+                              errors.addCodeTypes
+                                ? "border-red-500"
+                                : "border-hhOrange/75"
+                            }`}
+                            value={filteredCodeTypes}
+                            {...register("codeTypes", {
+                              required: "Select code type",
+                            })}
+                          >
+                            <option value="">All Code Types</option>
+                            {Array.from(
+                              new Set(
+                                presets.map((item: any) => item.codeType).sort()
+                              )
+                            ).map((o, i) => (
+                              <option key={i as any}>{o as String[]}</option>
+                            ))}
+                          </select>
+                        )}
+                        <AuthenticatedTemplate>
+                          {localStorage
+                            .getItem("roles")
+                            ?.includes("moderator") && (
+                            <button
+                              onClick={() => (
+                                setAddPresetType((prev) => !prev),
+                                resetField("addPresetTypes", {
+                                  defaultValue: "",
+                                }),
+                                resetField("presetTypes", { defaultValue: "" })
+                              )}
+                              type={"button"}
+                              className="rounded-lg bg-hhOrange p-2 text-hhBG transition-all hover:bg-hhOrangeShade-600"
+                            >
+                              {addPresetType ? <BsList /> : <BiAddToQueue />}
+                            </button>
+                          )}
+                        </AuthenticatedTemplate>
+                      </div>
+                    </div>
+                  )}
                   <p className="font-semibold text-red-500">
                     {addPresetType
                       ? errors.addPresetTypes?.message
@@ -499,8 +602,8 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                     <label htmlFor="searchfield">Name</label>
                   </div>
                   <input
-                    className={`w-full rounded-lg border bg-hhBG px-3 py-1 text-hhText ${
-                      errors.label ? "border-red-500" : "border-hhOrange"
+                    className={`w-full rounded-lg border bg-hhBG/75 px-3 py-1 text-hhText ${
+                      errors.label ? "border-red-500" : "border-hhOrange/75"
                     }`}
                     placeholder="Alternator 1 On"
                     {...register("label", { required: "Name required" })}
@@ -515,8 +618,8 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                     <label htmlFor="searchfield">Code</label>
                   </div>
                   <textarea
-                    className={`w-full rounded-lg border bg-hhBG px-3 py-1 text-hhText ${
-                      errors.code ? "border-red-500" : "border-hhOrange"
+                    className={`w-full rounded-lg border bg-hhBG/75 px-3 py-1 text-hhText ${
+                      errors.code ? "border-red-500" : "border-hhOrange/75"
                     }`}
                     cols={100}
                     rows={5}
@@ -533,7 +636,7 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                     <label htmlFor="searchfield">Description</label>
                   </div>
                   <textarea
-                    className="w-full rounded-lg border border-hhOrange bg-hhBG px-3 py-1 text-hhText"
+                    className="w-full rounded-lg border border-hhOrange/75 bg-hhBG/75 px-3 py-1 text-hhText"
                     cols={100}
                     rows={5}
                     placeholder={"This is your space for a nice description"}
@@ -547,7 +650,7 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                   <label htmlFor="searchfield">Similar Presets</label>
                 </div>
                 <div
-                  className={`flex w-full flex-col space-y-1 rounded-lg border border-hhOrange bg-hhBG px-3 py-1 text-hhText`}
+                  className={`flex w-full flex-col space-y-1 rounded-lg border border-hhOrange/75 bg-hhBG/75 px-3 py-1 text-hhText`}
                 >
                   <p>{filteredItems.length} presets found.</p>
                   {filteredItems.length === 0 ? (
@@ -563,7 +666,7 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                       >
                         <a
                           target={"_blank"}
-                          className="flex items-center justify-between space-x-1 rounded-lg bg-hhCard/50 py-0.5 px-3 transition-all hover:bg-hhOrange hover:text-hhBG"
+                          className="flex items-center justify-between space-x-1 rounded-lg bg-hhCard/75 py-0.5 px-3 transition-all hover:bg-hhOrange hover:text-hhBG"
                         >
                           <p className="w-11/12 truncate hover:text-clip">
                             {preset.label}

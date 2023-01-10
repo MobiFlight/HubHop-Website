@@ -4,6 +4,7 @@ export async function getUserSettings() {
   const url = process.env.NEXT_PUBLIC_HUBHOP_API_BASEURL + "/settings/user";
   const options = {
     method: "GET",
+    redirect: "follow",
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + localStorage.getItem("accessToken"),

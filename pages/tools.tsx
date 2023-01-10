@@ -35,7 +35,7 @@ const Tools: React.FC = () => {
       </Head>
       <div className="min-h-screen p-3">
         <div className="flex w-full flex-col space-y-3 xl:flex-row xl:space-y-0 xl:space-x-3">
-          <div className="flex h-fit w-full flex-col space-y-3 rounded-lg bg-hhCard/30 p-3 xl:w-1/6">
+          <div className="flex h-fit w-full flex-col space-y-3 rounded-lg bg-hhCard/40 p-3 xl:w-1/6">
             <h2 className="text-xl">Tools</h2>
             <button onClick={() => setTool("potti")} className="w-full">
               <ButtonOrange>Potentiometer RPN-Tool</ButtonOrange>
@@ -48,7 +48,7 @@ const Tools: React.FC = () => {
               <ButtonOrange>More tools will follow</ButtonOrange>
             </button>
           </div>
-          <div className="w-full rounded-lg bg-hhCard/30 p-3 xl:w-5/6">
+          <div className="w-full rounded-lg bg-hhCard/40 p-3 xl:w-5/6">
             {tool === "potti" && (
               <AnimatePresence>
                 <motion.div

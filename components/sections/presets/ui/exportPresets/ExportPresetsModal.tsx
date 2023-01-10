@@ -13,7 +13,9 @@ const ExportPresetsModal: React.FC<Props> = ({ setExportModalOpen }) => {
 
   function downloadEventsTxt() {
     setDownloadTxt(true);
-    fetch("https://hubhop-api-mgtm.azure-api.net/api/v1/export/presets")
+    fetch("https://hubhop-api-mgtm.azure-api.net/api/v1/export/presets", {
+      redirect: "follow",
+    })
       .then((response) => response.blob())
       .then((blob) => {
         var url = window.URL.createObjectURL(blob);
@@ -29,7 +31,8 @@ const ExportPresetsModal: React.FC<Props> = ({ setExportModalOpen }) => {
   function downloadEventsCip() {
     setDownloadCip(true);
     fetch(
-      "https://hubhop-api-mgtm.azure-api.net/api/v1/export/presets?type=cip"
+      "https://hubhop-api-mgtm.azure-api.net/api/v1/export/presets?type=cip",
+      { redirect: "follow" }
     )
       .then((response) => response.blob())
       .then((blob) => {
@@ -47,7 +50,8 @@ const ExportPresetsModal: React.FC<Props> = ({ setExportModalOpen }) => {
   function downloadSimVars() {
     setDownloadSimvars(true);
     fetch(
-      "https://hubhop-api-mgtm.azure-api.net/api/v1/export/presets?type=simVars"
+      "https://hubhop-api-mgtm.azure-api.net/api/v1/export/presets?type=simVars",
+      { redirect: "follow" }
     )
       .then((response) => response.blob())
       .then((blob) => {
@@ -67,6 +71,7 @@ const ExportPresetsModal: React.FC<Props> = ({ setExportModalOpen }) => {
       position="fixed"
       title="Export Presets"
       closeModal={setExportModalOpen}
+      closeModalX={setExportModalOpen}
     >
       <div className="mt-3 grid grid-cols-5 items-start gap-5">
         <div className="flex flex-col items-center justify-center align-top">

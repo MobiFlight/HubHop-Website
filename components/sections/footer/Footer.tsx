@@ -3,9 +3,9 @@ import { FaDiscord, FaGithub, FaReadme, FaFingerprint } from "react-icons/fa";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="grid grid-cols-3 items-center justify-between bg-hhBG py-5 px-5 text-hhText">
+    <footer className="grid grid-cols-3 items-center justify-between bg-hhBG/50 py-5 px-5 text-hhText">
       <div>
-        <span>&#169;</span> HubHop and its contributors 2022 - Version 2.7.2
+        <span>&#169;</span> HubHop and its contributors 2023 - Version 2.8.4
       </div>
       <div className="flex items-center justify-center">
         <div className="flex">

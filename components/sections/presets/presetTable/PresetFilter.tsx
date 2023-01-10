@@ -7,9 +7,10 @@ import {
   HiOutlineLightBulb,
 } from "react-icons/hi";
 import { GiCommercialAirplane } from "react-icons/gi";
+import { RiListSettingsLine } from "react-icons/ri";
 import { MdBusiness } from "react-icons/md";
 import { BiCog, BiJoystickButton } from "react-icons/bi";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { AuthenticatedTemplate } from "@azure/msal-react";
 
 interface Props {
@@ -23,12 +24,16 @@ interface Props {
   filteredAircrafts: any;
   filteredSystems: any;
   filteredPresetTypes: any;
+  filteredCodeTypes: any;
+  filterOpen: boolean;
   filterSystem: Function;
   filterPresetType: Function;
+  filterCodeType: Function;
   showReportedPresets: boolean;
   showMyPresets: boolean;
   setShowReportedPresets: Function;
   setShowMyPresets: Function;
+  setFilterOpen: Function;
 }
 
 const PresetFilter: React.FC<Props> = ({
@@ -42,14 +47,17 @@ const PresetFilter: React.FC<Props> = ({
   filteredAircrafts,
   filteredSystems,
   filteredPresetTypes,
+  filteredCodeTypes,
   filterSystem,
   filterPresetType,
+  filterCodeType,
   showReportedPresets,
   showMyPresets,
   setShowReportedPresets,
   setShowMyPresets,
+  filterOpen,
+  setFilterOpen
 }) => {
-  const [filterOpen, setFilterOpen] = useState(true);
   const [myPresetTooltip, setMyPresetTooltip] = useState(false);
 
   const uniqueVendor = Array.from(
@@ -63,6 +71,9 @@ const PresetFilter: React.FC<Props> = ({
   );
   const uniqueType = Array.from(
     new Set(filteredItems.map((item: any) => item.presetType).sort())
+  );
+  const uniqueCodeType = Array.from(
+    new Set(filteredItems.map((item: any) => item.codeType).sort())
   );
 
   const draw = {
@@ -101,13 +112,13 @@ const PresetFilter: React.FC<Props> = ({
 
   return (
     <div
-      className={`top-3 mb-5 flex flex-col space-y-3 self-start rounded-lg bg-hhCard/30 p-3 transition-all md:sticky md:mb-0 ${
-        filterOpen ? `w-full md:w-96` : `w-full md:w-16`
+      className={`top-3 mb-5 flex w-full flex-col space-y-3 self-start rounded-lg bg-hhCard/40 p-3 transition-all md:sticky md:mb-0 ${
+        filterOpen ? `md:w-96` : `md:w-16`
       }`}
     >
       <div>
         <button
-          onClick={() => setFilterOpen((prev) => !prev)}
+          onClick={(e) => setFilterOpen(e)}
           className="flex w-full items-center justify-between"
         >
           <div className="flex items-center justify-center space-x-1 text-2xl">
@@ -123,7 +134,7 @@ const PresetFilter: React.FC<Props> = ({
         <div className="hidden md:block">
           {!filterOpen && (
             <button
-              onClick={() => setFilterOpen((prev) => !prev)}
+              onClick={(e) => setFilterOpen(e)}
               className="mt-5 origin-center -rotate-90 pb-10"
             >
               <p className="hidden text-4xl md:block">Filter</p>
@@ -134,86 +145,127 @@ const PresetFilter: React.FC<Props> = ({
       <div
         className={`flex flex-col text-sm ${!filterOpen ? `hidden` : `block`}`}
       >
-        <div className="flex flex-col space-y-3">
-          <div>
-            <div className="flex items-center space-x-1">
-              <HiOutlineSearchCircle />
-              <label htmlFor="searchfield">Search Preset</label>
-            </div>
-            <textarea
-              id="seachfield"
-              className="w-full rounded-lg border border-hhOrange bg-hhBG px-3 py-1 text-hhText"
-              value={filteredPresets}
-              onChange={(e) => search(e)}
-            />
-          </div>
-          <div>
-            <div className="flex items-center space-x-1">
-              <MdBusiness />
-              <label htmlFor="searchfield">Select Vendor</label>
-            </div>
-            <select
-              className="w-full rounded-lg border border-hhOrange bg-hhBG px-3 py-1 text-hhText"
-              onChange={(e) => filterVendor(e)}
-              value={filteredVendors}
-            >
-              <option value="">All Vendors</option>
-              {uniqueVendor.map((o) => (
-                <option key={o as any}>{o as String[]}</option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <div className="flex items-center space-x-1">
-              <GiCommercialAirplane />
-              <label htmlFor="searchfield">Search Aircraft</label>
-            </div>
-            <select
-              className="w-full rounded-lg border border-hhOrange bg-hhBG px-3 py-1 text-hhText"
-              onChange={(e) => filterAircraft(e)}
-              value={filteredAircrafts}
-            >
-              <option value="">All Aircraft</option>
-              {uniqueAircraft.map((o) => (
-                <option key={o as any}>{o as String[]}</option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <div className="flex items-center space-x-1">
-              <BiCog />
-              <label htmlFor="searchfield">Select System</label>
-            </div>
-            <select
-              className="w-full rounded-lg border border-hhOrange bg-hhBG px-3 py-1 text-hhText"
-              onChange={(e) => filterSystem(e)}
-              value={filteredSystems}
-            >
-              <option value="">All Systems</option>
-              {uniqueSystem.map((o) => (
-                <option key={o as any}>{o as String[]}</option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <div className="flex items-center space-x-1">
-              <div className="flex space-x-1">
-                <BiJoystickButton />
-                <HiOutlineLightBulb />
+        <div className="flex flex-col">
+          <div className="flex flex-col space-y-3">
+            <div>
+              <div className="flex items-center space-x-1">
+                <HiOutlineSearchCircle />
+                <label htmlFor="searchfield">Search Preset</label>
               </div>
-              <label htmlFor="searchfield">Select Input/Output</label>
+              <textarea
+                id="seachfield"
+                className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 px-3 py-1 text-hhText"
+                value={filteredPresets}
+                onChange={(e) => search(e)}
+              />
             </div>
-            <select
-              className="w-full rounded-lg border border-hhOrange bg-hhBG px-3 py-1 text-hhText"
-              onChange={(e) => filterPresetType(e)}
-              value={filteredPresetTypes}
-            >
-              <option value="">All Inputs/Outputs</option>
-              {uniqueType.map((o) => (
-                <option key={o as any}>{o as String[]}</option>
-              ))}
-            </select>
+            <div>
+              <div className="flex items-center space-x-1">
+                <MdBusiness />
+                <label htmlFor="searchfield">Select Vendor</label>
+              </div>
+              <select
+                className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 px-3 py-1 text-hhText"
+                onChange={(e) => filterVendor(e)}
+                value={filteredVendors}
+              >
+                <option value="">All Vendors</option>
+                {uniqueVendor.map((o) => (
+                  <option className="bg-hhBG" key={o as any}>
+                    {o as String[]}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <div className="flex items-center space-x-1">
+                <GiCommercialAirplane />
+                <label htmlFor="searchfield">Search Aircraft</label>
+              </div>
+              <select
+                className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 px-3 py-1 text-hhText"
+                onChange={(e) => filterAircraft(e)}
+                value={filteredAircrafts}
+              >
+                <option value="">All Aircraft</option>
+                {uniqueAircraft.map((o) => (
+                  <option className="bg-hhBG" key={o as any}>
+                    {o as String[]}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <div className="flex items-center space-x-1">
+                <BiCog />
+                <label htmlFor="searchfield">Select System</label>
+              </div>
+              <select
+                className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 px-3 py-1 text-hhText"
+                onChange={(e) => filterSystem(e)}
+                value={filteredSystems}
+              >
+                <option value="">All Systems</option>
+                {uniqueSystem.map((o) => (
+                  <option className="bg-hhBG" key={o as any}>
+                    {o as String[]}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <div className="flex items-center space-x-1">
+                <div className="flex space-x-1">
+                  <BiJoystickButton />
+                  <HiOutlineLightBulb />
+                </div>
+                <label htmlFor="searchfield">Select Input/Output</label>
+              </div>
+              <select
+                className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 px-3 py-1 text-hhText"
+                onChange={(e) => filterPresetType(e)}
+                value={filteredPresetTypes}
+              >
+                <option value="">All Inputs/Outputs</option>
+                {uniqueType.map((o) => (
+                  <option className="bg-hhBG" key={o as any}>
+                    {o as String[]}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
+          <AnimatePresence>
+            {localStorage.getItem("simType") === "xplane" && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="pt-3">
+                  <div className="flex items-center space-x-1">
+                    <div className="flex space-x-1">
+                      <RiListSettingsLine />
+                    </div>
+                    <label htmlFor="searchfield">Select Code Type</label>
+                  </div>
+                  <select
+                    className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 px-3 py-1 text-hhText"
+                    onChange={(e) => filterCodeType(e)}
+                    value={filteredCodeTypes}
+                  >
+                    <option value="">All Code Types</option>
+                    {uniqueCodeType.map((o, i) => (
+                      <option className="bg-hhBG" key={i as any}>
+                        {o as String[]}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
           <AuthenticatedTemplate>
             <div>
               <button
@@ -226,7 +278,7 @@ const PresetFilter: React.FC<Props> = ({
                       ? { background: "#ffa047" }
                       : { background: "#545963" }
                   }
-                  className={`flex h-5 w-5 items-center justify-center rounded border border-hhOrange text-hhBG`}
+                  className={`flex h-5 w-5 items-center justify-center rounded border border-hhOrange/50 text-hhBG`}
                   onMouseEnter={showTip}
                   onMouseLeave={hideTip}
                 >
@@ -275,7 +327,7 @@ const PresetFilter: React.FC<Props> = ({
                         ? { background: "#ffa047" }
                         : { background: "#545963" }
                     }
-                    className={`flex h-5 w-5 items-center justify-center rounded border border-hhOrange text-hhBG`}
+                    className={`flex h-5 w-5 items-center justify-center rounded border border-hhOrange/50 text-hhBG`}
                   >
                     {showReportedPresets && (
                       <motion.div className="text-xs">
@@ -308,7 +360,7 @@ const PresetFilter: React.FC<Props> = ({
           </AuthenticatedTemplate>
         </div>
         <button
-          className="mt-6 w-full rounded-lg border border-hhOrange bg-hhBG px-3 py-1 text-hhText transition-all hover:bg-hhOrange hover:text-hhBG"
+          className="mt-6 w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 px-3 py-1 text-hhText transition-all hover:bg-hhOrange hover:text-hhBG"
           onClick={() => resetFilter()}
         >
           Reset Filters

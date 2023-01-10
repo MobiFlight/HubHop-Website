@@ -44,8 +44,15 @@ html {
   padding: 0;
   margin: 0;
   scroll-behavior: smooth;
+}
+
+body {
   background: url("../public/images/bg-hubhop.png");
-  @apply bg-hhBG bg-cover bg-fixed bg-no-repeat text-hhText;
+  @apply bg-hhBG bg-cover bg-fixed bg-no-repeat text-hhText transition-all;
+}
+body.xplane {
+  background: url("../public/images/bg-hubhop-xplane.png");
+  @apply bg-hhBG bg-cover bg-fixed bg-no-repeat text-hhText transition-all;
 }
 
 a {

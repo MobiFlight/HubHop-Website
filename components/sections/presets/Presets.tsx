@@ -10,11 +10,16 @@ import { BsCheck2Square } from "react-icons/bs";
 import { getAccessToken } from "../../../services/msalFunctions";
 import { msalInstance } from "../../../services/msal";
 import { db } from "../../../services/db";
+import Image from "next/image";
 import { useLiveQuery } from "dexie-react-hooks";
 
 const Presets: React.FC = () => {
+  const customLoader = ({ src }: any) => {
+    return src;
+  };
   const [loading, setLoading] = useState(false);
-  const [presets, setPresets] = useState<any[]>([]);
+  const [presetsMsfs, setPresetsMsfs] = useState<any[]>([]);
+  const [presetsXplane, setPresetsXplane] = useState<any[]>([]);
   const [filteredPresets, setFilteredPresets] = useState(
     localStorage.getItem("searchFilter") === ""
       ? ""
@@ -40,6 +45,11 @@ const Presets: React.FC = () => {
       ? ""
       : localStorage.getItem("presetTypeFilter") || ""
   );
+  const [filteredCodeTypes, setFilteredCodeTypes] = useState(
+    localStorage.getItem("codeTypeFilter") === ""
+      ? ""
+      : localStorage.getItem("codeTypeFilter") || ""
+  );
   const [exportModalOpen, setExportModalOpen] = useState(false);
   const [addModalOpen, setAddModalOpen] = useState(false);
   const [deletedToast, setDeletedToast] = useState(false);
@@ -48,27 +58,76 @@ const Presets: React.FC = () => {
   const [fixedToast, setFixedToast] = useState(false);
   const [showMyPresets, setShowMyPresets] = useState(false);
   const [showReportedPresets, setShowReportedPresets] = useState(false);
+  const [simType, setSimType] = useState(
+    localStorage.getItem("simType") === null
+      ? localStorage.setItem("simType", "msfs2020")
+      : localStorage.getItem("simType")
+  );
+  const [presets, setPresets] = useState<any[]>([]);
+  const [filterOpen, setFilterOpen] = useState(true);
 
   const last = async () => {
-    const res = await fetch(process.env.NEXT_PUBLIC_HUBHOP_API_LAST || "");
-    const last = await res.json();
+    const resMsfs = await fetch(
+      process.env.NEXT_PUBLIC_HUBHOP_API_LAST_MSFS || "",
+      {
+        redirect: "follow",
+      }
+    );
+    const resXplane = await fetch(
+      process.env.NEXT_PUBLIC_HUBHOP_API_LAST_XPLANE || "",
+      {
+        redirect: "follow",
+      }
+    );
+    const lastMsfs = await resMsfs.json();
+    const lastXplane = await resXplane.json();
     return (
-      localStorage.setItem("last", last[0].createdDate), last[0].createdDate
+      localStorage.setItem("lastMsfs", lastMsfs[0].createdDate),
+      lastMsfs[0].createdDate,
+      localStorage.setItem("lastXplane", lastXplane[0].createdDate),
+      lastXplane[0].createdDate
     );
   };
 
-  const fetchPresets = async () => {
+  const xplanePresets = useLiveQuery(() => db.presetsXplane.toArray());
+  const msfsPresets = useLiveQuery(() => db.presetsMsfs.toArray());
+
+  useEffect(() => {
+    if (!xplanePresets) return null || undefined;
+    if (!msfsPresets) return null || undefined;
+    setPresetsXplane(xplanePresets);
+    setPresetsMsfs(msfsPresets);
+    setPresets(simType === "msfs2020" ? presetsMsfs : presetsXplane);
+  }, [simType, presetsMsfs, presetsXplane, xplanePresets, msfsPresets]);
+
+  const fetchPresetsMsfs = async () => {
     const res = await fetch(
-      process.env.NEXT_PUBLIC_HUBHOP_API_BASEURL + "/presets"
+      process.env.NEXT_PUBLIC_HUBHOP_API_BASEURL + "/msfs2020/presets",
+      { redirect: "follow" }
     );
     const fetchedPresets = await res.json();
     const today = new Date();
 
     return (
-      localStorage.setItem("fetched", today.toISOString()),
-      // sessionStorage.setItem("presets", JSON.stringify(fetchedPresets)),
-      db.presets.clear().then(() => db.presets.bulkAdd(fetchedPresets)),
-      setPresets(fetchedPresets)
+      localStorage.setItem("fetchedMsfs", today.toISOString()),
+      db.presetsMsfs.clear().then(() => db.presetsMsfs.bulkAdd(fetchedPresets)),
+      setPresetsMsfs(fetchedPresets)
+    );
+  };
+  const fetchPresetsXplane = async () => {
+    const res = await fetch(
+      process.env.NEXT_PUBLIC_HUBHOP_API_BASEURL + "/xplane/presets",
+      { redirect: "follow" }
+    );
+    const fetchedPresets = await res.json();
+    const today = new Date();
+
+    return (
+      localStorage.setItem("fetchedXplane", today.toISOString()),
+      db.presetsXplane
+        .clear()
+        .then(() => db.presetsXplane.bulkAdd(fetchedPresets)),
+      setPresetsXplane(fetchedPresets)
     );
   };
 
@@ -77,34 +136,44 @@ const Presets: React.FC = () => {
       setLoading(true);
       await last();
       setLoading(false);
-      if ((await db.presets.count()).toFixed() === "0") {
+      if (
+        (await db.presetsMsfs.count()).toFixed() === "0" ||
+        (await db.presetsXplane.count()).toFixed() === "0"
+      ) {
         setLoading(true);
-        await fetchPresets();
+        await fetchPresetsMsfs();
+        await fetchPresetsXplane();
         setLoading(false);
       } else {
-        setLoading(true);
-        setPresets((await db.presets.orderBy("vendor").toArray()) || []);
-        setLoading(false);
+        // setLoading(true);
+        setPresetsMsfs(
+          (await db.presetsMsfs.orderBy("vendor").toArray()) || []
+        );
+        setPresetsXplane(
+          (await db.presetsXplane.orderBy("vendor").toArray()) || []
+        );
+        // setLoading(false);
       }
 
       if (
-        (localStorage.getItem("last") || "") >
-        (localStorage.getItem("fetched") || "")
+        (localStorage.getItem("lastMsfs") || "") >
+        (localStorage.getItem("fetchedMsfs") || "")
       ) {
         setLoading(true);
-        await fetchPresets();
+        await fetchPresetsMsfs();
+        setLoading(false);
+      }
+      if (
+        (localStorage.getItem("lastXplane") || "") >
+        (localStorage.getItem("fetchedXplane") || "")
+      ) {
+        setLoading(true);
+        await fetchPresetsXplane();
         setLoading(false);
       }
     }
     fetchRoutine();
-  }, []);
-
-  // useEffect(() => {
-  //   async function getPresets
-  //   if ((await db.presets.count()).toFixed() != "0") {
-  //     setPresets(JSON.parse(sessionStorage.getItem("presets") || ""));
-  //   }
-  // }, [sessionStorage.getItem("presets")]);
+  }, [addModalOpen]);
 
   useEffect(() => {
     const myAccounts = msalInstance.getAllAccounts();
@@ -161,8 +230,21 @@ const Presets: React.FC = () => {
       return preset;
     }
   });
+  const filteredCodeTypeList = filteredInputTypeList.filter((preset) => {
+    if (preset.codeType) {
+      if (filteredCodeTypes.length == 0) {
+        return preset.codeType.toLowerCase("");
+      } else {
+        return (
+          preset.codeType.toLowerCase() === filteredCodeTypes.toLowerCase()
+        );
+      }
+    } else {
+      return preset;
+    }
+  });
 
-  const filteredItems = filteredInputTypeList.filter((preset) => {
+  const filteredItems = filteredCodeTypeList.filter((preset) => {
     if (preset.description) {
       if (preset.author) {
         return (
@@ -225,35 +307,42 @@ const Presets: React.FC = () => {
 
   async function deleteToast() {
     setDeletedToast(true);
-    setPresets((await db.presets.orderBy("vendor").toArray()) || []);
-
+    setPresetsMsfs((await db.presetsMsfs.orderBy("vendor").toArray()) || []);
+    setPresetsMsfs((await db.presetsXplane.orderBy("vendor").toArray()) || []);
     setTimeout(() => {
       setDeletedToast(false);
     }, 5000);
   }
   async function reportToast() {
     setReportedToast(true);
-    setPresets((await db.presets.orderBy("vendor").toArray()) || []);
-
+    setPresetsMsfs((await db.presetsMsfs.orderBy("vendor").toArray()) || []);
+    setPresetsMsfs((await db.presetsXplane.orderBy("vendor").toArray()) || []);
     setTimeout(() => {
       setReportedToast(false);
     }, 5000);
   }
   async function fixToast() {
     setFixedToast(true);
-    setPresets((await db.presets.orderBy("vendor").toArray()) || []);
-
+    setPresetsMsfs((await db.presetsMsfs.orderBy("vendor").toArray()) || []);
+    setPresetsMsfs((await db.presetsXplane.orderBy("vendor").toArray()) || []);
     setTimeout(() => {
       setFixedToast(false);
     }, 5000);
   }
   async function saveToast() {
     setSavedToast(true);
-    setPresets((await db.presets.orderBy("vendor").toArray()) || []);
+    setPresetsMsfs((await db.presetsMsfs.orderBy("vendor").toArray()) || []);
+    setPresetsMsfs((await db.presetsXplane.orderBy("vendor").toArray()) || []);
     setTimeout(() => {
       setSavedToast(false);
     }, 5000);
   }
+
+  useEffect(() => {
+    localStorage.getItem("simType") === "msfs2020"
+      ? document.body.classList.remove("xplane")
+      : document.body.classList.add("xplane");
+  }, [localStorage.getItem("simType")]);
 
   return (
     <div>
@@ -267,54 +356,182 @@ const Presets: React.FC = () => {
       ) : presets.length ? (
         <div className="min-h-screen">
           <div className="flex flex-col p-3 md:flex-row md:space-x-3">
-            <PresetFilter
-              search={(e: React.ChangeEvent<HTMLInputElement>) => (
-                setFilteredPresets(e.target.value),
-                localStorage.setItem("searchFilter", e.target.value)
-              )}
-              filterVendor={(e: React.ChangeEvent<HTMLInputElement>) => (
-                setFilteredVendors(e.target.value),
-                localStorage.setItem("vendorFilter", e.target.value)
-              )}
-              filterAircraft={(e: React.ChangeEvent<HTMLInputElement>) => (
-                setFilteredAircrafts(e.target.value),
-                localStorage.setItem("aircraftFilter", e.target.value)
-              )}
-              filterSystem={(e: React.ChangeEvent<HTMLInputElement>) => (
-                setFilteredSystems(e.target.value),
-                localStorage.setItem("systemFilter", e.target.value)
-              )}
-              filterPresetType={(e: React.ChangeEvent<HTMLInputElement>) => (
-                setFilteredPresetTypes(e.target.value),
-                localStorage.setItem("presetTypeFilter", e.target.value)
-              )}
-              resetFilter={() => (
-                setFilteredPresets(""),
-                setFilteredVendors(""),
-                setFilteredAircrafts(""),
-                setFilteredSystems(""),
-                setFilteredPresetTypes(""),
-                localStorage.setItem("searchFilter", ""),
-                localStorage.setItem("vendorFilter", ""),
-                localStorage.setItem("aircraftFilter", ""),
-                localStorage.setItem("systemFilter", ""),
-                localStorage.setItem("presetTypeFilter", ""),
-                setShowMyPresets(false),
-                setShowReportedPresets(false)
-              )}
-              filteredPresets={filteredPresets}
-              filteredVendors={filteredVendors}
-              filteredAircrafts={filteredAircrafts}
-              filteredSystems={filteredSystems}
-              filteredPresetTypes={filteredPresetTypes}
-              filteredItems={filteredItems}
-              setShowMyPresets={() => setShowMyPresets((prev) => !prev)}
-              setShowReportedPresets={() =>
-                setShowReportedPresets((prev) => !prev)
-              }
-              showMyPresets={showMyPresets}
-              showReportedPresets={showReportedPresets}
-            />
+            <div>
+              <div>
+                <div className="mb-3 rounded-lg bg-hhCard/40 py-5">
+                  <button
+                    onClick={() => {
+                      setSimType(
+                        simType === "msfs2020" ? "xplane" : "msfs2020"
+                      );
+                      setFilteredVendors("");
+                      setFilteredAircrafts("");
+                      setFilteredSystems("");
+                      setFilteredPresetTypes("");
+                      setFilteredCodeTypes("");
+                      localStorage.getItem("simType") === "msfs2020"
+                        ? localStorage.setItem("simType", "xplane")
+                        : localStorage.setItem("simType", "msfs2020");
+                    }}
+                    className={`grid ${
+                      filterOpen
+                        ? "w-full grid-cols-3 px-3 mb-3"
+                        : "w-full px-3 md:mb-3 md:ml-2 md:w-[50px] md:grid-rows-3 md:items-center md:justify-center"
+                    } items-center justify-items-center text-xl`}
+                  >
+                    <div
+                      className={`transition-all ${
+                        filterOpen
+                          ? "rotate-0"
+                          : "md:origin-center md:-rotate-90 md:whitespace-nowrap"
+                      } ${
+                        simType === "msfs2020" ? "font-bold" : "font-normal"
+                      }`}
+                    >
+                      MSFS 2020
+                    </div>
+                    <div
+                      className={`relative w-full ${
+                        filterOpen
+                          ? "flex h-fit"
+                          : "md:mt-3 md:flex md:h-full flex h-fit md:min-h-[90px] md:w-fit md:flex-col"
+                      }  items-center rounded-lg bg-hhBG transition-all ${
+                        simType === "msfs2020" ? "justify-start" : "justify-end"
+                      }`}
+                    >
+                      <motion.div
+                        transition={{
+                          type: "spring",
+                          stiffness: 700,
+                          damping: 50,
+                        }}
+                        layout
+                        className={`${
+                          filterOpen ? "h-4 w-10" : "h-4 w-10 md:h-5 md:w-4"
+                        } rounded-lg transition-colors ${
+                          simType === "msfs2020"
+                            ? "bg-[#bfcad1]"
+                            : "bg-[#0fb5e8]"
+                        }`}
+                      ></motion.div>
+                    </div>
+                    <div
+                      className={`transition-all ${
+                        filterOpen
+                          ? "rotate-0"
+                          : "md:origin-center md:-rotate-90 md:transform"
+                      } ${simType === "xplane" ? "font-bold" : "font-normal"}`}
+                    >
+                      X-Plane
+                    </div>
+                  </button>
+                  {filterOpen && (
+                    <div className={filterOpen ? "px-5" : "p-0"}>
+                      <div className="relative mx-auto h-12 w-4/6">
+                        <AnimatePresence>
+                          {simType === "xplane" && (
+                            <motion.div
+                              initial={{ opacity: 1 }}
+                              animate={{ opacity: 1 }}
+                              exit={{ opacity: 0 }}
+                              transition={{ duration: 0.2 }}
+                              className="absolute mx-auto h-12 w-full"
+                            >
+                              <Image
+                                loader={customLoader}
+                                objectFit="contain"
+                                priority
+                                src={"/images/X-Plane_12_logo.svg"}
+                                unoptimized
+                                layout="fill"
+                              />
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                        <AnimatePresence>
+                          {simType === "msfs2020" && (
+                            <motion.div
+                              initial={{ opacity: 1 }}
+                              animate={{ opacity: 1 }}
+                              exit={{ opacity: 0 }}
+                              transition={{ duration: 0.2 }}
+                              className="absolute mx-auto h-12 w-full"
+                            >
+                              <Image
+                                loader={customLoader}
+                                objectFit="contain"
+                                priority
+                                src={"/images/Microsoft_Flight_Simulator.png"}
+                                unoptimized
+                                layout="fill"
+                              />
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <PresetFilter
+                  filterOpen={filterOpen}
+                  setFilterOpen={() => setFilterOpen((prev) => !prev)}
+                  search={(e: React.ChangeEvent<HTMLInputElement>) => (
+                    setFilteredPresets(e.target.value),
+                    localStorage.setItem("searchFilter", e.target.value)
+                  )}
+                  filterVendor={(e: React.ChangeEvent<HTMLInputElement>) => (
+                    setFilteredVendors(e.target.value),
+                    localStorage.setItem("vendorFilter", e.target.value)
+                  )}
+                  filterAircraft={(e: React.ChangeEvent<HTMLInputElement>) => (
+                    setFilteredAircrafts(e.target.value),
+                    localStorage.setItem("aircraftFilter", e.target.value)
+                  )}
+                  filterSystem={(e: React.ChangeEvent<HTMLInputElement>) => (
+                    setFilteredSystems(e.target.value),
+                    localStorage.setItem("systemFilter", e.target.value)
+                  )}
+                  filterPresetType={(
+                    e: React.ChangeEvent<HTMLInputElement>
+                  ) => (
+                    setFilteredPresetTypes(e.target.value),
+                    localStorage.setItem("presetTypeFilter", e.target.value)
+                  )}
+                  filterCodeType={(e: React.ChangeEvent<HTMLInputElement>) => (
+                    setFilteredCodeTypes(e.target.value),
+                    localStorage.setItem("codeTypeFilter", e.target.value)
+                  )}
+                  resetFilter={() => (
+                    setFilteredPresets(""),
+                    setFilteredVendors(""),
+                    setFilteredAircrafts(""),
+                    setFilteredSystems(""),
+                    setFilteredPresetTypes(""),
+                    setFilteredCodeTypes(""),
+                    localStorage.setItem("searchFilter", ""),
+                    localStorage.setItem("vendorFilter", ""),
+                    localStorage.setItem("aircraftFilter", ""),
+                    localStorage.setItem("systemFilter", ""),
+                    localStorage.setItem("presetTypeFilter", ""),
+                    setShowMyPresets(false),
+                    setShowReportedPresets(false)
+                  )}
+                  filteredPresets={filteredPresets}
+                  filteredVendors={filteredVendors}
+                  filteredAircrafts={filteredAircrafts}
+                  filteredSystems={filteredSystems}
+                  filteredPresetTypes={filteredPresetTypes}
+                  filteredCodeTypes={filteredCodeTypes}
+                  filteredItems={filteredItems}
+                  setShowMyPresets={() => setShowMyPresets((prev) => !prev)}
+                  setShowReportedPresets={() =>
+                    setShowReportedPresets((prev) => !prev)
+                  }
+                  showMyPresets={showMyPresets}
+                  showReportedPresets={showReportedPresets}
+                />
+              </div>
+            </div>
             <PresetTable
               setAddModalOpen={() => setAddModalOpen(true)}
               setExportModalOpen={() => setExportModalOpen(true)}
@@ -361,18 +578,23 @@ const Presets: React.FC = () => {
               setAddModalOpen={async () => {
                 setAddModalOpen(false);
                 await last();
-                if ((await db.presets.count()).toFixed() === "0") {
-                  await fetchPresets();
+                if ((await db.presetsMsfs.count()).toFixed() === "0") {
+                  await fetchPresetsMsfs();
+                  await fetchPresetsXplane();
                 } else {
-                  setPresets(
-                    (await db.presets.orderBy("vendor").toArray()) || []
+                  setPresetsMsfs(
+                    (await db.presetsMsfs.orderBy("vendor").toArray()) || []
+                  );
+                  setPresetsXplane(
+                    (await db.presetsXplane.orderBy("vendor").toArray()) || []
                   );
                 }
                 if (
                   (localStorage.getItem("last") || "") >
                   (localStorage.getItem("fetched") || "")
                 ) {
-                  await fetchPresets();
+                  await fetchPresetsMsfs();
+                  await fetchPresetsXplane();
                 }
               }}
             />

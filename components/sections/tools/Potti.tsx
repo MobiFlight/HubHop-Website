@@ -251,20 +251,24 @@ const Potti: React.FC = () => {
             )}
             id="selectedPreset"
             defaultValue={""}
-            className="w-full rounded-lg bg-hhBG p-3"
+            className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 p-3"
           >
             <option value={""} disabled>
               Select preset
             </option>
             {presets.map((preset) => {
-              return <option key={preset.name}>{preset.name}</option>;
+              return (
+                <option className="bg-hhBG" key={preset.name}>
+                  {preset.name}
+                </option>
+              );
             })}
           </select>
           <div className="flex w-full flex-col items-center sm:flex-row sm:space-x-5">
             <div className="flex w-full flex-col">
               <label>Min device output range</label>
               <input
-                className="rounded-lg bg-hhBG p-3"
+                className="rounded-lg border border-hhOrange/50 bg-hhBG/50 p-3"
                 placeholder="0"
                 type="number"
                 onChange={(e) => setMindo(parseFloat(e.target.value))}
@@ -274,7 +278,7 @@ const Potti: React.FC = () => {
             <div className="flex w-full flex-col">
               <label>Max device output range</label>
               <input
-                className="rounded-lg bg-hhBG p-3"
+                className="rounded-lg border border-hhOrange/50 bg-hhBG/50 p-3"
                 placeholder="0"
                 type="number"
                 onChange={(e) => setMaxdo(parseFloat(e.target.value))}
@@ -309,20 +313,24 @@ const Potti: React.FC = () => {
               )
             )}
             defaultValue={""}
-            className="w-full rounded-lg bg-hhBG p-3"
+            className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 p-3"
           >
             <option value={""} disabled>
               Select preset
             </option>
             {eir_preset.map((preset) => {
-              return <option key={preset.name}>{preset.name}</option>;
+              return (
+                <option className="bg-hhBG" key={preset.name}>
+                  {preset.name}
+                </option>
+              );
             })}
           </select>
           <div className="flex w-full flex-col items-center sm:flex-row sm:space-x-5">
             <div className="flex w-full flex-col">
               <label>Min event input range</label>
               <input
-                className="rounded-lg bg-hhBG p-3"
+                className="rounded-lg border border-hhOrange/50 bg-hhBG/50 p-3"
                 placeholder="0"
                 type="number"
                 value={Mineir}
@@ -332,7 +340,7 @@ const Potti: React.FC = () => {
             <div className="flex w-full flex-col">
               <label>Max event input range</label>
               <input
-                className="rounded-lg bg-hhBG p-3"
+                className="rounded-lg border border-hhOrange/50 bg-hhBG/50 p-3"
                 placeholder="0"
                 type="number"
                 value={Maxeir}
@@ -362,7 +370,7 @@ const Potti: React.FC = () => {
       <textarea
         cols={30}
         rows={5}
-        className="w-full rounded-lg bg-hhBG p-3"
+        className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 p-3"
         value={
           Maxdo
             ? "@ " +

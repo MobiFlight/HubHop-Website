@@ -3,7 +3,6 @@ import { useState } from "react";
 import AddPresetButton from "../ui/addPreset/AddPresetButton";
 import ExportPresetsButton from "../ui/exportPresets/ExportPresetsButton";
 import PresetCard from "../ui/PresetCard";
-import { AuthenticatedTemplate } from "@azure/msal-react";
 import { msalInstance } from "../../../../services/msal";
 import {
   getUserSettings,
@@ -57,6 +56,20 @@ const PresetTable: React.FC<Props> = ({
       maxWidth: "10%",
       hide: "md",
     },
+    localStorage.getItem("simType") === "xplane"
+      ? {
+          name: "Code Type",
+          selector: (row: any) => row.codeType,
+          sortable: true,
+          maxWidth: "10%",
+          hide: "md",
+        }
+      : {
+          name: "",
+          selector: (row: any) => row.codeType,
+          sortable: true,
+          maxWidth: "0%",
+        },
     {
       name: "Preset name",
       selector: (row: any) => row.label,
@@ -125,6 +138,7 @@ const PresetTable: React.FC<Props> = ({
     const [aircraft, setAircraft] = useState(data.aircraft);
     const [system, setSystem] = useState(data.system);
     const [presetType, setPresetType] = useState(data.presetType);
+    const [codeType, setCodeType] = useState(data.codeType);
     const [label, setLabel] = useState(data.label);
     const [code, setCode] = useState(data.code);
     const [description, setDescription] = useState(data.description);
@@ -144,6 +158,7 @@ const PresetTable: React.FC<Props> = ({
           aircraft={aircraft}
           system={system}
           presetType={presetType}
+          codeType={codeType}
           code={code}
           description={description}
           data={data}
@@ -154,6 +169,7 @@ const PresetTable: React.FC<Props> = ({
           setAircraft={(e: any) => setAircraft(e.target.value)}
           setSystem={(e: any) => setSystem(e.target.value)}
           setPresetType={(e: any) => setPresetType(e.target.value)}
+          setCodeType={(e: any) => setCodeType(e.target.value)}
           setLabel={(e: any) => setLabel(e.target.value)}
           setCode={(e: any) => setCode(e.target.value)}
           setDescription={(e: any) => setDescription(e.target.value)}
@@ -196,7 +212,7 @@ const PresetTable: React.FC<Props> = ({
   const rowsPerPage = [15, 20, 30, 50, 100];
 
   return (
-    <div className="relative flex w-full flex-col rounded-lg bg-hhCard/30">
+    <div className="relative flex w-full flex-col rounded-lg bg-hhCard/40">
       <div className="absolute right-0 z-10 mr-2 mt-2 hidden items-center space-x-3 md:flex ">
         <div
           onClick={() => {

@@ -55,7 +55,7 @@ const PresetFilter: React.FC<Props> = ({
 
   return (
     <div
-      className={`sticky top-3 flex flex-col space-y-3 self-start rounded-lg bg-hhCard/30 p-3 transition-all ${
+      className={`sticky top-3 flex flex-col space-y-3 self-start rounded-lg bg-hhCard/40 p-3 transition-all ${
         filterOpen ? `w-full md:w-96` : `w-full md:w-16`
       }`}
     >
@@ -108,8 +108,8 @@ const PresetFilter: React.FC<Props> = ({
               value={filteredVendors}
             >
               <option value="">All Vendors</option>
-              {uniqueVendor.map((o) => (
-                <option key={o as any}>{o as String[]}</option>
+              {uniqueVendor.map((o, i) => (
+                <option key={i as any}>{o as String[]}</option>
               ))}
             </select>
           </div>
@@ -124,8 +124,8 @@ const PresetFilter: React.FC<Props> = ({
               value={filteredAircrafts}
             >
               <option value="">All Aircraft</option>
-              {uniqueAircraft.map((o) => (
-                <option key={o as any}>{o as String[]}</option>
+              {uniqueAircraft.map((o, i) => (
+                <option key={i as any}>{o as String[]}</option>
               ))}
             </select>
           </div>
@@ -140,8 +140,8 @@ const PresetFilter: React.FC<Props> = ({
               value={filteredSystems}
             >
               <option value="">All Systems</option>
-              {uniqueSystem.map((o) => (
-                <option key={o as any}>{o as String[]}</option>
+              {uniqueSystem.map((o, i) => (
+                <option key={i as any}>{o as String[]}</option>
               ))}
             </select>
           </div>
@@ -159,8 +159,8 @@ const PresetFilter: React.FC<Props> = ({
               value={filteredPresetTypes}
             >
               <option value="">All Inputs/Outputs</option>
-              {uniqueType.map((o) => (
-                <option key={o as any}>{o as String[]}</option>
+              {uniqueType.map((o, i) => (
+                <option key={i as any}>{o as String[]}</option>
               ))}
             </select>
           </div>

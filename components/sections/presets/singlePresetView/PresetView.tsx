@@ -34,6 +34,7 @@ const PresetView: React.FC<Props> = ({
   const [aircraft, setAircraft] = useState("");
   const [system, setSystem] = useState("");
   const [presetType, setPresetType] = useState("");
+  const [codeType, setCodeType] = useState("");
   const [label, setLabel] = useState("");
   const [code, setCode] = useState("");
   const [description, setDescription] = useState("");
@@ -53,6 +54,7 @@ const PresetView: React.FC<Props> = ({
       setAircraft(preset[0].aircraft);
       setSystem(preset[0].system);
       setPresetType(preset[0].presetType);
+      setCodeType(preset[0].codeType ? preset[0].codeType : "");
       setLabel(preset[0].label);
       setCode(preset[0].code);
       setDescription(preset[0].description);
@@ -101,6 +103,7 @@ const PresetView: React.FC<Props> = ({
           aircraft={aircraft}
           system={system}
           presetType={presetType}
+          codeType={codeType}
           code={code}
           description={description}
           loading={loading}
@@ -112,6 +115,7 @@ const PresetView: React.FC<Props> = ({
           setAircraft={(e: any) => setAircraft(e.target.value)}
           setSystem={(e: any) => setSystem(e.target.value)}
           setPresetType={(e: any) => setPresetType(e.target.value)}
+          setCodeType={(e: any) => setCodeType(e.target.value)}
           setLabel={(e: any) => setLabel(e.target.value)}
           setCode={(e: any) => setCode(e.target.value)}
           setDescription={(e: any) => setDescription(e.target.value)}

@@ -26,6 +26,7 @@ interface Props {
   aircraft: string;
   system: string;
   presetType: string;
+  codeType: string;
   code: string;
   description: string;
   loading?: any;
@@ -35,6 +36,7 @@ interface Props {
   setSystem: Function;
   setPresetType: Function;
   setLabel: Function;
+  setCodeType: Function;
   setCode: Function;
   setDescription: Function;
   showingHistory: boolean;
@@ -58,6 +60,7 @@ const PresetCard: React.FC<Props> = ({
   aircraft,
   system,
   presetType,
+  codeType,
   label,
   code,
   description,
@@ -67,6 +70,7 @@ const PresetCard: React.FC<Props> = ({
   setAircraft,
   setSystem,
   setPresetType,
+  setCodeType,
   setLabel,
   setCode,
   setDescription,
@@ -88,35 +92,69 @@ const PresetCard: React.FC<Props> = ({
   const [deleteTooltip, setDeleteTooltip] = useState(false);
   const [revertObject, setRevertObject] = useState({});
   const [revertModal, setRevertModal] = useState(false);
-
-  console.log(revertObject);
+  const [simType, setSimType] = useState(
+    localStorage.getItem("simType") === null
+      ? localStorage.setItem("simType", "msfs2020")
+      : localStorage.getItem("simType")
+  );
 
   async function editPreset() {
     setEditButton(true);
-    const url = process.env.NEXT_PUBLIC_HUBHOP_API_BASEURL + "/presets/" + id;
+    const url =
+      process.env.NEXT_PUBLIC_HUBHOP_API_BASEURL +
+      "/" +
+      simType +
+      "/presets/" +
+      id;
 
     // post body data
-    const preset = {
-      path:
-        vendor + "." + aircraft + "." + system + "." + presetType + "." + label,
-      vendor: vendor,
-      aircraft: aircraft,
-      system: system,
-      code: code,
-      label: label,
-      presetType: presetType,
-      status: "Updated",
-      createdDate: new Date().toUTCString(),
-      author: author,
-      updatedBy: localStorage.getItem("username"),
-      description: description,
-      version: version,
-    };
+    const preset =
+      simType === "msfs2020"
+        ? {
+            path:
+              vendor +
+              "." +
+              aircraft +
+              "." +
+              system +
+              "." +
+              presetType +
+              "." +
+              label,
+            vendor: vendor,
+            aircraft: aircraft,
+            system: system,
+            code: code,
+            label: label,
+            presetType: presetType,
+            status: "Updated",
+            createdDate: new Date().toUTCString(),
+            author: author,
+            updatedBy: localStorage.getItem("username"),
+            description: description,
+            version: version,
+          }
+        : {
+            vendor: vendor,
+            aircraft: aircraft,
+            system: system,
+            label: label,
+            code: code,
+            presetType: presetType,
+            codeType: codeType,
+            status: "Updated",
+            createdDate: new Date().toUTCString(),
+            author: author,
+            updatedBy: localStorage.getItem("username"),
+            description: description,
+            version: version,
+          };
 
     // request options
-    const options = {
+    const options: any = {
       method: "PUT",
       body: JSON.stringify(preset),
+      redirect: "follow",
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + localStorage.getItem("accessToken"),
@@ -128,27 +166,50 @@ const PresetCard: React.FC<Props> = ({
       if (res.status != 201) {
         alert("Error occured");
       }
-      const localStoragePresets = (await db.presets.toArray()) || [];
+      const localStoragePresets =
+        simType === "msfs2020"
+          ? (await db.presetsMsfs.toArray()) || []
+          : (await db.presetsXplane.toArray()) || [];
+
       let result = localStoragePresets.map((x: any) =>
-        x.id === id
+        simType === "msfs2020"
+          ? x.id === id
+            ? {
+                ...x,
+                path:
+                  vendor +
+                  "." +
+                  aircraft +
+                  "." +
+                  system +
+                  "." +
+                  presetType +
+                  "." +
+                  label,
+                vendor: vendor,
+                aircraft: aircraft,
+                system: system,
+                code: code,
+                label: label,
+                presetType: presetType,
+                status: "Updated",
+                createdDate: new Date().toUTCString(),
+                author: author,
+                updatedBy: localStorage.getItem("username"),
+                description: description,
+                version: version + 1,
+              }
+            : x
+          : x.id === id
           ? {
               ...x,
-              path:
-                vendor +
-                "." +
-                aircraft +
-                "." +
-                system +
-                "." +
-                presetType +
-                "." +
-                label,
               vendor: vendor,
               aircraft: aircraft,
               system: system,
               code: code,
               label: label,
               presetType: presetType,
+              codeType: codeType,
               status: "Updated",
               createdDate: new Date().toUTCString(),
               author: author,
@@ -158,21 +219,35 @@ const PresetCard: React.FC<Props> = ({
             }
           : x
       );
-      await db.presets.clear().then(() => db.presets.bulkAdd(result));
+
+      simType === "msfs2020"
+        ? await db.presetsMsfs
+            .clear()
+            .then(() => db.presetsMsfs.bulkAdd(result))
+        : await db.presetsXplane
+            .clear()
+            .then(() => db.presetsXplane.bulkAdd(result));
       setEditButton(false);
       savedToast();
     });
   }
+
   async function revertPreset() {
-    const url = process.env.NEXT_PUBLIC_HUBHOP_API_BASEURL + "/presets/" + id;
+    const url =
+      process.env.NEXT_PUBLIC_HUBHOP_API_BASEURL +
+      "/" +
+      simType +
+      "/presets/" +
+      id;
 
     // post body data
     const preset = revertObject;
 
     // request options
-    const options = {
+    const options: any = {
       method: "PUT",
       body: JSON.stringify(preset),
+      redirect: "follow",
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + localStorage.getItem("accessToken"),
@@ -184,7 +259,11 @@ const PresetCard: React.FC<Props> = ({
       if (res.status != 201) {
         alert("Error occured");
       }
-      const localStoragePresets = (await db.presets.toArray()) || [];
+      const localStoragePresets =
+        simType === "msfs2020"
+          ? (await db.presetsMsfs.toArray()) || []
+          : (await db.presetsXplane.toArray()) || [];
+
       let result = localStoragePresets.map((x: any) =>
         x.id === id
           ? {
@@ -193,9 +272,15 @@ const PresetCard: React.FC<Props> = ({
             }
           : x
       );
-      await db.presets.clear().then(() => db.presets.bulkAdd(result));
+      simType === "msfs2020"
+        ? await db.presetsMsfs
+            .clear()
+            .then(() => db.presetsMsfs.bulkAdd(result))
+        : await db.presetsXplane
+            .clear()
+            .then(() => db.presetsXplane.bulkAdd(result));
       savedToast();
-      setRevertModal(false)
+      setRevertModal(false);
     });
   }
 
@@ -206,7 +291,7 @@ const PresetCard: React.FC<Props> = ({
           card && "container mx-auto mt-5 min-h-screen"
         }`}
       >
-        <div className={`${card && "mb-5 rounded-lg bg-hhCard/30"}`}>
+        <div className={`${card && "mb-5 rounded-lg bg-hhCard/40"}`}>
           {card && (
             <h2 className={`ml-5 pt-3 font-bold text-hhOrange text-${text}`}>
               {label}
@@ -256,6 +341,14 @@ const PresetCard: React.FC<Props> = ({
                 edit={edit}
                 inputHandler={(e: any) => setPresetType(e)}
               />
+              {localStorage.getItem("simType") === "xplane" && (
+                <PresetPreviewLabel
+                  title={"Code Type"}
+                  editData={codeType}
+                  edit={edit}
+                  inputHandler={(e: any) => setCodeType(e)}
+                />
+              )}
             </div>
             <div className="flex w-full flex-col space-y-2 lg:w-4/6">
               <PresetPreviewLabel
@@ -369,7 +462,7 @@ const PresetCard: React.FC<Props> = ({
             </div>
           </div>
         </div>
-        {showHistory && (
+        {simType === "msfs2020" && showHistory && (
           <div className="flex flex-col">
             {version > "1" ? (
               <PresetHistoryList
@@ -380,7 +473,7 @@ const PresetCard: React.FC<Props> = ({
                 )}
               />
             ) : (
-              <div className="rounded-lg bg-hhCard/30 p-3 text-xl text-hhText/50 transition-all">
+              <div className="rounded-lg bg-hhCard/40 p-3 text-xl text-hhText/50 transition-all">
                 No History available
               </div>
             )}

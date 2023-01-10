@@ -305,9 +305,9 @@ const Navbar: React.FC = () => {
             onClick={openMobileMenu}
             className="flex items-center justify-center text-4xl xl:hidden"
           >
-            <button>
+            <div>
               {mobileMenu ? <MdOutlineClose /> : <AiOutlineMenu />}
-            </button>
+            </div>
           </button>
         </div>
       </nav>

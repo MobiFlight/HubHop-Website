@@ -203,7 +203,7 @@ const TableStats: React.FC<Props> = ({ data, added }) => {
   };
 
   return (
-    <div className="relative flex w-full flex-col rounded-lg bg-hhCard/30">
+    <div className="relative flex w-full flex-col rounded-lg bg-hhCard/40">
       <DataTable
         columns={columns}
         data={data}

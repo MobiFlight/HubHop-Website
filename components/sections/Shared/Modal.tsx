@@ -25,9 +25,11 @@ const Modal: React.FC<Props> = ({
         } top-0 left-0 z-50 flex h-full w-full items-center justify-center bg-black/60 backdrop-blur-sm`}
       >
         <div
-          className={`mx-auto flex flex-col rounded-lg bg-hhCard ${
-            height ? "min-h-[50vh]" : "h-fit"
-          }`}
+          className={`mx-auto flex flex-col rounded-lg ${
+            localStorage.getItem("simType") === "msfs2020"
+              ? "bg-hhCard"
+              : "bg-[#103c49]"
+          } ${height ? "min-h-[50vh]" : "h-fit"}`}
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex items-center justify-between rounded-t-lg bg-hhBG/50 px-5 py-2">

@@ -36,7 +36,7 @@ const PresetHistoryList: React.FC<Props> = ({
   const [historyOpen, setHistoryOpen] = useState(false);
 
   return (
-    <div className="rounded-lg bg-hhCard/30 transition-all">
+    <div className="rounded-lg bg-hhCard/40 transition-all">
       <button
         onClick={() => setHistoryOpen((prev) => !prev)}
         className="flex w-full items-center justify-between p-3 text-left transition-all hover:text-hhOrange"

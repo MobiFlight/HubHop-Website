@@ -1,3 +1,4 @@
+import { useLiveQuery } from "dexie-react-hooks";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -7,6 +8,12 @@ import Toast from "../components/sections/Shared/Toast";
 import { db } from "../services/db";
 
 const Preset: React.FC = () => {
+  useEffect(() => {
+    localStorage.getItem("simType") === "msfs2020"
+      ? document.body.classList.remove("xplane")
+      : document.body.classList.add("xplane");
+  }, []);
+
   const router = useRouter();
   const { id } = router.query;
   const [presets, setPresets] = useState<any[]>([]);
@@ -16,62 +23,84 @@ const Preset: React.FC = () => {
   const [reportedToast, setReportedToast] = useState(false);
   const [savedToast, setSavedToast] = useState(false);
   const [fixedToast, setFixedToast] = useState(false);
+  const [presetsMsfs, setPresetsMsfs] = useState<any[]>([]);
+  const [presetsXplane, setPresetsXplane] = useState<any[]>([]);
 
   const fetchPresets = async () => {
     const res = await fetch(
-      "https://hubhop-api-mgtm.azure-api.net/api/v1/presets"
+      "https://hubhop-api-mgtm.azure-api.net/api/v1" +
+        "/" +
+        localStorage.getItem("simType") +
+        "/presets",
+      { redirect: "follow" }
     );
     const fetchedPresets = await res.json();
-    const today = new Date();
-    try {
-      await db.presets.bulkAdd(fetchedPresets);
-    } catch (error) {}
-    return (
-      localStorage.setItem("fetched", today.toISOString()),
-      // sessionStorage.setItem("presets", JSON.stringify(fetchedPresets)),
-      setPresets(fetchedPresets),
-      console.log("Fetched single preset")
-    );
+    setPresets(fetchedPresets);
+    // const today = new Date();
+    // try {
+    //   await db.presets.bulkAdd(fetchedPresets);
+    // } catch (error) {}
+    // return (
+    //   localStorage.setItem("fetched", today.toISOString()),
+    //   // sessionStorage.setItem("presets", JSON.stringify(fetchedPresets)),
+    //   setPresets(fetchedPresets),
+    //   console.log("Fetched single preset")
+    // );
   };
 
   const fetchHistory = async () => {
     const res = await fetch(
-      `https://hubhop-api-mgtm.azure-api.net/api/v1/history/presets/${id}`
+      `https://hubhop-api-mgtm.azure-api.net/api/v1/msfs2020/history/presets/${id}`,
+      { redirect: "follow" }
     );
     const fetchedHistory = await res.json();
     return setHistory(fetchedHistory[0].history);
   };
+
+  const xplanePresets = useLiveQuery(() => db.presetsXplane.toArray());
+  const msfsPresets = useLiveQuery(() => db.presetsMsfs.toArray());
+
+  useEffect(() => {
+    if (!xplanePresets) return null || undefined;
+    if (!msfsPresets) return null || undefined;
+    setPresetsXplane(xplanePresets);
+    setPresetsMsfs(msfsPresets);
+    setPresets(
+      localStorage.getItem("simType") === "msfs2020"
+        ? presetsMsfs
+        : presetsXplane
+    );
+  }, [
+    localStorage.getItem("simType"),
+    presetsMsfs,
+    presetsXplane,
+    xplanePresets,
+    msfsPresets,
+  ]);
 
   useEffect(() => {
     async function fetchHistoryRoutine() {
       if (!id) {
         return;
       }
-      if (db.presets) {
-        setLoading(true);
-        setPresets((await db.presets.toArray()) || []);
-        await fetchHistory();
-        setLoading(false);
-      } else {
-        setLoading(true);
-        await fetchPresets();
-        await fetchHistory();
-        setLoading(false);
-      }
+      fetchPresets();
+      localStorage.getItem("simType") === "msfs2020"
+        ? (setLoading(true), await fetchHistory(), setLoading(false))
+        : null;
     }
     fetchHistoryRoutine();
     return;
   }, [id]);
 
-  useEffect(() => {
-    async function getPresetsFromDexie() {
-      if (db.presets) {
-        setPresets((await db.presets.toArray()) || []);
-      }
-    }
-    getPresetsFromDexie();
-    return;
-  }, [db.presets]);
+  // useEffect(() => {
+  //   async function getPresetsFromDexie() {
+  //     if (db.presets) {
+  //       setPresets((await db.presets.toArray()) || []);
+  //     }
+  //   }
+  //   getPresetsFromDexie();
+  //   return;
+  // }, [db.presets]);
 
   const filterPreset = presets.filter((singlePreset) => {
     if (singlePreset.id === id) {
