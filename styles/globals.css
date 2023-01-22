@@ -7,36 +7,36 @@
     font-family: Assistant;
     src: local("Assistant"),
       url(../public/fonts/Assistant-VariableFont_wght.ttf);
-    font-weight: 100 900;
+    font-weight: 100 900 !important;
   }
 }
 @layer utilities {
   .font-thin {
-    font-variation-settings: "wght" 100;
+    font-variation-settings: "wght" 100 !important;
   }
   .font-extralight {
-    font-variation-settings: "wght" 200;
+    font-variation-settings: "wght" 200 !important;
   }
   .font-light {
-    font-variation-settings: "wght" 300;
+    font-variation-settings: "wght" 300 !important;
   }
   .font-normal {
-    font-variation-settings: "wght" 400;
+    font-variation-settings: "wght" 400 !important;
   }
   .font-medium {
-    font-variation-settings: "wght" 500;
+    font-variation-settings: "wght" 500 !important;
   }
   .font-semibold {
-    font-variation-settings: "wght" 600;
+    font-variation-settings: "wght" 600 !important;
   }
   .font-bold {
-    font-variation-settings: "wght" 700;
+    font-variation-settings: "wght" 700 !important;
   }
   .font-extrabold {
-    font-variation-settings: "wght" 800;
+    font-variation-settings: "wght" 800 !important;
   }
   .font-black {
-    font-variation-settings: "wght" 900;
+    font-variation-settings: "wght" 900 !important;
   }
 }
 
