@@ -10,7 +10,7 @@ const OpenPresetButton: React.FC<Props> = ({ id }) => {
     <Link
       href={{
         pathname: `/preset`,
-        query: {id: id}
+        query: { simType: localStorage.getItem("simType"), id: id },
       }}
     >
       <a

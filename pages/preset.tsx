@@ -15,7 +15,7 @@ const Preset: React.FC = () => {
   }, []);
 
   const router = useRouter();
-  const { id } = router.query;
+  const { id, simType } = router.query;
   const [presets, setPresets] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [history, setHistory] = useState([]);
@@ -26,11 +26,16 @@ const Preset: React.FC = () => {
   const [presetsMsfs, setPresetsMsfs] = useState<any[]>([]);
   const [presetsXplane, setPresetsXplane] = useState<any[]>([]);
 
+  window.location.href.includes("msfs2020")
+    ? localStorage.setItem("simType", "msfs2020")
+    : localStorage.setItem("simType", "xplane");
+
   const fetchPresets = async () => {
     const res = await fetch(
       "https://hubhop-api-mgtm.azure-api.net/api/v1" +
         "/" +
-        localStorage.getItem("simType") +
+        // localStorage.getItem("simType") +
+        simType +
         "/presets",
       { redirect: "follow" }
     );
@@ -84,7 +89,7 @@ const Preset: React.FC = () => {
         return;
       }
       fetchPresets();
-      localStorage.getItem("simType") === "msfs2020"
+      simType === "msfs2020"
         ? (setLoading(true), await fetchHistory(), setLoading(false))
         : null;
     }
@@ -132,6 +137,12 @@ const Preset: React.FC = () => {
     }, 5000);
   }
 
+  setTimeout(() => {
+    
+    
+  }, 5000);
+
+  
   return (
     <>
       <PresetView
