@@ -65,6 +65,7 @@ const Presets: React.FC = () => {
   );
   const [presets, setPresets] = useState<any[]>([]);
   const [filterOpen, setFilterOpen] = useState(true);
+  const [loadingStatus, setLoadingStatus] = useState("");
 
   const last = async () => {
     const resMsfs = await fetch(
@@ -134,24 +135,33 @@ const Presets: React.FC = () => {
   useEffect(() => {
     async function fetchRoutine() {
       setLoading(true);
+      setLoadingStatus("Checking for updates");
       await last();
-      setLoading(false);
+      // setLoading(false);
+      setLoadingStatus("");
       if (
         (await db.presetsMsfs.count()).toFixed() === "0" ||
         (await db.presetsXplane.count()).toFixed() === "0"
       ) {
-        setLoading(true);
+        // setLoading(true);
+        setLoadingStatus("Downloading MSFS Presets");
         await fetchPresetsMsfs();
+        setLoadingStatus("Downloading X-Plane Presets");
         await fetchPresetsXplane();
-        setLoading(false);
+        // setLoading(false);
+        setLoadingStatus("");
       } else {
         // setLoading(true);
+        setLoadingStatus("Loading MSFS Presets");
         setPresetsMsfs(
           (await db.presetsMsfs.orderBy("vendor").toArray()) || []
         );
+        setLoadingStatus("");
+        setLoadingStatus("Loading X-Plane Presets");
         setPresetsXplane(
           (await db.presetsXplane.orderBy("vendor").toArray()) || []
         );
+        setLoadingStatus("");
         // setLoading(false);
       }
 
@@ -159,18 +169,23 @@ const Presets: React.FC = () => {
         (localStorage.getItem("lastMsfs") || "") >
         (localStorage.getItem("fetchedMsfs") || "")
       ) {
-        setLoading(true);
+        // setLoading(true);
+        setLoadingStatus("Downloading MSFS Presets");
         await fetchPresetsMsfs();
-        setLoading(false);
+        // setLoading(false);
+        setLoadingStatus("");
       }
       if (
         (localStorage.getItem("lastXplane") || "") >
         (localStorage.getItem("fetchedXplane") || "")
       ) {
-        setLoading(true);
+        // setLoading(true);
+        setLoadingStatus("Downloading X-Plane Presets");
         await fetchPresetsXplane();
-        setLoading(false);
+        // setLoading(false);
+        setLoadingStatus("");
       }
+      setLoading(false);
     }
     fetchRoutine();
   }, [addModalOpen]);
@@ -351,7 +366,9 @@ const Presets: React.FC = () => {
           <div className="animate-spin text-6xl text-hhOrange">
             <AiOutlineLoading />
           </div>
-          <p className="mt-5">Loading Presets</p>
+          <p className="mt-5 font-semibold">
+            {loadingStatus != "" ? loadingStatus : "Loading Presets"}
+          </p>
         </div>
       ) : presets.length ? (
         <div className="min-h-screen">
@@ -375,7 +392,7 @@ const Presets: React.FC = () => {
                     }}
                     className={`grid ${
                       filterOpen
-                        ? "w-full grid-cols-3 px-3 mb-3"
+                        ? "mb-3 w-full grid-cols-3 px-3"
                         : "w-full px-3 md:mb-3 md:ml-2 md:w-[50px] md:grid-rows-3 md:items-center md:justify-center"
                     } items-center justify-items-center text-xl`}
                   >
@@ -394,7 +411,7 @@ const Presets: React.FC = () => {
                       className={`relative w-full ${
                         filterOpen
                           ? "flex h-fit"
-                          : "md:mt-3 md:flex md:h-full flex h-fit md:min-h-[90px] md:w-fit md:flex-col"
+                          : "flex h-fit md:mt-3 md:flex md:h-full md:min-h-[90px] md:w-fit md:flex-col"
                       }  items-center rounded-lg bg-hhBG transition-all ${
                         simType === "msfs2020" ? "justify-start" : "justify-end"
                       }`}
