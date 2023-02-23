@@ -39,7 +39,7 @@ const Potti: React.FC = () => {
       name: "Com volume",
       min: "0",
       max: "100",
-      event: "COM1_VOL_SET",
+      event: "COM1_VOLUME_SET",
     },
     {
       name: "Mixture",
