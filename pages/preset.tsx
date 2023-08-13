@@ -6,6 +6,10 @@ import { BsCheck2Square } from "react-icons/bs";
 import PresetView from "../components/sections/presets/singlePresetView/PresetView";
 import Toast from "../components/sections/Shared/Toast";
 import { db } from "../services/db";
+import { ToastContainer, toast } from "react-toastify";
+
+import "react-toastify/dist/ReactToastify.css";
+import { IoSaveOutline } from "react-icons/io5";
 
 const Preset: React.FC = () => {
   useEffect(() => {
@@ -29,6 +33,10 @@ const Preset: React.FC = () => {
   window.location.href.includes("msfs2020")
     ? localStorage.setItem("simType", "msfs2020")
     : localStorage.setItem("simType", "xplane");
+
+  useEffect(() => {
+    savedToast == true ? toast("Saved") : null;
+  }, [savedToast]);
 
   const fetchPresets = async () => {
     const res = await fetch(
@@ -137,12 +145,8 @@ const Preset: React.FC = () => {
     }, 5000);
   }
 
-  setTimeout(() => {
-    
-    
-  }, 5000);
+  setTimeout(() => {}, 5000);
 
-  
   return (
     <>
       <PresetView
@@ -202,7 +206,22 @@ const Preset: React.FC = () => {
           </motion.div>
         )}
       </AnimatePresence>
-      <AnimatePresence>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={true}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        toastClassName={() => "bg-hhOrange text-black font-bold rounded-lg p-1 flex"}
+        icon={<IoSaveOutline size={"2rem"} />}
+      />
+
+      {/* <AnimatePresence>
         {savedToast && (
           <motion.div
             initial={{ opacity: 0 }}
@@ -217,7 +236,7 @@ const Preset: React.FC = () => {
             </Toast>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
     </>
   );
 };

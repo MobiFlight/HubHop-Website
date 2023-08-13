@@ -12,6 +12,9 @@ import { msalInstance } from "../../../services/msal";
 import { db } from "../../../services/db";
 import Image from "next/image";
 import { useLiveQuery } from "dexie-react-hooks";
+import { ToastContainer, toast } from "react-toastify";
+
+import 'react-toastify/dist/ReactToastify.css';
 
 const Presets: React.FC = () => {
   const customLoader = ({ src }: any) => {
@@ -131,6 +134,10 @@ const Presets: React.FC = () => {
       setPresetsXplane(fetchedPresets)
     );
   };
+
+  useEffect(() => {
+    savedToast == true ? toast("Saved") : null
+  }, [])
 
   useEffect(() => {
     async function fetchRoutine() {
@@ -666,7 +673,9 @@ const Presets: React.FC = () => {
           </motion.div>
         )}
       </AnimatePresence>
-      <AnimatePresence>
+      <ToastContainer />
+
+      {/* <AnimatePresence>
         {savedToast && (
           <motion.div
             initial={{ opacity: 0 }}
@@ -681,7 +690,7 @@ const Presets: React.FC = () => {
             </Toast>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
     </div>
   );
 };
