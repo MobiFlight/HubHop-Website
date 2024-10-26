@@ -124,16 +124,40 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
   });
 
   const uniqueVendor = Array.from(
-    new Set(filteredInputTypeList.map((item: any) => item.vendor).sort())
+    new Set(
+      filteredInputTypeList
+        .map((item: any) => item.vendor)
+        .sort((a: any, b: any) =>
+          a.toLowerCase().localeCompare(b.toLowerCase())
+        )
+    )
   );
   const uniqueAircraft = Array.from(
-    new Set(filteredInputTypeList.map((item: any) => item.aircraft).sort())
+    new Set(
+      filteredInputTypeList
+        .map((item: any) => item.aircraft)
+        .sort((a: any, b: any) =>
+          a.toLowerCase().localeCompare(b.toLowerCase())
+        )
+    )
   );
   const uniqueSystem = Array.from(
-    new Set(filteredInputTypeList.map((item: any) => item.system).sort())
+    new Set(
+      filteredInputTypeList
+        .map((item: any) => item.system)
+        .sort((a: any, b: any) =>
+          a.toLowerCase().localeCompare(b.toLowerCase())
+        )
+    )
   );
   const uniqueType = Array.from(
-    new Set(filteredInputTypeList.map((item: any) => item.presetType).sort())
+    new Set(
+      filteredInputTypeList
+        .map((item: any) => item.presetType)
+        .sort((a: any, b: any) =>
+          a.toLowerCase().localeCompare(b.toLowerCase())
+        )
+    )
   );
 
   const {
@@ -281,12 +305,19 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                       {addVendor ? (
                         <input
                           placeholder="Provide a vendor name"
-                          type={"text"}
+                          type="text"
                           className={`w-full rounded-lg border bg-hhBG/75 px-3 py-1 text-hhText ${
                             errors.addVendors
                               ? "border-red-500"
                               : "border-hhOrange/75"
                           }`}
+                          onInput={(e) => {
+                            e.currentTarget.value =
+                              e.currentTarget.value.replace(
+                                /[^a-zA-Z\s/]/g,
+                                ""
+                              );
+                          }}
                           {...register("addVendors", {
                             required: "Provide a vendor name",
                           })}
@@ -306,7 +337,11 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                           <option value="">All Vendors</option>
                           {Array.from(
                             new Set(
-                              presets.map((item: any) => item.vendor).sort()
+                              presets
+                                .map((item: any) => item.vendor)
+                                .sort((a: any, b: any) =>
+                                  a.toLowerCase().localeCompare(b.toLowerCase())
+                                )
                             )
                           ).map((o, i) => (
                             <option key={i as any}>{o as String[]}</option>
@@ -348,6 +383,12 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                             ? "border-red-500"
                             : "border-hhOrange/75"
                         }`}
+                        onInput={(e) => {
+                          e.currentTarget.value = e.currentTarget.value.replace(
+                            /[^a-zA-Z\s/]/g,
+                            ""
+                          );
+                        }}
                         {...register("addAircrafts", {
                           required: "Provide an aircraft name",
                         })}
@@ -367,7 +408,11 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                         <option value="">All Aircraft</option>
                         {Array.from(
                           new Set(
-                            presets.map((item: any) => item.aircraft).sort()
+                            presets
+                              .map((item: any) => item.aircraft)
+                              .sort((a: any, b: any) =>
+                                a.toLowerCase().localeCompare(b.toLowerCase())
+                              )
                           )
                         ).map((o, i) => (
                           <option key={i as any}>{o as String[]}</option>
@@ -428,7 +473,11 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                         <option value="">All Systems</option>
                         {Array.from(
                           new Set(
-                            presets.map((item: any) => item.system).sort()
+                            presets
+                              .map((item: any) => item.system)
+                              .sort((a: any, b: any) =>
+                                a.toLowerCase().localeCompare(b.toLowerCase())
+                              )
                           )
                         ).map((o, i) => (
                           <option key={i as any}>{o as String[]}</option>
@@ -499,7 +548,11 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                         <option value="">All Inputs/Outputs</option>
                         {Array.from(
                           new Set(
-                            presets.map((item: any) => item.presetType).sort()
+                            presets
+                              .map((item: any) => item.presetType)
+                              .sort((a: any, b: any) =>
+                                a.toLowerCase().localeCompare(b.toLowerCase())
+                              )
                           )
                         ).map((o, i) => (
                           <option key={i as any}>{o as String[]}</option>
@@ -559,7 +612,13 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                             <option value="">All Code Types</option>
                             {Array.from(
                               new Set(
-                                presets.map((item: any) => item.codeType).sort()
+                                presets
+                                  .map((item: any) => item.codeType)
+                                  .sort((a: any, b: any) =>
+                                    a
+                                      .toLowerCase()
+                                      .localeCompare(b.toLowerCase())
+                                  )
                               )
                             ).map((o, i) => (
                               <option key={i as any}>{o as String[]}</option>
@@ -606,6 +665,11 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                       errors.label ? "border-red-500" : "border-hhOrange/75"
                     }`}
                     placeholder="Alternator 1 On"
+                    onInput={(e) => {
+                      e.currentTarget.value = e.currentTarget.value
+                        .replace(/[^a-zA-Z\s/]/g, "") // Allow only letters, spaces, and slashes
+                        .replace(/^\s+|\s+$/g, ""); // Remove leading and trailing spaces
+                    }}
                     {...register("label", { required: "Name required" })}
                   />
                   <p className="font-semibold text-red-500">
@@ -621,6 +685,12 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                     className={`w-full rounded-lg border bg-hhBG/75 px-3 py-1 text-hhText ${
                       errors.code ? "border-red-500" : "border-hhOrange/75"
                     }`}
+                    onInput={(e) => {
+                      e.currentTarget.value = e.currentTarget.value.replace(
+                        /[^a-zA-Z0-9\s()+\-*/:<>]/g,
+                        ""
+                      );
+                    }}
                     cols={100}
                     rows={5}
                     placeholder={"(>L:somecode) (>K:somecodeToo) * near"}
@@ -658,6 +728,7 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                   ) : filteredItems.length <= 10 ? (
                     filteredItems.map((preset: any) => (
                       <Link
+                        legacyBehavior
                         href={{
                           pathname: `/preset`,
                           query: { id: preset.id },
@@ -666,7 +737,7 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                       >
                         <a
                           target={"_blank"}
-                          className="flex items-center justify-between space-x-1 rounded-lg bg-hhCard/75 py-0.5 px-3 transition-all hover:bg-hhOrange hover:text-hhBG"
+                          className="flex items-center justify-between space-x-1 rounded-lg bg-hhCard/75 px-3 py-0.5 transition-all hover:bg-hhOrange hover:text-hhBG"
                         >
                           <p className="w-11/12 truncate hover:text-clip">
                             {preset.label}
@@ -729,7 +800,10 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
             bulk-upload channel.
           </p>
           <div className="mt-2 flex flex-col items-start space-y-2">
-            <Link href={"../../../../../../import_events_yourName.xlsx"}>
+            <Link
+              legacyBehavior
+              href={"../../../../../../import_events_yourName.xlsx"}
+            >
               <a>
                 <ButtonOrange>
                   Download import-file (MS Excel Required)
@@ -737,6 +811,7 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
               </a>
             </Link>
             <Link
+              legacyBehavior
               href={
                 "https://docs.google.com/spreadsheets/d/1HHDvuA1rgdLZvdy0MTXB3QNIxba4iZZUcit8TQysD_k/edit#gid=664333323"
               }

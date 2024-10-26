@@ -56,24 +56,54 @@ const PresetFilter: React.FC<Props> = ({
   setShowReportedPresets,
   setShowMyPresets,
   filterOpen,
-  setFilterOpen
+  setFilterOpen,
 }) => {
   const [myPresetTooltip, setMyPresetTooltip] = useState(false);
 
   const uniqueVendor = Array.from(
-    new Set(filteredItems.map((item: any) => item.vendor).sort())
+    new Set(
+      filteredItems
+        .map((item: any) => item.vendor)
+        .sort((a: any, b: any) =>
+          a.toLowerCase().localeCompare(b.toLowerCase())
+        )
+    )
   );
   const uniqueAircraft = Array.from(
-    new Set(filteredItems.map((item: any) => item.aircraft).sort())
+    new Set(
+      filteredItems
+        .map((item: any) => item.aircraft)
+        .sort((a: any, b: any) =>
+          a.toLowerCase().localeCompare(b.toLowerCase())
+        )
+    )
   );
   const uniqueSystem = Array.from(
-    new Set(filteredItems.map((item: any) => item.system).sort())
+    new Set(
+      filteredItems
+        .map((item: any) => item.system)
+        .sort((a: any, b: any) =>
+          a.toLowerCase().localeCompare(b.toLowerCase())
+        )
+    )
   );
   const uniqueType = Array.from(
-    new Set(filteredItems.map((item: any) => item.presetType).sort())
+    new Set(
+      filteredItems
+        .map((item: any) => item.presetType)
+        .sort((a: any, b: any) =>
+          a.toLowerCase().localeCompare(b.toLowerCase())
+        )
+    )
   );
   const uniqueCodeType = Array.from(
-    new Set(filteredItems.map((item: any) => item.codeType).sort())
+    new Set(
+      filteredItems
+        .map((item: any) => item.codeType)
+        .sort((a: any, b: any) =>
+          a.toLowerCase().localeCompare(b.toLowerCase())
+        )
+    )
   );
 
   const draw = {

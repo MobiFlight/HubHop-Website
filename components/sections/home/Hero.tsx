@@ -19,12 +19,12 @@ const Hero: React.FC = () => {
             variables and events and provides unique, understandable and
             standardized events and variables.
           </p>
-          <Link href={"/presets"}>
+          <Link legacyBehavior href={"/presets"}>
             <button className="upper w-full rounded-lg bg-hhOrange py-3 px-5 text-xl font-semibold text-hhBG transition-all hover:bg-hhOrangeShade-600 md:w-fit">
               View contributions
             </button>
           </Link>
-          <Link href={"https://www.mobiflight.com/en/index.html"}>
+          <Link legacyBehavior href={"https://www.mobiflight.com/en/index.html"}>
             <a
               target="_blank"
               className="flex items-center space-x-2 transition-all hover:text-hhOrange"
@@ -33,13 +33,13 @@ const Hero: React.FC = () => {
                 Created and sponsored by Mobiflight and the Mobiflight community
               </p>
               <div className="w-8">
-                <Image loader={customLoader} priority src={mfLogo} unoptimized />
+                <Image alt="" loader={customLoader} priority src={mfLogo} unoptimized />
               </div>
             </a>
           </Link>
         </div>
         <div className="hidden h-max w-full justify-center md:flex md:w-2/5">
-          <Image loader={customLoader} priority src={hubhopLogo} unoptimized />
+          <Image alt="" loader={customLoader} priority src={hubhopLogo} unoptimized />
         </div>
       </div>
     </div>

@@ -37,7 +37,7 @@ const Layout = ({ children, title = "Hubhop" }: Props) => {
   const banner = "../../public/images/logo-big-banner.png";
 
   return (
-    <div>
+    <>
       <Head>
         <title>{title}</title>
         <meta name="title" content={title} />
@@ -81,7 +81,7 @@ const Layout = ({ children, title = "Hubhop" }: Props) => {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </>
   );
 };
 

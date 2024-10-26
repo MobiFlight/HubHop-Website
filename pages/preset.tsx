@@ -30,9 +30,11 @@ const Preset: React.FC = () => {
   const [presetsMsfs, setPresetsMsfs] = useState<any[]>([]);
   const [presetsXplane, setPresetsXplane] = useState<any[]>([]);
 
-  window.location.href.includes("msfs2020")
-    ? localStorage.setItem("simType", "msfs2020")
-    : localStorage.setItem("simType", "xplane");
+  if (typeof window !== "undefined") {
+    window.location.href.includes("msfs2020")
+      ? localStorage.setItem("simType", "msfs2020")
+      : localStorage.setItem("simType", "xplane");
+  }
 
   useEffect(() => {
     savedToast == true ? toast("Saved") : null;
@@ -74,8 +76,8 @@ const Preset: React.FC = () => {
   const msfsPresets = useLiveQuery(() => db.presetsMsfs.toArray());
 
   useEffect(() => {
-    if (!xplanePresets) return null || undefined;
-    if (!msfsPresets) return null || undefined;
+    if (!xplanePresets) return undefined;
+    if (!msfsPresets) return undefined;
     setPresetsXplane(xplanePresets);
     setPresetsMsfs(msfsPresets);
     setPresets(
@@ -84,7 +86,7 @@ const Preset: React.FC = () => {
         : presetsXplane
     );
   }, [
-    localStorage.getItem("simType"),
+    typeof window !== "undefined" ? localStorage.getItem("simType") : null,
     presetsMsfs,
     presetsXplane,
     xplanePresets,
@@ -101,7 +103,7 @@ const Preset: React.FC = () => {
         ? (setLoading(true), await fetchHistory(), setLoading(false))
         : null;
     }
-    fetchHistoryRoutine();
+    filterPreset?.length && fetchHistoryRoutine();
     return;
   }, [id]);
 
@@ -217,7 +219,9 @@ const Preset: React.FC = () => {
         draggable
         pauseOnHover
         theme="light"
-        toastClassName={() => "bg-hhOrange text-black font-bold rounded-lg p-1 flex"}
+        toastClassName={() =>
+          "bg-hhOrange text-black font-bold rounded-lg p-1 flex"
+        }
         icon={<IoSaveOutline size={"2rem"} />}
       />
 

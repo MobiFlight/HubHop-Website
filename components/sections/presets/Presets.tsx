@@ -14,7 +14,8 @@ import Image from "next/image";
 import { useLiveQuery } from "dexie-react-hooks";
 import { ToastContainer, toast } from "react-toastify";
 
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
+import { useRouter } from "next/router";
 
 const Presets: React.FC = () => {
   const customLoader = ({ src }: any) => {
@@ -24,35 +25,42 @@ const Presets: React.FC = () => {
   const [presetsMsfs, setPresetsMsfs] = useState<any[]>([]);
   const [presetsXplane, setPresetsXplane] = useState<any[]>([]);
   const [filteredPresets, setFilteredPresets] = useState(
-    localStorage.getItem("searchFilter") === ""
-      ? ""
-      : localStorage.getItem("searchFilter") || ""
+    typeof localStorage !== "undefined" &&
+      localStorage.getItem("searchFilter") !== null
+      ? localStorage.getItem("searchFilter") || ""
+      : ""
   );
   const [filteredVendors, setFilteredVendors] = useState(
-    localStorage.getItem("vendorFilter") === ""
-      ? ""
-      : localStorage.getItem("vendorFilter") || ""
+    typeof localStorage !== "undefined" &&
+      localStorage.getItem("vendorFilter") !== null
+      ? localStorage.getItem("vendorFilter") || ""
+      : ""
   );
   const [filteredAircrafts, setFilteredAircrafts] = useState(
-    localStorage.getItem("aircraftFilter") === ""
-      ? ""
-      : localStorage.getItem("aircraftFilter") || ""
+    typeof localStorage !== "undefined" &&
+      localStorage.getItem("aircraftFilter") !== null
+      ? localStorage.getItem("aircraftFilter") || ""
+      : ""
   );
   const [filteredSystems, setFilteredSystems] = useState(
-    localStorage.getItem("systemFilter") === ""
-      ? ""
-      : localStorage.getItem("systemFilter") || ""
+    typeof localStorage !== "undefined" &&
+      localStorage.getItem("systemFilter") !== null
+      ? localStorage.getItem("systemFilter") || ""
+      : ""
   );
   const [filteredPresetTypes, setFilteredPresetTypes] = useState(
-    localStorage.getItem("presetTypeFilter") === ""
-      ? ""
-      : localStorage.getItem("presetTypeFilter") || ""
+    typeof localStorage !== "undefined" &&
+      localStorage.getItem("presetTypeFilter") !== null
+      ? localStorage.getItem("presetTypeFilter") || ""
+      : ""
   );
   const [filteredCodeTypes, setFilteredCodeTypes] = useState(
-    localStorage.getItem("codeTypeFilter") === ""
-      ? ""
-      : localStorage.getItem("codeTypeFilter") || ""
+    typeof localStorage !== "undefined" &&
+      localStorage.getItem("codeTypeFilter") !== null
+      ? localStorage.getItem("codeTypeFilter") || ""
+      : ""
   );
+
   const [exportModalOpen, setExportModalOpen] = useState(false);
   const [addModalOpen, setAddModalOpen] = useState(false);
   const [deletedToast, setDeletedToast] = useState(false);
@@ -62,9 +70,9 @@ const Presets: React.FC = () => {
   const [showMyPresets, setShowMyPresets] = useState(false);
   const [showReportedPresets, setShowReportedPresets] = useState(false);
   const [simType, setSimType] = useState(
-    localStorage.getItem("simType") === null
-      ? localStorage.setItem("simType", "msfs2020")
-      : localStorage.getItem("simType")
+    typeof localStorage !== "undefined" && localStorage.getItem("simType")
+      ? localStorage.getItem("simType")
+      : "msfs2020"
   );
   const [presets, setPresets] = useState<any[]>([]);
   const [filterOpen, setFilterOpen] = useState(true);
@@ -97,8 +105,8 @@ const Presets: React.FC = () => {
   const msfsPresets = useLiveQuery(() => db.presetsMsfs.toArray());
 
   useEffect(() => {
-    if (!xplanePresets) return null || undefined;
-    if (!msfsPresets) return null || undefined;
+    if (!xplanePresets) return undefined;
+    if (!msfsPresets) return undefined;
     setPresetsXplane(xplanePresets);
     setPresetsMsfs(msfsPresets);
     setPresets(simType === "msfs2020" ? presetsMsfs : presetsXplane);
@@ -136,8 +144,8 @@ const Presets: React.FC = () => {
   };
 
   useEffect(() => {
-    savedToast == true ? toast("Saved") : null
-  }, [])
+    savedToast == true ? toast("Saved") : null;
+  }, []);
 
   useEffect(() => {
     async function fetchRoutine() {
@@ -364,7 +372,32 @@ const Presets: React.FC = () => {
     localStorage.getItem("simType") === "msfs2020"
       ? document.body.classList.remove("xplane")
       : document.body.classList.add("xplane");
-  }, [localStorage.getItem("simType")]);
+  }, [typeof localStorage !== "undefined" && localStorage.getItem("simType")]);
+
+  const router = useRouter();
+
+  const updateQueryParam = (key: string, value: string) => {
+    const newQuery = { ...router.query, [key]: value };
+    if (!value) delete newQuery[key]; // Remove the key if value is empty
+    router.push(
+      {
+        pathname: router.pathname,
+        query: newQuery,
+      },
+      undefined,
+      { shallow: true }
+    );
+  };
+
+  // Populate filters from query parameters on mount
+  useEffect(() => {
+    setFilteredPresets((router.query.search as string) || "");
+    setFilteredVendors((router.query.vendor as string) || "");
+    setFilteredAircrafts((router.query.aircraft as string) || "");
+    setFilteredSystems((router.query.system as string) || "");
+    setFilteredPresetTypes((router.query.presetType as string) || "");
+    setFilteredCodeTypes((router.query.codeType as string) || "");
+  }, [router.query]);
 
   return (
     <div>
@@ -381,180 +414,73 @@ const Presets: React.FC = () => {
         <div className="min-h-screen">
           <div className="flex flex-col p-3 md:flex-row md:space-x-3">
             <div>
-              <div>
-                <div className="mb-3 rounded-lg bg-hhCard/40 py-5">
-                  <button
-                    onClick={() => {
-                      setSimType(
-                        simType === "msfs2020" ? "xplane" : "msfs2020"
-                      );
-                      setFilteredVendors("");
-                      setFilteredAircrafts("");
-                      setFilteredSystems("");
-                      setFilteredPresetTypes("");
-                      setFilteredCodeTypes("");
-                      localStorage.getItem("simType") === "msfs2020"
-                        ? localStorage.setItem("simType", "xplane")
-                        : localStorage.setItem("simType", "msfs2020");
-                    }}
-                    className={`grid ${
-                      filterOpen
-                        ? "mb-3 w-full grid-cols-3 px-3"
-                        : "w-full px-3 md:mb-3 md:ml-2 md:w-[50px] md:grid-rows-3 md:items-center md:justify-center"
-                    } items-center justify-items-center text-xl`}
-                  >
-                    <div
-                      className={`transition-all ${
-                        filterOpen
-                          ? "rotate-0"
-                          : "md:origin-center md:-rotate-90 md:whitespace-nowrap"
-                      } ${
-                        simType === "msfs2020" ? "font-bold" : "font-normal"
-                      }`}
-                    >
-                      MSFS 2020
-                    </div>
-                    <div
-                      className={`relative w-full ${
-                        filterOpen
-                          ? "flex h-fit"
-                          : "flex h-fit md:mt-3 md:flex md:h-full md:min-h-[90px] md:w-fit md:flex-col"
-                      }  items-center rounded-lg bg-hhBG transition-all ${
-                        simType === "msfs2020" ? "justify-start" : "justify-end"
-                      }`}
-                    >
-                      <motion.div
-                        transition={{
-                          type: "spring",
-                          stiffness: 700,
-                          damping: 50,
-                        }}
-                        layout
-                        className={`${
-                          filterOpen ? "h-4 w-10" : "h-4 w-10 md:h-5 md:w-4"
-                        } rounded-lg transition-colors ${
-                          simType === "msfs2020"
-                            ? "bg-[#bfcad1]"
-                            : "bg-[#0fb5e8]"
-                        }`}
-                      ></motion.div>
-                    </div>
-                    <div
-                      className={`transition-all ${
-                        filterOpen
-                          ? "rotate-0"
-                          : "md:origin-center md:-rotate-90 md:transform"
-                      } ${simType === "xplane" ? "font-bold" : "font-normal"}`}
-                    >
-                      X-Plane
-                    </div>
-                  </button>
-                  {filterOpen && (
-                    <div className={filterOpen ? "px-5" : "p-0"}>
-                      <div className="relative mx-auto h-12 w-4/6">
-                        <AnimatePresence>
-                          {simType === "xplane" && (
-                            <motion.div
-                              initial={{ opacity: 1 }}
-                              animate={{ opacity: 1 }}
-                              exit={{ opacity: 0 }}
-                              transition={{ duration: 0.2 }}
-                              className="absolute mx-auto h-12 w-full"
-                            >
-                              <Image
-                                loader={customLoader}
-                                objectFit="contain"
-                                priority
-                                src={"/images/X-Plane_12_logo.svg"}
-                                unoptimized
-                                layout="fill"
-                              />
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                        <AnimatePresence>
-                          {simType === "msfs2020" && (
-                            <motion.div
-                              initial={{ opacity: 1 }}
-                              animate={{ opacity: 1 }}
-                              exit={{ opacity: 0 }}
-                              transition={{ duration: 0.2 }}
-                              className="absolute mx-auto h-12 w-full"
-                            >
-                              <Image
-                                loader={customLoader}
-                                objectFit="contain"
-                                priority
-                                src={"/images/Microsoft_Flight_Simulator.png"}
-                                unoptimized
-                                layout="fill"
-                              />
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </div>
-                    </div>
-                  )}
-                </div>
-                <PresetFilter
-                  filterOpen={filterOpen}
-                  setFilterOpen={() => setFilterOpen((prev) => !prev)}
-                  search={(e: React.ChangeEvent<HTMLInputElement>) => (
-                    setFilteredPresets(e.target.value),
-                    localStorage.setItem("searchFilter", e.target.value)
-                  )}
-                  filterVendor={(e: React.ChangeEvent<HTMLInputElement>) => (
-                    setFilteredVendors(e.target.value),
-                    localStorage.setItem("vendorFilter", e.target.value)
-                  )}
-                  filterAircraft={(e: React.ChangeEvent<HTMLInputElement>) => (
-                    setFilteredAircrafts(e.target.value),
-                    localStorage.setItem("aircraftFilter", e.target.value)
-                  )}
-                  filterSystem={(e: React.ChangeEvent<HTMLInputElement>) => (
-                    setFilteredSystems(e.target.value),
-                    localStorage.setItem("systemFilter", e.target.value)
-                  )}
-                  filterPresetType={(
-                    e: React.ChangeEvent<HTMLInputElement>
-                  ) => (
-                    setFilteredPresetTypes(e.target.value),
-                    localStorage.setItem("presetTypeFilter", e.target.value)
-                  )}
-                  filterCodeType={(e: React.ChangeEvent<HTMLInputElement>) => (
-                    setFilteredCodeTypes(e.target.value),
-                    localStorage.setItem("codeTypeFilter", e.target.value)
-                  )}
-                  resetFilter={() => (
-                    setFilteredPresets(""),
-                    setFilteredVendors(""),
-                    setFilteredAircrafts(""),
-                    setFilteredSystems(""),
-                    setFilteredPresetTypes(""),
-                    setFilteredCodeTypes(""),
-                    localStorage.setItem("searchFilter", ""),
-                    localStorage.setItem("vendorFilter", ""),
-                    localStorage.setItem("aircraftFilter", ""),
-                    localStorage.setItem("systemFilter", ""),
-                    localStorage.setItem("presetTypeFilter", ""),
-                    setShowMyPresets(false),
-                    setShowReportedPresets(false)
-                  )}
-                  filteredPresets={filteredPresets}
-                  filteredVendors={filteredVendors}
-                  filteredAircrafts={filteredAircrafts}
-                  filteredSystems={filteredSystems}
-                  filteredPresetTypes={filteredPresetTypes}
-                  filteredCodeTypes={filteredCodeTypes}
-                  filteredItems={filteredItems}
-                  setShowMyPresets={() => setShowMyPresets((prev) => !prev)}
-                  setShowReportedPresets={() =>
-                    setShowReportedPresets((prev) => !prev)
-                  }
-                  showMyPresets={showMyPresets}
-                  showReportedPresets={showReportedPresets}
-                />
-              </div>
+              <PresetFilter
+                filterOpen={filterOpen}
+                setFilterOpen={() => setFilterOpen((prev) => !prev)}
+                search={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  const value = e.target.value;
+                  setFilteredPresets(value);
+                  localStorage.setItem("searchFilter", value);
+                  updateQueryParam("search", value);
+                }}
+                filterVendor={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  const value = e.target.value;
+                  setFilteredVendors(value);
+                  localStorage.setItem("vendorFilter", value);
+                  updateQueryParam("vendor", value);
+                }}
+                filterAircraft={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  const value = e.target.value;
+                  setFilteredAircrafts(value);
+                  localStorage.setItem("aircraftFilter", value);
+                  updateQueryParam("aircraft", value);
+                }}
+                filterSystem={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  const value = e.target.value;
+                  setFilteredSystems(value);
+                  localStorage.setItem("systemFilter", value);
+                  updateQueryParam("system", value);
+                }}
+                filterPresetType={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  const value = e.target.value;
+                  setFilteredPresetTypes(value);
+                  localStorage.setItem("presetTypeFilter", value);
+                  updateQueryParam("presetType", value);
+                }}
+                filterCodeType={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  const value = e.target.value;
+                  setFilteredCodeTypes(value);
+                  localStorage.setItem("codeTypeFilter", value);
+                  updateQueryParam("codeType", value);
+                }}
+                resetFilter={() => {
+                  setFilteredPresets("");
+                  setFilteredVendors("");
+                  setFilteredAircrafts("");
+                  setFilteredSystems("");
+                  setFilteredPresetTypes("");
+                  setFilteredCodeTypes("");
+                  localStorage.setItem("searchFilter", "");
+                  localStorage.setItem("vendorFilter", "");
+                  localStorage.setItem("aircraftFilter", "");
+                  localStorage.setItem("systemFilter", "");
+                  localStorage.setItem("presetTypeFilter", "");
+                  router.push(router.pathname, undefined, { shallow: true }); // reset URL
+                }}
+                filteredPresets={filteredPresets}
+                filteredVendors={filteredVendors}
+                filteredAircrafts={filteredAircrafts}
+                filteredSystems={filteredSystems}
+                filteredPresetTypes={filteredPresetTypes}
+                filteredCodeTypes={filteredCodeTypes}
+                filteredItems={filteredItems}
+                setShowMyPresets={() => setShowMyPresets((prev) => !prev)}
+                setShowReportedPresets={() =>
+                  setShowReportedPresets((prev) => !prev)
+                }
+                showMyPresets={showMyPresets}
+                showReportedPresets={showReportedPresets}
+              />
             </div>
             <PresetTable
               setAddModalOpen={() => setAddModalOpen(true)}

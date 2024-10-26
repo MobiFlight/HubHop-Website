@@ -1,15 +1,15 @@
 import Link from "next/link";
-import { FaDiscord, FaGithub, FaReadme, FaFingerprint } from "react-icons/fa";
+import { FaDiscord, FaFingerprint, FaGithub, FaReadme } from "react-icons/fa";
 
 const Footer: React.FC = () => {
   return (
     <footer className="grid grid-cols-3 items-center justify-between bg-hhBG/50 py-5 px-5 text-hhText">
       <div>
-        <span>&#169;</span> HubHop and its contributors 2023 - Version 2.8.7
+        <span>&#169;</span> HubHop and its contributors 2024 - Version 2.8.8
       </div>
       <div className="flex items-center justify-center">
         <div className="flex">
-          <Link href="https://discord.gg/YMExvWp8eX">
+          <Link legacyBehavior href="https://discord.gg/YMExvWp8eX">
             <a
               className="flex items-center space-x-1 transition-all hover:text-hhOrange"
               target="_blank"
@@ -22,7 +22,7 @@ const Footer: React.FC = () => {
       </div>
       <div className="flex flex-col items-end space-y-2">
         <div>
-          <Link href="https://github.com/HubHopAPI/HubHop-Website">
+          <Link legacyBehavior href="https://github.com/HubHopAPI/HubHop-Website">
             <a
               className="flex items-center justify-around space-x-1 transition-all hover:text-hhOrange"
               target="_blank"
@@ -34,7 +34,7 @@ const Footer: React.FC = () => {
         </div>
         <div>
           <button className="flex items-center justify-around">
-            <Link href="/terms">
+            <Link legacyBehavior href="/terms">
               <a className="flex items-center justify-around space-x-1 transition-all hover:text-hhOrange">
                 <FaReadme />
                 <p className="hidden md:block">Terms of Service</p>
@@ -44,7 +44,7 @@ const Footer: React.FC = () => {
         </div>
         <div>
           <button className="flex items-center justify-around">
-            <Link href="/privacy">
+            <Link legacyBehavior href="/privacy">
               <a className="flex items-center justify-around space-x-1 transition-all hover:text-hhOrange">
                 <FaFingerprint />
                 <p className="hidden md:block">Privacy Policy</p>

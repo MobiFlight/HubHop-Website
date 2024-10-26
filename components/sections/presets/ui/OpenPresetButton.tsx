@@ -7,7 +7,7 @@ interface Props {
 
 const OpenPresetButton: React.FC<Props> = ({ id }) => {
   return (
-    <Link
+    <Link legacyBehavior
       href={{
         pathname: `/preset`,
         query: { simType: localStorage.getItem("simType"), id: id },

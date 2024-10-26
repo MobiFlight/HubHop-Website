@@ -40,11 +40,10 @@ const PresetView: React.FC<Props> = ({
   const [description, setDescription] = useState("");
   const [author, setAuthor] = useState("");
   const [notFound, setNotFound] = useState(false);
-  const [loadingPreset, setLoadingPreset] = useState(false);
+  const [loadingPreset, setLoadingPreset] = useState(true);
 
   useEffect(() => {
-    if (preset.length) {
-      setLoadingPreset(false);
+    if (preset && preset.length) {
       setId(preset[0].id);
       setUpdatedBy(preset[0].updatedBy);
       setCreatedDate(preset[0].createdDate);
@@ -54,22 +53,22 @@ const PresetView: React.FC<Props> = ({
       setAircraft(preset[0].aircraft);
       setSystem(preset[0].system);
       setPresetType(preset[0].presetType);
-      setCodeType(preset[0].codeType ? preset[0].codeType : "");
+      setCodeType(preset[0].codeType || "");
       setLabel(preset[0].label);
       setCode(preset[0].code);
       setDescription(preset[0].description);
       setAuthor(preset[0].author);
       setNotFound(false);
     } else {
-      setLoadingPreset(true);
       setNotFound(true);
     }
+    setLoadingPreset(false);
   }, [preset]);
 
   return (
     <Layout title="Preset | Hubhop by Mobiflight">
       <Head>
-        <title>{label}</title>;
+        <title>{label || "Preset View"}</title>
       </Head>
       {loadingPreset ? (
         <div className="flex min-h-screen flex-col items-center justify-center">
@@ -87,7 +86,6 @@ const PresetView: React.FC<Props> = ({
             <h2 className="text-center text-4xl">
               This preset does not exist or has been deleted
             </h2>
-            {notFound ? <p>true</p> : <p>false</p>}
           </div>
         </div>
       ) : (
@@ -109,8 +107,8 @@ const PresetView: React.FC<Props> = ({
           loading={loading}
           history={history}
           showingHistory={true}
-          text={""}
-          card={true}
+          text=""
+          card
           setVendor={(e: any) => setVendor(e.target.value)}
           setAircraft={(e: any) => setAircraft(e.target.value)}
           setSystem={(e: any) => setSystem(e.target.value)}

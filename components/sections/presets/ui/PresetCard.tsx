@@ -1,4 +1,6 @@
-import { useState } from "react";
+"use client";
+
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import PresetHistoryList from "../singlePresetView/PresetHistoryList";
 import DeleteButton from "./deletePreset/DeleteButton";
@@ -92,11 +94,19 @@ const PresetCard: React.FC<Props> = ({
   const [deleteTooltip, setDeleteTooltip] = useState(false);
   const [revertObject, setRevertObject] = useState({});
   const [revertModal, setRevertModal] = useState(false);
-  const [simType, setSimType] = useState(
-    localStorage.getItem("simType") === null
-      ? localStorage.setItem("simType", "msfs2020")
-      : localStorage.getItem("simType")
-  );
+  const [simType, setSimType] = useState("");
+
+  useEffect(() => {
+    const storedSimType =
+      typeof window !== "undefined" && localStorage.getItem("simType");
+
+    if (!storedSimType && typeof window !== "undefined") {
+      localStorage.setItem("simType", "msfs2020");
+      setSimType("msfs2020");
+    } else {
+      setSimType(storedSimType || "");
+    }
+  }, []);
 
   async function editPreset() {
     setEditButton(true);
@@ -285,7 +295,7 @@ const PresetCard: React.FC<Props> = ({
   }
 
   return (
-    <div>
+    <>
       <div
         className={`p-3 xl:p-0 text-${text} ${
           card && "container mx-auto mt-5 min-h-screen"
@@ -297,7 +307,7 @@ const PresetCard: React.FC<Props> = ({
               {label}
             </h2>
           )}
-          <div className="flex w-full flex-col space-y-2 p-5 text-hhText lg:flex-row lg:space-y-0 lg:space-x-5">
+          <div className="flex w-full flex-col space-y-2 p-5 text-hhText lg:flex-row lg:space-x-5 lg:space-y-0">
             <div className="flex w-full flex-col space-y-2 lg:w-1/6">
               {version > "1" ? (
                 <PresetPreviewLabel title={"Updated by"} editData={updatedBy} />
@@ -341,14 +351,15 @@ const PresetCard: React.FC<Props> = ({
                 edit={edit}
                 inputHandler={(e: any) => setPresetType(e)}
               />
-              {localStorage.getItem("simType") === "xplane" && (
-                <PresetPreviewLabel
-                  title={"Code Type"}
-                  editData={codeType}
-                  edit={edit}
-                  inputHandler={(e: any) => setCodeType(e)}
-                />
-              )}
+              {typeof window !== "undefined" &&
+                localStorage.getItem("simType") === "xplane" && (
+                  <PresetPreviewLabel
+                    title={"Code Type"}
+                    editData={codeType}
+                    edit={edit}
+                    inputHandler={(e: any) => setCodeType(e)}
+                  />
+                )}
             </div>
             <div className="flex w-full flex-col space-y-2 lg:w-4/6">
               <PresetPreviewLabel
@@ -376,10 +387,11 @@ const PresetCard: React.FC<Props> = ({
             </div>
           </div>
           <div className="flex w-full justify-between px-5 pb-5 pt-2">
-            <div className="flex flex-col space-y-2 xl:flex-row xl:items-center xl:space-y-0 xl:space-x-5">
+            <div className="flex flex-col space-y-2 xl:flex-row xl:items-center xl:space-x-5 xl:space-y-0">
               <div
                 onClick={() => {
                   if (
+                    typeof window !== "undefined" &&
                     localStorage
                       .getItem("roles")
                       ?.toLocaleLowerCase()
@@ -397,7 +409,7 @@ const PresetCard: React.FC<Props> = ({
                 <DeleteButton />
               </div>
             </div>
-            <div className="flex flex-col-reverse justify-between space-y-2 space-y-reverse xl:flex-row xl:items-center xl:space-y-0 xl:space-x-5">
+            <div className="flex flex-col-reverse justify-between space-y-2 space-y-reverse xl:flex-row xl:items-center xl:space-x-5 xl:space-y-0">
               <AnimatePresence>
                 {edit && (
                   <motion.div
@@ -569,7 +581,7 @@ const PresetCard: React.FC<Props> = ({
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </>
   );
 };
 

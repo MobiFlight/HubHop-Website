@@ -221,7 +221,10 @@ const Potti: React.FC = () => {
         <p>
           If you want to learn more about potentiometers and how to use this
           tool, please visit the
-          <Link href="https://github.com/MobiFlight/MobiFlight-Connector/wiki">
+          <Link
+            legacyBehavior
+            href="https://github.com/MobiFlight/MobiFlight-Connector/wiki"
+          >
             <a
               className="mx-1 rounded-lg bg-hhOrange px-1 py-0.5 text-sm font-semibold text-hhBG transition-all hover:bg-hhOrangeShade-600"
               target={"_blank"}
@@ -229,7 +232,6 @@ const Potti: React.FC = () => {
               Mobiflight&nbsp;Community
             </a>
           </Link>
-          {}
           Wiki.
         </p>
       </div>
@@ -237,18 +239,18 @@ const Potti: React.FC = () => {
         <div className="flex w-full flex-col items-center space-y-5">
           <h4 className="text-xl font-semibold">Device output range</h4>
           <select
-            onChange={(e) => (
+            onChange={(e) => {
               setMindo(
                 presets
                   .filter((preset) => preset.name === e.target.value)
                   .map((pres) => pres.min)[0]
-              ),
+              );
               setMaxdo(
                 presets
                   .filter((preset) => preset.name === e.target.value)
                   .map((pres) => pres.max)[0]
-              )
-            )}
+              );
+            }}
             id="selectedPreset"
             defaultValue={""}
             className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 p-3"
@@ -256,13 +258,11 @@ const Potti: React.FC = () => {
             <option value={""} disabled>
               Select preset
             </option>
-            {presets.map((preset) => {
-              return (
-                <option className="bg-hhBG" key={preset.name}>
-                  {preset.name}
-                </option>
-              );
-            })}
+            {presets.map((preset) => (
+              <option className="bg-hhBG" key={preset.name}>
+                {preset.name}
+              </option>
+            ))}
           </select>
           <div className="flex w-full flex-col items-center sm:flex-row sm:space-x-5">
             <div className="flex w-full flex-col">
@@ -270,8 +270,14 @@ const Potti: React.FC = () => {
               <input
                 className="rounded-lg border border-hhOrange/50 bg-hhBG/50 p-3"
                 placeholder="0"
-                type="number"
-                onChange={(e) => setMindo(parseFloat(e.target.value))}
+                type="text"
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (value === "-" || !isNaN(parseFloat(value))) {
+                    setMindo(value as any);
+                  }
+                }}
+                onBlur={() => setMindo((prev: any) => parseFloat(prev) || 0)}
                 value={Mindo}
               />
             </div>
@@ -280,8 +286,14 @@ const Potti: React.FC = () => {
               <input
                 className="rounded-lg border border-hhOrange/50 bg-hhBG/50 p-3"
                 placeholder="0"
-                type="number"
-                onChange={(e) => setMaxdo(parseFloat(e.target.value))}
+                type="text"
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (value === "-" || !isNaN(parseFloat(value))) {
+                    setMaxdo(value as any);
+                  }
+                }}
+                onBlur={() => setMaxdo((prev: any) => parseFloat(prev) || 0)}
                 value={Maxdo}
               />
             </div>
@@ -290,41 +302,39 @@ const Potti: React.FC = () => {
         <div className="flex w-full flex-col items-center space-y-5">
           <h4 className="text-xl font-semibold">MSFS2020 event input range</h4>
           <select
-            onChange={(e) => (
+            onChange={(e) => {
               setMineir(
                 parseFloat(
                   eir_preset
                     .filter((preset) => preset.name === e.target.value)
                     .map((pres) => pres.min)[0]
                 )
-              ),
+              );
               setMaxeir(
                 parseFloat(
                   eir_preset
                     .filter((preset) => preset.name === e.target.value)
                     .map((pres) => pres.max)[0]
                 )
-              ),
+              );
               setNameEir(
                 eir_preset
                   .filter((preset) => preset.name === e.target.value)
                   .map((pres) => pres.event)
                   .toString()
-              )
-            )}
+              );
+            }}
             defaultValue={""}
             className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 p-3"
           >
             <option value={""} disabled>
               Select preset
             </option>
-            {eir_preset.map((preset) => {
-              return (
-                <option className="bg-hhBG" key={preset.name}>
-                  {preset.name}
-                </option>
-              );
-            })}
+            {eir_preset.map((preset) => (
+              <option className="bg-hhBG" key={preset.name}>
+                {preset.name}
+              </option>
+            ))}
           </select>
           <div className="flex w-full flex-col items-center sm:flex-row sm:space-x-5">
             <div className="flex w-full flex-col">
@@ -332,9 +342,15 @@ const Potti: React.FC = () => {
               <input
                 className="rounded-lg border border-hhOrange/50 bg-hhBG/50 p-3"
                 placeholder="0"
-                type="number"
+                type="text"
                 value={Mineir}
-                onChange={(e) => setMineir(parseFloat(e.target.value))}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (value === "-" || !isNaN(parseFloat(value))) {
+                    setMineir(value as any);
+                  }
+                }}
+                onBlur={() => setMineir((prev: any) => parseFloat(prev) || 0)}
               />
             </div>
             <div className="flex w-full flex-col">
@@ -342,9 +358,15 @@ const Potti: React.FC = () => {
               <input
                 className="rounded-lg border border-hhOrange/50 bg-hhBG/50 p-3"
                 placeholder="0"
-                type="number"
+                type="text"
                 value={Maxeir}
-                onChange={(e) => setMaxeir(parseFloat(e.target.value))}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (value === "-" || !isNaN(parseFloat(value))) {
+                    setMaxeir(value as any);
+                  }
+                }}
+                onBlur={() => setMaxeir((prev: any) => parseFloat(prev) || 0)}
               />
             </div>
           </div>
@@ -364,7 +386,7 @@ const Potti: React.FC = () => {
           </div>
         </div>
       </div>
-      <h2 className="mt-5 mb-5 text-center text-xl font-semibold">
+      <h2 className="mb-5 mt-5 text-center text-xl font-semibold">
         Generated RPN Code
       </h2>
       <textarea

@@ -165,14 +165,30 @@ const PresetTable: React.FC<Props> = ({
           showingHistory={false}
           text={"sm"}
           card={false}
-          setVendor={(e: any) => setVendor(e.target.value)}
-          setAircraft={(e: any) => setAircraft(e.target.value)}
-          setSystem={(e: any) => setSystem(e.target.value)}
-          setPresetType={(e: any) => setPresetType(e.target.value)}
-          setCodeType={(e: any) => setCodeType(e.target.value)}
-          setLabel={(e: any) => setLabel(e.target.value)}
-          setCode={(e: any) => setCode(e.target.value)}
-          setDescription={(e: any) => setDescription(e.target.value)}
+          setVendor={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setVendor(e.target.value)
+          }
+          setAircraft={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setAircraft(e.target.value)
+          }
+          setSystem={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setSystem(e.target.value)
+          }
+          setPresetType={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setPresetType(e.target.value)
+          }
+          setCodeType={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setCodeType(e.target.value)
+          }
+          setLabel={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setLabel(e.target.value)
+          }
+          setCode={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setCode(e.target.value)
+          }
+          setDescription={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setDescription(e.target.value)
+          }
           deletedToast={deletedToast}
           reportedToast={reportedToast}
           fixedToast={fixedToast}
