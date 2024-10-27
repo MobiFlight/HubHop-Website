@@ -399,6 +399,14 @@ const Presets: React.FC = () => {
     setFilteredCodeTypes((router.query.codeType as string) || "");
   }, [router.query]);
 
+  const toggleSimType = () => {
+    if (typeof window !== "undefined") {
+      const newSimType = simType === "msfs2020" ? "xplane" : "msfs2020";
+      setSimType(newSimType);
+      localStorage.setItem("simType", newSimType);
+    }
+  };
+
   return (
     <div>
       {loading ? (
@@ -414,6 +422,44 @@ const Presets: React.FC = () => {
         <div className="min-h-screen">
           <div className="flex flex-col p-3 md:flex-row md:space-x-3">
             <div>
+              <div className="mb-3 w-full rounded-lg bg-hhCard/40 py-3">
+                <button
+                  onClick={toggleSimType}
+                  className="grid w-full grid-cols-3 items-center justify-items-center gap-x-5 px-3 text-xl"
+                >
+                  <div
+                    className={`${
+                      simType === "msfs2020" ? "font-bold" : "font-normal"
+                    }`}
+                  >
+                    MSFS 2020
+                  </div>
+                  <div
+                    className={`relative flex h-fit w-full items-center rounded-lg bg-hhBG transition-all ${
+                      simType === "msfs2020" ? "justify-start" : "justify-end"
+                    }`}
+                  >
+                    <motion.div
+                      transition={{
+                        type: "spring",
+                        stiffness: 700,
+                        damping: 50,
+                      }}
+                      layout
+                      className={`h-4 w-10 rounded-lg transition-colors ${
+                        simType === "msfs2020" ? "bg-[#bfcad1]" : "bg-[#0fb5e8]"
+                      }`}
+                    ></motion.div>
+                  </div>
+                  <div
+                    className={`${
+                      simType === "xplane" ? "font-bold" : "font-normal"
+                    }`}
+                  >
+                    X-Plane
+                  </div>
+                </button>
+              </div>
               <PresetFilter
                 filterOpen={filterOpen}
                 setFilterOpen={() => setFilterOpen((prev) => !prev)}
