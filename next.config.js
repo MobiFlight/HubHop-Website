@@ -9,4 +9,5 @@ module.exports = {
       "https://hubhop-api-mgtm.azure-api.net/api/v1/statistics/general",
     hubHopPresets: "https://hubhop-api-mgtm.azure-api.net/api/v1/presets",
   },
+  output: "export",
 };
