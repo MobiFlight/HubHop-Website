@@ -314,7 +314,7 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                           onInput={(e) => {
                             e.currentTarget.value =
                               e.currentTarget.value.replace(
-                                /[^a-zA-Z\s/]/g,
+                                /[^a-zA-Z\s0-9\-/]/g,
                                 ""
                               );
                           }}
@@ -385,7 +385,7 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                         }`}
                         onInput={(e) => {
                           e.currentTarget.value = e.currentTarget.value.replace(
-                            /[^a-zA-Z\s/]/g,
+                            /[^a-zA-Z\s0-9\-/]/g,
                             ""
                           );
                         }}
