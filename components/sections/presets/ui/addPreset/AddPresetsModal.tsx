@@ -667,8 +667,8 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                     placeholder="Alternator 1 On"
                     onInput={(e) => {
                       e.currentTarget.value = e.currentTarget.value
-                        .replace(/[^a-zA-Z\s/]/g, "") // Allow only letters, spaces, and slashes
-                        .replace(/^\s+|\s+$/g, ""); // Remove leading and trailing spaces
+                        .replace(/[^a-zA-Z0-9\s/]/g, "")
+                        .replace(/^\s+|\s+$/g, "");
                     }}
                     {...register("label", { required: "Name required" })}
                   />
