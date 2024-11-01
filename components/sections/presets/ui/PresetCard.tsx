@@ -342,13 +342,27 @@ const PresetCard: React.FC<Props> = ({
               <PresetPreviewLabel
                 title={"System"}
                 editData={system}
-                edit={edit}
+                edit={
+                  typeof window !== "undefined" &&
+                  localStorage
+                    .getItem("roles")
+                    ?.toLocaleLowerCase()
+                    .includes("moderator") &&
+                  edit
+                }
                 inputHandler={(e: any) => setSystem(e)}
               />
               <PresetPreviewLabel
                 title={"Input / Output"}
                 editData={presetType}
-                edit={edit}
+                edit={
+                  typeof window !== "undefined" &&
+                  localStorage
+                    .getItem("roles")
+                    ?.toLocaleLowerCase()
+                    .includes("moderator") &&
+                  edit
+                }
                 inputHandler={(e: any) => setPresetType(e)}
               />
               {typeof window !== "undefined" &&
@@ -356,7 +370,14 @@ const PresetCard: React.FC<Props> = ({
                   <PresetPreviewLabel
                     title={"Code Type"}
                     editData={codeType}
-                    edit={edit}
+                    edit={
+                      typeof window !== "undefined" &&
+                      localStorage
+                        .getItem("roles")
+                        ?.toLocaleLowerCase()
+                        .includes("moderator") &&
+                      edit
+                    }
                     inputHandler={(e: any) => setCodeType(e)}
                   />
                 )}
@@ -442,7 +463,14 @@ const PresetCard: React.FC<Props> = ({
                   </AnimatePresence>
                   <EditToggle
                     setEdit={() => {
-                      if (localStorage.getItem("username")) {
+                      if (
+                        localStorage.getItem("username") === author ||
+                        (typeof window !== "undefined" &&
+                          localStorage
+                            .getItem("roles")
+                            ?.toLocaleLowerCase()
+                            .includes("moderator"))
+                      ) {
                         setEdit((e) => !e);
                       } else {
                         seteditTooltip(true);
