@@ -311,13 +311,7 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                               ? "border-red-500"
                               : "border-hhOrange/75"
                           }`}
-                          onInput={(e) => {
-                            e.currentTarget.value =
-                              e.currentTarget.value.replace(
-                                /[^a-zA-Z0-9\s_()/]/g,
-                                ""
-                              );
-                          }}
+                          onInput={(e) => e}
                           {...register("addVendors", {
                             required: "Provide a vendor name",
                           })}
@@ -383,12 +377,7 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                             ? "border-red-500"
                             : "border-hhOrange/75"
                         }`}
-                        onInput={(e) => {
-                          e.currentTarget.value = e.currentTarget.value.replace(
-                            /[^a-zA-Z0-9\s_()/]/g,
-                            ""
-                          );
-                        }}
+                        onInput={(e) => e}
                         {...register("addAircrafts", {
                           required: "Provide an aircraft name",
                         })}
@@ -665,12 +654,7 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                       errors.label ? "border-red-500" : "border-hhOrange/75"
                     }`}
                     placeholder="Alternator 1 On"
-                    onInput={(e) => {
-                      e.currentTarget.value = e.currentTarget.value.replace(
-                        /[^a-zA-Z0-9\s_()/]/g,
-                        ""
-                      );
-                    }}
+                    onInput={(e) => e}
                     {...register("label", { required: "Name required" })}
                   />
                   <p className="font-semibold text-red-500">
@@ -686,12 +670,7 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                     className={`w-full rounded-lg border bg-hhBG/75 px-3 py-1 text-hhText ${
                       errors.code ? "border-red-500" : "border-hhOrange/75"
                     }`}
-                    onInput={(e) => {
-                      e.currentTarget.value = e.currentTarget.value.replace(
-                        /[^a-zA-Z0-9+\-*/%&|^~!=<>():{}\[\] \.,?]/g,
-                        ""
-                      );
-                    }}
+                    onInput={(e) => e}
                     cols={100}
                     rows={5}
                     placeholder={"(>L:somecode) (>K:somecodeToo) * near"}
