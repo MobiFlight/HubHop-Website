@@ -314,7 +314,7 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                           onInput={(e) => {
                             e.currentTarget.value =
                               e.currentTarget.value.replace(
-                                /[^a-zA-Z\s0-9\-/]/g,
+                                /[^a-zA-Z0-9\s_()/]/g,
                                 ""
                               );
                           }}
@@ -385,7 +385,7 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                         }`}
                         onInput={(e) => {
                           e.currentTarget.value = e.currentTarget.value.replace(
-                            /[^a-zA-Z\s0-9\-/]/g,
+                            /[^a-zA-Z0-9\s_()/]/g,
                             ""
                           );
                         }}
@@ -666,9 +666,10 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                     }`}
                     placeholder="Alternator 1 On"
                     onInput={(e) => {
-                      e.currentTarget.value = e.currentTarget.value
-                        .replace(/[^a-zA-Z0-9\s/]/g, "")
-                        .replace(/^\s+|\s+$/g, "");
+                      e.currentTarget.value = e.currentTarget.value.replace(
+                        /[^a-zA-Z0-9\s_()/]/g,
+                        ""
+                      );
                     }}
                     {...register("label", { required: "Name required" })}
                   />

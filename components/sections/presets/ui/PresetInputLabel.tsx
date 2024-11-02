@@ -22,9 +22,10 @@ const PresetPreviewLabel: React.FC<Props> = ({
             className="w-full break-words rounded-lg border border-hhOrange/50 bg-hhCard/50 px-3 py-1"
             value={editData}
             onInput={(e: any) => {
-              e.target.value = e.target.value
-                .trim()
-                .replace(/[^a-zA-Z0-9+\-*/%&|^~!=<>():{}\[\] \.,?]/g, "");
+              e.target.value = e.target.value.replace(
+                /[^a-zA-Z0-9+\-*/%&|^~!=<>():{}\[\] \.,?]/g,
+                ""
+              );
               inputHandler(e);
             }}
             rows={5}
@@ -34,9 +35,10 @@ const PresetPreviewLabel: React.FC<Props> = ({
             className="w-full break-words rounded-lg border border-hhOrange/50 bg-hhCard/50 px-3 py-1"
             value={editData}
             onInput={(e: any) => (
-              (e.target.value = e.target.value
-                .trim()
-                .replace(/[^a-zA-Z0-9/ ]/g, "")),
+              (e.target.value = e.target.value.replace(
+                /[^a-zA-Z0-9\s_()/]/g,
+                ""
+              )),
               inputHandler(e)
             )}
           />
