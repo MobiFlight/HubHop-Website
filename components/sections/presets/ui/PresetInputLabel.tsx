@@ -21,14 +21,14 @@ const PresetPreviewLabel: React.FC<Props> = ({
           <textarea
             className="w-full break-words rounded-lg border border-hhOrange/50 bg-hhCard/50 px-3 py-1"
             value={editData}
-            onInput={(e: any) => e}
+            onInput={(e: any) => inputHandler(e)}
             rows={5}
           />
         ) : (
           <input
             className="w-full break-words rounded-lg border border-hhOrange/50 bg-hhCard/50 px-3 py-1"
             value={editData}
-            onInput={(e: any) => e}
+            onInput={(e: any) => inputHandler(e)}
           />
         )
       ) : codeOrDescriptionBox ? (
