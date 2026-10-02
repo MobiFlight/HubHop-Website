@@ -43,6 +43,8 @@ const PresetView: React.FC<Props> = ({
   const [loadingPreset, setLoadingPreset] = useState(true);
 
   useEffect(() => {
+    // undefined: preset is still being loaded
+    if (preset === undefined) return;
     if (preset && preset.length) {
       setId(preset[0].id);
       setUpdatedBy(preset[0].updatedBy);
