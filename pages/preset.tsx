@@ -1,11 +1,11 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { BsCheck2Square } from "react-icons/bs";
 import PresetView from "../components/sections/presets/singlePresetView/PresetView";
 import Toast from "../components/sections/Shared/Toast";
-import { db } from "../services/db";
+import { presetTable } from "../services/presetSync";
 import { ToastContainer, toast } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
@@ -20,15 +20,12 @@ const Preset: React.FC = () => {
 
   const router = useRouter();
   const { id, simType } = router.query;
-  const [presets, setPresets] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [history, setHistory] = useState([]);
   const [deletedToast, setDeletedToast] = useState(false);
   const [reportedToast, setReportedToast] = useState(false);
   const [savedToast, setSavedToast] = useState(false);
   const [fixedToast, setFixedToast] = useState(false);
-  const [presetsMsfs, setPresetsMsfs] = useState<any[]>([]);
-  const [presetsXplane, setPresetsXplane] = useState<any[]>([]);
 
   if (typeof window !== "undefined") {
     window.location.href.includes("msfs2020")
@@ -40,27 +37,26 @@ const Preset: React.FC = () => {
     savedToast == true ? toast("Saved") : null;
   }, [savedToast]);
 
-  const fetchPresets = async () => {
-    const res = await fetch(
-      "https://hubhop-api-mgtm.azure-api.net/api/v1" +
-        "/" +
-        // localStorage.getItem("simType") +
-        simType +
-        "/presets",
-      { redirect: "follow" }
-    );
-    const fetchedPresets = await res.json();
-    setPresets(fetchedPresets);
-    // const today = new Date();
-    // try {
-    //   await db.presets.bulkAdd(fetchedPresets);
-    // } catch (error) {}
-    // return (
-    //   localStorage.setItem("fetched", today.toISOString()),
-    //   // sessionStorage.setItem("presets", JSON.stringify(fetchedPresets)),
-    //   setPresets(fetchedPresets),
-    //   console.log("Fetched single preset")
-    // );
+  const sim = simType === "xplane" ? "xplane" : "msfs2020";
+  const [fetchDone, setFetchDone] = useState(false);
+
+  // fetch the newest version of this one preset and store it in the local cache
+  const fetchPreset = async () => {
+    try {
+      const res = await fetch(
+        process.env.NEXT_PUBLIC_HUBHOP_API_BASEURL + "/" + sim + "/presets/" + id,
+        { redirect: "follow" }
+      );
+      if (res.ok) {
+        const fetchedPreset = await res.json();
+        await presetTable(sim).put({ ...fetchedPreset, id });
+      } else if (res.status === 404) {
+        await presetTable(sim).delete(id as string);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    setFetchDone(true);
   };
 
   const fetchHistory = async () => {
@@ -69,59 +65,35 @@ const Preset: React.FC = () => {
       { redirect: "follow" }
     );
     const fetchedHistory = await res.json();
-    return setHistory(fetchedHistory[0].history);
+    return setHistory(fetchedHistory[0]?.history || []);
   };
 
-  const xplanePresets = useLiveQuery(() => db.presetsXplane.toArray());
-  const msfsPresets = useLiveQuery(() => db.presetsMsfs.toArray());
-
-  useEffect(() => {
-    if (!xplanePresets) return undefined;
-    if (!msfsPresets) return undefined;
-    setPresetsXplane(xplanePresets);
-    setPresetsMsfs(msfsPresets);
-    setPresets(
-      localStorage.getItem("simType") === "msfs2020"
-        ? presetsMsfs
-        : presetsXplane
-    );
-  }, [
-    typeof window !== "undefined" ? localStorage.getItem("simType") : null,
-    presetsMsfs,
-    presetsXplane,
-    xplanePresets,
-    msfsPresets,
-  ]);
+  const cachedPreset = useLiveQuery(
+    () => (id ? presetTable(sim).get(id as string) : undefined),
+    [id, sim]
+  );
 
   useEffect(() => {
     async function fetchHistoryRoutine() {
-      if (!id) {
+      if (!id || !simType) {
         return;
       }
-      fetchPresets();
-      simType === "msfs2020"
-        ? (setLoading(true), await fetchHistory(), setLoading(false))
-        : null;
+      fetchPreset();
+      if (simType === "msfs2020") {
+        setLoading(true);
+        await fetchHistory().catch((error) => console.error(error));
+        setLoading(false);
+      }
     }
-    filterPreset?.length && fetchHistoryRoutine();
-    return;
-  }, [id]);
+    fetchHistoryRoutine();
+  }, [id, simType]);
 
-  // useEffect(() => {
-  //   async function getPresetsFromDexie() {
-  //     if (db.presets) {
-  //       setPresets((await db.presets.toArray()) || []);
-  //     }
-  //   }
-  //   getPresetsFromDexie();
-  //   return;
-  // }, [db.presets]);
-
-  const filterPreset = presets.filter((singlePreset) => {
-    if (singlePreset.id === id) {
-      return singlePreset;
-    }
-  });
+  // undefined keeps PresetView in its loading state until we know the answer
+  const filterPreset = useMemo(
+    () =>
+      cachedPreset ? [cachedPreset] : fetchDone ? [] : undefined,
+    [cachedPreset, fetchDone]
+  );
   function deleteToast() {
     setDeletedToast(true);
     setTimeout(() => {
