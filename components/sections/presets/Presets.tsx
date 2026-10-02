@@ -10,6 +10,7 @@ import { BsCheck2Square } from "react-icons/bs";
 import { getAccessToken } from "../../../services/msalFunctions";
 import { msalInstance } from "../../../services/msal";
 import { db } from "../../../services/db";
+import { syncSim } from "../../../services/presetSync";
 import Image from "next/image";
 import { useLiveQuery } from "dexie-react-hooks";
 import { ToastContainer, toast } from "react-toastify";
@@ -78,29 +79,6 @@ const Presets: React.FC = () => {
   const [filterOpen, setFilterOpen] = useState(true);
   const [loadingStatus, setLoadingStatus] = useState("");
 
-  const last = async () => {
-    const resMsfs = await fetch(
-      process.env.NEXT_PUBLIC_HUBHOP_API_LAST_MSFS || "",
-      {
-        redirect: "follow",
-      }
-    );
-    const resXplane = await fetch(
-      process.env.NEXT_PUBLIC_HUBHOP_API_LAST_XPLANE || "",
-      {
-        redirect: "follow",
-      }
-    );
-    const lastMsfs = await resMsfs.json();
-    const lastXplane = await resXplane.json();
-    return (
-      localStorage.setItem("lastMsfs", lastMsfs[0].createdDate),
-      lastMsfs[0].createdDate,
-      localStorage.setItem("lastXplane", lastXplane[0].createdDate),
-      lastXplane[0].createdDate
-    );
-  };
-
   const xplanePresets = useLiveQuery(() => db.presetsXplane.toArray());
   const msfsPresets = useLiveQuery(() => db.presetsMsfs.toArray());
 
@@ -112,98 +90,27 @@ const Presets: React.FC = () => {
     setPresets(simType === "msfs2020" ? presetsMsfs : presetsXplane);
   }, [simType, presetsMsfs, presetsXplane, xplanePresets, msfsPresets]);
 
-  const fetchPresetsMsfs = async () => {
-    const res = await fetch(
-      process.env.NEXT_PUBLIC_HUBHOP_API_BASEURL + "/msfs2020/presets",
-      { redirect: "follow" }
-    );
-    const fetchedPresets = await res.json();
-    const today = new Date();
-
-    return (
-      localStorage.setItem("fetchedMsfs", today.toISOString()),
-      db.presetsMsfs.clear().then(() => db.presetsMsfs.bulkAdd(fetchedPresets)),
-      setPresetsMsfs(fetchedPresets)
-    );
-  };
-  const fetchPresetsXplane = async () => {
-    const res = await fetch(
-      process.env.NEXT_PUBLIC_HUBHOP_API_BASEURL + "/xplane/presets",
-      { redirect: "follow" }
-    );
-    const fetchedPresets = await res.json();
-    const today = new Date();
-
-    return (
-      localStorage.setItem("fetchedXplane", today.toISOString()),
-      db.presetsXplane
-        .clear()
-        .then(() => db.presetsXplane.bulkAdd(fetchedPresets)),
-      setPresetsXplane(fetchedPresets)
-    );
-  };
-
   useEffect(() => {
     savedToast == true ? toast("Saved") : null;
   }, []);
 
   useEffect(() => {
-    async function fetchRoutine() {
+    if (addModalOpen) return;
+    const sim = simType === "xplane" ? "xplane" : "msfs2020";
+    syncSim(sim, () => {
       setLoading(true);
-      setLoadingStatus("Checking for updates");
-      await last();
-      // setLoading(false);
-      setLoadingStatus("");
-      if (
-        (await db.presetsMsfs.count()).toFixed() === "0" ||
-        (await db.presetsXplane.count()).toFixed() === "0"
-      ) {
-        // setLoading(true);
-        setLoadingStatus("Downloading MSFS Presets");
-        await fetchPresetsMsfs();
-        setLoadingStatus("Downloading X-Plane Presets");
-        await fetchPresetsXplane();
-        // setLoading(false);
+      setLoadingStatus(
+        sim === "msfs2020"
+          ? "Downloading MSFS Presets"
+          : "Downloading X-Plane Presets"
+      );
+    })
+      .catch((error) => console.error(error))
+      .finally(() => {
+        setLoading(false);
         setLoadingStatus("");
-      } else {
-        // setLoading(true);
-        setLoadingStatus("Loading MSFS Presets");
-        setPresetsMsfs(
-          (await db.presetsMsfs.orderBy("vendor").toArray()) || []
-        );
-        setLoadingStatus("");
-        setLoadingStatus("Loading X-Plane Presets");
-        setPresetsXplane(
-          (await db.presetsXplane.orderBy("vendor").toArray()) || []
-        );
-        setLoadingStatus("");
-        // setLoading(false);
-      }
-
-      if (
-        (localStorage.getItem("lastMsfs") || "") >
-        (localStorage.getItem("fetchedMsfs") || "")
-      ) {
-        // setLoading(true);
-        setLoadingStatus("Downloading MSFS Presets");
-        await fetchPresetsMsfs();
-        // setLoading(false);
-        setLoadingStatus("");
-      }
-      if (
-        (localStorage.getItem("lastXplane") || "") >
-        (localStorage.getItem("fetchedXplane") || "")
-      ) {
-        // setLoading(true);
-        setLoadingStatus("Downloading X-Plane Presets");
-        await fetchPresetsXplane();
-        // setLoading(false);
-        setLoadingStatus("");
-      }
-      setLoading(false);
-    }
-    fetchRoutine();
-  }, [addModalOpen]);
+      });
+  }, [simType, addModalOpen]);
 
   useEffect(() => {
     const myAccounts = msalInstance.getAllAccounts();
@@ -571,28 +478,7 @@ const Presets: React.FC = () => {
           >
             <AddPresetsModal
               presets={presets}
-              setAddModalOpen={async () => {
-                setAddModalOpen(false);
-                await last();
-                if ((await db.presetsMsfs.count()).toFixed() === "0") {
-                  await fetchPresetsMsfs();
-                  await fetchPresetsXplane();
-                } else {
-                  setPresetsMsfs(
-                    (await db.presetsMsfs.orderBy("vendor").toArray()) || []
-                  );
-                  setPresetsXplane(
-                    (await db.presetsXplane.orderBy("vendor").toArray()) || []
-                  );
-                }
-                if (
-                  (localStorage.getItem("last") || "") >
-                  (localStorage.getItem("fetched") || "")
-                ) {
-                  await fetchPresetsMsfs();
-                  await fetchPresetsXplane();
-                }
-              }}
+              setAddModalOpen={() => setAddModalOpen(false)}
             />
           </motion.div>
         )}
