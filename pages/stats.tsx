@@ -5,40 +5,44 @@ import Layout from "../components/Layout";
 import LoadingSpinner from "../components/sections/Shared/LoadingSpinner";
 import GeneralStats from "../components/sections/stats/GeneralStats";
 import TableStats from "../components/sections/stats/TableStats";
+import { presetTable, syncSim } from "../services/presetSync";
 
 const Stats: React.FC = () => {
   const [presets, setPresets] = useState([]);
   const [stats, setStats] = useState<any>([]);
-  const [simType, setSimType] = useState("msfs2020");
+  const [simType, setSimType] = useState<string | null>(null);
 
   useEffect(() => {
     // Initialize simType based on localStorage if available
     if (typeof window !== "undefined") {
-      const storedSimType = localStorage.getItem("simType");
-      if (storedSimType) setSimType(storedSimType);
+      setSimType(localStorage.getItem("simType") || "msfs2020");
     }
   }, []);
 
   useEffect(() => {
-    // Fetch stats and presets based on simType
+    // Fetch stats and presets based on simType, once it is known
+    if (!simType) return;
     setStats([]);
     setPresets([]);
     const statsUrl =
       simType === "msfs2020"
         ? process.env.NEXT_PUBLIC_HUBHOP_API_STATS_MSFS
         : process.env.NEXT_PUBLIC_HUBHOP_API_STATS_XPLANE;
-    const presetsUrl =
-      simType === "msfs2020"
-        ? `${process.env.NEXT_PUBLIC_HUBHOP_API_BASEURL}/msfs2020/presets`
-        : `${process.env.NEXT_PUBLIC_HUBHOP_API_BASEURL}/xplane/presets`;
+    const sim = simType === "xplane" ? "xplane" : "msfs2020";
+    let cancelled = false;
 
     fetch(statsUrl || "", { redirect: "follow" })
       .then((res) => res.json())
-      .then((data) => setStats(data));
+      .then((data) => !cancelled && setStats(data));
 
-    fetch(presetsUrl || "", { redirect: "follow" })
-      .then((res) => res.json())
-      .then((data) => setPresets(data));
+    syncSim(sim)
+      .catch((error) => console.error(error))
+      .then(() => presetTable(sim).toArray())
+      .then((data: any) => !cancelled && setPresets(data));
+
+    return () => {
+      cancelled = true;
+    };
   }, [simType]);
 
   useEffect(() => {
