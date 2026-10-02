@@ -42,6 +42,7 @@ const Preset: React.FC = () => {
 
   // fetch the newest version of this one preset and store it in the local cache
   const fetchPreset = async () => {
+    setFetchDone(false);
     try {
       const res = await fetch(
         process.env.NEXT_PUBLIC_HUBHOP_API_BASEURL + "/" + sim + "/presets/" + id,
@@ -52,11 +53,14 @@ const Preset: React.FC = () => {
         await presetTable(sim).put({ ...fetchedPreset, id });
       } else if (res.status === 404) {
         await presetTable(sim).delete(id as string);
+      } else {
+        throw new Error(`Loading preset ${id} failed: ${res.status}`);
       }
+      // only a real answer from the server may turn into "does not exist"
+      setFetchDone(true);
     } catch (error) {
       console.error(error);
     }
-    setFetchDone(true);
   };
 
   const fetchHistory = async () => {
