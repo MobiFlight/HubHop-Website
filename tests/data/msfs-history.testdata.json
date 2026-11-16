@@ -1,0 +1,45 @@
+[
+  {
+    "_id": "msfs-0001",
+    "history": [
+      {
+        "vendor": "Asobo",
+        "aircraft": "A320neo",
+        "system": "Autopilot",
+        "presetType": "Input",
+        "code": "(>K:TEST_0001)",
+        "description": "Test description for AP master toggle",
+        "author": "Test Author",
+        "label": "AP master",
+        "version": 1,
+        "createdDate": "2024-01-01T10:00:00.000Z"
+      },
+      {
+        "vendor": "Asobo",
+        "aircraft": "A320neo",
+        "system": "Autopilot",
+        "presetType": "Input",
+        "code": "(>K:TEST_0001)",
+        "description": "Test description for AP master toggle",
+        "author": "Test Author",
+        "label": "AP master on",
+        "version": 2,
+        "updatedBy": "Test User",
+        "createdDate": "2024-02-01T10:00:00.000Z"
+      },
+      {
+        "vendor": "Asobo",
+        "aircraft": "A320neo",
+        "system": "Autopilot",
+        "presetType": "Input",
+        "code": "(>K:TEST_0001)",
+        "description": "Test description for AP master toggle",
+        "author": "Test Author",
+        "label": "AP master toggle",
+        "version": 3,
+        "updatedBy": "Test User",
+        "createdDate": "2024-03-01T10:00:00.000Z"
+      }
+    ]
+  }
+]

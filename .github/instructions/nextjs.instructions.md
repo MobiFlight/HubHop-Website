@@ -11,7 +11,7 @@ applyTo: "**/*.jsx, **/*.tsx, **/*.js, **/*.ts, **/*.css"
   Azure Static Web Apps. There is no server: no API routes, no `getServerSideProps`, no middleware.
 - `trailingSlash: true`; dynamic data is addressed via query params (e.g. `/preset/?id=<id>&simType=<sim>`), not dynamic routes.
 - React with functional components and hooks
-- TypeScript (`strict: false` for now; new code should still be fully typed)
+- TypeScript in strict mode (legacy code uses `any` liberally; new code should be properly typed)
 - Tailwind CSS for styling (some legacy `styled-components` and `framer-motion` usage)
 - Dexie (IndexedDB) as client-side preset cache
 - MSAL (`@azure/msal-browser`, `@azure/msal-react`) against Azure AD B2C for login
@@ -59,8 +59,9 @@ public/                  # Static assets
 
 ### Configuration
 
-- All runtime configuration is `NEXT_PUBLIC_*` env vars from `.env.production` (inlined at build time):
-  OAuth settings, `NEXT_PUBLIC_HUBHOP_API_BASEURL`, stats and "last" endpoints. No secrets belong there.
+- All runtime configuration is `NEXT_PUBLIC_*` env vars from the committed `.env` (used by dev, build and tests,
+  inlined into the JavaScript at build time): OAuth settings, `NEXT_PUBLIC_HUBHOP_API_BASEURL`, stats and "last" endpoints.
+  Everything in `.env` is public. **Never put secrets there.** Use a gitignored `.env.local` for personal overrides.
 - Because the site is static, code that touches `window`, `localStorage` or IndexedDB must run on the client only
   (inside `useEffect` or event handlers).
 
@@ -73,6 +74,7 @@ public/                  # Static assets
 - Handle loading, error and empty states for every API call.
 - Use semantic HTML and accessible names (labels, `aria-*`, alt text) so components are reachable via role-based Playwright locators.
 - Add `data-testid` only when a role/label/text locator is not possible.
+- Add or update Playwright tests in `tests/` for every user-facing change (see `tests/README.md`).
 - Use `useEffect` with correct dependency arrays and clean up listeners/timers.
 
 ## Code Style

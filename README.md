@@ -17,11 +17,13 @@ npm run dev          # http://localhost:3000
 npm run build        # static export to ./out
 npm run type-check   # TypeScript check
 npm run format       # Prettier
+npm run test:e2e     # Playwright end-to-end tests
 ```
 
 The site runs against the production HubHop API. Configuration comes from the public `NEXT_PUBLIC_*`
-variables in `.env.production`. Note: `next dev` does not load `.env.production`. Until this is fixed, copy it
-to `.env.local` for local development.
+variables in `.env`. Everything in it is public, so never add secrets there.
+
+Tests are described in [tests/README.md](tests/README.md).
 
 ## Contributing
 

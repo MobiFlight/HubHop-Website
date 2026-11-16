@@ -12,7 +12,7 @@
   "forwardPorts": [3000],
 
   // All project tooling is installed here, so a fresh container is ready to go.
-  "postCreateCommand": "npm ci",
+  "postCreateCommand": "npm ci && sudo npx playwright install-deps chromium && npx playwright install chromium",
   "postStartCommand": "npm install",
 
   "customizations": {
