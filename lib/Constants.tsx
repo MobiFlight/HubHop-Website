@@ -15,6 +15,6 @@ const NavbarLinks = [
     title: "Stats",
     href: "/stats",
   },
-];
+]
 
-export default NavbarLinks;
+export default NavbarLinks

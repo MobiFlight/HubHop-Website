@@ -1,9 +1,9 @@
 interface Props {
-  title: string;
-  edit?: boolean;
-  inputHandler?: any;
-  editData?: string;
-  codeOrDescriptionBox?: boolean;
+  title: string
+  edit?: boolean
+  inputHandler?: any
+  editData?: string
+  codeOrDescriptionBox?: boolean
 }
 
 const PresetPreviewLabel: React.FC<Props> = ({
@@ -44,7 +44,7 @@ const PresetPreviewLabel: React.FC<Props> = ({
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default PresetPreviewLabel;
+export default PresetPreviewLabel

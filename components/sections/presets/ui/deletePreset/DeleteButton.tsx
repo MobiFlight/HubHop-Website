@@ -1,4 +1,4 @@
-import { FiTrash2 } from "react-icons/fi";
+import { FiTrash2 } from "react-icons/fi"
 
 const DeleteButton: React.FC = () => {
   return (
@@ -8,7 +8,7 @@ const DeleteButton: React.FC = () => {
       </div>
       <div>Delete</div>
     </button>
-  );
-};
+  )
+}
 
-export default DeleteButton;
+export default DeleteButton

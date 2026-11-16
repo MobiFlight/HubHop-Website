@@ -1,8 +1,8 @@
-import Layout from "../components/Layout";
+import Layout from "../components/Layout"
 
 const Terms: React.FC = () => (
   <Layout title="Terms of Service | Hubhop by Mobiflight">
-    <div className="container mx-auto min-h-screen px-2 mb-3 text-justify md:mt-10">
+    <div className="container mx-auto mb-3 min-h-screen px-2 text-justify md:mt-10">
       <h1 className="mb-3 text-4xl">Impressum / Terms</h1>
       <h2>Angaben gemäß § 5 TMG:</h2>
       <p>
@@ -89,6 +89,6 @@ const Terms: React.FC = () => (
       </p>
     </div>
   </Layout>
-);
+)
 
-export default Terms;
+export default Terms

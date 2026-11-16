@@ -1,4 +1,5 @@
 # AGENTS.md
+
 Instructions for AI coding agents working in this repository.
 @.github/copilot-instructions.md
 @.github/instructions/nextjs.instructions.md

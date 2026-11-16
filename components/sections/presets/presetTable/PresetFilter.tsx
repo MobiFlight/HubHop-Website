@@ -1,39 +1,39 @@
-import { useState } from "react";
+import { useState } from "react"
 import {
   HiAdjustments,
   HiOutlineSearchCircle,
   HiChevronRight,
   HiChevronLeft,
   HiOutlineLightBulb,
-} from "react-icons/hi";
-import { GiCommercialAirplane } from "react-icons/gi";
-import { RiListSettingsLine } from "react-icons/ri";
-import { MdBusiness } from "react-icons/md";
-import { BiCog, BiJoystickButton } from "react-icons/bi";
-import { AnimatePresence, motion } from "framer-motion";
-import { AuthenticatedTemplate } from "@azure/msal-react";
+} from "react-icons/hi"
+import { GiCommercialAirplane } from "react-icons/gi"
+import { RiListSettingsLine } from "react-icons/ri"
+import { MdBusiness } from "react-icons/md"
+import { BiCog, BiJoystickButton } from "react-icons/bi"
+import { AnimatePresence, motion } from "framer-motion"
+import { AuthenticatedTemplate } from "@azure/msal-react"
 
 interface Props {
-  search: Function;
-  filterVendor: Function;
-  resetFilter: Function;
-  filteredPresets: any;
-  filterAircraft: Function;
-  filteredVendors: any;
-  filteredItems: any;
-  filteredAircrafts: any;
-  filteredSystems: any;
-  filteredPresetTypes: any;
-  filteredCodeTypes: any;
-  filterOpen: boolean;
-  filterSystem: Function;
-  filterPresetType: Function;
-  filterCodeType: Function;
-  showReportedPresets: boolean;
-  showMyPresets: boolean;
-  setShowReportedPresets: Function;
-  setShowMyPresets: Function;
-  setFilterOpen: Function;
+  search: Function
+  filterVendor: Function
+  resetFilter: Function
+  filteredPresets: any
+  filterAircraft: Function
+  filteredVendors: any
+  filteredItems: any
+  filteredAircrafts: any
+  filteredSystems: any
+  filteredPresetTypes: any
+  filteredCodeTypes: any
+  filterOpen: boolean
+  filterSystem: Function
+  filterPresetType: Function
+  filterCodeType: Function
+  showReportedPresets: boolean
+  showMyPresets: boolean
+  setShowReportedPresets: Function
+  setShowMyPresets: Function
+  setFilterOpen: Function
 }
 
 const PresetFilter: React.FC<Props> = ({
@@ -58,53 +58,53 @@ const PresetFilter: React.FC<Props> = ({
   filterOpen,
   setFilterOpen,
 }) => {
-  const [myPresetTooltip, setMyPresetTooltip] = useState(false);
+  const [myPresetTooltip, setMyPresetTooltip] = useState(false)
 
   const uniqueVendor = Array.from(
     new Set(
       filteredItems
         .map((item: any) => item.vendor)
         .sort((a: any, b: any) =>
-          a.toLowerCase().localeCompare(b.toLowerCase())
-        )
-    )
-  );
+          a.toLowerCase().localeCompare(b.toLowerCase()),
+        ),
+    ),
+  )
   const uniqueAircraft = Array.from(
     new Set(
       filteredItems
         .map((item: any) => item.aircraft)
         .sort((a: any, b: any) =>
-          a.toLowerCase().localeCompare(b.toLowerCase())
-        )
-    )
-  );
+          a.toLowerCase().localeCompare(b.toLowerCase()),
+        ),
+    ),
+  )
   const uniqueSystem = Array.from(
     new Set(
       filteredItems
         .map((item: any) => item.system)
         .sort((a: any, b: any) =>
-          a.toLowerCase().localeCompare(b.toLowerCase())
-        )
-    )
-  );
+          a.toLowerCase().localeCompare(b.toLowerCase()),
+        ),
+    ),
+  )
   const uniqueType = Array.from(
     new Set(
       filteredItems
         .map((item: any) => item.presetType)
         .sort((a: any, b: any) =>
-          a.toLowerCase().localeCompare(b.toLowerCase())
-        )
-    )
-  );
+          a.toLowerCase().localeCompare(b.toLowerCase()),
+        ),
+    ),
+  )
   const uniqueCodeType = Array.from(
     new Set(
       filteredItems
         .map((item: any) => item.codeType)
         .sort((a: any, b: any) =>
-          a.toLowerCase().localeCompare(b.toLowerCase())
-        )
-    )
-  );
+          a.toLowerCase().localeCompare(b.toLowerCase()),
+        ),
+    ),
+  )
 
   const draw = {
     hidden: {
@@ -123,22 +123,22 @@ const PresetFilter: React.FC<Props> = ({
           pathLength: { type: "spring", duration: 0.5, bounce: 0 },
           opacity: { duration: 0.01 },
         },
-      };
+      }
     },
-  };
+  }
 
-  var timeout: any;
+  var timeout: any
 
   const showTip = () => {
     timeout = setTimeout(() => {
-      setMyPresetTooltip(true);
-    }, 400);
-  };
+      setMyPresetTooltip(true)
+    }, 400)
+  }
 
   const hideTip = () => {
-    clearInterval(timeout);
-    setMyPresetTooltip(false);
-  };
+    clearInterval(timeout)
+    setMyPresetTooltip(false)
+  }
 
   return (
     <div
@@ -397,7 +397,7 @@ const PresetFilter: React.FC<Props> = ({
         </button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default PresetFilter;
+export default PresetFilter

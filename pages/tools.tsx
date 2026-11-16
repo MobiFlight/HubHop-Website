@@ -1,12 +1,12 @@
-import { AnimatePresence, motion } from "framer-motion";
-import Head from "next/head";
-import { useState } from "react";
-import Layout from "../components/Layout";
-import ButtonOrange from "../components/sections/Shared/ButtonOrange";
-import Potti from "../components/sections/tools/Potti";
+import { AnimatePresence, motion } from "framer-motion"
+import Head from "next/head"
+import { useState } from "react"
+import Layout from "../components/Layout"
+import ButtonOrange from "../components/sections/Shared/ButtonOrange"
+import Potti from "../components/sections/tools/Potti"
 
 const Tools: React.FC = () => {
-  const [tool, setTool] = useState("potti");
+  const [tool, setTool] = useState("potti")
 
   return (
     <Layout title="Tools | Hubhop by Mobiflight">
@@ -34,7 +34,7 @@ const Tools: React.FC = () => {
         <meta property="twitter:image" content="@/assets/logo-big.png" />
       </Head>
       <div className="min-h-screen p-3">
-        <div className="flex w-full flex-col space-y-3 xl:flex-row xl:space-y-0 xl:space-x-3">
+        <div className="flex w-full flex-col space-y-3 xl:flex-row xl:space-x-3 xl:space-y-0">
           <div className="flex h-fit w-full flex-col space-y-3 rounded-lg bg-hhCard/40 p-3 xl:w-1/6">
             <h2 className="text-xl">Tools</h2>
             <button onClick={() => setTool("potti")} className="w-full">
@@ -75,7 +75,7 @@ const Tools: React.FC = () => {
         </div>
       </div>
     </Layout>
-  );
-};
+  )
+}
 
-export default Tools;
+export default Tools

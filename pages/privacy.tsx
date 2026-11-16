@@ -1,5 +1,5 @@
-import Head from "next/head";
-import Layout from "../components/Layout";
+import Head from "next/head"
+import Layout from "../components/Layout"
 
 const Privacy: React.FC = () => (
   <Layout title="Privacy Policy | Hubhop by Mobiflight">
@@ -297,6 +297,6 @@ const Privacy: React.FC = () => (
       </p>
     </div>
   </Layout>
-);
+)
 
-export default Privacy;
+export default Privacy

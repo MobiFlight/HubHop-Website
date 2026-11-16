@@ -1,4 +1,4 @@
-import { BiDownload } from "react-icons/bi";
+import { BiDownload } from "react-icons/bi"
 
 const ExportPresetsButton: React.FC = () => {
   return (
@@ -8,7 +8,7 @@ const ExportPresetsButton: React.FC = () => {
       </div>
       <p>Export presets</p>
     </button>
-  );
-};
+  )
+}
 
-export default ExportPresetsButton;
+export default ExportPresetsButton

@@ -1,9 +1,9 @@
-import Link from "next/link";
-import { FaDiscord, FaFingerprint, FaGithub, FaReadme } from "react-icons/fa";
+import Link from "next/link"
+import { FaDiscord, FaFingerprint, FaGithub, FaReadme } from "react-icons/fa"
 
 const Footer: React.FC = () => {
   return (
-    <footer className="grid grid-cols-3 items-center justify-between bg-hhBG/50 py-5 px-5 text-hhText">
+    <footer className="grid grid-cols-3 items-center justify-between bg-hhBG/50 px-5 py-5 text-hhText">
       <div>
         <span>&#169;</span> HubHop and its contributors 2024 - Version 2.9.5
       </div>
@@ -22,7 +22,10 @@ const Footer: React.FC = () => {
       </div>
       <div className="flex flex-col items-end space-y-2">
         <div>
-          <Link legacyBehavior href="https://github.com/HubHopAPI/HubHop-Website">
+          <Link
+            legacyBehavior
+            href="https://github.com/HubHopAPI/HubHop-Website"
+          >
             <a
               className="flex items-center justify-around space-x-1 transition-all hover:text-hhOrange"
               target="_blank"
@@ -54,7 +57,7 @@ const Footer: React.FC = () => {
         </div>
       </div>
     </footer>
-  );
-};
+  )
+}
 
-export default Footer;
+export default Footer

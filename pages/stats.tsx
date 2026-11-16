@@ -1,63 +1,63 @@
-import { motion } from "framer-motion";
-import Head from "next/head";
-import { useEffect, useState } from "react";
-import Layout from "../components/Layout";
-import LoadingSpinner from "../components/sections/Shared/LoadingSpinner";
-import GeneralStats from "../components/sections/stats/GeneralStats";
-import TableStats from "../components/sections/stats/TableStats";
-import { presetTable, syncSim } from "../services/presetSync";
+import { motion } from "framer-motion"
+import Head from "next/head"
+import { useEffect, useState } from "react"
+import Layout from "../components/Layout"
+import LoadingSpinner from "../components/sections/Shared/LoadingSpinner"
+import GeneralStats from "../components/sections/stats/GeneralStats"
+import TableStats from "../components/sections/stats/TableStats"
+import { presetTable, syncSim } from "../services/presetSync"
 
 const Stats: React.FC = () => {
-  const [presets, setPresets] = useState([]);
-  const [stats, setStats] = useState<any>([]);
-  const [simType, setSimType] = useState<string | null>(null);
+  const [presets, setPresets] = useState([])
+  const [stats, setStats] = useState<any>([])
+  const [simType, setSimType] = useState<string | null>(null)
 
   useEffect(() => {
     // Initialize simType based on localStorage if available
     if (typeof window !== "undefined") {
-      setSimType(localStorage.getItem("simType") || "msfs2020");
+      setSimType(localStorage.getItem("simType") || "msfs2020")
     }
-  }, []);
+  }, [])
 
   useEffect(() => {
     // Fetch stats and presets based on simType, once it is known
-    if (!simType) return;
-    setStats([]);
-    setPresets([]);
+    if (!simType) return
+    setStats([])
+    setPresets([])
     const statsUrl =
       simType === "msfs2020"
         ? process.env.NEXT_PUBLIC_HUBHOP_API_STATS_MSFS
-        : process.env.NEXT_PUBLIC_HUBHOP_API_STATS_XPLANE;
-    const sim = simType === "xplane" ? "xplane" : "msfs2020";
-    let cancelled = false;
+        : process.env.NEXT_PUBLIC_HUBHOP_API_STATS_XPLANE
+    const sim = simType === "xplane" ? "xplane" : "msfs2020"
+    let cancelled = false
 
     fetch(statsUrl || "", { redirect: "follow" })
       .then((res) => res.json())
-      .then((data) => !cancelled && setStats(data));
+      .then((data) => !cancelled && setStats(data))
 
     syncSim(sim)
       .catch((error) => console.error(error))
       .then(() => presetTable(sim).toArray())
-      .then((data: any) => !cancelled && setPresets(data));
+      .then((data: any) => !cancelled && setPresets(data))
 
     return () => {
-      cancelled = true;
-    };
-  }, [simType]);
+      cancelled = true
+    }
+  }, [simType])
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      document.body.classList.toggle("xplane", simType === "xplane");
+      document.body.classList.toggle("xplane", simType === "xplane")
     }
-  }, [simType]);
+  }, [simType])
 
   const toggleSimType = () => {
     if (typeof window !== "undefined") {
-      const newSimType = simType === "msfs2020" ? "xplane" : "msfs2020";
-      setSimType(newSimType);
-      localStorage.setItem("simType", newSimType);
+      const newSimType = simType === "msfs2020" ? "xplane" : "msfs2020"
+      setSimType(newSimType)
+      localStorage.setItem("simType", newSimType)
     }
-  };
+  }
 
   return (
     <Layout title="Stats | Hubhop by Mobiflight">
@@ -154,7 +154,7 @@ const Stats: React.FC = () => {
         )}
       </div>
     </Layout>
-  );
-};
+  )
+}
 
-export default Stats;
+export default Stats

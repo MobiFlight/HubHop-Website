@@ -10,4 +10,4 @@ module.exports = {
     hubHopPresets: "https://hubhop-api-mgtm.azure-api.net/api/v1/presets",
   },
   output: "export",
-};
+}

@@ -1,9 +1,9 @@
-import { BiLockAlt, BiLockOpenAlt } from "react-icons/bi";
-import { motion } from "framer-motion";
+import { BiLockAlt, BiLockOpenAlt } from "react-icons/bi"
+import { motion } from "framer-motion"
 
 interface Props {
-  toggleEdit: boolean;
-  setEdit: Function;
+  toggleEdit: boolean
+  setEdit: Function
 }
 
 const EditToggle: React.FC<Props> = ({ toggleEdit, setEdit }) => {
@@ -39,7 +39,7 @@ const EditToggle: React.FC<Props> = ({ toggleEdit, setEdit }) => {
         <BiLockOpenAlt />
       </div>
     </button>
-  );
-};
+  )
+}
 
-export default EditToggle;
+export default EditToggle

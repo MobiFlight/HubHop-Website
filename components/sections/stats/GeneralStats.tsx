@@ -1,25 +1,25 @@
-import { AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
-import DataTable, { createTheme } from "react-data-table-component";
-import LoadingSpinner from "../Shared/LoadingSpinner";
-import Modal from "../Shared/Modal";
-import StatsCard from "./ui/StatsCard";
-import { db } from "../../../services/db";
-import OpenPresetButton from "../presets/ui/OpenPresetButton";
-import PresetPreviewLabel from "../presets/ui/PresetInputLabel";
+import { AnimatePresence } from "framer-motion"
+import { useEffect, useState } from "react"
+import DataTable, { createTheme } from "react-data-table-component"
+import LoadingSpinner from "../Shared/LoadingSpinner"
+import Modal from "../Shared/Modal"
+import StatsCard from "./ui/StatsCard"
+import { db } from "../../../services/db"
+import OpenPresetButton from "../presets/ui/OpenPresetButton"
+import PresetPreviewLabel from "../presets/ui/PresetInputLabel"
 
 interface Props {
-  presets: String[];
-  stats: any;
+  presets: String[]
+  stats: any
 }
 
 const GeneralStats: React.FC<Props> = ({ presets, stats }) => {
-  const [modal, setModal] = useState(false);
-  const [contModal, setContModal] = useState(false);
-  const [singleCont, setSingleCont] = useState("");
-  const [contSearch, setContSearch] = useState("");
-  const [contPresetSearch, setContPresetSearch] = useState("");
-  const [cont, setCont] = useState<any>([]);
+  const [modal, setModal] = useState(false)
+  const [contModal, setContModal] = useState(false)
+  const [singleCont, setSingleCont] = useState("")
+  const [contSearch, setContSearch] = useState("")
+  const [contPresetSearch, setContPresetSearch] = useState("")
+  const [cont, setCont] = useState<any>([])
 
   const columns: any = [
     {
@@ -34,7 +34,7 @@ const GeneralStats: React.FC<Props> = ({ presets, stats }) => {
       maxWidth: "40%",
       sortable: true,
     },
-  ];
+  ]
   const columnSingle: any = [
     {
       name: "Last modification",
@@ -83,7 +83,7 @@ const GeneralStats: React.FC<Props> = ({ presets, stats }) => {
       sortable: true,
       maxWidth: "50%",
     },
-  ];
+  ]
 
   createTheme("hubhop", {
     text: {
@@ -111,7 +111,7 @@ const GeneralStats: React.FC<Props> = ({ presets, stats }) => {
       hover: "rgba(0,0,0,.12)",
       disabled: "rgba(0, 0, 0, .18)",
     },
-  });
+  })
 
   const customStyles = {
     noData: {
@@ -134,31 +134,32 @@ const GeneralStats: React.FC<Props> = ({ presets, stats }) => {
         fontSize: "0.9rem",
       },
     },
-  };
+  }
 
   const contributor = Array.from(
     new Set(
       presets
         .filter((un: any) => un.author != undefined)
         .map((item: any) => item.author)
-        .sort()
-    )
-  );
+        .sort(),
+    ),
+  )
 
   useEffect(() => {
-    var ar = [];
+    var ar = []
     for (const contribute of contributor) {
       ar.push({
         name: contribute,
         presets: presets
           .filter((un: any) => un.author != undefined)
           .filter(
-            (fi: any) => fi.author === contribute || fi.updatedBy === contribute
+            (fi: any) =>
+              fi.author === contribute || fi.updatedBy === contribute,
           ).length,
-      });
+      })
     }
-    setCont(ar);
-  }, [presets]);
+    setCont(ar)
+  }, [presets])
 
   return (
     <div className="container mx-auto flex flex-col">
@@ -197,7 +198,7 @@ const GeneralStats: React.FC<Props> = ({ presets, stats }) => {
                       new Set(
                         presets
                           .filter((un: any) => un.author != undefined)
-                          .map((preset: any) => preset.author)
+                          .map((preset: any) => preset.author),
                       ).size
                     }
                   </p>
@@ -244,7 +245,7 @@ const GeneralStats: React.FC<Props> = ({ presets, stats }) => {
               <DataTable
                 columns={columns}
                 data={cont.filter((search: any) =>
-                  search.name.toLowerCase().includes(contSearch)
+                  search.name.toLowerCase().includes(contSearch),
                 )}
                 customStyles={customStyles}
                 pagination
@@ -256,7 +257,8 @@ const GeneralStats: React.FC<Props> = ({ presets, stats }) => {
                 defaultSortFieldId={2}
                 defaultSortAsc={false}
                 onRowClicked={(row: any) => (
-                  setSingleCont(row.name), setContModal((prev) => !prev)
+                  setSingleCont(row.name),
+                  setContModal((prev) => !prev)
                 )}
               />
               {contModal && (
@@ -278,7 +280,7 @@ const GeneralStats: React.FC<Props> = ({ presets, stats }) => {
                         .filter(
                           (cont: any) =>
                             cont.author === singleCont ||
-                            cont.updatedBy === singleCont
+                            cont.updatedBy === singleCont,
                         )
                         .filter(
                           (na: any) =>
@@ -295,12 +297,12 @@ const GeneralStats: React.FC<Props> = ({ presets, stats }) => {
                             na.presetType
                               .toLowerCase()
                               .includes(contPresetSearch) ||
-                            na.code.toLowerCase().includes(contPresetSearch)
+                            na.code.toLowerCase().includes(contPresetSearch),
                         )
                         .sort(
                           (a: any, b: any) =>
                             new Date(b.createdDate).valueOf() -
-                            new Date(a.createdDate).valueOf()
+                            new Date(a.createdDate).valueOf(),
                         )}
                       customStyles={customStyles}
                       pagination
@@ -312,7 +314,7 @@ const GeneralStats: React.FC<Props> = ({ presets, stats }) => {
                       onRowClicked={(row: any) =>
                         window.open(
                           "https://hubhop.mobiflight.com/preset/?id=" + row.id,
-                          "_blank"
+                          "_blank",
                         )
                       }
                     />
@@ -324,7 +326,7 @@ const GeneralStats: React.FC<Props> = ({ presets, stats }) => {
         )}
       </AnimatePresence>
     </div>
-  );
-};
+  )
+}
 
-export default GeneralStats;
+export default GeneralStats

@@ -1,4 +1,4 @@
-import * as msal from "@azure/msal-browser";
+import * as msal from "@azure/msal-browser"
 
 export const msalConfig = {
   auth: {
@@ -12,6 +12,6 @@ export const msalConfig = {
     cacheLocation: "localStorage",
     storeAuthStateInCookie: true,
   },
-};
+}
 
-export const msalInstance = new msal.PublicClientApplication(msalConfig);
+export const msalInstance = new msal.PublicClientApplication(msalConfig)

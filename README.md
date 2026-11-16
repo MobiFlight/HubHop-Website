@@ -9,7 +9,7 @@ Login uses Azure AD B2C via MSAL.
 ## Getting started
 
 The recommended setup is the **devcontainer**: open the repository in VS Code and choose
-*Reopen in Container*, or use GitHub Codespaces. It installs Node, the GitHub and Azure CLIs, Claude Code,
+_Reopen in Container_, or use GitHub Codespaces. It installs Node, the GitHub and Azure CLIs, Claude Code,
 the recommended editor extensions, and all npm dependencies.
 
 ```sh

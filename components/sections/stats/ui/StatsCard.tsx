@@ -1,5 +1,5 @@
 interface Props {
-  title: string;
+  title: string
 }
 
 const StatsCard: React.FC<Props> = ({ title, children }) => {
@@ -8,6 +8,6 @@ const StatsCard: React.FC<Props> = ({ title, children }) => {
       <p className="font-semibold text-hhOrange">{title}</p>
       {children}
     </div>
-  );
-};
-export default StatsCard;
+  )
+}
+export default StatsCard

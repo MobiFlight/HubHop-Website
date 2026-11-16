@@ -1,9 +1,9 @@
-import { AiOutlineLoading } from "react-icons/ai";
+import { AiOutlineLoading } from "react-icons/ai"
 
 interface Props {
-  text: string;
-  loading: boolean;
-  disabled: boolean;
+  text: string
+  loading: boolean
+  disabled: boolean
 }
 
 const ExportButton: React.FC<Props> = ({ text, loading, disabled }) => {
@@ -24,7 +24,7 @@ const ExportButton: React.FC<Props> = ({ text, loading, disabled }) => {
       </div>
       <p className="px-5">{text}</p>
     </div>
-  );
-};
+  )
+}
 
-export default ExportButton;
+export default ExportButton

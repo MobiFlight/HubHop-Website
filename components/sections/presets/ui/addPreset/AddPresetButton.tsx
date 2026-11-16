@@ -1,4 +1,4 @@
-import { BiPlusCircle } from "react-icons/bi";
+import { BiPlusCircle } from "react-icons/bi"
 
 const AddPresetButton: React.FC = () => {
   return (
@@ -8,7 +8,7 @@ const AddPresetButton: React.FC = () => {
       </div>
       <p>Add preset</p>
     </button>
-  );
-};
+  )
+}
 
-export default AddPresetButton;
+export default AddPresetButton

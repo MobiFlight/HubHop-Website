@@ -1,69 +1,69 @@
-import { useState } from "react";
-import Modal from "../../../Shared/Modal";
-import ExportButton from "./ExportButton";
+import { useState } from "react"
+import Modal from "../../../Shared/Modal"
+import ExportButton from "./ExportButton"
 
 interface Props {
-  setExportModalOpen: Function;
+  setExportModalOpen: Function
 }
 
 const ExportPresetsModal: React.FC<Props> = ({ setExportModalOpen }) => {
-  const [downloadTxt, setDownloadTxt] = useState(false);
-  const [downloadCip, setDownloadCip] = useState(false);
-  const [downloadSimvars, setDownloadSimvars] = useState(false);
+  const [downloadTxt, setDownloadTxt] = useState(false)
+  const [downloadCip, setDownloadCip] = useState(false)
+  const [downloadSimvars, setDownloadSimvars] = useState(false)
 
   function downloadEventsTxt() {
-    setDownloadTxt(true);
+    setDownloadTxt(true)
     fetch("https://hubhop-api-mgtm.azure-api.net/api/v1/export/presets", {
       redirect: "follow",
     })
       .then((response) => response.blob())
       .then((blob) => {
-        var url = window.URL.createObjectURL(blob);
-        var a = document.createElement("a");
-        a.href = url;
-        a.download = "events.txt";
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
+        var url = window.URL.createObjectURL(blob)
+        var a = document.createElement("a")
+        a.href = url
+        a.download = "events.txt"
+        document.body.appendChild(a)
+        a.click()
+        a.remove()
       })
-      .then(() => setDownloadTxt(false));
+      .then(() => setDownloadTxt(false))
   }
   function downloadEventsCip() {
-    setDownloadCip(true);
+    setDownloadCip(true)
     fetch(
       "https://hubhop-api-mgtm.azure-api.net/api/v1/export/presets?type=cip",
-      { redirect: "follow" }
+      { redirect: "follow" },
     )
       .then((response) => response.blob())
       .then((blob) => {
-        var url = window.URL.createObjectURL(blob);
-        var a = document.createElement("a");
-        a.href = url;
-        a.download = "msfs2020_eventids.cip";
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
+        var url = window.URL.createObjectURL(blob)
+        var a = document.createElement("a")
+        a.href = url
+        a.download = "msfs2020_eventids.cip"
+        document.body.appendChild(a)
+        a.click()
+        a.remove()
       })
-      .then(() => setDownloadCip(false));
+      .then(() => setDownloadCip(false))
   }
 
   function downloadSimVars() {
-    setDownloadSimvars(true);
+    setDownloadSimvars(true)
     fetch(
       "https://hubhop-api-mgtm.azure-api.net/api/v1/export/presets?type=simVars",
-      { redirect: "follow" }
+      { redirect: "follow" },
     )
       .then((response) => response.blob())
       .then((blob) => {
-        var url = window.URL.createObjectURL(blob);
-        var a = document.createElement("a");
-        a.href = url;
-        a.download = "msfs2020_simvars.cip";
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
+        var url = window.URL.createObjectURL(blob)
+        var a = document.createElement("a")
+        a.href = url
+        a.download = "msfs2020_simvars.cip"
+        document.body.appendChild(a)
+        a.click()
+        a.remove()
       })
-      .then(() => setDownloadSimvars(false));
+      .then(() => setDownloadSimvars(false))
   }
 
   return (
@@ -169,7 +169,7 @@ const ExportPresetsModal: React.FC<Props> = ({ setExportModalOpen }) => {
         </button>
       </div>
     </Modal>
-  );
-};
+  )
+}
 
-export default ExportPresetsModal;
+export default ExportPresetsModal

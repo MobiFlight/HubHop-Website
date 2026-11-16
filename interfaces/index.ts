@@ -5,11 +5,11 @@
 // import { User } from 'path/to/interfaces';
 
 export type User = {
-  id: number;
-  name: string;
-};
+  id: number
+  name: string
+}
 
 export type NavLinks = {
-  href: string;
-  title: string;
-};
+  href: string
+  title: string
+}
