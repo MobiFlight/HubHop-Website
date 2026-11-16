@@ -33,6 +33,8 @@ jobs:
           app_location: "/" # App source code path
           # api_location: "" # Api source code path - optional
           output_location: "/out" # Built app content directory - optional
+          # Dependabot PRs have no access to the deploy token: build, but skip the preview deployment
+          skip_deploy_on_missing_secrets: true
           ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
