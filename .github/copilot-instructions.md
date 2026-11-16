@@ -15,11 +15,13 @@ report and export presets. Data comes from the HubHop API; this repo contains no
 
 ## Commands
 
-| Command              | Purpose                             |
-| -------------------- | ----------------------------------- |
-| `npm run dev`        | Dev server on http://localhost:3000 |
-| `npm run build`      | Static export to `out/`             |
-| `npm run type-check` | TypeScript check (`tsc`)            |
+| Command                | Purpose                             |
+| ---------------------- | ----------------------------------- |
+| `npm run dev`          | Dev server on http://localhost:3000 |
+| `npm run build`        | Static export to `out/`             |
+| `npm run type-check`   | TypeScript check (`tsc`)            |
+| `npm run format`       | Format all files with Prettier      |
+| `npm run format:check` | Check formatting (CI)               |
 
 Before pushing, run `npm run format:check`, `npm run type-check` and `npm run build`, and all tests once they exist.
 
