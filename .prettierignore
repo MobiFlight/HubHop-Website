@@ -1,0 +1,7 @@
+out/
+.next/
+node_modules/
+reference/
+public/
+package-lock.json
+next-env.d.ts
