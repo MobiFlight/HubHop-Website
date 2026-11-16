@@ -16,6 +16,7 @@ the recommended editor extensions, and all npm dependencies.
 npm run dev          # http://localhost:3000
 npm run build        # static export to ./out
 npm run type-check   # TypeScript check
+npm run format       # Prettier
 ```
 
 The site runs against the production HubHop API. Configuration comes from the public `NEXT_PUBLIC_*`

@@ -21,7 +21,7 @@ report and export presets. Data comes from the HubHop API; this repo contains no
 | `npm run build`      | Static export to `out/`             |
 | `npm run type-check` | TypeScript check (`tsc`)            |
 
-Before pushing, run `npm run type-check` and `npm run build`, and all tests once they exist.
+Before pushing, run `npm run format:check`, `npm run type-check` and `npm run build`, and all tests once they exist.
 
 The devcontainer provisions all tooling (Node, gh, az, Claude Code, editor extensions).
 Add new tooling to `.devcontainer/devcontainer.json` rather than documenting manual installs.

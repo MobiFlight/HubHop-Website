@@ -77,8 +77,9 @@ public/                  # Static assets
 
 ## Code Style
 
-- Prettier with `prettier-plugin-tailwindcss` (auto-sorted Tailwind classes). Format on save is enabled in the devcontainer.
-- Target style (aligned with other MobiFlight projects, to be enforced by tooling): no semicolons, double quotes.
+- Prettier 3 with `prettier-plugin-tailwindcss` (auto-sorted Tailwind classes), config in `.prettierrc`:
+  no semicolons, double quotes. Same style as other MobiFlight projects.
+- Format on save is enabled in the devcontainer; `npm run format:check` must pass.
 
 ## Deployment
 
