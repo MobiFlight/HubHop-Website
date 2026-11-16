@@ -180,10 +180,10 @@ const PresetFilter: React.FC<Props> = ({
             <div>
               <div className="flex items-center space-x-1">
                 <HiOutlineSearchCircle />
-                <label htmlFor="searchfield">Search Preset</label>
+                <label htmlFor="filter-search">Search Preset</label>
               </div>
               <textarea
-                id="seachfield"
+                id="filter-search"
                 className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 px-3 py-1 text-hhText"
                 value={filteredPresets}
                 onChange={(e) => search(e)}
@@ -192,9 +192,10 @@ const PresetFilter: React.FC<Props> = ({
             <div>
               <div className="flex items-center space-x-1">
                 <MdBusiness />
-                <label htmlFor="searchfield">Select Vendor</label>
+                <label htmlFor="filter-vendor">Select Vendor</label>
               </div>
               <select
+                id="filter-vendor"
                 className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 px-3 py-1 text-hhText"
                 onChange={(e) => filterVendor(e)}
                 value={filteredVendors}
@@ -210,9 +211,10 @@ const PresetFilter: React.FC<Props> = ({
             <div>
               <div className="flex items-center space-x-1">
                 <GiCommercialAirplane />
-                <label htmlFor="searchfield">Search Aircraft</label>
+                <label htmlFor="filter-aircraft">Search Aircraft</label>
               </div>
               <select
+                id="filter-aircraft"
                 className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 px-3 py-1 text-hhText"
                 onChange={(e) => filterAircraft(e)}
                 value={filteredAircrafts}
@@ -228,9 +230,10 @@ const PresetFilter: React.FC<Props> = ({
             <div>
               <div className="flex items-center space-x-1">
                 <BiCog />
-                <label htmlFor="searchfield">Select System</label>
+                <label htmlFor="filter-system">Select System</label>
               </div>
               <select
+                id="filter-system"
                 className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 px-3 py-1 text-hhText"
                 onChange={(e) => filterSystem(e)}
                 value={filteredSystems}
@@ -249,9 +252,10 @@ const PresetFilter: React.FC<Props> = ({
                   <BiJoystickButton />
                   <HiOutlineLightBulb />
                 </div>
-                <label htmlFor="searchfield">Select Input/Output</label>
+                <label htmlFor="filter-preset-type">Select Input/Output</label>
               </div>
               <select
+                id="filter-preset-type"
                 className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 px-3 py-1 text-hhText"
                 onChange={(e) => filterPresetType(e)}
                 value={filteredPresetTypes}
@@ -278,9 +282,10 @@ const PresetFilter: React.FC<Props> = ({
                     <div className="flex space-x-1">
                       <RiListSettingsLine />
                     </div>
-                    <label htmlFor="searchfield">Select Code Type</label>
+                    <label htmlFor="filter-code-type">Select Code Type</label>
                   </div>
                   <select
+                    id="filter-code-type"
                     className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 px-3 py-1 text-hhText"
                     onChange={(e) => filterCodeType(e)}
                     value={filteredCodeTypes}
