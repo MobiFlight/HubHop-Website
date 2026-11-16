@@ -8,7 +8,7 @@ report and export presets. Data comes from the HubHop API; this repo contains no
 ## Git workflow
 - **Never push to `main`.** Work on a feature branch and open a pull request; maintainers merge.
 - Branch names: `<issue-number>/<descriptive-name>` when an issue exists, otherwise `<type>/<descriptive-name>` (e.g. `chore/update-deps`).
-- Do not add `Co-Authored-By` or other attribution trailers to commit messages.
+- Do not add `Co-Authored-By` or other attribution trailers to commit messages, and no "Generated with ..." footers in PR descriptions.
 - Keep PRs focused: one concern per PR. Fill in `.github/pull_request_template.md`.
 
 ## Commands
