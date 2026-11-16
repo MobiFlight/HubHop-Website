@@ -52,7 +52,11 @@ public/                  # Static assets
 
 ### Authentication and roles
 
-- Login via MSAL (B2C). The access token is stored in `localStorage.accessToken`.
+- Login via MSAL v4 (B2C, popup flow). `services/msal.js` exports `msalInstance` and `msalReady`;
+  **await `msalReady` before calling `msalInstance` directly** (MSAL must be initialized first).
+  `MsalProvider` initializes it too. MSAL encrypts its `localStorage` cache with a session-cookie key,
+  so users have to log in again after a browser restart.
+- The access token is stored in `localStorage.accessToken`.
 - `getUserSettings()` loads the user's roles from the API into `localStorage.roles`; logged-out users get `"Guest"`.
 - UI permissions are checked with `localStorage.getItem("roles")` (e.g. only `moderator` may edit System/PresetType).
   The API enforces permissions; UI checks are convenience only.

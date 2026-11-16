@@ -1,16 +1,18 @@
 import { test, expect, authFile } from "./fixtures"
 
 test.describe("Add preset - anonymous", () => {
-  test("Add preset - anonymous users are sent to the login", async ({
+  test("Add preset - anonymous users are asked to log in", async ({
     presetsPage,
     page,
   }) => {
     await presetsPage.gotoPage()
 
-    const loginRequest = page.waitForRequest(/b2clogin\.com/)
+    const popup = page.waitForEvent("popup")
     await page.getByRole("button", { name: "Add preset" }).click()
 
-    await loginRequest
+    await test.step("Login popup opens", async () => {
+      await (await popup).waitForEvent("close")
+    })
     await expect(page.getByRole("heading", { name: "Add Preset" })).toHaveCount(
       0,
     )

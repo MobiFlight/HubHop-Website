@@ -9,11 +9,6 @@ export const SafeHydrate: React.FC = ({ children }) => {
   return <div suppressHydrationWarning>{children}</div>
 }
 
-const accounts = msalInstance.getAllAccounts()
-if (accounts.length > 0) {
-  msalInstance.setActiveAccount(accounts[0])
-}
-
 function App({ Component, pageProps }: AppProps) {
   return (
     <MsalProvider instance={msalInstance}>

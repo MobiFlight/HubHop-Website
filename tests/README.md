@@ -9,14 +9,18 @@ Conventions follow MobiFlight-Connector; see
 - **`*.spec.ts`**: one spec per feature or page (`PresetList`, `PresetView`, `AddPreset`, `EditPreset`, ...).
 - **`fixtures.ts`**: extends Playwright's `test` with the page objects below.
 - **`fixtures/HubHopPage.ts`**: base page object. It mocks the HubHop API with the test data,
-  blocks the B2C login, records write requests (`writeRequests()`) and counts full preset downloads.
+  records write requests (`writeRequests()`), counts full preset downloads and can log in (`login(roles)`).
+- **`fixtures/FakeIdentityProvider.ts`**: a minimal OpenID Connect provider that answers the login service's
+  endpoints (OpenID configuration, authorize, token, logout). The app's real MSAL login code runs against it.
 - **`fixtures/PresetsPage.ts`, `fixtures/PresetViewPage.ts`**: page objects with locators and actions.
-- **`auth.setup.ts`**: creates storage states in `.auth/` (gitignored) for the test personas:
-  `anonymous`, `user` and `moderator`. Logged-in states are a fake MSAL session, so no credentials are needed.
+- **`auth.setup.ts`**: logs in through the UI and saves storage states in `.auth/` (gitignored) for the test
+  personas `anonymous`, `user` and `moderator`. The role comes from the mocked `/settings/user` API.
+  MSAL encrypts its cache with a key kept in a session cookie; the storage states contain both.
 - **`data/*.testdata.json`**: synthetic API responses (presets, "last" stamps, statistics, history).
 
-Tests never call the real HubHop API. Every request to it is answered from `data/`, or with a 404
-for anything that isn't mocked.
+Tests never call the real HubHop API or login service. API requests are answered from `data/` (404 for
+anything that isn't mocked); login requests are answered by the fake identity provider. The test server
+uses `http://localhost:3000/` as OAuth redirect URI (set in `playwright.config.ts`).
 
 ## Running the tests
 

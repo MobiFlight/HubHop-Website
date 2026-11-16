@@ -1,4 +1,5 @@
 import type { Page, Request, Route } from "@playwright/test"
+import { FakeIdentityProvider } from "./FakeIdentityProvider"
 import msfsPresets from "../data/msfs-presets.testdata.json"
 import xplanePresets from "../data/xplane-presets.testdata.json"
 import msfsLast from "../data/msfs-last.testdata.json"
@@ -52,26 +53,39 @@ export class HubHopPage {
 
   constructor(public readonly page: Page) {}
 
+  readonly identityProvider = new FakeIdentityProvider()
+
   /** Installs all mocks. Must be called before the first navigation. */
   async init() {
-    // MSAL must never reach the real B2C tenant; popups are blocked so
-    // interactive token requests fail fast instead of opening windows.
-    await this.page.route(
-      /b2clogin\.com|login\.microsoftonline\.com/,
-      (route) => route.abort(),
+    const context = this.page.context()
+    // Mocks are installed on the browser context, so the login popup gets them too.
+    await this.identityProvider.install(context)
+    await context.route(`${API_HOST}/**`, (route, request) =>
+      this.handleApi(route, request),
     )
-    await this.page.addInitScript(() => {
-      window.open = () => null
-      // The Next.js dev overlay (shown for console errors, e.g. the failing
-      // silent token refresh of the fake session) would cover page controls.
+    await context.addInitScript(() => {
+      // The Next.js dev overlay (shown for console errors) would cover page controls.
       document.addEventListener("DOMContentLoaded", () => {
         const style = document.createElement("style")
         style.textContent = "nextjs-portal { display: none !important; }"
         document.head.appendChild(style)
       })
     })
-    await this.page.route(`${API_HOST}/**`, (route, request) =>
-      this.handleApi(route, request),
+  }
+
+  /**
+   * Logs in through the UI: Log-in button, login popup (answered by the fake
+   * identity provider), then the app loads the user's roles from the API.
+   */
+  async login(roles = this.api.roles) {
+    this.api.roles = roles
+    if (!this.page.url().startsWith("http")) await this.goto("/")
+    const popup = this.page.waitForEvent("popup")
+    await this.page.getByRole("button", { name: "Log-in" }).click()
+    await (await popup).waitForEvent("close")
+    await this.page.waitForFunction(
+      (expected) => localStorage.getItem("roles") === expected,
+      roles,
     )
   }
 

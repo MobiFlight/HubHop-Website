@@ -6,6 +6,32 @@ test.describe("User menu - anonymous", () => {
 
     await expect(page.getByRole("button", { name: "Log-in" })).toBeVisible()
   })
+
+  test("User menu - log in and log out", async ({ hubHopPage, page }) => {
+    await hubHopPage.goto("/")
+
+    await test.step("Log in through the login popup", async () => {
+      await hubHopPage.login("user")
+      await expect(
+        page.getByRole("button", { name: testUser.name }),
+      ).toBeVisible()
+      expect(hubHopPage.requests.some((r) => r.path === "/settings/user")).toBe(
+        true,
+      )
+    })
+
+    await test.step("Log out", async () => {
+      // the pointer still rests where the Log-in button was; move it away so
+      // hovering the user name triggers mouseenter
+      await page.mouse.move(0, 0)
+      await page.getByRole("button", { name: testUser.name }).hover()
+      await page.getByRole("button", { name: "Log-out" }).click()
+      await expect(page.getByRole("button", { name: "Log-in" })).toBeVisible()
+      expect(
+        await page.evaluate(() => localStorage.getItem("roles")),
+      ).toBeNull()
+    })
+  })
 })
 
 test.describe("User menu - logged in", () => {
