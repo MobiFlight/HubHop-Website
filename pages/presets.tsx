@@ -1,6 +1,6 @@
-import Head from "next/head";
-import Layout from "../components/Layout";
-import PresetList from "../components/sections/presets/Presets";
+import Head from "next/head"
+import Layout from "../components/Layout"
+import PresetList from "../components/sections/presets/Presets"
 
 const Presets: React.FC = () => {
   return (
@@ -21,7 +21,10 @@ const Presets: React.FC = () => {
         <meta property="og:image" content="@/assets/logo-big.png" />
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content="https://hubhop.mobiflight.com/" />
-        <meta property="twitter:title" content="Presets | Hubhop by Mobiflight" />
+        <meta
+          property="twitter:title"
+          content="Presets | Hubhop by Mobiflight"
+        />
         <meta
           property="twitter:description"
           content="Get the preset for your favorite aircraft from Hubhop. The database is a community driven project. If you find events/variables of your favorite aircraft, please share them on Hubhop too."
@@ -30,7 +33,7 @@ const Presets: React.FC = () => {
       </Head>
       <PresetList />
     </Layout>
-  );
-};
+  )
+}
 
-export default Presets;
+export default Presets

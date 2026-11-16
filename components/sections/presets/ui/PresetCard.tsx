@@ -1,54 +1,54 @@
-"use client";
+"use client"
 
-import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import PresetHistoryList from "../singlePresetView/PresetHistoryList";
-import DeleteButton from "./deletePreset/DeleteButton";
-import EditToggle from "./editPreset/EditToggle";
-import PresetPreviewLabel from "./PresetInputLabel";
-import SavePresetButton from "./editPreset/SavePresetButton";
-import ReportPresetModal from "./reportPreset/ReportPresetModal";
-import DeleteConfirmationModal from "./deletePreset/DeleteConfirmationModal";
-import OpenPresetButton from "./OpenPresetButton";
-import FixedPresetModal from "./reportPreset/FixedPresetModal";
-import { db } from "../../../../services/db";
-import Modal from "../../Shared/Modal";
-import ButtonOrange from "../../Shared/ButtonOrange";
-import ButtonDark from "../../Shared/ButtonDark";
+import { useEffect, useState } from "react"
+import { AnimatePresence, motion } from "framer-motion"
+import PresetHistoryList from "../singlePresetView/PresetHistoryList"
+import DeleteButton from "./deletePreset/DeleteButton"
+import EditToggle from "./editPreset/EditToggle"
+import PresetPreviewLabel from "./PresetInputLabel"
+import SavePresetButton from "./editPreset/SavePresetButton"
+import ReportPresetModal from "./reportPreset/ReportPresetModal"
+import DeleteConfirmationModal from "./deletePreset/DeleteConfirmationModal"
+import OpenPresetButton from "./OpenPresetButton"
+import FixedPresetModal from "./reportPreset/FixedPresetModal"
+import { db } from "../../../../services/db"
+import Modal from "../../Shared/Modal"
+import ButtonOrange from "../../Shared/ButtonOrange"
+import ButtonDark from "../../Shared/ButtonDark"
 
 interface Props {
-  id: string;
-  label: string;
-  updatedBy: string;
-  author: string;
-  createdDate: string;
-  version: string;
-  reported: string;
-  vendor: string;
-  aircraft: string;
-  system: string;
-  presetType: string;
-  codeType: string;
-  code: string;
-  description: string;
-  loading?: any;
-  history?: string;
-  setVendor: Function;
-  setAircraft: Function;
-  setSystem: Function;
-  setPresetType: Function;
-  setLabel: Function;
-  setCodeType: Function;
-  setCode: Function;
-  setDescription: Function;
-  showingHistory: boolean;
-  text: string;
-  card: boolean;
-  data?: any;
-  deletedToast: Function;
-  reportedToast: Function;
-  fixedToast: Function;
-  savedToast: Function;
+  id: string
+  label: string
+  updatedBy: string
+  author: string
+  createdDate: string
+  version: string
+  reported: string
+  vendor: string
+  aircraft: string
+  system: string
+  presetType: string
+  codeType: string
+  code: string
+  description: string
+  loading?: any
+  history?: string
+  setVendor: Function
+  setAircraft: Function
+  setSystem: Function
+  setPresetType: Function
+  setLabel: Function
+  setCodeType: Function
+  setCode: Function
+  setDescription: Function
+  showingHistory: boolean
+  text: string
+  card: boolean
+  data?: any
+  deletedToast: Function
+  reportedToast: Function
+  fixedToast: Function
+  savedToast: Function
 }
 
 const PresetCard: React.FC<Props> = ({
@@ -84,38 +84,38 @@ const PresetCard: React.FC<Props> = ({
   savedToast,
   fixedToast,
 }) => {
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [reportModalOpen, setReportModalOpen] = useState(false);
-  const [fixedModalOpen, setFixedModalOpen] = useState(false);
-  const [showHistory, setShowHistory] = useState(showingHistory);
-  const [edit, setEdit] = useState(false);
-  const [editButton, setEditButton] = useState(false);
-  const [editTooltip, seteditTooltip] = useState(false);
-  const [deleteTooltip, setDeleteTooltip] = useState(false);
-  const [revertObject, setRevertObject] = useState({});
-  const [revertModal, setRevertModal] = useState(false);
-  const [simType, setSimType] = useState("");
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+  const [reportModalOpen, setReportModalOpen] = useState(false)
+  const [fixedModalOpen, setFixedModalOpen] = useState(false)
+  const [showHistory, setShowHistory] = useState(showingHistory)
+  const [edit, setEdit] = useState(false)
+  const [editButton, setEditButton] = useState(false)
+  const [editTooltip, seteditTooltip] = useState(false)
+  const [deleteTooltip, setDeleteTooltip] = useState(false)
+  const [revertObject, setRevertObject] = useState({})
+  const [revertModal, setRevertModal] = useState(false)
+  const [simType, setSimType] = useState("")
 
   useEffect(() => {
     const storedSimType =
-      typeof window !== "undefined" && localStorage.getItem("simType");
+      typeof window !== "undefined" && localStorage.getItem("simType")
 
     if (!storedSimType && typeof window !== "undefined") {
-      localStorage.setItem("simType", "msfs2020");
-      setSimType("msfs2020");
+      localStorage.setItem("simType", "msfs2020")
+      setSimType("msfs2020")
     } else {
-      setSimType(storedSimType || "");
+      setSimType(storedSimType || "")
     }
-  }, []);
+  }, [])
 
   async function editPreset() {
-    setEditButton(true);
+    setEditButton(true)
     const url =
       process.env.NEXT_PUBLIC_HUBHOP_API_BASEURL +
       "/" +
       simType +
       "/presets/" +
-      id;
+      id
 
     // post body data
     const preset =
@@ -158,7 +158,7 @@ const PresetCard: React.FC<Props> = ({
             updatedBy: localStorage.getItem("username"),
             description: description,
             version: version,
-          };
+          }
 
     // request options
     const options: any = {
@@ -169,17 +169,17 @@ const PresetCard: React.FC<Props> = ({
         "Content-Type": "application/json",
         Authorization: "Bearer " + localStorage.getItem("accessToken"),
       },
-    };
+    }
 
     // send POST request
     fetch(url, options).then(async (res) => {
       if (res.status != 201) {
-        alert("Error occured");
+        alert("Error occured")
       }
       const localStoragePresets =
         simType === "msfs2020"
           ? (await db.presetsMsfs.toArray()) || []
-          : (await db.presetsXplane.toArray()) || [];
+          : (await db.presetsXplane.toArray()) || []
 
       let result = localStoragePresets.map((x: any) =>
         simType === "msfs2020"
@@ -211,24 +211,24 @@ const PresetCard: React.FC<Props> = ({
               }
             : x
           : x.id === id
-          ? {
-              ...x,
-              vendor: vendor,
-              aircraft: aircraft,
-              system: system,
-              code: code,
-              label: label,
-              presetType: presetType,
-              codeType: codeType,
-              status: "Updated",
-              createdDate: new Date().toUTCString(),
-              author: author,
-              updatedBy: localStorage.getItem("username"),
-              description: description,
-              version: version + 1,
-            }
-          : x
-      );
+            ? {
+                ...x,
+                vendor: vendor,
+                aircraft: aircraft,
+                system: system,
+                code: code,
+                label: label,
+                presetType: presetType,
+                codeType: codeType,
+                status: "Updated",
+                createdDate: new Date().toUTCString(),
+                author: author,
+                updatedBy: localStorage.getItem("username"),
+                description: description,
+                version: version + 1,
+              }
+            : x,
+      )
 
       simType === "msfs2020"
         ? await db.presetsMsfs
@@ -236,10 +236,10 @@ const PresetCard: React.FC<Props> = ({
             .then(() => db.presetsMsfs.bulkAdd(result))
         : await db.presetsXplane
             .clear()
-            .then(() => db.presetsXplane.bulkAdd(result));
-      setEditButton(false);
-      savedToast();
-    });
+            .then(() => db.presetsXplane.bulkAdd(result))
+      setEditButton(false)
+      savedToast()
+    })
   }
 
   async function revertPreset() {
@@ -248,10 +248,10 @@ const PresetCard: React.FC<Props> = ({
       "/" +
       simType +
       "/presets/" +
-      id;
+      id
 
     // post body data
-    const preset = revertObject;
+    const preset = revertObject
 
     // request options
     const options: any = {
@@ -262,17 +262,17 @@ const PresetCard: React.FC<Props> = ({
         "Content-Type": "application/json",
         Authorization: "Bearer " + localStorage.getItem("accessToken"),
       },
-    };
+    }
 
     // send POST request
     fetch(url, options).then(async (res) => {
       if (res.status != 201) {
-        alert("Error occured");
+        alert("Error occured")
       }
       const localStoragePresets =
         simType === "msfs2020"
           ? (await db.presetsMsfs.toArray()) || []
-          : (await db.presetsXplane.toArray()) || [];
+          : (await db.presetsXplane.toArray()) || []
 
       let result = localStoragePresets.map((x: any) =>
         x.id === id
@@ -280,18 +280,18 @@ const PresetCard: React.FC<Props> = ({
               ...x,
               revertObject,
             }
-          : x
-      );
+          : x,
+      )
       simType === "msfs2020"
         ? await db.presetsMsfs
             .clear()
             .then(() => db.presetsMsfs.bulkAdd(result))
         : await db.presetsXplane
             .clear()
-            .then(() => db.presetsXplane.bulkAdd(result));
-      savedToast();
-      setRevertModal(false);
-    });
+            .then(() => db.presetsXplane.bulkAdd(result))
+      savedToast()
+      setRevertModal(false)
+    })
   }
 
   return (
@@ -418,12 +418,12 @@ const PresetCard: React.FC<Props> = ({
                       ?.toLocaleLowerCase()
                       .includes("moderator")
                   ) {
-                    setDeleteModalOpen(true);
+                    setDeleteModalOpen(true)
                   } else {
-                    setDeleteTooltip(true);
+                    setDeleteTooltip(true)
                     setTimeout(() => {
-                      setDeleteTooltip(false);
-                    }, 5000);
+                      setDeleteTooltip(false)
+                    }, 5000)
                   }
                 }}
               >
@@ -471,12 +471,12 @@ const PresetCard: React.FC<Props> = ({
                             ?.toLocaleLowerCase()
                             .includes("moderator"))
                       ) {
-                        setEdit((e) => !e);
+                        setEdit((e) => !e)
                       } else {
-                        seteditTooltip(true);
+                        seteditTooltip(true)
                         setTimeout(() => {
-                          seteditTooltip(false);
-                        }, 5000);
+                          seteditTooltip(false)
+                        }, 5000)
                       }
                     }}
                     toggleEdit={edit}
@@ -509,7 +509,8 @@ const PresetCard: React.FC<Props> = ({
                 presetHistory={history}
                 loading={loading}
                 revertHistory={(o: any) => (
-                  setRevertObject(o), setRevertModal(true)
+                  setRevertObject(o),
+                  setRevertModal(true)
                 )}
               />
             ) : (
@@ -610,7 +611,7 @@ const PresetCard: React.FC<Props> = ({
         )}
       </AnimatePresence>
     </>
-  );
-};
+  )
+}
 
-export default PresetCard;
+export default PresetCard

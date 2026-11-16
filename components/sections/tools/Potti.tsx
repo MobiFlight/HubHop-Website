@@ -1,14 +1,14 @@
-import Link from "next/link";
-import { useState } from "react";
-import { MdSwapHoriz } from "react-icons/md";
-import ButtonOrange from "../Shared/ButtonOrange";
+import Link from "next/link"
+import { useState } from "react"
+import { MdSwapHoriz } from "react-icons/md"
+import ButtonOrange from "../Shared/ButtonOrange"
 
 const Potti: React.FC = () => {
   const presets = [
     { name: "Arduino", min: 0, max: 1023 },
     { name: "Joystick", min: 0, max: 65535 },
     { name: "Custom", min: 0, max: 0 },
-  ];
+  ]
 
   const eir_preset = [
     {
@@ -125,89 +125,89 @@ const Potti: React.FC = () => {
       max: "16383",
       event: "Your_Event_SET",
     },
-  ];
+  ]
 
-  const [Mindo, setMindo] = useState(0);
-  const [Maxdo, setMaxdo] = useState(0);
-  const [Mineir, setMineir] = useState(0);
-  const [Maxeir, setMaxeir] = useState(0);
-  const [NameEir, setNameEir] = useState("");
+  const [Mindo, setMindo] = useState(0)
+  const [Maxdo, setMaxdo] = useState(0)
+  const [Mineir, setMineir] = useState(0)
+  const [Maxeir, setMaxeir] = useState(0)
+  const [NameEir, setNameEir] = useState("")
 
   function invertMinMax() {
-    var max2 = Mineir;
-    var min2 = Maxeir;
+    var max2 = Mineir
+    var min2 = Maxeir
 
-    setMineir(min2);
-    setMaxeir(max2);
+    setMineir(min2)
+    setMaxeir(max2)
   }
 
   function eir_delta() {
-    return Maxeir - Mineir;
+    return Maxeir - Mineir
   }
   function dor_delta() {
-    return Maxdo - Mindo;
+    return Maxdo - Mindo
   }
   function dor_eir_ratio() {
-    return parseFloat((eir_delta() / dor_delta()).toFixed(4));
+    return parseFloat((eir_delta() / dor_delta()).toFixed(4))
   }
   function dor_eir_ratio2() {
-    return parseFloat((dor_delta() / eir_delta()).toFixed(4));
+    return parseFloat((dor_delta() / eir_delta()).toFixed(4))
   }
   function rpnDorMin() {
     if (Mindo == 0) {
-      return "";
+      return ""
     } else {
-      return Mindo + " - ";
+      return Mindo + " - "
     }
   }
   function rpnGrRatio() {
     if (Math.abs(dor_eir_ratio()) > Math.abs(dor_eir_ratio2())) {
-      return dor_eir_ratio();
+      return dor_eir_ratio()
     } else {
-      return dor_eir_ratio2();
+      return dor_eir_ratio2()
     }
   }
   function rpnGrRatioMath() {
     if (Math.abs(dor_eir_ratio()) > Math.abs(dor_eir_ratio2())) {
-      return "* ";
+      return "* "
     } else {
-      return "/ ";
+      return "/ "
     }
   }
   function rpnEirMin() {
     if (Mineir == 0) {
-      return "";
+      return ""
     } else {
-      return Math.abs(Mineir);
+      return Math.abs(Mineir)
     }
   }
   function rpnEirMinMath() {
     if (Mineir == 0) {
-      return "";
+      return ""
     } else {
       if (Mineir > 0) {
-        return " + ";
+        return " + "
       } else {
-        return " - ";
+        return " - "
       }
     }
   }
   function rpnMin() {
-    return Math.min(Mineir, Maxeir);
+    return Math.min(Mineir, Maxeir)
   }
   function rpnMax() {
-    return Math.max(Mineir, Maxeir);
+    return Math.max(Mineir, Maxeir)
   }
   function rpnLeft() {
     for (let index = 0; index < eir_preset.length; index++) {
-      const preset = eir_preset[index];
+      const preset = eir_preset[index]
       if (preset.event == NameEir) {
         if (preset.event.substring(0, 1) == "2") {
-          return "index ";
-        } else "";
+          return "index "
+        } else ""
       }
     }
-    return "";
+    return ""
   }
 
   return (
@@ -243,13 +243,13 @@ const Potti: React.FC = () => {
               setMindo(
                 presets
                   .filter((preset) => preset.name === e.target.value)
-                  .map((pres) => pres.min)[0]
-              );
+                  .map((pres) => pres.min)[0],
+              )
               setMaxdo(
                 presets
                   .filter((preset) => preset.name === e.target.value)
-                  .map((pres) => pres.max)[0]
-              );
+                  .map((pres) => pres.max)[0],
+              )
             }}
             id="selectedPreset"
             defaultValue={""}
@@ -272,9 +272,9 @@ const Potti: React.FC = () => {
                 placeholder="0"
                 type="text"
                 onChange={(e) => {
-                  const value = e.target.value;
+                  const value = e.target.value
                   if (value === "-" || !isNaN(parseFloat(value))) {
-                    setMindo(value as any);
+                    setMindo(value as any)
                   }
                 }}
                 onBlur={() => setMindo((prev: any) => parseFloat(prev) || 0)}
@@ -288,9 +288,9 @@ const Potti: React.FC = () => {
                 placeholder="0"
                 type="text"
                 onChange={(e) => {
-                  const value = e.target.value;
+                  const value = e.target.value
                   if (value === "-" || !isNaN(parseFloat(value))) {
-                    setMaxdo(value as any);
+                    setMaxdo(value as any)
                   }
                 }}
                 onBlur={() => setMaxdo((prev: any) => parseFloat(prev) || 0)}
@@ -307,22 +307,22 @@ const Potti: React.FC = () => {
                 parseFloat(
                   eir_preset
                     .filter((preset) => preset.name === e.target.value)
-                    .map((pres) => pres.min)[0]
-                )
-              );
+                    .map((pres) => pres.min)[0],
+                ),
+              )
               setMaxeir(
                 parseFloat(
                   eir_preset
                     .filter((preset) => preset.name === e.target.value)
-                    .map((pres) => pres.max)[0]
-                )
-              );
+                    .map((pres) => pres.max)[0],
+                ),
+              )
               setNameEir(
                 eir_preset
                   .filter((preset) => preset.name === e.target.value)
                   .map((pres) => pres.event)
-                  .toString()
-              );
+                  .toString(),
+              )
             }}
             defaultValue={""}
             className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 p-3"
@@ -345,9 +345,9 @@ const Potti: React.FC = () => {
                 type="text"
                 value={Mineir}
                 onChange={(e) => {
-                  const value = e.target.value;
+                  const value = e.target.value
                   if (value === "-" || !isNaN(parseFloat(value))) {
-                    setMineir(value as any);
+                    setMineir(value as any)
                   }
                 }}
                 onBlur={() => setMineir((prev: any) => parseFloat(prev) || 0)}
@@ -361,9 +361,9 @@ const Potti: React.FC = () => {
                 type="text"
                 value={Maxeir}
                 onChange={(e) => {
-                  const value = e.target.value;
+                  const value = e.target.value
                   if (value === "-" || !isNaN(parseFloat(value))) {
-                    setMaxeir(value as any);
+                    setMaxeir(value as any)
                   }
                 }}
                 onBlur={() => setMaxeir((prev: any) => parseFloat(prev) || 0)}
@@ -415,6 +415,6 @@ const Potti: React.FC = () => {
         onChange={() => {}}
       ></textarea>
     </div>
-  );
-};
-export default Potti;
+  )
+}
+export default Potti

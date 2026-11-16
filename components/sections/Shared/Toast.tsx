@@ -1,6 +1,6 @@
 interface Props {
-  bg: string;
-  textColor: string;
+  bg: string
+  textColor: string
 }
 
 const Toast: React.FC<Props> = ({ bg, children, textColor }) => {
@@ -11,7 +11,7 @@ const Toast: React.FC<Props> = ({ bg, children, textColor }) => {
     >
       <div className="flex items-center">{children}</div>
     </div>
-  );
-};
+  )
+}
 
-export default Toast;
+export default Toast

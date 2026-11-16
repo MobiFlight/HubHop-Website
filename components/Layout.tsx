@@ -1,40 +1,41 @@
-import React, { ReactNode, useState, useEffect } from "react";
-import Head from "next/head";
-import Navbar from "./sections/Navbar/Navbar";
-import Footer from "./sections/footer/Footer";
-import { FiArrowUpCircle } from "react-icons/fi";
-import { AnimatePresence, motion } from "framer-motion";
+import React, { ReactNode, useState, useEffect } from "react"
+import Head from "next/head"
+import Navbar from "./sections/Navbar/Navbar"
+import Footer from "./sections/footer/Footer"
+import { FiArrowUpCircle } from "react-icons/fi"
+import { AnimatePresence, motion } from "framer-motion"
 
 type Props = {
-  children?: ReactNode;
-  title?: string;
-};
+  children?: ReactNode
+  title?: string
+}
 
 const Layout = ({ children, title = "Hubhop" }: Props) => {
-  const [clientWindowHeight, setClientWindowHeight] = useState(0);
+  const [clientWindowHeight, setClientWindowHeight] = useState(0)
 
   const handleScroll = () => {
-    setClientWindowHeight(window.scrollY);
-  };
+    setClientWindowHeight(window.scrollY)
+  }
 
   useEffect(() => {
-    let isSubscribed = true;
-    window.addEventListener("scroll", handleScroll);
+    let isSubscribed = true
+    window.addEventListener("scroll", handleScroll)
     return () => (
-      (isSubscribed = false), window.removeEventListener("scroll", handleScroll)
-    );
-  });
+      (isSubscribed = false),
+      window.removeEventListener("scroll", handleScroll)
+    )
+  })
 
   function toTop() {
-    window.scrollTo(0, 0);
+    window.scrollTo(0, 0)
   }
 
   useEffect(() => {
     localStorage.getItem("simType") === null &&
-      localStorage.setItem("simType", "msfs2020");
-  }, []);
+      localStorage.setItem("simType", "msfs2020")
+  }, [])
 
-  const banner = "../../public/images/logo-big-banner.png";
+  const banner = "../../public/images/logo-big-banner.png"
 
   return (
     <>
@@ -74,7 +75,7 @@ const Layout = ({ children, title = "Hubhop" }: Props) => {
           >
             <button
               onClick={() => toTop()}
-              className="fixed right-5 bottom-5 rounded-xl bg-hhOrange p-1.5 text-2xl font-bold text-hhBG"
+              className="fixed bottom-5 right-5 rounded-xl bg-hhOrange p-1.5 text-2xl font-bold text-hhBG"
             >
               <FiArrowUpCircle />
             </button>
@@ -82,7 +83,7 @@ const Layout = ({ children, title = "Hubhop" }: Props) => {
         )}
       </AnimatePresence>
     </>
-  );
-};
+  )
+}
 
-export default Layout;
+export default Layout

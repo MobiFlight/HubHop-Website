@@ -1,68 +1,68 @@
-import NavbarLinks from "../../../lib/Constants";
-import Image from "next/image";
-import hhLogo from "../../../public/images/logo-big.png";
-import Link from "next/link";
+import NavbarLinks from "../../../lib/Constants"
+import Image from "next/image"
+import hhLogo from "../../../public/images/logo-big.png"
+import Link from "next/link"
 import {
   HiOutlineHome,
   HiOutlineViewList,
   HiOutlineLightningBolt,
   HiOutlineTrendingUp,
   HiOutlineUserCircle,
-} from "react-icons/hi";
-import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { AiOutlineMenu } from "react-icons/ai";
-import { MdOutlineClose } from "react-icons/md";
+} from "react-icons/hi"
+import { useState } from "react"
+import { AnimatePresence, motion } from "framer-motion"
+import { AiOutlineMenu } from "react-icons/ai"
+import { MdOutlineClose } from "react-icons/md"
 import {
   AuthenticatedTemplate,
   UnauthenticatedTemplate,
   useMsal,
-} from "@azure/msal-react";
-import { msalInstance } from "../../../services/msal";
-import UserDropdown from "../Shared/UserDropdown";
-import ButtonOrange from "../Shared/ButtonOrange";
+} from "@azure/msal-react"
+import { msalInstance } from "../../../services/msal"
+import UserDropdown from "../Shared/UserDropdown"
+import ButtonOrange from "../Shared/ButtonOrange"
 import {
   getUserSettings,
   getAccessToken,
-} from "../../../services/msalFunctions";
+} from "../../../services/msalFunctions"
 
 const Navbar: React.FC = () => {
   if (
     typeof window !== "undefined" &&
     localStorage.getItem("searchFilter") === null
   ) {
-    localStorage.setItem("searchFilter", "");
+    localStorage.setItem("searchFilter", "")
   }
   if (
     typeof window !== "undefined" &&
     localStorage.getItem("vendorFilter") === null
   ) {
-    localStorage.setItem("vendorFilter", "");
+    localStorage.setItem("vendorFilter", "")
   }
   if (
     typeof window !== "undefined" &&
     localStorage.getItem("aircraftFilter") === null
   ) {
-    localStorage.setItem("aircraftFilter", "");
+    localStorage.setItem("aircraftFilter", "")
   }
   if (
     typeof window !== "undefined" &&
     localStorage.getItem("systemFilter") === null
   ) {
-    localStorage.setItem("systemFilter", "");
+    localStorage.setItem("systemFilter", "")
   }
   if (
     typeof window !== "undefined" &&
     localStorage.getItem("presetTypeFilter") === null
   ) {
-    localStorage.setItem("presetTypeFilter", "");
+    localStorage.setItem("presetTypeFilter", "")
   }
 
-  const [mobileMenu, setMobileMenu] = useState(false);
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [mobileMenu, setMobileMenu] = useState(false)
+  const [showDropdown, setShowDropdown] = useState(false)
 
   function openMobileMenu() {
-    setMobileMenu((setMobileMenu) => !setMobileMenu);
+    setMobileMenu((setMobileMenu) => !setMobileMenu)
   }
 
   const itemVariants = {
@@ -78,7 +78,7 @@ const Navbar: React.FC = () => {
       },
       opacity: 1,
     },
-  };
+  }
 
   const sideVariants = {
     closed: {
@@ -93,40 +93,40 @@ const Navbar: React.FC = () => {
         staggerDirection: 1,
       },
     },
-  };
+  }
 
-  const { accounts } = useMsal();
+  const { accounts } = useMsal()
 
-  var timeout: any;
+  var timeout: any
 
   const showTip = () => {
     timeout = setTimeout(() => {
-      setShowDropdown(true);
-    }, 400);
-  };
+      setShowDropdown(true)
+    }, 400)
+  }
 
   const hideTip = () => {
-    clearInterval(timeout);
-    setShowDropdown(false);
-  };
+    clearInterval(timeout)
+    setShowDropdown(false)
+  }
 
   async function login() {
-    await msalInstance.handleRedirectPromise();
-    const accounts = msalInstance.getAllAccounts();
+    await msalInstance.handleRedirectPromise()
+    const accounts = msalInstance.getAllAccounts()
     if (accounts.length === 0) {
       await msalInstance
         .loginPopup()
         .then(() => {
-          getAccessToken().then(() => getUserSettings());
+          getAccessToken().then(() => getUserSettings())
         })
         .catch((error) => {
-          console.error(`error during authentication: ${error}`);
-          localStorage.setItem("roles", "Guest");
-          localStorage.setItem("setAccessToken", "");
+          console.error(`error during authentication: ${error}`)
+          localStorage.setItem("roles", "Guest")
+          localStorage.setItem("setAccessToken", "")
           msalInstance.logoutRedirect({}).catch((error) => {
-            console.error(error);
-          });
-        });
+            console.error(error)
+          })
+        })
     }
   }
 
@@ -134,18 +134,18 @@ const Navbar: React.FC = () => {
     const logoutRequest = {
       account: instance.getAccountByHomeId(accounts[0].homeAccountId),
       postLogoutRedirectUri: "/",
-    };
-    localStorage.clear();
-    instance.logoutRedirect(logoutRequest);
+    }
+    localStorage.clear()
+    instance.logoutRedirect(logoutRequest)
   }
 
   if (accounts.length) {
-    localStorage.setItem("username", accounts[0].name || "");
+    localStorage.setItem("username", accounts[0].name || "")
   }
 
   const customLoader = ({ src }: any) => {
-    return src;
-  };
+    return src
+  }
 
   return (
     <div>
@@ -337,7 +337,7 @@ const Navbar: React.FC = () => {
         </nav>
       </header>
     </div>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar

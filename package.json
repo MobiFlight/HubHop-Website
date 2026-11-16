@@ -4,7 +4,11 @@
     "dev": "next -p 3000",
     "build": "next build",
     "start": "next start",
-    "type-check": "tsc"
+    "type-check": "tsc",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
     "@azure/msal-browser": "^2.39.0",
@@ -23,13 +27,14 @@
     "styled-components": "^5.3.11"
   },
   "devDependencies": {
+    "@playwright/test": "^1.65.1",
     "@types/node": "^24.19.1",
     "@types/react": "^17.0.93",
     "@types/react-dom": "^17.0.26",
     "autoprefixer": "^10.6.1",
     "postcss": "^8.5.28",
-    "prettier": "^2.8.8",
-    "prettier-plugin-tailwindcss": "^0.1.13",
+    "prettier": "^3.10.1",
+    "prettier-plugin-tailwindcss": "^0.8.1",
     "tailwindcss": "^3.4.19",
     "typescript": "^5.9.3"
   }

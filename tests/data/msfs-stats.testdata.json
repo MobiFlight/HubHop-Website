@@ -1,0 +1,124 @@
+{
+  "contributors": [
+    {
+      "_id": "Test Author",
+      "contributions": 120
+    },
+    {
+      "_id": "Test User",
+      "contributions": 42
+    }
+  ],
+  "aircrafts": [
+    {
+      "_id": {
+        "vendor": "Asobo",
+        "aircraft": "A320neo"
+      },
+      "presetCount": 8
+    }
+  ],
+  "votes": [],
+  "presetsAdded": [
+    {
+      "id": "msfs-0001",
+      "path": "Asobo.A320neo.Autopilot.Input.AP master toggle",
+      "vendor": "Asobo",
+      "aircraft": "A320neo",
+      "system": "Autopilot",
+      "label": "AP master toggle",
+      "code": "(>K:TEST_0001)",
+      "presetType": "Input",
+      "status": "Updated",
+      "version": 3,
+      "author": "Test Author",
+      "createdDate": "2024-03-01T10:00:00.000Z",
+      "description": "Test description for AP master toggle",
+      "updatedBy": "Test User",
+      "_id": "msfs-0001"
+    },
+    {
+      "id": "msfs-0002",
+      "path": "Asobo.A320neo.Autopilot.Input.AP heading hold",
+      "vendor": "Asobo",
+      "aircraft": "A320neo",
+      "system": "Autopilot",
+      "label": "AP heading hold",
+      "code": "(>K:TEST_0002)",
+      "presetType": "Input",
+      "status": "Submitted",
+      "version": 1,
+      "author": "Test Author",
+      "createdDate": "2024-01-02T10:00:00.000Z",
+      "description": "Test description for AP heading hold",
+      "_id": "msfs-0002"
+    },
+    {
+      "id": "msfs-0003",
+      "path": "Asobo.A320neo.Autopilot.Input.AP altitude hold",
+      "vendor": "Asobo",
+      "aircraft": "A320neo",
+      "system": "Autopilot",
+      "label": "AP altitude hold",
+      "code": "(>K:TEST_0003)",
+      "presetType": "Input",
+      "status": "Submitted",
+      "version": 1,
+      "author": "Test Author",
+      "createdDate": "2024-01-03T10:00:00.000Z",
+      "description": "Test description for AP altitude hold",
+      "_id": "msfs-0003"
+    },
+    {
+      "id": "msfs-0004",
+      "path": "Asobo.A320neo.Autopilot.Input.AP speed hold",
+      "vendor": "Asobo",
+      "aircraft": "A320neo",
+      "system": "Autopilot",
+      "label": "AP speed hold",
+      "code": "(>K:TEST_0004)",
+      "presetType": "Input",
+      "status": "Submitted",
+      "version": 1,
+      "author": "Test Author",
+      "createdDate": "2024-01-04T10:00:00.000Z",
+      "description": "Test description for AP speed hold",
+      "_id": "msfs-0004"
+    },
+    {
+      "id": "msfs-0005",
+      "path": "Asobo.A320neo.Autopilot.Input.AP NAV mode",
+      "vendor": "Asobo",
+      "aircraft": "A320neo",
+      "system": "Autopilot",
+      "label": "AP NAV mode",
+      "code": "(>K:TEST_0005)",
+      "presetType": "Input",
+      "status": "Submitted",
+      "version": 1,
+      "author": "Test Author",
+      "createdDate": "2024-01-05T10:00:00.000Z",
+      "description": "Test description for AP NAV mode",
+      "_id": "msfs-0005"
+    }
+  ],
+  "presetsUpdated": [
+    {
+      "id": "msfs-0001",
+      "path": "Asobo.A320neo.Autopilot.Input.AP master toggle",
+      "vendor": "Asobo",
+      "aircraft": "A320neo",
+      "system": "Autopilot",
+      "label": "AP master toggle",
+      "code": "(>K:TEST_0001)",
+      "presetType": "Input",
+      "status": "Updated",
+      "version": 3,
+      "author": "Test Author",
+      "createdDate": "2024-03-01T10:00:00.000Z",
+      "description": "Test description for AP master toggle",
+      "updatedBy": "Test User",
+      "_id": "msfs-0001"
+    }
+  ]
+}

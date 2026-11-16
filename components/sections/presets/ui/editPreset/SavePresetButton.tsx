@@ -1,8 +1,8 @@
-import { AiOutlineLoading } from "react-icons/ai";
-import { MdDone } from "react-icons/md";
+import { AiOutlineLoading } from "react-icons/ai"
+import { MdDone } from "react-icons/md"
 
 interface Props {
-  disabled: boolean;
+  disabled: boolean
 }
 
 const SavePresetButton: React.FC<Props> = ({ disabled }) => {
@@ -24,7 +24,7 @@ const SavePresetButton: React.FC<Props> = ({ disabled }) => {
       )}
       <p>Save</p>
     </button>
-  );
-};
+  )
+}
 
-export default SavePresetButton;
+export default SavePresetButton

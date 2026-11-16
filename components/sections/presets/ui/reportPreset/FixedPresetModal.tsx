@@ -1,11 +1,11 @@
-import Modal from "../../../Shared/Modal";
-import FixedPresetButton from "./FixedPresetButton";
+import Modal from "../../../Shared/Modal"
+import FixedPresetButton from "./FixedPresetButton"
 
 interface Props {
-  label: string;
-  presetId: string;
-  setFixedModalOpen: Function;
-  fixedToast: Function;
+  label: string
+  presetId: string
+  setFixedModalOpen: Function
+  fixedToast: Function
 }
 
 const FixedPresetModal: React.FC<Props> = ({
@@ -50,7 +50,7 @@ const FixedPresetModal: React.FC<Props> = ({
         </div>
       </div>
     </Modal>
-  );
-};
+  )
+}
 
-export default FixedPresetModal;
+export default FixedPresetModal

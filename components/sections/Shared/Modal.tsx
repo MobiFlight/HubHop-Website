@@ -1,11 +1,11 @@
-import { FiX } from "react-icons/fi";
+import { FiX } from "react-icons/fi"
 
 interface Props {
-  title: string;
-  closeModal: Function;
-  position: string;
-  closeModalX?: any;
-  height?: boolean;
+  title: string
+  closeModal: Function
+  position: string
+  closeModalX?: any
+  height?: boolean
 }
 
 const Modal: React.FC<Props> = ({
@@ -22,7 +22,7 @@ const Modal: React.FC<Props> = ({
         onClick={(e) => closeModal(e)}
         className={`${
           position === "absolute" ? "absolute" : "fixed"
-        } top-0 left-0 z-50 flex h-full w-full items-center justify-center bg-black/60 backdrop-blur-sm`}
+        } left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-black/60 backdrop-blur-sm`}
       >
         <div
           className={`mx-auto flex flex-col rounded-lg ${
@@ -47,7 +47,7 @@ const Modal: React.FC<Props> = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Modal;
+export default Modal

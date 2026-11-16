@@ -1,4 +1,4 @@
-import { FiAlertCircle } from "react-icons/fi";
+import { FiAlertCircle } from "react-icons/fi"
 
 const ReportPresetButton: React.FC = () => {
   return (
@@ -8,7 +8,7 @@ const ReportPresetButton: React.FC = () => {
       </div>
       <div>Report Preset</div>
     </button>
-  );
-};
+  )
+}
 
-export default ReportPresetButton;
+export default ReportPresetButton

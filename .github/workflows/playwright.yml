@@ -1,0 +1,81 @@
+name: Checks & Playwright Tests
+on:
+  pull_request:
+    branches: [main]
+
+  workflow_dispatch:
+    inputs:
+      workers:
+        description: "Playwright workers per shard (e.g. 2 or 50%)"
+        required: false
+
+env:
+  DEFAULT_CI_WORKERS: 2
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Format, type-check & build
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: lts/*
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Check formatting
+        run: npm run format:check
+      - name: Type-check
+        run: npm run type-check
+      - name: Build
+        run: npm run build
+
+  test:
+    name: Playwright (shard ${{ matrix.shard }})
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: ${{ fromJSON(vars.CI_PLAYWRIGHT_SHARDS || '["1/2","2/2"]') }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: lts/*
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+      - name: Run Playwright tests
+        env:
+          CI_WORKERS: ${{ inputs.workers || vars.CI_PLAYWRIGHT_WORKERS || env.DEFAULT_CI_WORKERS }}
+        run: npx playwright test --shard=${{ matrix.shard }}
+      - name: Upload test results
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-results-${{ strategy.job-index }}
+          path: test-results/
+          retention-days: 7
+
+  # Single status check for branch protection, independent of the shard count
+  playwright:
+    name: Playwright tests
+    if: always()
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: All shards passed
+        if: needs.test.result != 'success'
+        run: |
+          echo "Playwright shards finished with: ${{ needs.test.result }}"
+          exit 1
+      - run: echo "All Playwright shards passed"

@@ -1,22 +1,22 @@
-import DataTable, { createTheme } from "react-data-table-component";
-import { useState } from "react";
-import AddPresetButton from "../ui/addPreset/AddPresetButton";
-import ExportPresetsButton from "../ui/exportPresets/ExportPresetsButton";
-import PresetCard from "../ui/PresetCard";
-import { msalInstance } from "../../../../services/msal";
+import DataTable, { createTheme } from "react-data-table-component"
+import { useState } from "react"
+import AddPresetButton from "../ui/addPreset/AddPresetButton"
+import ExportPresetsButton from "../ui/exportPresets/ExportPresetsButton"
+import PresetCard from "../ui/PresetCard"
+import { msalInstance } from "../../../../services/msal"
 import {
   getUserSettings,
   getAccessToken,
-} from "../../../../services/msalFunctions";
+} from "../../../../services/msalFunctions"
 
 interface Props {
-  data: string[];
-  setExportModalOpen: Function;
-  setAddModalOpen: Function;
-  deletedToast: Function;
-  reportedToast: Function;
-  savedToast: Function;
-  fixedToast: Function;
+  data: string[]
+  setExportModalOpen: Function
+  setAddModalOpen: Function
+  deletedToast: Function
+  reportedToast: Function
+  savedToast: Function
+  fixedToast: Function
 }
 
 const PresetTable: React.FC<Props> = ({
@@ -76,7 +76,7 @@ const PresetTable: React.FC<Props> = ({
       sortable: true,
       maxWidth: "50%",
     },
-  ];
+  ]
 
   createTheme("hubhop", {
     text: {
@@ -104,7 +104,7 @@ const PresetTable: React.FC<Props> = ({
       hover: "rgba(0,0,0,.12)",
       disabled: "rgba(0, 0, 0, .18)",
     },
-  });
+  })
 
   const customStyles = {
     noData: {
@@ -127,22 +127,22 @@ const PresetTable: React.FC<Props> = ({
         fontSize: "0.9rem",
       },
     },
-  };
+  }
 
   const ExpandedComponent = ({ data }: { data: any }) => {
-    const [updatedBy, setUpdatedBy] = useState(data.updatedBy);
-    const [createdDate, setCreatedDate] = useState(data.createdDate);
-    const [version, setVersion] = useState(data.version);
-    const [reported, setReported] = useState(data.reported);
-    const [vendor, setVendor] = useState(data.vendor);
-    const [aircraft, setAircraft] = useState(data.aircraft);
-    const [system, setSystem] = useState(data.system);
-    const [presetType, setPresetType] = useState(data.presetType);
-    const [codeType, setCodeType] = useState(data.codeType);
-    const [label, setLabel] = useState(data.label);
-    const [code, setCode] = useState(data.code);
-    const [description, setDescription] = useState(data.description);
-    const [author, setAuthor] = useState(data.author);
+    const [updatedBy, setUpdatedBy] = useState(data.updatedBy)
+    const [createdDate, setCreatedDate] = useState(data.createdDate)
+    const [version, setVersion] = useState(data.version)
+    const [reported, setReported] = useState(data.reported)
+    const [vendor, setVendor] = useState(data.vendor)
+    const [aircraft, setAircraft] = useState(data.aircraft)
+    const [system, setSystem] = useState(data.system)
+    const [presetType, setPresetType] = useState(data.presetType)
+    const [codeType, setCodeType] = useState(data.codeType)
+    const [label, setLabel] = useState(data.label)
+    const [code, setCode] = useState(data.code)
+    const [description, setDescription] = useState(data.description)
+    const [author, setAuthor] = useState(data.author)
 
     return (
       <div className="relative -mx-3 md:m-0">
@@ -196,56 +196,56 @@ const PresetTable: React.FC<Props> = ({
         />
         <hr className="border-hhBG" />
       </div>
-    );
-  };
+    )
+  }
 
   async function login() {
-    await msalInstance.handleRedirectPromise();
-    const accounts = msalInstance.getAllAccounts();
+    await msalInstance.handleRedirectPromise()
+    const accounts = msalInstance.getAllAccounts()
     if (accounts.length === 0) {
       await msalInstance
         .loginPopup()
         .then(() => {
-          getAccessToken().then(() => getUserSettings());
+          getAccessToken().then(() => getUserSettings())
         })
         .catch((error) => {
-          console.error(`error during authentication: ${error}`);
-          localStorage.setItem("roles", "Guest");
-          localStorage.setItem("setAccessToken", "");
+          console.error(`error during authentication: ${error}`)
+          localStorage.setItem("roles", "Guest")
+          localStorage.setItem("setAccessToken", "")
           msalInstance.logoutRedirect({}).catch((error) => {
-            console.error(error);
-          });
-        });
+            console.error(error)
+          })
+        })
     }
   }
 
   const [userPagination, setUserPagination] = useState(
     localStorage.getItem("pagination") === ""
       ? 15
-      : parseInt(localStorage.getItem("pagination") || "15")
-  );
+      : parseInt(localStorage.getItem("pagination") || "15"),
+  )
 
-  const rowsPerPage = [15, 20, 30, 50, 100];
+  const rowsPerPage = [15, 20, 30, 50, 100]
 
   return (
     <div className="relative flex w-full flex-col rounded-lg bg-hhCard/40">
-      <div className="absolute right-0 z-10 mr-2 mt-2 hidden items-center space-x-3 md:flex ">
+      <div className="absolute right-0 z-10 mr-2 mt-2 hidden items-center space-x-3 md:flex">
         <div
           onClick={() => {
             if (localStorage.getItem("username")) {
-              setAddModalOpen(true);
-            } else login();
+              setAddModalOpen(true)
+            } else login()
           }}
         >
           <AddPresetButton />
         </div>
       </div>
-      <div className="absolute left-3 bottom-3 z-10 mr-2 mt-2 hidden items-center space-x-3 md:flex ">
+      <div className="absolute bottom-3 left-3 z-10 mr-2 mt-2 hidden items-center space-x-3 md:flex">
         <div
           onClick={() => {
             if (localStorage.getItem("username")) {
-              setExportModalOpen(true);
-            } else login();
+              setExportModalOpen(true)
+            } else login()
           }}
         >
           <ExportPresetsButton />
@@ -271,7 +271,7 @@ const PresetTable: React.FC<Props> = ({
         defaultSortFieldId={1}
       />
     </div>
-  );
-};
+  )
+}
 
-export default PresetTable;
+export default PresetTable

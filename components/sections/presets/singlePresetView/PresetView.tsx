@@ -1,19 +1,19 @@
-import Head from "next/head";
-import Layout from "../../../Layout";
-import { useEffect, useState } from "react";
+import Head from "next/head"
+import Layout from "../../../Layout"
+import { useEffect, useState } from "react"
 
-import PresetCard from "../ui/PresetCard";
-import { BiSad } from "react-icons/bi";
-import { AiOutlineLoading } from "react-icons/ai";
+import PresetCard from "../ui/PresetCard"
+import { BiSad } from "react-icons/bi"
+import { AiOutlineLoading } from "react-icons/ai"
 
 interface Props {
-  preset: any;
-  history: any;
-  loading: boolean;
-  deletedToast: Function;
-  reportedToast: Function;
-  savedToast: Function;
-  fixedToast: Function;
+  preset: any
+  history: any
+  loading: boolean
+  deletedToast: Function
+  reportedToast: Function
+  savedToast: Function
+  fixedToast: Function
 }
 
 const PresetView: React.FC<Props> = ({
@@ -25,50 +25,50 @@ const PresetView: React.FC<Props> = ({
   fixedToast,
   savedToast,
 }) => {
-  const [id, setId] = useState("");
-  const [updatedBy, setUpdatedBy] = useState("");
-  const [createdDate, setCreatedDate] = useState("");
-  const [version, setVersion] = useState("");
-  const [reported, setReported] = useState("");
-  const [vendor, setVendor] = useState("");
-  const [aircraft, setAircraft] = useState("");
-  const [system, setSystem] = useState("");
-  const [presetType, setPresetType] = useState("");
-  const [codeType, setCodeType] = useState("");
-  const [label, setLabel] = useState("");
-  const [code, setCode] = useState("");
-  const [description, setDescription] = useState("");
-  const [author, setAuthor] = useState("");
-  const [notFound, setNotFound] = useState(false);
-  const [loadingPreset, setLoadingPreset] = useState(true);
+  const [id, setId] = useState("")
+  const [updatedBy, setUpdatedBy] = useState("")
+  const [createdDate, setCreatedDate] = useState("")
+  const [version, setVersion] = useState("")
+  const [reported, setReported] = useState("")
+  const [vendor, setVendor] = useState("")
+  const [aircraft, setAircraft] = useState("")
+  const [system, setSystem] = useState("")
+  const [presetType, setPresetType] = useState("")
+  const [codeType, setCodeType] = useState("")
+  const [label, setLabel] = useState("")
+  const [code, setCode] = useState("")
+  const [description, setDescription] = useState("")
+  const [author, setAuthor] = useState("")
+  const [notFound, setNotFound] = useState(false)
+  const [loadingPreset, setLoadingPreset] = useState(true)
 
   useEffect(() => {
     // undefined: preset is still being loaded
     if (preset === undefined) {
-      setLoadingPreset(true);
-      return;
+      setLoadingPreset(true)
+      return
     }
     if (preset && preset.length) {
-      setId(preset[0].id);
-      setUpdatedBy(preset[0].updatedBy);
-      setCreatedDate(preset[0].createdDate);
-      setVersion(preset[0].version);
-      setReported(preset[0].reported);
-      setVendor(preset[0].vendor);
-      setAircraft(preset[0].aircraft);
-      setSystem(preset[0].system);
-      setPresetType(preset[0].presetType);
-      setCodeType(preset[0].codeType || "");
-      setLabel(preset[0].label);
-      setCode(preset[0].code);
-      setDescription(preset[0].description);
-      setAuthor(preset[0].author);
-      setNotFound(false);
+      setId(preset[0].id)
+      setUpdatedBy(preset[0].updatedBy)
+      setCreatedDate(preset[0].createdDate)
+      setVersion(preset[0].version)
+      setReported(preset[0].reported)
+      setVendor(preset[0].vendor)
+      setAircraft(preset[0].aircraft)
+      setSystem(preset[0].system)
+      setPresetType(preset[0].presetType)
+      setCodeType(preset[0].codeType || "")
+      setLabel(preset[0].label)
+      setCode(preset[0].code)
+      setDescription(preset[0].description)
+      setAuthor(preset[0].author)
+      setNotFound(false)
     } else {
-      setNotFound(true);
+      setNotFound(true)
     }
-    setLoadingPreset(false);
-  }, [preset]);
+    setLoadingPreset(false)
+  }, [preset])
 
   return (
     <Layout title="Preset | Hubhop by Mobiflight">
@@ -129,7 +129,7 @@ const PresetView: React.FC<Props> = ({
         />
       )}
     </Layout>
-  );
-};
+  )
+}
 
-export default PresetView;
+export default PresetView

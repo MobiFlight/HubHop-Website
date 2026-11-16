@@ -5,8 +5,8 @@
 @layer base {
   @font-face {
     font-family: Assistant;
-    src: local("Assistant"),
-      url(../public/fonts/Assistant-VariableFont_wght.ttf);
+    src:
+      local("Assistant"), url(../public/fonts/Assistant-VariableFont_wght.ttf);
     font-weight: 100 900 !important;
   }
 }

@@ -1,164 +1,159 @@
-import { useEffect, useState } from "react";
-import {
-  BiAddToQueue,
-  BiCog,
-  BiJoystickButton,
-  BiRename,
-} from "react-icons/bi";
-import { BsCardText, BsCheck2Square, BsList } from "react-icons/bs";
-import { GiCommercialAirplane } from "react-icons/gi";
-import { HiOutlineLightBulb, HiOutlineSearchCircle } from "react-icons/hi";
-import { MdBusiness } from "react-icons/md";
-import ButtonDark from "../../../Shared/ButtonDark";
-import ButtonOrange from "../../../Shared/ButtonOrange";
-import Modal from "../../../Shared/Modal";
-import { useForm } from "react-hook-form";
-import { FiExternalLink, FiRepeat } from "react-icons/fi";
-import Link from "next/link";
-import { AiOutlineLoading } from "react-icons/ai";
-import { AnimatePresence, motion } from "framer-motion";
-import Toast from "../../../Shared/Toast";
-import { AuthenticatedTemplate } from "@azure/msal-react";
-import { RiListSettingsLine } from "react-icons/ri";
-import { db } from "../../../../../services/db";
+import { useEffect, useState } from "react"
+import { BiAddToQueue, BiCog, BiJoystickButton, BiRename } from "react-icons/bi"
+import { BsCardText, BsCheck2Square, BsList } from "react-icons/bs"
+import { GiCommercialAirplane } from "react-icons/gi"
+import { HiOutlineLightBulb, HiOutlineSearchCircle } from "react-icons/hi"
+import { MdBusiness } from "react-icons/md"
+import ButtonDark from "../../../Shared/ButtonDark"
+import ButtonOrange from "../../../Shared/ButtonOrange"
+import Modal from "../../../Shared/Modal"
+import { useForm } from "react-hook-form"
+import { FiExternalLink, FiRepeat } from "react-icons/fi"
+import Link from "next/link"
+import { AiOutlineLoading } from "react-icons/ai"
+import { AnimatePresence, motion } from "framer-motion"
+import Toast from "../../../Shared/Toast"
+import { AuthenticatedTemplate } from "@azure/msal-react"
+import { RiListSettingsLine } from "react-icons/ri"
+import { db } from "../../../../../services/db"
 
 interface Props {
-  setAddModalOpen: Function;
-  presets: any;
+  setAddModalOpen: Function
+  presets: any
 }
 
 const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
   const [filteredVendors, setFilteredVendors] = useState(
     localStorage.getItem("vendorFilter") === ""
       ? ""
-      : localStorage.getItem("vendorFilter") || ""
-  );
+      : localStorage.getItem("vendorFilter") || "",
+  )
   const [filteredAircrafts, setFilteredAircrafts] = useState(
     localStorage.getItem("aircraftFilter") === ""
       ? ""
-      : localStorage.getItem("aircraftFilter") || ""
-  );
+      : localStorage.getItem("aircraftFilter") || "",
+  )
   const [filteredSystems, setFilteredSystems] = useState(
     localStorage.getItem("systemFilter") === ""
       ? ""
-      : localStorage.getItem("systemFilter") || ""
-  );
+      : localStorage.getItem("systemFilter") || "",
+  )
   const [filteredPresetTypes, setFilteredPresetTypes] = useState(
     localStorage.getItem("presetTypeFilter") === ""
       ? ""
-      : localStorage.getItem("presetTypeFilter") || ""
-  );
+      : localStorage.getItem("presetTypeFilter") || "",
+  )
   const [filteredCodeTypes, setFilteredCodeTypes] = useState(
     localStorage.getItem("codeTypeFilter") === ""
       ? ""
-      : localStorage.getItem("codeTypeFilter") || ""
-  );
-  const [label, setLabel] = useState("");
-  const [code, setCode] = useState("");
-  const [description, setDescription] = useState("");
-  const [addVendor, setAddVendor] = useState(false);
-  const [addAircraft, setAddAircraft] = useState(false);
-  const [addSystem, setAddSystem] = useState(false);
-  const [addPresetType, setAddPresetType] = useState(false);
-  const [addCodeType, setAddCodeType] = useState(false);
-  const [buttonSubmit, setButtonSubmit] = useState(false);
-  const [bulkUpload, setBulkUpload] = useState(false);
-  const [presetToast, setPresetToast] = useState(false);
-  const [presetToastError, setPresetToastError] = useState(false);
+      : localStorage.getItem("codeTypeFilter") || "",
+  )
+  const [label, setLabel] = useState("")
+  const [code, setCode] = useState("")
+  const [description, setDescription] = useState("")
+  const [addVendor, setAddVendor] = useState(false)
+  const [addAircraft, setAddAircraft] = useState(false)
+  const [addSystem, setAddSystem] = useState(false)
+  const [addPresetType, setAddPresetType] = useState(false)
+  const [addCodeType, setAddCodeType] = useState(false)
+  const [buttonSubmit, setButtonSubmit] = useState(false)
+  const [bulkUpload, setBulkUpload] = useState(false)
+  const [presetToast, setPresetToast] = useState(false)
+  const [presetToastError, setPresetToastError] = useState(false)
 
   const filteredVendorList = presets.filter((preset: any) =>
-    preset.vendor.toLowerCase().includes(filteredVendors.toLowerCase())
-  );
+    preset.vendor.toLowerCase().includes(filteredVendors.toLowerCase()),
+  )
   const filteredAircraftList = filteredVendorList.filter((preset: any) => {
     if (filteredAircrafts.length == 0) {
-      return preset.aircraft.toLowerCase("");
+      return preset.aircraft.toLowerCase("")
     } else {
-      return preset.aircraft.toLowerCase() === filteredAircrafts.toLowerCase();
+      return preset.aircraft.toLowerCase() === filteredAircrafts.toLowerCase()
     }
-  });
+  })
   const filteredSystemList = filteredAircraftList.filter((preset: any) => {
     if (filteredSystems.length == 0) {
-      return preset.system.toLowerCase("");
+      return preset.system.toLowerCase("")
     } else {
-      return preset.system.toLowerCase() === filteredSystems.toLowerCase();
+      return preset.system.toLowerCase() === filteredSystems.toLowerCase()
     }
-  });
+  })
   const filteredInputTypeList = filteredSystemList.filter((preset: any) => {
     if (preset.presetType) {
       if (filteredPresetTypes.length == 0) {
-        return preset.presetType.toLowerCase("");
+        return preset.presetType.toLowerCase("")
       } else {
         return (
           preset.presetType.toLowerCase() === filteredPresetTypes.toLowerCase()
-        );
+        )
       }
     } else {
-      return preset;
+      return preset
     }
-  });
+  })
 
   const filteredItemsLabel = filteredInputTypeList.filter((preset: any) => {
     if (preset.description) {
-      return preset.label.toLowerCase().includes(label.toLowerCase());
+      return preset.label.toLowerCase().includes(label.toLowerCase())
     } else {
-      return preset.label.toLowerCase().includes(label.toLowerCase());
+      return preset.label.toLowerCase().includes(label.toLowerCase())
     }
-  });
+  })
 
   const filteredItemsCode = filteredItemsLabel.filter((preset: any) => {
     if (preset.description) {
-      return preset.code.toLowerCase().includes(code.toLowerCase());
+      return preset.code.toLowerCase().includes(code.toLowerCase())
     } else {
-      return preset.code.toLowerCase().includes(code.toLowerCase());
+      return preset.code.toLowerCase().includes(code.toLowerCase())
     }
-  });
+  })
 
   const filteredItems = filteredItemsCode.filter((preset: any) => {
     if (preset.description) {
       return preset.description
         .toLowerCase()
-        .includes(description.toLowerCase());
+        .includes(description.toLowerCase())
     } else {
-      return preset.code.toLowerCase().includes(code.toLowerCase());
+      return preset.code.toLowerCase().includes(code.toLowerCase())
     }
-  });
+  })
 
   const uniqueVendor = Array.from(
     new Set(
       filteredInputTypeList
         .map((item: any) => item.vendor)
         .sort((a: any, b: any) =>
-          a.toLowerCase().localeCompare(b.toLowerCase())
-        )
-    )
-  );
+          a.toLowerCase().localeCompare(b.toLowerCase()),
+        ),
+    ),
+  )
   const uniqueAircraft = Array.from(
     new Set(
       filteredInputTypeList
         .map((item: any) => item.aircraft)
         .sort((a: any, b: any) =>
-          a.toLowerCase().localeCompare(b.toLowerCase())
-        )
-    )
-  );
+          a.toLowerCase().localeCompare(b.toLowerCase()),
+        ),
+    ),
+  )
   const uniqueSystem = Array.from(
     new Set(
       filteredInputTypeList
         .map((item: any) => item.system)
         .sort((a: any, b: any) =>
-          a.toLowerCase().localeCompare(b.toLowerCase())
-        )
-    )
-  );
+          a.toLowerCase().localeCompare(b.toLowerCase()),
+        ),
+    ),
+  )
   const uniqueType = Array.from(
     new Set(
       filteredInputTypeList
         .map((item: any) => item.presetType)
         .sort((a: any, b: any) =>
-          a.toLowerCase().localeCompare(b.toLowerCase())
-        )
-    )
-  );
+          a.toLowerCase().localeCompare(b.toLowerCase()),
+        ),
+    ),
+  )
 
   const {
     register,
@@ -166,33 +161,33 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
     watch,
     resetField,
     formState: { errors },
-  } = useForm();
+  } = useForm()
 
   useEffect(() => {
     const subscription = watch((value) => {
-      setFilteredVendors(value.vendors);
-      setFilteredAircrafts(value.aircrafts);
-      setFilteredSystems(value.systems);
-      setFilteredPresetTypes(value.presetTypes);
-      setFilteredCodeTypes(value.codeTypes);
-      setCode(value.code);
-      setLabel(value.label);
-      setDescription(value.description);
-    });
-    return () => subscription.unsubscribe();
-  }, [watch]);
+      setFilteredVendors(value.vendors)
+      setFilteredAircrafts(value.aircrafts)
+      setFilteredSystems(value.systems)
+      setFilteredPresetTypes(value.presetTypes)
+      setFilteredCodeTypes(value.codeTypes)
+      setCode(value.code)
+      setLabel(value.label)
+      setDescription(value.description)
+    })
+    return () => subscription.unsubscribe()
+  }, [watch])
 
   function presetAdded() {
-    setPresetToast(true);
+    setPresetToast(true)
     setTimeout(() => {
-      setPresetToast(false);
-    }, 5000);
+      setPresetToast(false)
+    }, 5000)
   }
   function presetAddedError() {
-    setPresetToastError(true);
+    setPresetToastError(true)
     setTimeout(() => {
-      setPresetToastError(false);
-    }, 5000);
+      setPresetToastError(false)
+    }, 5000)
   }
 
   return (
@@ -205,12 +200,12 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
       <div className="w-[70vw]">
         <form
           onSubmit={handleSubmit(async (data) => {
-            setButtonSubmit(true);
+            setButtonSubmit(true)
             const url =
               process.env.NEXT_PUBLIC_HUBHOP_API_BASEURL +
               "/" +
               localStorage.getItem("simType") +
-              "/presets";
+              "/presets"
 
             // post body data
             const preset =
@@ -261,7 +256,7 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                     createdDate: new Date().toUTCString(),
                     author: localStorage.getItem("username"),
                     description: data.description,
-                  };
+                  }
 
             // request options
             const options: any = {
@@ -272,20 +267,20 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                 "Content-Type": "application/json",
                 Authorization: "Bearer " + localStorage.getItem("accessToken"),
               },
-            };
+            }
 
             // send POST request
             fetch(url, options).then((res) => {
               if (res.status != 200) {
-                presetAddedError();
+                presetAddedError()
               }
 
-              resetField("label", { defaultValue: "" });
-              resetField("code", { defaultValue: "" });
-              resetField("description", { defaultValue: "" });
-              setButtonSubmit(false);
-              presetAdded();
-            });
+              resetField("label", { defaultValue: "" })
+              resetField("code", { defaultValue: "" })
+              resetField("description", { defaultValue: "" })
+              setButtonSubmit(false)
+              presetAdded()
+            })
           })}
         >
           <div
@@ -334,9 +329,11 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                               presets
                                 .map((item: any) => item.vendor)
                                 .sort((a: any, b: any) =>
-                                  a.toLowerCase().localeCompare(b.toLowerCase())
-                                )
-                            )
+                                  a
+                                    .toLowerCase()
+                                    .localeCompare(b.toLowerCase()),
+                                ),
+                            ),
                           ).map((o, i) => (
                             <option key={i as any}>{o as String[]}</option>
                           ))}
@@ -400,9 +397,9 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                             presets
                               .map((item: any) => item.aircraft)
                               .sort((a: any, b: any) =>
-                                a.toLowerCase().localeCompare(b.toLowerCase())
-                              )
-                          )
+                                a.toLowerCase().localeCompare(b.toLowerCase()),
+                              ),
+                          ),
                         ).map((o, i) => (
                           <option key={i as any}>{o as String[]}</option>
                         ))}
@@ -465,9 +462,9 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                             presets
                               .map((item: any) => item.system)
                               .sort((a: any, b: any) =>
-                                a.toLowerCase().localeCompare(b.toLowerCase())
-                              )
-                          )
+                                a.toLowerCase().localeCompare(b.toLowerCase()),
+                              ),
+                          ),
                         ).map((o, i) => (
                           <option key={i as any}>{o as String[]}</option>
                         ))}
@@ -540,9 +537,9 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                             presets
                               .map((item: any) => item.presetType)
                               .sort((a: any, b: any) =>
-                                a.toLowerCase().localeCompare(b.toLowerCase())
-                              )
-                          )
+                                a.toLowerCase().localeCompare(b.toLowerCase()),
+                              ),
+                          ),
                         ).map((o, i) => (
                           <option key={i as any}>{o as String[]}</option>
                         ))}
@@ -606,9 +603,9 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                                   .sort((a: any, b: any) =>
                                     a
                                       .toLowerCase()
-                                      .localeCompare(b.toLowerCase())
-                                  )
-                              )
+                                      .localeCompare(b.toLowerCase()),
+                                  ),
+                              ),
                             ).map((o, i) => (
                               <option key={i as any}>{o as String[]}</option>
                             ))}
@@ -836,7 +833,7 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
         )}
       </AnimatePresence>
     </Modal>
-  );
-};
+  )
+}
 
-export default AddPresetsModal;
+export default AddPresetsModal

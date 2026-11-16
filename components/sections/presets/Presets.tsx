@@ -1,185 +1,183 @@
-import { useEffect, useState } from "react";
-import PresetFilter from "./presetTable/PresetFilter";
-import PresetTable from "./presetTable/PresetTable";
-import { AiOutlineLoading } from "react-icons/ai";
-import ExportPresetsModal from "./ui/exportPresets/ExportPresetsModal";
-import { AnimatePresence, motion } from "framer-motion";
-import AddPresetsModal from "./ui/addPreset/AddPresetsModal";
-import Toast from "../Shared/Toast";
-import { BsCheck2Square } from "react-icons/bs";
-import { getAccessToken } from "../../../services/msalFunctions";
-import { msalInstance } from "../../../services/msal";
-import { db } from "../../../services/db";
-import { syncSim } from "../../../services/presetSync";
-import Image from "next/image";
-import { useLiveQuery } from "dexie-react-hooks";
-import { ToastContainer, toast } from "react-toastify";
+import { useEffect, useState } from "react"
+import PresetFilter from "./presetTable/PresetFilter"
+import PresetTable from "./presetTable/PresetTable"
+import { AiOutlineLoading } from "react-icons/ai"
+import ExportPresetsModal from "./ui/exportPresets/ExportPresetsModal"
+import { AnimatePresence, motion } from "framer-motion"
+import AddPresetsModal from "./ui/addPreset/AddPresetsModal"
+import Toast from "../Shared/Toast"
+import { BsCheck2Square } from "react-icons/bs"
+import { getAccessToken } from "../../../services/msalFunctions"
+import { msalInstance } from "../../../services/msal"
+import { db } from "../../../services/db"
+import { syncSim } from "../../../services/presetSync"
+import Image from "next/image"
+import { useLiveQuery } from "dexie-react-hooks"
+import { ToastContainer, toast } from "react-toastify"
 
-import "react-toastify/dist/ReactToastify.css";
-import { useRouter } from "next/router";
+import "react-toastify/dist/ReactToastify.css"
+import { useRouter } from "next/router"
 
 const Presets: React.FC = () => {
   const customLoader = ({ src }: any) => {
-    return src;
-  };
-  const [loading, setLoading] = useState(false);
-  const [presetsMsfs, setPresetsMsfs] = useState<any[]>([]);
-  const [presetsXplane, setPresetsXplane] = useState<any[]>([]);
+    return src
+  }
+  const [loading, setLoading] = useState(false)
+  const [presetsMsfs, setPresetsMsfs] = useState<any[]>([])
+  const [presetsXplane, setPresetsXplane] = useState<any[]>([])
   const [filteredPresets, setFilteredPresets] = useState(
     typeof localStorage !== "undefined" &&
       localStorage.getItem("searchFilter") !== null
       ? localStorage.getItem("searchFilter") || ""
-      : ""
-  );
+      : "",
+  )
   const [filteredVendors, setFilteredVendors] = useState(
     typeof localStorage !== "undefined" &&
       localStorage.getItem("vendorFilter") !== null
       ? localStorage.getItem("vendorFilter") || ""
-      : ""
-  );
+      : "",
+  )
   const [filteredAircrafts, setFilteredAircrafts] = useState(
     typeof localStorage !== "undefined" &&
       localStorage.getItem("aircraftFilter") !== null
       ? localStorage.getItem("aircraftFilter") || ""
-      : ""
-  );
+      : "",
+  )
   const [filteredSystems, setFilteredSystems] = useState(
     typeof localStorage !== "undefined" &&
       localStorage.getItem("systemFilter") !== null
       ? localStorage.getItem("systemFilter") || ""
-      : ""
-  );
+      : "",
+  )
   const [filteredPresetTypes, setFilteredPresetTypes] = useState(
     typeof localStorage !== "undefined" &&
       localStorage.getItem("presetTypeFilter") !== null
       ? localStorage.getItem("presetTypeFilter") || ""
-      : ""
-  );
+      : "",
+  )
   const [filteredCodeTypes, setFilteredCodeTypes] = useState(
     typeof localStorage !== "undefined" &&
       localStorage.getItem("codeTypeFilter") !== null
       ? localStorage.getItem("codeTypeFilter") || ""
-      : ""
-  );
+      : "",
+  )
 
-  const [exportModalOpen, setExportModalOpen] = useState(false);
-  const [addModalOpen, setAddModalOpen] = useState(false);
-  const [deletedToast, setDeletedToast] = useState(false);
-  const [reportedToast, setReportedToast] = useState(false);
-  const [savedToast, setSavedToast] = useState(false);
-  const [fixedToast, setFixedToast] = useState(false);
-  const [showMyPresets, setShowMyPresets] = useState(false);
-  const [showReportedPresets, setShowReportedPresets] = useState(false);
+  const [exportModalOpen, setExportModalOpen] = useState(false)
+  const [addModalOpen, setAddModalOpen] = useState(false)
+  const [deletedToast, setDeletedToast] = useState(false)
+  const [reportedToast, setReportedToast] = useState(false)
+  const [savedToast, setSavedToast] = useState(false)
+  const [fixedToast, setFixedToast] = useState(false)
+  const [showMyPresets, setShowMyPresets] = useState(false)
+  const [showReportedPresets, setShowReportedPresets] = useState(false)
   const [simType, setSimType] = useState(
     typeof localStorage !== "undefined" && localStorage.getItem("simType")
       ? localStorage.getItem("simType")
-      : "msfs2020"
-  );
-  const [presets, setPresets] = useState<any[]>([]);
-  const [filterOpen, setFilterOpen] = useState(true);
-  const [loadingStatus, setLoadingStatus] = useState("");
+      : "msfs2020",
+  )
+  const [presets, setPresets] = useState<any[]>([])
+  const [filterOpen, setFilterOpen] = useState(true)
+  const [loadingStatus, setLoadingStatus] = useState("")
 
-  const xplanePresets = useLiveQuery(() => db.presetsXplane.toArray());
-  const msfsPresets = useLiveQuery(() => db.presetsMsfs.toArray());
-
-  useEffect(() => {
-    if (!xplanePresets) return undefined;
-    if (!msfsPresets) return undefined;
-    setPresetsXplane(xplanePresets);
-    setPresetsMsfs(msfsPresets);
-    setPresets(simType === "msfs2020" ? presetsMsfs : presetsXplane);
-  }, [simType, presetsMsfs, presetsXplane, xplanePresets, msfsPresets]);
+  const xplanePresets = useLiveQuery(() => db.presetsXplane.toArray())
+  const msfsPresets = useLiveQuery(() => db.presetsMsfs.toArray())
 
   useEffect(() => {
-    savedToast == true ? toast("Saved") : null;
-  }, []);
+    if (!xplanePresets) return undefined
+    if (!msfsPresets) return undefined
+    setPresetsXplane(xplanePresets)
+    setPresetsMsfs(msfsPresets)
+    setPresets(simType === "msfs2020" ? presetsMsfs : presetsXplane)
+  }, [simType, presetsMsfs, presetsXplane, xplanePresets, msfsPresets])
 
   useEffect(() => {
-    if (addModalOpen) return;
-    const sim = simType === "xplane" ? "xplane" : "msfs2020";
+    savedToast == true ? toast("Saved") : null
+  }, [])
+
+  useEffect(() => {
+    if (addModalOpen) return
+    const sim = simType === "xplane" ? "xplane" : "msfs2020"
     syncSim(sim, () => {
-      setLoading(true);
+      setLoading(true)
       setLoadingStatus(
         sim === "msfs2020"
           ? "Downloading MSFS Presets"
-          : "Downloading X-Plane Presets"
-      );
+          : "Downloading X-Plane Presets",
+      )
     })
       .catch((error) => console.error(error))
       .finally(() => {
-        setLoading(false);
-        setLoadingStatus("");
-      });
-  }, [simType, addModalOpen]);
+        setLoading(false)
+        setLoadingStatus("")
+      })
+  }, [simType, addModalOpen])
 
   useEffect(() => {
-    const myAccounts = msalInstance.getAllAccounts();
-    const account = myAccounts[0];
+    const myAccounts = msalInstance.getAllAccounts()
+    const account = myAccounts[0]
     if (account) {
-      getAccessToken();
+      getAccessToken()
     }
-  }, []);
+  }, [])
 
   const filteredMyPresetList = presets.filter((preset) => {
     if (showReportedPresets) {
-      return preset.reported > 0;
+      return preset.reported > 0
     }
-    return presets;
-  });
+    return presets
+  })
   const filteredReportedPresets = filteredMyPresetList.filter((preset) => {
     if (showMyPresets) {
       if (localStorage.getItem("username")) {
         return (
           preset.author === localStorage.getItem("username") ||
           preset.updatedBy === localStorage.getItem("username")
-        );
+        )
       }
     }
-    return presets;
-  });
+    return presets
+  })
   const filteredVendorList = filteredReportedPresets.filter((preset) =>
-    preset.vendor.toLowerCase().includes(filteredVendors.toLowerCase())
-  );
+    preset.vendor.toLowerCase().includes(filteredVendors.toLowerCase()),
+  )
   const filteredAircraftList = filteredVendorList.filter((preset) => {
     if (filteredAircrafts.length == 0) {
-      return preset.aircraft.toLowerCase("");
+      return preset.aircraft.toLowerCase("")
     } else {
-      return preset.aircraft.toLowerCase() === filteredAircrafts.toLowerCase();
+      return preset.aircraft.toLowerCase() === filteredAircrafts.toLowerCase()
     }
-  });
+  })
   const filteredSystemList = filteredAircraftList.filter((preset) => {
     if (filteredSystems.length == 0) {
-      return preset.system.toLowerCase("");
+      return preset.system.toLowerCase("")
     } else {
-      return preset.system.toLowerCase() === filteredSystems.toLowerCase();
+      return preset.system.toLowerCase() === filteredSystems.toLowerCase()
     }
-  });
+  })
   const filteredInputTypeList = filteredSystemList.filter((preset) => {
     if (preset.presetType) {
       if (filteredPresetTypes.length == 0) {
-        return preset.presetType.toLowerCase("");
+        return preset.presetType.toLowerCase("")
       } else {
         return (
           preset.presetType.toLowerCase() === filteredPresetTypes.toLowerCase()
-        );
+        )
       }
     } else {
-      return preset;
+      return preset
     }
-  });
+  })
   const filteredCodeTypeList = filteredInputTypeList.filter((preset) => {
     if (preset.codeType) {
       if (filteredCodeTypes.length == 0) {
-        return preset.codeType.toLowerCase("");
+        return preset.codeType.toLowerCase("")
       } else {
-        return (
-          preset.codeType.toLowerCase() === filteredCodeTypes.toLowerCase()
-        );
+        return preset.codeType.toLowerCase() === filteredCodeTypes.toLowerCase()
       }
     } else {
-      return preset;
+      return preset
     }
-  });
+  })
 
   const filteredItems = filteredCodeTypeList.filter((preset) => {
     if (preset.description) {
@@ -191,7 +189,7 @@ const Presets: React.FC = () => {
           preset.description
             .toLowerCase()
             .includes(filteredPresets.toLowerCase())
-        );
+        )
       }
       if (preset.updatedBy) {
         return (
@@ -203,7 +201,7 @@ const Presets: React.FC = () => {
           preset.description
             .toLowerCase()
             .includes(filteredPresets.toLowerCase())
-        );
+        )
       } else {
         return (
           preset.label.toLowerCase().includes(filteredPresets.toLowerCase()) ||
@@ -211,7 +209,7 @@ const Presets: React.FC = () => {
           preset.description
             .toLowerCase()
             .includes(filteredPresets.toLowerCase())
-        );
+        )
       }
     } else {
       if (preset.author) {
@@ -219,7 +217,7 @@ const Presets: React.FC = () => {
           preset.label.toLowerCase().includes(filteredPresets.toLowerCase()) ||
           preset.author.toLowerCase().includes(filteredPresets.toLowerCase()) ||
           preset.code.toLowerCase().includes(filteredPresets.toLowerCase())
-        );
+        )
       }
       if (preset.updatedBy) {
         return (
@@ -228,91 +226,91 @@ const Presets: React.FC = () => {
             .toLowerCase()
             .includes(filteredPresets.toLowerCase()) ||
           preset.code.toLowerCase().includes(filteredPresets.toLowerCase())
-        );
+        )
       } else {
         return (
           preset.label.toLowerCase().includes(filteredPresets.toLowerCase()) ||
           preset.code.toLowerCase().includes(filteredPresets.toLowerCase())
-        );
+        )
       }
       // return (
       //   preset.label.toLowerCase().includes(filteredPresets.toLowerCase()) ||
       //   preset.code.toLowerCase().includes(filteredPresets.toLowerCase())
       // );
     }
-  });
+  })
 
   async function deleteToast() {
-    setDeletedToast(true);
-    setPresetsMsfs((await db.presetsMsfs.orderBy("vendor").toArray()) || []);
-    setPresetsMsfs((await db.presetsXplane.orderBy("vendor").toArray()) || []);
+    setDeletedToast(true)
+    setPresetsMsfs((await db.presetsMsfs.orderBy("vendor").toArray()) || [])
+    setPresetsMsfs((await db.presetsXplane.orderBy("vendor").toArray()) || [])
     setTimeout(() => {
-      setDeletedToast(false);
-    }, 5000);
+      setDeletedToast(false)
+    }, 5000)
   }
   async function reportToast() {
-    setReportedToast(true);
-    setPresetsMsfs((await db.presetsMsfs.orderBy("vendor").toArray()) || []);
-    setPresetsMsfs((await db.presetsXplane.orderBy("vendor").toArray()) || []);
+    setReportedToast(true)
+    setPresetsMsfs((await db.presetsMsfs.orderBy("vendor").toArray()) || [])
+    setPresetsMsfs((await db.presetsXplane.orderBy("vendor").toArray()) || [])
     setTimeout(() => {
-      setReportedToast(false);
-    }, 5000);
+      setReportedToast(false)
+    }, 5000)
   }
   async function fixToast() {
-    setFixedToast(true);
-    setPresetsMsfs((await db.presetsMsfs.orderBy("vendor").toArray()) || []);
-    setPresetsMsfs((await db.presetsXplane.orderBy("vendor").toArray()) || []);
+    setFixedToast(true)
+    setPresetsMsfs((await db.presetsMsfs.orderBy("vendor").toArray()) || [])
+    setPresetsMsfs((await db.presetsXplane.orderBy("vendor").toArray()) || [])
     setTimeout(() => {
-      setFixedToast(false);
-    }, 5000);
+      setFixedToast(false)
+    }, 5000)
   }
   async function saveToast() {
-    setSavedToast(true);
-    setPresetsMsfs((await db.presetsMsfs.orderBy("vendor").toArray()) || []);
-    setPresetsMsfs((await db.presetsXplane.orderBy("vendor").toArray()) || []);
+    setSavedToast(true)
+    setPresetsMsfs((await db.presetsMsfs.orderBy("vendor").toArray()) || [])
+    setPresetsMsfs((await db.presetsXplane.orderBy("vendor").toArray()) || [])
     setTimeout(() => {
-      setSavedToast(false);
-    }, 5000);
+      setSavedToast(false)
+    }, 5000)
   }
 
   useEffect(() => {
     localStorage.getItem("simType") === "msfs2020"
       ? document.body.classList.remove("xplane")
-      : document.body.classList.add("xplane");
-  }, [typeof localStorage !== "undefined" && localStorage.getItem("simType")]);
+      : document.body.classList.add("xplane")
+  }, [typeof localStorage !== "undefined" && localStorage.getItem("simType")])
 
-  const router = useRouter();
+  const router = useRouter()
 
   const updateQueryParam = (key: string, value: string) => {
-    const newQuery = { ...router.query, [key]: value };
-    if (!value) delete newQuery[key]; // Remove the key if value is empty
+    const newQuery = { ...router.query, [key]: value }
+    if (!value) delete newQuery[key] // Remove the key if value is empty
     router.push(
       {
         pathname: router.pathname,
         query: newQuery,
       },
       undefined,
-      { shallow: true }
-    );
-  };
+      { shallow: true },
+    )
+  }
 
   // Populate filters from query parameters on mount
   useEffect(() => {
-    setFilteredPresets((router.query.search as string) || "");
-    setFilteredVendors((router.query.vendor as string) || "");
-    setFilteredAircrafts((router.query.aircraft as string) || "");
-    setFilteredSystems((router.query.system as string) || "");
-    setFilteredPresetTypes((router.query.presetType as string) || "");
-    setFilteredCodeTypes((router.query.codeType as string) || "");
-  }, [router.query]);
+    setFilteredPresets((router.query.search as string) || "")
+    setFilteredVendors((router.query.vendor as string) || "")
+    setFilteredAircrafts((router.query.aircraft as string) || "")
+    setFilteredSystems((router.query.system as string) || "")
+    setFilteredPresetTypes((router.query.presetType as string) || "")
+    setFilteredCodeTypes((router.query.codeType as string) || "")
+  }, [router.query])
 
   const toggleSimType = () => {
     if (typeof window !== "undefined") {
-      const newSimType = simType === "msfs2020" ? "xplane" : "msfs2020";
-      setSimType(newSimType);
-      localStorage.setItem("simType", newSimType);
+      const newSimType = simType === "msfs2020" ? "xplane" : "msfs2020"
+      setSimType(newSimType)
+      localStorage.setItem("simType", newSimType)
     }
-  };
+  }
 
   return (
     <div>
@@ -371,54 +369,54 @@ const Presets: React.FC = () => {
                 filterOpen={filterOpen}
                 setFilterOpen={() => setFilterOpen((prev) => !prev)}
                 search={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  const value = e.target.value;
-                  setFilteredPresets(value);
-                  localStorage.setItem("searchFilter", value);
-                  updateQueryParam("search", value);
+                  const value = e.target.value
+                  setFilteredPresets(value)
+                  localStorage.setItem("searchFilter", value)
+                  updateQueryParam("search", value)
                 }}
                 filterVendor={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  const value = e.target.value;
-                  setFilteredVendors(value);
-                  localStorage.setItem("vendorFilter", value);
-                  updateQueryParam("vendor", value);
+                  const value = e.target.value
+                  setFilteredVendors(value)
+                  localStorage.setItem("vendorFilter", value)
+                  updateQueryParam("vendor", value)
                 }}
                 filterAircraft={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  const value = e.target.value;
-                  setFilteredAircrafts(value);
-                  localStorage.setItem("aircraftFilter", value);
-                  updateQueryParam("aircraft", value);
+                  const value = e.target.value
+                  setFilteredAircrafts(value)
+                  localStorage.setItem("aircraftFilter", value)
+                  updateQueryParam("aircraft", value)
                 }}
                 filterSystem={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  const value = e.target.value;
-                  setFilteredSystems(value);
-                  localStorage.setItem("systemFilter", value);
-                  updateQueryParam("system", value);
+                  const value = e.target.value
+                  setFilteredSystems(value)
+                  localStorage.setItem("systemFilter", value)
+                  updateQueryParam("system", value)
                 }}
                 filterPresetType={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  const value = e.target.value;
-                  setFilteredPresetTypes(value);
-                  localStorage.setItem("presetTypeFilter", value);
-                  updateQueryParam("presetType", value);
+                  const value = e.target.value
+                  setFilteredPresetTypes(value)
+                  localStorage.setItem("presetTypeFilter", value)
+                  updateQueryParam("presetType", value)
                 }}
                 filterCodeType={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  const value = e.target.value;
-                  setFilteredCodeTypes(value);
-                  localStorage.setItem("codeTypeFilter", value);
-                  updateQueryParam("codeType", value);
+                  const value = e.target.value
+                  setFilteredCodeTypes(value)
+                  localStorage.setItem("codeTypeFilter", value)
+                  updateQueryParam("codeType", value)
                 }}
                 resetFilter={() => {
-                  setFilteredPresets("");
-                  setFilteredVendors("");
-                  setFilteredAircrafts("");
-                  setFilteredSystems("");
-                  setFilteredPresetTypes("");
-                  setFilteredCodeTypes("");
-                  localStorage.setItem("searchFilter", "");
-                  localStorage.setItem("vendorFilter", "");
-                  localStorage.setItem("aircraftFilter", "");
-                  localStorage.setItem("systemFilter", "");
-                  localStorage.setItem("presetTypeFilter", "");
-                  router.push(router.pathname, undefined, { shallow: true }); // reset URL
+                  setFilteredPresets("")
+                  setFilteredVendors("")
+                  setFilteredAircrafts("")
+                  setFilteredSystems("")
+                  setFilteredPresetTypes("")
+                  setFilteredCodeTypes("")
+                  localStorage.setItem("searchFilter", "")
+                  localStorage.setItem("vendorFilter", "")
+                  localStorage.setItem("aircraftFilter", "")
+                  localStorage.setItem("systemFilter", "")
+                  localStorage.setItem("presetTypeFilter", "")
+                  router.push(router.pathname, undefined, { shallow: true }) // reset URL
                 }}
                 filteredPresets={filteredPresets}
                 filteredVendors={filteredVendors}
@@ -550,7 +548,7 @@ const Presets: React.FC = () => {
         )}
       </AnimatePresence> */}
     </div>
-  );
-};
+  )
+}
 
-export default Presets;
+export default Presets

@@ -1,11 +1,11 @@
-import Modal from "../../../Shared/Modal";
-import ReportPresetButton from "./ReportPresetButton";
+import Modal from "../../../Shared/Modal"
+import ReportPresetButton from "./ReportPresetButton"
 
 interface Props {
-  label: string;
-  presetId: string;
-  setReportModalOpen: Function;
-  reportedToast: Function;
+  label: string
+  presetId: string
+  setReportModalOpen: Function
+  reportedToast: Function
 }
 
 const ReportPresetModal: React.FC<Props> = ({
@@ -65,7 +65,7 @@ const ReportPresetModal: React.FC<Props> = ({
         </div>
       </div>
     </Modal>
-  );
-};
+  )
+}
 
-export default ReportPresetModal;
+export default ReportPresetModal

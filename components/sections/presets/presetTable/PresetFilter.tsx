@@ -1,39 +1,39 @@
-import { useState } from "react";
+import { useState } from "react"
 import {
   HiAdjustments,
   HiOutlineSearchCircle,
   HiChevronRight,
   HiChevronLeft,
   HiOutlineLightBulb,
-} from "react-icons/hi";
-import { GiCommercialAirplane } from "react-icons/gi";
-import { RiListSettingsLine } from "react-icons/ri";
-import { MdBusiness } from "react-icons/md";
-import { BiCog, BiJoystickButton } from "react-icons/bi";
-import { AnimatePresence, motion } from "framer-motion";
-import { AuthenticatedTemplate } from "@azure/msal-react";
+} from "react-icons/hi"
+import { GiCommercialAirplane } from "react-icons/gi"
+import { RiListSettingsLine } from "react-icons/ri"
+import { MdBusiness } from "react-icons/md"
+import { BiCog, BiJoystickButton } from "react-icons/bi"
+import { AnimatePresence, motion } from "framer-motion"
+import { AuthenticatedTemplate } from "@azure/msal-react"
 
 interface Props {
-  search: Function;
-  filterVendor: Function;
-  resetFilter: Function;
-  filteredPresets: any;
-  filterAircraft: Function;
-  filteredVendors: any;
-  filteredItems: any;
-  filteredAircrafts: any;
-  filteredSystems: any;
-  filteredPresetTypes: any;
-  filteredCodeTypes: any;
-  filterOpen: boolean;
-  filterSystem: Function;
-  filterPresetType: Function;
-  filterCodeType: Function;
-  showReportedPresets: boolean;
-  showMyPresets: boolean;
-  setShowReportedPresets: Function;
-  setShowMyPresets: Function;
-  setFilterOpen: Function;
+  search: Function
+  filterVendor: Function
+  resetFilter: Function
+  filteredPresets: any
+  filterAircraft: Function
+  filteredVendors: any
+  filteredItems: any
+  filteredAircrafts: any
+  filteredSystems: any
+  filteredPresetTypes: any
+  filteredCodeTypes: any
+  filterOpen: boolean
+  filterSystem: Function
+  filterPresetType: Function
+  filterCodeType: Function
+  showReportedPresets: boolean
+  showMyPresets: boolean
+  setShowReportedPresets: Function
+  setShowMyPresets: Function
+  setFilterOpen: Function
 }
 
 const PresetFilter: React.FC<Props> = ({
@@ -58,53 +58,53 @@ const PresetFilter: React.FC<Props> = ({
   filterOpen,
   setFilterOpen,
 }) => {
-  const [myPresetTooltip, setMyPresetTooltip] = useState(false);
+  const [myPresetTooltip, setMyPresetTooltip] = useState(false)
 
   const uniqueVendor = Array.from(
     new Set(
       filteredItems
         .map((item: any) => item.vendor)
         .sort((a: any, b: any) =>
-          a.toLowerCase().localeCompare(b.toLowerCase())
-        )
-    )
-  );
+          a.toLowerCase().localeCompare(b.toLowerCase()),
+        ),
+    ),
+  )
   const uniqueAircraft = Array.from(
     new Set(
       filteredItems
         .map((item: any) => item.aircraft)
         .sort((a: any, b: any) =>
-          a.toLowerCase().localeCompare(b.toLowerCase())
-        )
-    )
-  );
+          a.toLowerCase().localeCompare(b.toLowerCase()),
+        ),
+    ),
+  )
   const uniqueSystem = Array.from(
     new Set(
       filteredItems
         .map((item: any) => item.system)
         .sort((a: any, b: any) =>
-          a.toLowerCase().localeCompare(b.toLowerCase())
-        )
-    )
-  );
+          a.toLowerCase().localeCompare(b.toLowerCase()),
+        ),
+    ),
+  )
   const uniqueType = Array.from(
     new Set(
       filteredItems
         .map((item: any) => item.presetType)
         .sort((a: any, b: any) =>
-          a.toLowerCase().localeCompare(b.toLowerCase())
-        )
-    )
-  );
+          a.toLowerCase().localeCompare(b.toLowerCase()),
+        ),
+    ),
+  )
   const uniqueCodeType = Array.from(
     new Set(
       filteredItems
         .map((item: any) => item.codeType)
         .sort((a: any, b: any) =>
-          a.toLowerCase().localeCompare(b.toLowerCase())
-        )
-    )
-  );
+          a.toLowerCase().localeCompare(b.toLowerCase()),
+        ),
+    ),
+  )
 
   const draw = {
     hidden: {
@@ -123,22 +123,22 @@ const PresetFilter: React.FC<Props> = ({
           pathLength: { type: "spring", duration: 0.5, bounce: 0 },
           opacity: { duration: 0.01 },
         },
-      };
+      }
     },
-  };
+  }
 
-  var timeout: any;
+  var timeout: any
 
   const showTip = () => {
     timeout = setTimeout(() => {
-      setMyPresetTooltip(true);
-    }, 400);
-  };
+      setMyPresetTooltip(true)
+    }, 400)
+  }
 
   const hideTip = () => {
-    clearInterval(timeout);
-    setMyPresetTooltip(false);
-  };
+    clearInterval(timeout)
+    setMyPresetTooltip(false)
+  }
 
   return (
     <div
@@ -180,10 +180,10 @@ const PresetFilter: React.FC<Props> = ({
             <div>
               <div className="flex items-center space-x-1">
                 <HiOutlineSearchCircle />
-                <label htmlFor="searchfield">Search Preset</label>
+                <label htmlFor="filter-search">Search Preset</label>
               </div>
               <textarea
-                id="seachfield"
+                id="filter-search"
                 className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 px-3 py-1 text-hhText"
                 value={filteredPresets}
                 onChange={(e) => search(e)}
@@ -192,9 +192,10 @@ const PresetFilter: React.FC<Props> = ({
             <div>
               <div className="flex items-center space-x-1">
                 <MdBusiness />
-                <label htmlFor="searchfield">Select Vendor</label>
+                <label htmlFor="filter-vendor">Select Vendor</label>
               </div>
               <select
+                id="filter-vendor"
                 className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 px-3 py-1 text-hhText"
                 onChange={(e) => filterVendor(e)}
                 value={filteredVendors}
@@ -210,9 +211,10 @@ const PresetFilter: React.FC<Props> = ({
             <div>
               <div className="flex items-center space-x-1">
                 <GiCommercialAirplane />
-                <label htmlFor="searchfield">Search Aircraft</label>
+                <label htmlFor="filter-aircraft">Search Aircraft</label>
               </div>
               <select
+                id="filter-aircraft"
                 className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 px-3 py-1 text-hhText"
                 onChange={(e) => filterAircraft(e)}
                 value={filteredAircrafts}
@@ -228,9 +230,10 @@ const PresetFilter: React.FC<Props> = ({
             <div>
               <div className="flex items-center space-x-1">
                 <BiCog />
-                <label htmlFor="searchfield">Select System</label>
+                <label htmlFor="filter-system">Select System</label>
               </div>
               <select
+                id="filter-system"
                 className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 px-3 py-1 text-hhText"
                 onChange={(e) => filterSystem(e)}
                 value={filteredSystems}
@@ -249,9 +252,10 @@ const PresetFilter: React.FC<Props> = ({
                   <BiJoystickButton />
                   <HiOutlineLightBulb />
                 </div>
-                <label htmlFor="searchfield">Select Input/Output</label>
+                <label htmlFor="filter-preset-type">Select Input/Output</label>
               </div>
               <select
+                id="filter-preset-type"
                 className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 px-3 py-1 text-hhText"
                 onChange={(e) => filterPresetType(e)}
                 value={filteredPresetTypes}
@@ -278,9 +282,10 @@ const PresetFilter: React.FC<Props> = ({
                     <div className="flex space-x-1">
                       <RiListSettingsLine />
                     </div>
-                    <label htmlFor="searchfield">Select Code Type</label>
+                    <label htmlFor="filter-code-type">Select Code Type</label>
                   </div>
                   <select
+                    id="filter-code-type"
                     className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 px-3 py-1 text-hhText"
                     onChange={(e) => filterCodeType(e)}
                     value={filteredCodeTypes}
@@ -397,7 +402,7 @@ const PresetFilter: React.FC<Props> = ({
         </button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default PresetFilter;
+export default PresetFilter

@@ -10,7 +10,7 @@ const UserDropdown: React.FC = ({ children }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default UserDropdown;
+export default UserDropdown

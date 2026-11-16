@@ -1,13 +1,14 @@
-import { MdTabUnselected } from "react-icons/md";
-import Link from "next/link";
+import { MdTabUnselected } from "react-icons/md"
+import Link from "next/link"
 
 interface Props {
-  id: string;
+  id: string
 }
 
 const OpenPresetButton: React.FC<Props> = ({ id }) => {
   return (
-    <Link legacyBehavior
+    <Link
+      legacyBehavior
       href={{
         pathname: `/preset`,
         query: { simType: localStorage.getItem("simType"), id: id },
@@ -23,7 +24,7 @@ const OpenPresetButton: React.FC<Props> = ({ id }) => {
         <p>View Details</p>
       </a>
     </Link>
-  );
-};
+  )
+}
 
-export default OpenPresetButton;
+export default OpenPresetButton

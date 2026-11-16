@@ -1,14 +1,14 @@
-import PresetPreviewLabel from "../ui/PresetInputLabel";
-import { AiOutlineLoading } from "react-icons/ai";
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { BsArrowUpCircle } from "react-icons/bs";
-import ButtonOrange from "../../Shared/ButtonOrange";
+import PresetPreviewLabel from "../ui/PresetInputLabel"
+import { AiOutlineLoading } from "react-icons/ai"
+import { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { BsArrowUpCircle } from "react-icons/bs"
+import ButtonOrange from "../../Shared/ButtonOrange"
 
 interface Props {
-  presetHistory: any;
-  loading: boolean;
-  revertHistory: Function;
+  presetHistory: any
+  loading: boolean
+  revertHistory: Function
 }
 
 const PresetHistoryList: React.FC<Props> = ({
@@ -31,9 +31,9 @@ const PresetHistoryList: React.FC<Props> = ({
         ease: [0.83, 0, 0.17, 1],
       },
     },
-  };
+  }
 
-  const [historyOpen, setHistoryOpen] = useState(false);
+  const [historyOpen, setHistoryOpen] = useState(false)
 
   return (
     <div className="rounded-lg bg-hhCard/40 transition-all">
@@ -81,13 +81,13 @@ const PresetHistoryList: React.FC<Props> = ({
               .sort(
                 (a: any, b: any) =>
                   new Date(b.createdDate).valueOf() -
-                  new Date(a.createdDate).valueOf()
+                  new Date(a.createdDate).valueOf(),
               )
               .map((history: any) => {
                 return (
                   <div
                     key={history.createdDate}
-                    className="mb-5 mr-1 ml-3 rounded-lg bg-hhBG/70"
+                    className="mb-5 ml-3 mr-1 rounded-lg bg-hhBG/70"
                   >
                     <div className="flex w-full flex-col p-5 text-hhText md:flex-row md:space-x-5">
                       <div className="flex w-full flex-col space-y-2 md:w-1/6">
@@ -105,7 +105,7 @@ const PresetHistoryList: React.FC<Props> = ({
                         <PresetPreviewLabel
                           title={history.version > 1 ? "Updated" : "Added"}
                           editData={new Date(
-                            history.createdDate
+                            history.createdDate,
                           ).toLocaleString()}
                         />
                         <PresetPreviewLabel
@@ -210,7 +210,7 @@ const PresetHistoryList: React.FC<Props> = ({
                                     label: history.label,
                                     code: history.code,
                                     description: history.description,
-                                  }
+                                  },
                             )
                           }
                           className="my-auto h-fit cursor-pointer text-center"
@@ -220,13 +220,13 @@ const PresetHistoryList: React.FC<Props> = ({
                       )}
                     </div>
                   </div>
-                );
+                )
               })}
           </motion.div>
         )}
       </AnimatePresence>
     </div>
-  );
-};
+  )
+}
 
-export default PresetHistoryList;
+export default PresetHistoryList

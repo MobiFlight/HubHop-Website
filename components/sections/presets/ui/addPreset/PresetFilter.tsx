@@ -1,28 +1,28 @@
-import { useState } from "react";
+import { useState } from "react"
 import {
   HiAdjustments,
   HiOutlineSearchCircle,
   HiChevronRight,
   HiChevronLeft,
   HiOutlineLightBulb,
-} from "react-icons/hi";
-import { GiCommercialAirplane } from "react-icons/gi";
-import { MdBusiness } from "react-icons/md";
-import { BiCog, BiJoystickButton } from "react-icons/bi";
+} from "react-icons/hi"
+import { GiCommercialAirplane } from "react-icons/gi"
+import { MdBusiness } from "react-icons/md"
+import { BiCog, BiJoystickButton } from "react-icons/bi"
 
 interface Props {
-  search: Function;
-  filterVendor: Function;
-  resetFilter: Function;
-  filteredPresets: any;
-  filterAircraft: Function;
-  filteredVendors: any;
-  filteredItems: any;
-  filteredAircrafts: any;
-  filteredSystems: any;
-  filteredPresetTypes: any;
-  filterSystem: Function;
-  filterPresetType: Function;
+  search: Function
+  filterVendor: Function
+  resetFilter: Function
+  filteredPresets: any
+  filterAircraft: Function
+  filteredVendors: any
+  filteredItems: any
+  filteredAircrafts: any
+  filteredSystems: any
+  filteredPresetTypes: any
+  filterSystem: Function
+  filterPresetType: Function
 }
 
 const PresetFilter: React.FC<Props> = ({
@@ -39,19 +39,19 @@ const PresetFilter: React.FC<Props> = ({
   filterSystem,
   filterPresetType,
 }) => {
-  const [filterOpen, setFilterOpen] = useState(true);
+  const [filterOpen, setFilterOpen] = useState(true)
   const uniqueVendor = Array.from(
-    new Set(filteredItems.map((item: any) => item.vendor).sort())
-  );
+    new Set(filteredItems.map((item: any) => item.vendor).sort()),
+  )
   const uniqueAircraft = Array.from(
-    new Set(filteredItems.map((item: any) => item.aircraft).sort())
-  );
+    new Set(filteredItems.map((item: any) => item.aircraft).sort()),
+  )
   const uniqueSystem = Array.from(
-    new Set(filteredItems.map((item: any) => item.system).sort())
-  );
+    new Set(filteredItems.map((item: any) => item.system).sort()),
+  )
   const uniqueType = Array.from(
-    new Set(filteredItems.map((item: any) => item.presetType).sort())
-  );
+    new Set(filteredItems.map((item: any) => item.presetType).sort()),
+  )
 
   return (
     <div
@@ -173,7 +173,7 @@ const PresetFilter: React.FC<Props> = ({
         </button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default PresetFilter;
+export default PresetFilter

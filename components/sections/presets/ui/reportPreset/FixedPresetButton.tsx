@@ -1,4 +1,4 @@
-import { GiAutoRepair } from "react-icons/gi";
+import { GiAutoRepair } from "react-icons/gi"
 
 const FixedPresetButton: React.FC = () => {
   return (
@@ -8,7 +8,7 @@ const FixedPresetButton: React.FC = () => {
       </div>
       <p>Preset fixed</p>
     </button>
-  );
-};
+  )
+}
 
-export default FixedPresetButton;
+export default FixedPresetButton

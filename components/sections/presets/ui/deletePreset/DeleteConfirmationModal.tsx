@@ -1,13 +1,13 @@
-import Modal from "../../../Shared/Modal";
-import DeleteButton from "./DeleteButton";
-import { FiAlertTriangle } from "react-icons/fi";
-import { db } from "../../../../../services/db";
+import Modal from "../../../Shared/Modal"
+import DeleteButton from "./DeleteButton"
+import { FiAlertTriangle } from "react-icons/fi"
+import { db } from "../../../../../services/db"
 
 interface Props {
-  label: string;
-  presetId: string;
-  setDeleteModalOpen: Function;
-  deletedToast: Function;
+  label: string
+  presetId: string
+  setDeleteModalOpen: Function
+  deletedToast: Function
 }
 
 const DeleteConfirmationModal: React.FC<Props> = ({
@@ -30,19 +30,19 @@ const DeleteConfirmationModal: React.FC<Props> = ({
         headers: {
           Authorization: "Bearer " + localStorage.getItem("accessToken"),
         },
-      }
+      },
     ).then(async (res) => {
       if (res.status != 200) {
-        alert("Error occured");
+        alert("Error occured")
       }
       const localStoragePresets =
         localStorage.getItem("simType") === "msfs2020"
           ? (await db.presetsMsfs.toArray()) || []
-          : (await db.presetsXplane.toArray()) || [];
+          : (await db.presetsXplane.toArray()) || []
 
       let result = localStoragePresets.filter(
-        (item: any) => item.id !== presetId
-      );
+        (item: any) => item.id !== presetId,
+      )
       try {
         localStorage.getItem("simType") === "msfs2020"
           ? await db.presetsMsfs
@@ -50,10 +50,10 @@ const DeleteConfirmationModal: React.FC<Props> = ({
               .then(() => db.presetsMsfs.bulkAdd(result))
           : await db.presetsXplane
               .clear()
-              .then(() => db.presetsXplane.bulkAdd(result));
+              .then(() => db.presetsXplane.bulkAdd(result))
       } catch (error) {}
-      deletedToast();
-    });
+      deletedToast()
+    })
   }
 
   return (
@@ -89,7 +89,7 @@ const DeleteConfirmationModal: React.FC<Props> = ({
         </div>
       </div>
     </Modal>
-  );
-};
+  )
+}
 
-export default DeleteConfirmationModal;
+export default DeleteConfirmationModal

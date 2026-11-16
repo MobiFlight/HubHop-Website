@@ -1,129 +1,132 @@
-import { useLiveQuery } from "dexie-react-hooks";
-import { AnimatePresence, motion } from "framer-motion";
-import { useRouter } from "next/router";
-import { useEffect, useMemo, useState } from "react";
-import { BsCheck2Square } from "react-icons/bs";
-import PresetView from "../components/sections/presets/singlePresetView/PresetView";
-import Toast from "../components/sections/Shared/Toast";
-import { presetTable } from "../services/presetSync";
-import { ToastContainer, toast } from "react-toastify";
+import { useLiveQuery } from "dexie-react-hooks"
+import { AnimatePresence, motion } from "framer-motion"
+import { useRouter } from "next/router"
+import { useEffect, useMemo, useState } from "react"
+import { BsCheck2Square } from "react-icons/bs"
+import PresetView from "../components/sections/presets/singlePresetView/PresetView"
+import Toast from "../components/sections/Shared/Toast"
+import { presetTable } from "../services/presetSync"
+import { ToastContainer, toast } from "react-toastify"
 
-import "react-toastify/dist/ReactToastify.css";
-import { IoSaveOutline } from "react-icons/io5";
+import "react-toastify/dist/ReactToastify.css"
+import { IoSaveOutline } from "react-icons/io5"
 
 const Preset: React.FC = () => {
   useEffect(() => {
     localStorage.getItem("simType") === "msfs2020"
       ? document.body.classList.remove("xplane")
-      : document.body.classList.add("xplane");
-  }, []);
+      : document.body.classList.add("xplane")
+  }, [])
 
-  const router = useRouter();
-  const { id, simType } = router.query;
-  const [loading, setLoading] = useState(false);
-  const [history, setHistory] = useState([]);
-  const [deletedToast, setDeletedToast] = useState(false);
-  const [reportedToast, setReportedToast] = useState(false);
-  const [savedToast, setSavedToast] = useState(false);
-  const [fixedToast, setFixedToast] = useState(false);
+  const router = useRouter()
+  const { id, simType } = router.query
+  const [loading, setLoading] = useState(false)
+  const [history, setHistory] = useState([])
+  const [deletedToast, setDeletedToast] = useState(false)
+  const [reportedToast, setReportedToast] = useState(false)
+  const [savedToast, setSavedToast] = useState(false)
+  const [fixedToast, setFixedToast] = useState(false)
 
   if (typeof window !== "undefined") {
     window.location.href.includes("msfs2020")
       ? localStorage.setItem("simType", "msfs2020")
-      : localStorage.setItem("simType", "xplane");
+      : localStorage.setItem("simType", "xplane")
   }
 
   useEffect(() => {
-    savedToast == true ? toast("Saved") : null;
-  }, [savedToast]);
+    savedToast == true ? toast("Saved") : null
+  }, [savedToast])
 
-  const sim = simType === "xplane" ? "xplane" : "msfs2020";
-  const [fetchDone, setFetchDone] = useState(false);
+  const sim = simType === "xplane" ? "xplane" : "msfs2020"
+  const [fetchDone, setFetchDone] = useState(false)
 
   // fetch the newest version of this one preset and store it in the local cache
   const fetchPreset = async () => {
-    setFetchDone(false);
+    setFetchDone(false)
     try {
       const res = await fetch(
-        process.env.NEXT_PUBLIC_HUBHOP_API_BASEURL + "/" + sim + "/presets/" + id,
-        { redirect: "follow" }
-      );
+        process.env.NEXT_PUBLIC_HUBHOP_API_BASEURL +
+          "/" +
+          sim +
+          "/presets/" +
+          id,
+        { redirect: "follow" },
+      )
       if (res.ok) {
-        const fetchedPreset = await res.json();
-        await presetTable(sim).put({ ...fetchedPreset, id });
+        const fetchedPreset = await res.json()
+        await presetTable(sim).put({ ...fetchedPreset, id })
       } else if (res.status === 404) {
-        await presetTable(sim).delete(id as string);
+        await presetTable(sim).delete(id as string)
       } else {
-        throw new Error(`Loading preset ${id} failed: ${res.status}`);
+        throw new Error(`Loading preset ${id} failed: ${res.status}`)
       }
       // only a real answer from the server may turn into "does not exist"
-      setFetchDone(true);
+      setFetchDone(true)
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
-  };
+  }
 
   const fetchHistory = async () => {
     const res = await fetch(
       `https://hubhop-api-mgtm.azure-api.net/api/v1/msfs2020/history/presets/${id}`,
-      { redirect: "follow" }
-    );
-    const fetchedHistory = await res.json();
-    return setHistory(fetchedHistory[0]?.history || []);
-  };
+      { redirect: "follow" },
+    )
+    const fetchedHistory = await res.json()
+    return setHistory(fetchedHistory[0]?.history || [])
+  }
 
   const cachedPreset = useLiveQuery(
     () => (id ? presetTable(sim).get(id as string) : undefined),
-    [id, sim]
-  );
+    [id, sim],
+  )
 
   useEffect(() => {
     async function fetchHistoryRoutine() {
       if (!id || !simType) {
-        return;
+        return
       }
-      fetchPreset();
+      fetchPreset()
       if (simType === "msfs2020") {
-        setLoading(true);
-        await fetchHistory().catch((error) => console.error(error));
-        setLoading(false);
+        setLoading(true)
+        await fetchHistory().catch((error) => console.error(error))
+        setLoading(false)
       }
     }
-    fetchHistoryRoutine();
-  }, [id, simType]);
+    fetchHistoryRoutine()
+  }, [id, simType])
 
   // undefined keeps PresetView in its loading state until we know the answer
   const filterPreset = useMemo(
-    () =>
-      cachedPreset ? [cachedPreset] : fetchDone ? [] : undefined,
-    [cachedPreset, fetchDone]
-  );
+    () => (cachedPreset ? [cachedPreset] : fetchDone ? [] : undefined),
+    [cachedPreset, fetchDone],
+  )
   function deleteToast() {
-    setDeletedToast(true);
+    setDeletedToast(true)
     setTimeout(() => {
-      setDeletedToast(false);
-    }, 5000);
+      setDeletedToast(false)
+    }, 5000)
   }
   function reportToast() {
-    setReportedToast(true);
+    setReportedToast(true)
     setTimeout(() => {
-      setReportedToast(false);
-    }, 5000);
+      setReportedToast(false)
+    }, 5000)
   }
   function fixToast() {
-    setFixedToast(true);
+    setFixedToast(true)
     setTimeout(() => {
-      setFixedToast(false);
-    }, 5000);
+      setFixedToast(false)
+    }, 5000)
   }
   function saveToast() {
-    setSavedToast(true);
+    setSavedToast(true)
     setTimeout(() => {
-      setSavedToast(false);
-    }, 5000);
+      setSavedToast(false)
+    }, 5000)
   }
 
-  setTimeout(() => {}, 5000);
+  setTimeout(() => {}, 5000)
 
   return (
     <>
@@ -218,7 +221,7 @@ const Preset: React.FC = () => {
         )}
       </AnimatePresence> */}
     </>
-  );
-};
+  )
+}
 
-export default Preset;
+export default Preset
