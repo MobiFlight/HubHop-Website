@@ -10,6 +10,7 @@ const Toast: React.FC<React.PropsWithChildren<Props>> = ({
 }) => {
   return (
     <div
+      role="status"
       style={{ backgroundColor: bg, color: textColor }}
       className={`fixed right-5 bottom-5 z-50 rounded-lg p-5 font-semibold`}
     >

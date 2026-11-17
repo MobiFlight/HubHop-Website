@@ -491,7 +491,7 @@ const Presets: React.FC = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <Toast bg={"rgb(22 101 52 / var(--tw-bg-opacity))"} textColor={""}>
+            <Toast bg={"rgb(22 101 52)"} textColor={""}>
               <div className="mr-1 bg-green-800 text-xl">
                 <BsCheck2Square />
               </div>
@@ -507,7 +507,7 @@ const Presets: React.FC = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <Toast bg={"rgb(22 101 52 / var(--tw-bg-opacity))"} textColor={""}>
+            <Toast bg={"rgb(22 101 52)"} textColor={""}>
               <div className="mr-1 bg-green-800 text-xl">
                 <BsCheck2Square />
               </div>
@@ -523,7 +523,7 @@ const Presets: React.FC = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <Toast bg={"rgb(22 101 52 / var(--tw-bg-opacity))"} textColor={""}>
+            <Toast bg={"rgb(22 101 52)"} textColor={""}>
               <div className="mr-1 bg-green-800 text-xl">
                 <BsCheck2Square />
               </div>
@@ -541,7 +541,7 @@ const Presets: React.FC = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <Toast bg={"rgb(22 101 52 / var(--tw-bg-opacity))"} textColor={""}>
+            <Toast bg={"rgb(22 101 52)"} textColor={""}>
               <div className="mr-1 bg-green-800 text-xl">
                 <BsCheck2Square />
               </div>

@@ -825,7 +825,7 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <Toast bg={"rgb(22 101 52 / var(--tw-bg-opacity))"} textColor={""}>
+            <Toast bg={"rgb(22 101 52)"} textColor={""}>
               <div className="mr-1 bg-green-800 text-xl">
                 <BsCheck2Square />
               </div>
@@ -839,7 +839,7 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <Toast bg={"rgb(127 29 29 / var(--tw-bg-opacity))"} textColor={""}>
+            <Toast bg={"rgb(127 29 29)"} textColor={""}>
               <div className="mr-1 bg-red-900 text-xl">
                 <BsCheck2Square />
               </div>
