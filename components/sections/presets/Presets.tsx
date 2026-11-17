@@ -133,108 +133,26 @@ const Presets: React.FC = () => {
     }
     return presets
   })
-  const filteredVendorList = filteredReportedPresets.filter((preset) =>
-    preset.vendor.toLowerCase().includes(filteredVendors.toLowerCase()),
-  )
-  const filteredAircraftList = filteredVendorList.filter((preset) => {
-    if (filteredAircrafts.length == 0) {
-      return preset.aircraft.toLowerCase("")
-    } else {
-      return preset.aircraft.toLowerCase() === filteredAircrafts.toLowerCase()
-    }
-  })
-  const filteredSystemList = filteredAircraftList.filter((preset) => {
-    if (filteredSystems.length == 0) {
-      return preset.system.toLowerCase("")
-    } else {
-      return preset.system.toLowerCase() === filteredSystems.toLowerCase()
-    }
-  })
-  const filteredInputTypeList = filteredSystemList.filter((preset) => {
-    if (preset.presetType) {
-      if (filteredPresetTypes.length == 0) {
-        return preset.presetType.toLowerCase("")
-      } else {
-        return (
-          preset.presetType.toLowerCase() === filteredPresetTypes.toLowerCase()
-        )
-      }
-    } else {
-      return preset
-    }
-  })
-  const filteredCodeTypeList = filteredInputTypeList.filter((preset) => {
-    if (preset.codeType) {
-      if (filteredCodeTypes.length == 0) {
-        return preset.codeType.toLowerCase("")
-      } else {
-        return preset.codeType.toLowerCase() === filteredCodeTypes.toLowerCase()
-      }
-    } else {
-      return preset
-    }
-  })
+  // an empty filter matches every preset, including ones without that field
+  const isFilteredBy = (value: string | undefined, filter: string) =>
+    !filter || value?.toLowerCase() === filter.toLowerCase()
+  const search = filteredPresets.toLowerCase()
 
-  const filteredItems = filteredCodeTypeList.filter((preset) => {
-    if (preset.description) {
-      if (preset.author) {
-        return (
-          preset.label.toLowerCase().includes(filteredPresets.toLowerCase()) ||
-          preset.author.toLowerCase().includes(filteredPresets.toLowerCase()) ||
-          preset.code.toLowerCase().includes(filteredPresets.toLowerCase()) ||
-          preset.description
-            .toLowerCase()
-            .includes(filteredPresets.toLowerCase())
-        )
-      }
-      if (preset.updatedBy) {
-        return (
-          preset.label.toLowerCase().includes(filteredPresets.toLowerCase()) ||
-          preset.updatedBy
-            .toLowerCase()
-            .includes(filteredPresets.toLowerCase()) ||
-          preset.code.toLowerCase().includes(filteredPresets.toLowerCase()) ||
-          preset.description
-            .toLowerCase()
-            .includes(filteredPresets.toLowerCase())
-        )
-      } else {
-        return (
-          preset.label.toLowerCase().includes(filteredPresets.toLowerCase()) ||
-          preset.code.toLowerCase().includes(filteredPresets.toLowerCase()) ||
-          preset.description
-            .toLowerCase()
-            .includes(filteredPresets.toLowerCase())
-        )
-      }
-    } else {
-      if (preset.author) {
-        return (
-          preset.label.toLowerCase().includes(filteredPresets.toLowerCase()) ||
-          preset.author.toLowerCase().includes(filteredPresets.toLowerCase()) ||
-          preset.code.toLowerCase().includes(filteredPresets.toLowerCase())
-        )
-      }
-      if (preset.updatedBy) {
-        return (
-          preset.label.toLowerCase().includes(filteredPresets.toLowerCase()) ||
-          preset.updatedBy
-            .toLowerCase()
-            .includes(filteredPresets.toLowerCase()) ||
-          preset.code.toLowerCase().includes(filteredPresets.toLowerCase())
-        )
-      } else {
-        return (
-          preset.label.toLowerCase().includes(filteredPresets.toLowerCase()) ||
-          preset.code.toLowerCase().includes(filteredPresets.toLowerCase())
-        )
-      }
-      // return (
-      //   preset.label.toLowerCase().includes(filteredPresets.toLowerCase()) ||
-      //   preset.code.toLowerCase().includes(filteredPresets.toLowerCase())
-      // );
-    }
-  })
+  const filteredItems = filteredReportedPresets.filter(
+    (preset) =>
+      preset.vendor.toLowerCase().includes(filteredVendors.toLowerCase()) &&
+      isFilteredBy(preset.aircraft, filteredAircrafts) &&
+      isFilteredBy(preset.system, filteredSystems) &&
+      isFilteredBy(preset.presetType, filteredPresetTypes) &&
+      isFilteredBy(preset.codeType, filteredCodeTypes) &&
+      [
+        preset.label,
+        preset.code,
+        preset.description,
+        preset.author,
+        preset.updatedBy,
+      ].some((field) => field?.toLowerCase().includes(search)),
+  )
 
   async function deleteToast() {
     setDeletedToast(true)

@@ -1,4 +1,9 @@
-import DataTable, { createTheme } from "react-data-table-component"
+import DataTable, {
+  createTheme,
+  SortOrder,
+  type ExpanderComponentProps,
+  type SortFunction,
+} from "react-data-table-component"
 import { useState } from "react"
 import AddPresetButton from "../ui/addPreset/AddPresetButton"
 import ExportPresetsButton from "../ui/exportPresets/ExportPresetsButton"
@@ -17,6 +22,99 @@ interface Props {
   reportedToast: Function
   savedToast: Function
   fixedToast: Function
+}
+
+// sort text columns ignoring case ("Alternator" before "AP master")
+const sortIgnoringCase: SortFunction<any> = (rows, selector, direction) => {
+  const sign = direction === SortOrder.DESC ? -1 : 1
+  return [...rows].sort(
+    (a, b) =>
+      sign *
+      String(selector(a) ?? "").localeCompare(String(selector(b) ?? ""), "en", {
+        sensitivity: "base",
+        numeric: true,
+      }),
+  )
+}
+
+interface RowToasts {
+  deletedToast: Function
+  reportedToast: Function
+  savedToast: Function
+  fixedToast: Function
+}
+
+// Defined outside PresetTable: a component created during render gets a new
+// identity on every render, which remounted open rows and reset their edit mode.
+const PresetRowDetails = ({
+  data,
+  deletedToast,
+  reportedToast,
+  fixedToast,
+  savedToast,
+}: { data: any } & RowToasts) => {
+  const [vendor, setVendor] = useState(data.vendor)
+  const [aircraft, setAircraft] = useState(data.aircraft)
+  const [system, setSystem] = useState(data.system)
+  const [presetType, setPresetType] = useState(data.presetType)
+  const [codeType, setCodeType] = useState(data.codeType)
+  const [label, setLabel] = useState(data.label)
+  const [code, setCode] = useState(data.code)
+  const [description, setDescription] = useState(data.description)
+
+  return (
+    <div className="relative -mx-3 md:m-0">
+      <PresetCard
+        id={data.id}
+        label={label}
+        updatedBy={data.updatedBy}
+        author={data.author}
+        createdDate={data.createdDate}
+        version={data.version}
+        reported={data.reported}
+        vendor={vendor}
+        aircraft={aircraft}
+        system={system}
+        presetType={presetType}
+        codeType={codeType}
+        code={code}
+        description={description}
+        data={data}
+        showingHistory={false}
+        text={"sm"}
+        card={false}
+        setVendor={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setVendor(e.target.value)
+        }
+        setAircraft={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setAircraft(e.target.value)
+        }
+        setSystem={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setSystem(e.target.value)
+        }
+        setPresetType={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setPresetType(e.target.value)
+        }
+        setCodeType={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setCodeType(e.target.value)
+        }
+        setLabel={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setLabel(e.target.value)
+        }
+        setCode={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setCode(e.target.value)
+        }
+        setDescription={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setDescription(e.target.value)
+        }
+        deletedToast={deletedToast}
+        reportedToast={reportedToast}
+        fixedToast={fixedToast}
+        savedToast={savedToast}
+      />
+      <hr className="border-hhBG" />
+    </div>
+  )
 }
 
 const PresetTable: React.FC<Props> = ({
@@ -131,71 +229,6 @@ const PresetTable: React.FC<Props> = ({
     },
   }
 
-  const ExpandedComponent = ({ data }: { data: any }) => {
-    const [vendor, setVendor] = useState(data.vendor)
-    const [aircraft, setAircraft] = useState(data.aircraft)
-    const [system, setSystem] = useState(data.system)
-    const [presetType, setPresetType] = useState(data.presetType)
-    const [codeType, setCodeType] = useState(data.codeType)
-    const [label, setLabel] = useState(data.label)
-    const [code, setCode] = useState(data.code)
-    const [description, setDescription] = useState(data.description)
-
-    return (
-      <div className="relative -mx-3 md:m-0">
-        <PresetCard
-          id={data.id}
-          label={label}
-          updatedBy={data.updatedBy}
-          author={data.author}
-          createdDate={data.createdDate}
-          version={data.version}
-          reported={data.reported}
-          vendor={vendor}
-          aircraft={aircraft}
-          system={system}
-          presetType={presetType}
-          codeType={codeType}
-          code={code}
-          description={description}
-          data={data}
-          showingHistory={false}
-          text={"sm"}
-          card={false}
-          setVendor={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setVendor(e.target.value)
-          }
-          setAircraft={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setAircraft(e.target.value)
-          }
-          setSystem={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setSystem(e.target.value)
-          }
-          setPresetType={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setPresetType(e.target.value)
-          }
-          setCodeType={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setCodeType(e.target.value)
-          }
-          setLabel={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setLabel(e.target.value)
-          }
-          setCode={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setCode(e.target.value)
-          }
-          setDescription={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setDescription(e.target.value)
-          }
-          deletedToast={deletedToast}
-          reportedToast={reportedToast}
-          fixedToast={fixedToast}
-          savedToast={savedToast}
-        />
-        <hr className="border-hhBG" />
-      </div>
-    )
-  }
-
   async function login() {
     await msalReady
     await msalInstance.handleRedirectPromise()
@@ -255,8 +288,20 @@ const PresetTable: React.FC<Props> = ({
         customStyles={customStyles}
         pagination
         expandOnRowClicked
+        sortFunction={sortIgnoringCase}
         expandableRows
-        expandableRowsComponent={ExpandedComponent}
+        // the library passes expandableRowsComponentProps, but only types { data }
+        expandableRowsComponent={
+          PresetRowDetails as unknown as React.ComponentType<
+            ExpanderComponentProps<string>
+          >
+        }
+        expandableRowsComponentProps={{
+          deletedToast,
+          reportedToast,
+          fixedToast,
+          savedToast,
+        }}
         highlightOnHover
         responsive={true}
         theme="hubhop"

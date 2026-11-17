@@ -52,6 +52,34 @@ test.describe("Preset list", () => {
     await expect(presetsPage.row("Landing lights off")).toHaveCount(1)
   })
 
+  test("Preset list - search matches who updated a preset", async ({
+    presetsPage,
+  }) => {
+    await presetsPage.gotoPage()
+
+    await presetsPage.searchFilter.fill("Test User")
+    // authored by Test User, and updated by Test User
+    await expect(presetsPage.rows).toHaveCount(2)
+    await expect(presetsPage.row("Landing lights on")).toHaveCount(1)
+    await expect(presetsPage.row("AP master toggle")).toHaveCount(1)
+  })
+
+  test("Preset list - presets without an aircraft are listed", async ({
+    presetsPage,
+  }) => {
+    const presets = presetsPage.hubHopPage.api.presets.msfs2020 as object[]
+    presets.push({
+      ...presets[0],
+      id: "msfs-generic",
+      label: "Generic gear lever",
+      aircraft: "",
+    })
+    await presetsPage.gotoPage()
+
+    await presetsPage.searchFilter.fill("Generic gear lever")
+    await expect(presetsPage.rows).toHaveCount(1)
+  })
+
   test("Preset list - vendor, aircraft, system and type filters", async ({
     presetsPage,
     page,
@@ -111,8 +139,8 @@ test.describe("Preset list", () => {
     await presetsPage.gotoPage()
 
     await page.getByRole("columnheader", { name: "Preset name" }).click()
-    // sorting is case-sensitive: "AP ..." sorts before "Al..."
-    await expect(presetsPage.rows.first()).toContainText("AP NAV mode")
+    // sorting ignores case: "Alternator ..." sorts before "AP ..."
+    await expect(presetsPage.rows.first()).toContainText("Alternator 1 on")
 
     await page.getByRole("columnheader", { name: "Preset name" }).click()
     await expect(presetsPage.rows.first()).toContainText("Strobe toggle")

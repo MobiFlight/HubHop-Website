@@ -1,11 +1,8 @@
 // db.ts
 import Dexie, { Table } from "dexie"
 
-export interface Presets {
-  presetsMsfs: any
-  presetsXplane: any
-  presets: any
-}
+// A cached preset as returned by the API (detailed typing follows later)
+export type Presets = Record<string, unknown>
 
 export class PresetsDb extends Dexie {
   presetsMsfs!: Table<Presets>

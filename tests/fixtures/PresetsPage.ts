@@ -58,7 +58,9 @@ export class PresetsPage {
   }
 
   /** Expands a preset row and returns the expanded details area */
-  async expand(label: string) {
+  async expand(label: string): Promise<Locator> {
     await this.row(label).getByRole("cell").last().click()
+    // the table renders the details right after the row, without a role
+    return this.row(label).locator("xpath=following-sibling::div[1]")
   }
 }

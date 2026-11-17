@@ -1,7 +1,7 @@
 import Modal from "../../../Shared/Modal"
 import DeleteButton from "./DeleteButton"
 import { FiAlertTriangle } from "react-icons/fi"
-import { db } from "../../../../../services/db"
+import { presetTable, type SimType } from "../../../../../services/presetSync"
 
 interface Props {
   label: string
@@ -16,11 +16,12 @@ const DeleteConfirmationModal: React.FC<Props> = ({
   setDeleteModalOpen,
   deletedToast,
 }) => {
-  function deletePreset() {
-    fetch(
+  async function deletePreset() {
+    const sim = (localStorage.getItem("simType") || "msfs2020") as SimType
+    const deleted = await fetch(
       process.env.NEXT_PUBLIC_HUBHOP_API_BASEURL +
         "/" +
-        localStorage.getItem("simType") +
+        sim +
         "/presets/" +
         presetId,
       {
@@ -31,31 +32,14 @@ const DeleteConfirmationModal: React.FC<Props> = ({
           Authorization: "Bearer " + localStorage.getItem("accessToken"),
         },
       },
-    ).then(async (res) => {
-      if (res.status != 200) {
-        alert("Error occured")
-      }
-      const localStoragePresets =
-        localStorage.getItem("simType") === "msfs2020"
-          ? (await db.presetsMsfs.toArray()) || []
-          : (await db.presetsXplane.toArray()) || []
+    )
+      .then((res) => res.status === 200)
+      .catch(() => false)
+    if (!deleted) return alert("Error occured")
 
-      const result = localStoragePresets.filter(
-        (item: any) => item.id !== presetId,
-      )
-      try {
-        localStorage.getItem("simType") === "msfs2020"
-          ? await db.presetsMsfs
-              .clear()
-              .then(() => db.presetsMsfs.bulkAdd(result))
-          : await db.presetsXplane
-              .clear()
-              .then(() => db.presetsXplane.bulkAdd(result))
-      } catch (error) {
-        console.error(error)
-      }
-      deletedToast()
-    })
+    // remove only this preset from the local cache
+    await presetTable(sim).delete(presetId)
+    deletedToast()
   }
 
   return (

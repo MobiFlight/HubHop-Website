@@ -11,7 +11,7 @@ import ReportPresetModal from "./reportPreset/ReportPresetModal"
 import DeleteConfirmationModal from "./deletePreset/DeleteConfirmationModal"
 import OpenPresetButton from "./OpenPresetButton"
 import FixedPresetModal from "./reportPreset/FixedPresetModal"
-import { db } from "../../../../services/db"
+import { presetTable, type SimType } from "../../../../services/presetSync"
 import Modal from "../../Shared/Modal"
 import ButtonOrange from "../../Shared/ButtonOrange"
 import ButtonDark from "../../Shared/ButtonDark"
@@ -172,75 +172,18 @@ const PresetCard: React.FC<Props> = ({
       },
     }
 
-    // send POST request
-    fetch(url, options).then(async (res) => {
-      if (res.status != 201) {
-        alert("Error occured")
-      }
-      const localStoragePresets =
-        simType === "msfs2020"
-          ? (await db.presetsMsfs.toArray()) || []
-          : (await db.presetsXplane.toArray()) || []
+    const saved = await fetch(url, options)
+      .then((res) => res.status === 201)
+      .catch(() => false)
+    setEditButton(false)
+    if (!saved) return alert("Error occured")
 
-      const result = localStoragePresets.map((x: any) =>
-        simType === "msfs2020"
-          ? x.id === id
-            ? {
-                ...x,
-                path:
-                  vendor +
-                  "." +
-                  aircraft +
-                  "." +
-                  system +
-                  "." +
-                  presetType +
-                  "." +
-                  label,
-                vendor: vendor,
-                aircraft: aircraft,
-                system: system,
-                code: code,
-                label: label,
-                presetType: presetType,
-                status: "Updated",
-                createdDate: new Date().toUTCString(),
-                author: author,
-                updatedBy: localStorage.getItem("username"),
-                description: description,
-                version: version + 1,
-              }
-            : x
-          : x.id === id
-            ? {
-                ...x,
-                vendor: vendor,
-                aircraft: aircraft,
-                system: system,
-                code: code,
-                label: label,
-                presetType: presetType,
-                codeType: codeType,
-                status: "Updated",
-                createdDate: new Date().toUTCString(),
-                author: author,
-                updatedBy: localStorage.getItem("username"),
-                description: description,
-                version: version + 1,
-              }
-            : x,
-      )
-
-      simType === "msfs2020"
-        ? await db.presetsMsfs
-            .clear()
-            .then(() => db.presetsMsfs.bulkAdd(result))
-        : await db.presetsXplane
-            .clear()
-            .then(() => db.presetsXplane.bulkAdd(result))
-      setEditButton(false)
-      savedToast()
+    // update only this preset in the local cache
+    await presetTable(simType as SimType).update(id, {
+      ...preset,
+      version: Number(version) + 1,
     })
+    savedToast()
   }
 
   async function revertPreset() {
@@ -265,34 +208,14 @@ const PresetCard: React.FC<Props> = ({
       },
     }
 
-    // send POST request
-    fetch(url, options).then(async (res) => {
-      if (res.status != 201) {
-        alert("Error occured")
-      }
-      const localStoragePresets =
-        simType === "msfs2020"
-          ? (await db.presetsMsfs.toArray()) || []
-          : (await db.presetsXplane.toArray()) || []
+    const saved = await fetch(url, options)
+      .then((res) => res.status === 201)
+      .catch(() => false)
+    if (!saved) return alert("Error occured")
 
-      const result = localStoragePresets.map((x: any) =>
-        x.id === id
-          ? {
-              ...x,
-              revertObject,
-            }
-          : x,
-      )
-      simType === "msfs2020"
-        ? await db.presetsMsfs
-            .clear()
-            .then(() => db.presetsMsfs.bulkAdd(result))
-        : await db.presetsXplane
-            .clear()
-            .then(() => db.presetsXplane.bulkAdd(result))
-      savedToast()
-      setRevertModal(false)
-    })
+    await presetTable(simType as SimType).update(id, revertObject)
+    savedToast()
+    setRevertModal(false)
   }
 
   return (

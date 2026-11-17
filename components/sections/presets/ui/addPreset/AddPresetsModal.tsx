@@ -247,17 +247,17 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
             }
 
             // send POST request
-            fetch(url, options).then((res) => {
-              if (res.status != 200) {
-                presetAddedError()
-              }
+            const added = await fetch(url, options)
+              .then((res) => res.ok)
+              .catch(() => false)
+            setButtonSubmit(false)
+            // on error keep the input, so the user can try again
+            if (!added) return presetAddedError()
 
-              resetField("label", { defaultValue: "" })
-              resetField("code", { defaultValue: "" })
-              resetField("description", { defaultValue: "" })
-              setButtonSubmit(false)
-              presetAdded()
-            })
+            resetField("label", { defaultValue: "" })
+            resetField("code", { defaultValue: "" })
+            resetField("description", { defaultValue: "" })
+            presetAdded()
           })}
         >
           <div

@@ -1,3 +1,4 @@
+import type { Locator } from "@playwright/test"
 import { test, expect, authFile } from "./fixtures"
 
 test.describe("Add preset - anonymous", () => {
@@ -18,6 +19,22 @@ test.describe("Add preset - anonymous", () => {
     )
   })
 })
+
+const fillForm = (form: Locator) =>
+  test.step("Fill in the form", async () => {
+    const selects = form.getByRole("combobox")
+    await selects.nth(0).selectOption("Asobo")
+    await selects.nth(1).selectOption("C172")
+    await selects.nth(2).selectOption("Electrical")
+    await selects.nth(3).selectOption("Input")
+    await form.getByPlaceholder("Alternator 1 On").fill("Alternator 2 on")
+    await form
+      .getByPlaceholder("(>L:somecode) (>K:somecodeToo) * near")
+      .fill("(>K:ALTERNATOR_2_ON)")
+    await form
+      .getByPlaceholder("This is your space for a nice description")
+      .fill("Turns on alternator 2")
+  })
 
 test.describe("Add preset - user", () => {
   test.use({ storageState: authFile.user })
@@ -44,21 +61,7 @@ test.describe("Add preset - user", () => {
 
   test("Add preset - submits a new preset", async ({ hubHopPage, page }) => {
     const form = page.locator("form")
-    const selects = form.getByRole("combobox")
-
-    await test.step("Fill in the form", async () => {
-      await selects.nth(0).selectOption("Asobo")
-      await selects.nth(1).selectOption("C172")
-      await selects.nth(2).selectOption("Electrical")
-      await selects.nth(3).selectOption("Input")
-      await form.getByPlaceholder("Alternator 1 On").fill("Alternator 2 on")
-      await form
-        .getByPlaceholder("(>L:somecode) (>K:somecodeToo) * near")
-        .fill("(>K:ALTERNATOR_2_ON)")
-      await form
-        .getByPlaceholder("This is your space for a nice description")
-        .fill("Turns on alternator 2")
-    })
+    await fillForm(form)
 
     await form.getByRole("button", { name: "Add preset" }).click()
 
@@ -117,8 +120,27 @@ test.describe("Add preset - user", () => {
     ).toHaveAttribute("href", /import_events_yourName\.xlsx$/)
   })
 
+  test("Add preset - a failed request shows only the error and keeps the input", async ({
+    hubHopPage,
+    page,
+  }) => {
+    hubHopPage.api.writeStatus.POST = 500
+    const form = page.locator("form")
+    await fillForm(form)
+
+    await form.getByRole("button", { name: "Add preset" }).click()
+
+    await expect(
+      page.getByRole("status").filter({ hasText: "Preset not added" }),
+    ).toBeVisible()
+    await expect(page.getByText("Preset successfully added!")).toHaveCount(0)
+    await expect(form.getByPlaceholder("Alternator 1 On")).toHaveValue(
+      "Alternator 2 on",
+    )
+  })
+
   test("Add preset - close hides the dialog", async ({ page }) => {
-    await page.getByRole("button", { name: "Close" }).click()
+    await page.getByRole("button", { name: "Close", exact: true }).click()
 
     await expect(page.getByRole("heading", { name: "Add Preset" })).toHaveCount(
       0,
