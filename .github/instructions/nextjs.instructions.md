@@ -35,8 +35,15 @@ services/
   presetSync.ts          # Keeps the IndexedDB copy of each sim's presets current
   msal.js                # MSAL instance/config
   msalFunctions.js       # Access token + user settings (roles) helpers
-lib/Constants.tsx        # Navbar links
-interfaces/              # Shared types
+lib/
+  Constants.tsx          # Navbar links
+  presetSearch.ts        # Search, relevance and default order; shared with MobiFlight Connector
+  presetFacets.ts        # Faceted filter options
+  presetTypes.ts         # Fixed Input/Output values per sim
+  codeTypes.ts           # Fixed X-Plane code types
+  features.ts            # Feature flags (e.g. REPORTING_ENABLED)
+interfaces/
+  preset.ts              # Preset, history and statistics types of the HubHop API
 public/                  # Static assets
 ```
 
@@ -58,8 +65,15 @@ public/                  # Static assets
   so users have to log in again after a browser restart.
 - The access token is stored in `localStorage.accessToken`.
 - `getUserSettings()` loads the user's roles from the API into `localStorage.roles`; logged-out users get `"Guest"`.
-- UI permissions are checked with `localStorage.getItem("roles")` (e.g. only `moderator` may edit System/PresetType).
-  The API enforces permissions; UI checks are convenience only.
+- UI permissions are checked with `localStorage.getItem("roles")`. The API enforces permissions; UI checks are convenience only.
+- Who may create new values: vendor and aircraft everyone; system moderators only (moderators are admins);
+  Input/Output and Code Type nobody. These are fixed lists in `lib/presetTypes.ts` and `lib/codeTypes.ts`.
+
+### Types and shared code
+
+- `interfaces/preset.ts` follows the HubHop API (`PresetDbSchema` in HubHopApi's `model/Preset.ts`, the interface
+  next to it is incomplete) and uses the same names and values as MobiFlight Connector's `types/preset.d.ts`.
+- `lib/presetSearch.ts` is copied into MobiFlight Connector as is: keep it free of project imports.
 
 ### Configuration
 
@@ -76,6 +90,9 @@ public/                  # Static assets
 - Write components as in MobiFlight: no `React.FC`; a props type named after the component,
   `type PresetCardProps = { … }` and `const PresetCard = ({ … }: PresetCardProps) => {`.
   Declare `children: React.ReactNode` in the props type.
+  Props types use `type`, not `interface`.
+- Callback props pass values, not React events (e.g. `onLabelChange: (label: string) => void`); only the input
+  component itself handles the event. Existing code is being converted (#121).
 - Prefer `const` and immutable data over mutable variables (`let`, reassignment, in-place mutation).
   Keep values that must persist across renders in `useRef`/`useState`, not in reassigned locals.
 - Use Tailwind for new styling; do not add new `styled-components`.
@@ -85,6 +102,16 @@ public/                  # Static assets
 - Add `data-testid` only when a role/label/text locator is not possible.
 - Add or update Playwright tests in `tests/` for every user-facing change (see `tests/README.md`).
 - Use `useEffect` with correct dependency arrays and clean up listeners/timers.
+
+## Performance and library pitfalls
+
+- The preset list holds about 35,000 presets. Don't repeat expensive work on every render (sort once when the
+  data changes, compute per-preset values once per render).
+- Sort text with `compareText` from `lib/presetSearch.ts` (a shared `Intl.Collator`). `localeCompare` with
+  options creates a collator per comparison and is about 50 times slower.
+- react-data-table-component keeps the column object from when a sort was selected, so a column `selector`
+  must not read changing data from a closure (read it through a ref).
+- Define the expandable row component outside the render function; a new component identity remounts open rows.
 
 ## Code Style
 

@@ -12,6 +12,19 @@ report and export presets. Data comes from the HubHop API; this repo contains no
 - Branch names: `<issue-number>/<descriptive-name>` when an issue exists, otherwise `<type>/<descriptive-name>` (e.g. `chore/update-deps`).
 - Do not add `Co-Authored-By` or other attribution trailers to commit messages, and no "Generated with ..." footers in PR descriptions.
 - Keep PRs focused: one concern per PR. Fill in `.github/pull_request_template.md`.
+- PRs are squash-merged. For stacked PRs, rebase the follow-up with `git rebase --onto origin/main <old base>` and
+  retarget it to `main` once the base PR is merged.
+- CI only runs on PRs into `main`. To re-run it without a new commit, close and reopen the PR (don't open a new one).
+
+## Working agreements
+
+- Discuss changes to architecture or UX before implementing them; prefer minimal solutions.
+- Ask before removing code or features, even if they look unused.
+- Every follow-up, to-do or deferred finding becomes a GitHub issue (check for duplicates first), not only a note in a plan.
+- Issues are short and use the target repository's issue template.
+- In PR checklists, tick what was verified; leave manual steps (e.g. screenshots) unticked and mark them as manual.
+- HubHop and MobiFlight Connector must behave the same for preset search, order and preset types.
+  Shared logic (`lib/presetSearch.ts`) is copied between both projects; change it in both.
 
 ## Commands
 

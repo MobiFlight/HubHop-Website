@@ -11,6 +11,9 @@ applyTo: "**"
 - **Assertions**: Use auto-retrying web-first assertions. These assertions start with the `await` keyword (e.g., `await expect(locator).toHaveText()`). Avoid `await expect(locator).toBeVisible()` unless specifically testing for visibility changes.
 - **Timeouts**: Rely on Playwright's built-in auto-waiting mechanisms. Avoid hard-coded waits or increased default timeouts.
 - **Clarity**: Use descriptive test and step titles that clearly state the intent. Add comments only to explain complex logic or non-obvious interactions.
+- **Prove the fix**: A test for a bug or feature must fail without the change. Check it by stashing the change and running the test.
+- **No style values**: Don't assert colours or other computed styles; checking class names is fine.
+- **Time and typing**: Use `page.clock` for timers and debounces. Use `pressSequentially` when typing letter by letter matters (`fill` sets the value at once).
 
 ### Test Structure
 
@@ -46,6 +49,11 @@ applyTo: "**"
   as storage states in `tests/.auth/`; use `hubHopPage.login(roles)` to test the login flow itself.
   Never use real credentials in tests.
 - **IndexedDB**: each test starts with a fresh browser context, so the preset cache is empty unless the test seeds it.
+
+- **Local runs**: `npm run build` overwrites `.next` while the dev server is running and breaks a running test session.
+  On a busy machine, run with `--workers=4`.
+- **Preview environments**: PR previews on Azure can't load data (the API's CORS policy only allows production and
+  `localhost:3000`). Check a production build by serving `out/` locally on port 3000.
 
 ## Example Test Structure
 
