@@ -9,7 +9,7 @@ import OpenPresetButton from "../presets/ui/OpenPresetButton"
 import PresetPreviewLabel from "../presets/ui/PresetInputLabel"
 
 interface Props {
-  presets: String[]
+  presets: string[]
   stats: any
 }
 
@@ -148,7 +148,7 @@ const GeneralStats: React.FC<Props> = ({ presets, stats }) => {
   )
 
   useEffect(() => {
-    var ar = []
+    const ar = []
     for (const contribute of contributor) {
       ar.push({
         name: contribute,

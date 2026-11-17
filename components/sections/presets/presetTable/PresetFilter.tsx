@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 import {
   HiAdjustments,
   HiOutlineSearchCircle,
@@ -127,16 +127,17 @@ const PresetFilter: React.FC<Props> = ({
     },
   }
 
-  var timeout: any
+  // kept in a ref so the pending timer survives re-renders
+  const timeout = useRef<ReturnType<typeof setTimeout>>(undefined)
 
   const showTip = () => {
-    timeout = setTimeout(() => {
+    timeout.current = setTimeout(() => {
       setMyPresetTooltip(true)
     }, 400)
   }
 
   const hideTip = () => {
-    clearInterval(timeout)
+    clearTimeout(timeout.current)
     setMyPresetTooltip(false)
   }
 
@@ -203,7 +204,7 @@ const PresetFilter: React.FC<Props> = ({
                 <option value="">All Vendors</option>
                 {uniqueVendor.map((o) => (
                   <option className="bg-hhBG" key={o as any}>
-                    {o as String[]}
+                    {o as string[]}
                   </option>
                 ))}
               </select>
@@ -222,7 +223,7 @@ const PresetFilter: React.FC<Props> = ({
                 <option value="">All Aircraft</option>
                 {uniqueAircraft.map((o) => (
                   <option className="bg-hhBG" key={o as any}>
-                    {o as String[]}
+                    {o as string[]}
                   </option>
                 ))}
               </select>
@@ -241,7 +242,7 @@ const PresetFilter: React.FC<Props> = ({
                 <option value="">All Systems</option>
                 {uniqueSystem.map((o) => (
                   <option className="bg-hhBG" key={o as any}>
-                    {o as String[]}
+                    {o as string[]}
                   </option>
                 ))}
               </select>
@@ -263,7 +264,7 @@ const PresetFilter: React.FC<Props> = ({
                 <option value="">All Inputs/Outputs</option>
                 {uniqueType.map((o) => (
                   <option className="bg-hhBG" key={o as any}>
-                    {o as String[]}
+                    {o as string[]}
                   </option>
                 ))}
               </select>
@@ -293,7 +294,7 @@ const PresetFilter: React.FC<Props> = ({
                     <option value="">All Code Types</option>
                     {uniqueCodeType.map((o, i) => (
                       <option className="bg-hhBG" key={i as any}>
-                        {o as String[]}
+                        {o as string[]}
                       </option>
                     ))}
                   </select>

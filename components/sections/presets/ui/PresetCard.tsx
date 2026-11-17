@@ -181,7 +181,7 @@ const PresetCard: React.FC<Props> = ({
           ? (await db.presetsMsfs.toArray()) || []
           : (await db.presetsXplane.toArray()) || []
 
-      let result = localStoragePresets.map((x: any) =>
+      const result = localStoragePresets.map((x: any) =>
         simType === "msfs2020"
           ? x.id === id
             ? {
@@ -274,7 +274,7 @@ const PresetCard: React.FC<Props> = ({
           ? (await db.presetsMsfs.toArray()) || []
           : (await db.presetsXplane.toArray()) || []
 
-      let result = localStoragePresets.map((x: any) =>
+      const result = localStoragePresets.map((x: any) =>
         x.id === id
           ? {
               ...x,

@@ -22,10 +22,11 @@ report and export presets. Data comes from the HubHop API; this repo contains no
 | `npm run type-check`   | TypeScript check (`tsc`)            |
 | `npm run format`       | Format all files with Prettier      |
 | `npm run format:check` | Check formatting (CI)               |
+| `npm run lint`         | ESLint (errors fail CI)             |
 | `npm run test:e2e`     | Playwright end-to-end tests         |
 | `npm run test:e2e:ui`  | Playwright UI mode                  |
 
-Before pushing, run `npm run format:check`, `npm run type-check`, `npm run build` and `npm run test:e2e`.
+Before pushing, run `npm run format:check`, `npm run lint`, `npm run type-check`, `npm run build` and `npm run test:e2e`.
 The same checks run on every pull request (`.github/workflows/playwright.yml`) and must pass before merging.
 
 The devcontainer provisions all tooling (Node, gh, az, Claude Code, editor extensions).

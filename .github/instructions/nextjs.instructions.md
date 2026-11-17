@@ -73,6 +73,8 @@ public/                  # Static assets
 
 - Prefer TypeScript for new and touched files; convert `.js` files when reasonable.
 - Use functional components and hooks; keep components small and single-purpose.
+- Prefer `const` and immutable data over mutable variables (`let`, reassignment, in-place mutation).
+  Keep values that must persist across renders in `useRef`/`useState`, not in reassigned locals.
 - Use Tailwind for new styling; do not add new `styled-components`.
 - Reuse existing shared components in `components/sections/Shared/` before creating new ones.
 - Handle loading, error and empty states for every API call.
@@ -86,6 +88,8 @@ public/                  # Static assets
 - Prettier 3 with `prettier-plugin-tailwindcss` (auto-sorted Tailwind classes), config in `.prettierrc`:
   no semicolons, double quotes. Same style as other MobiFlight projects.
 - Format on save is enabled in the devcontainer; `npm run format:check` must pass.
+- ESLint (`eslint.config.mjs`: Next.js core-web-vitals + TypeScript rules, Prettier-compatible): `npm run lint` must report no errors.
+  `any`, `Function` types and missing hook dependencies are warnings in legacy code; do not add new ones.
 
 ## Deployment
 
