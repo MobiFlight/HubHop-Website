@@ -91,9 +91,20 @@ test.describe("Preset list", () => {
     await expect(relevance).toHaveCount(1)
     await expect(presetsPage.rows).toHaveCount(2)
     await expect(presetsPage.rows.nth(0)).toContainText("Landing lights on")
-    await expect(presetsPage.rows.nth(0)).toContainText("100%")
+    await expect(
+      presetsPage.rows.nth(0).getByRole("meter", { name: "Relevance" }),
+    ).toHaveAttribute("aria-valuenow", "100")
     await expect(presetsPage.rows.nth(1)).toContainText("Landing lights off")
-    await expect(presetsPage.rows.nth(1)).toContainText("80%")
+    await expect(
+      presetsPage.rows.nth(1).getByRole("meter", { name: "Relevance" }),
+    ).toHaveAttribute("aria-valuenow", "80")
+
+    await test.step("Typing letter by letter keeps the relevance order", async () => {
+      await presetsPage.searchFilter.fill("")
+      await presetsPage.searchFilter.pressSequentially("on landing")
+      await expect(presetsPage.rows.nth(0)).toContainText("Landing lights on")
+      await expect(presetsPage.rows.nth(1)).toContainText("Landing lights off")
+    })
 
     await test.step("Clearing the search hides the relevance", async () => {
       await presetsPage.searchFilter.fill("")
