@@ -15,7 +15,6 @@ import Image from "next/image"
 import { useLiveQuery } from "dexie-react-hooks"
 import { ToastContainer, toast } from "react-toastify"
 
-import "react-toastify/dist/ReactToastify.css"
 import { useRouter } from "next/router"
 
 const Presets: React.FC = () => {
