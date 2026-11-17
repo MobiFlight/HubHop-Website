@@ -20,7 +20,7 @@ const PresetPreviewLabel: React.FC<Props> = ({
         codeOrDescriptionBox ? (
           <textarea
             aria-label={title}
-            className="w-full break-words rounded-lg border border-hhOrange/50 bg-hhCard/50 px-3 py-1"
+            className="w-full rounded-lg border border-hhOrange/50 bg-hhCard/50 px-3 py-1 wrap-break-word"
             value={editData}
             onInput={(e: any) => inputHandler(e)}
             rows={5}
@@ -28,7 +28,7 @@ const PresetPreviewLabel: React.FC<Props> = ({
         ) : (
           <input
             aria-label={title}
-            className="w-full break-words rounded-lg border border-hhOrange/50 bg-hhCard/50 px-3 py-1"
+            className="w-full rounded-lg border border-hhOrange/50 bg-hhCard/50 px-3 py-1 wrap-break-word"
             value={editData}
             onInput={(e: any) => inputHandler(e)}
           />
@@ -36,7 +36,7 @@ const PresetPreviewLabel: React.FC<Props> = ({
       ) : codeOrDescriptionBox ? (
         <textarea
           aria-label={title}
-          className="w-full break-words rounded-lg border border-hhOrange/50 bg-hhBG/50 px-3 py-1"
+          className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 px-3 py-1 wrap-break-word"
           value={editData}
           rows={5}
           disabled

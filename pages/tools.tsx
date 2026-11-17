@@ -34,7 +34,7 @@ const Tools: React.FC = () => {
         <meta property="twitter:image" content="@/assets/logo-big.png" />
       </Head>
       <div className="min-h-screen p-3">
-        <div className="flex w-full flex-col space-y-3 xl:flex-row xl:space-x-3 xl:space-y-0">
+        <div className="flex w-full flex-col space-y-3 xl:flex-row xl:space-y-0 xl:space-x-3">
           <div className="flex h-fit w-full flex-col space-y-3 rounded-lg bg-hhCard/40 p-3 xl:w-1/6">
             <h2 className="text-xl">Tools</h2>
             <button onClick={() => setTool("potti")} className="w-full">

@@ -22,7 +22,7 @@ const Modal: React.FC<React.PropsWithChildren<Props>> = ({
         onClick={(e) => closeModal(e)}
         className={`${
           position === "absolute" ? "absolute" : "fixed"
-        } left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-black/60 backdrop-blur-sm`}
+        } top-0 left-0 z-50 flex h-full w-full items-center justify-center bg-black/60 backdrop-blur-xs`}
       >
         <div
           className={`mx-auto flex flex-col rounded-lg ${

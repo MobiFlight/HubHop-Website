@@ -157,7 +157,7 @@ const Navbar: React.FC = () => {
           <AnimatePresence>
             {mobileMenu && (
               <motion.div
-                className="fixed left-0 top-0 z-50 h-screen bg-black/50 backdrop-blur"
+                className="fixed top-0 left-0 z-50 h-screen bg-black/50 backdrop-blur-sm"
                 onClick={openMobileMenu}
                 initial={{ opacity: 0 }}
                 animate={{
@@ -174,7 +174,7 @@ const Navbar: React.FC = () => {
                 }}
               >
                 <motion.div
-                  className="relative left-0 top-0 z-50"
+                  className="relative top-0 left-0 z-50"
                   initial={{ width: 0 }}
                   animate={{
                     width: 300,
@@ -215,7 +215,7 @@ const Navbar: React.FC = () => {
                           </Link>
                         ))}
                       </div>
-                      <div className="flex items-center space-x-1 whitespace-nowrap text-xl">
+                      <div className="flex items-center space-x-1 text-xl whitespace-nowrap">
                         <AuthenticatedTemplate>
                           {accounts.length && (
                             <div className="flex flex-col space-y-5 font-medium">
@@ -252,7 +252,7 @@ const Navbar: React.FC = () => {
           </AnimatePresence>
           <div className="mt-2 flex w-full items-center justify-between md:mt-0">
             <Link legacyBehavior href={"/"}>
-              <a className="flex max-w-[8rem] p-1">
+              <a className="flex max-w-32 p-1">
                 <Image
                   alt=""
                   loader={customLoader}
@@ -280,7 +280,7 @@ const Navbar: React.FC = () => {
                 </Link>
               ))}
             </div>
-            <div className="hidden items-center space-x-1 whitespace-nowrap text-xl xl:flex">
+            <div className="hidden items-center space-x-1 text-xl whitespace-nowrap xl:flex">
               <AuthenticatedTemplate>
                 {accounts.length && (
                   <div

@@ -313,7 +313,7 @@ const PresetFilter: React.FC<Props> = ({
                       ? { background: "#ffa047" }
                       : { background: "#545963" }
                   }
-                  className={`flex h-5 w-5 items-center justify-center rounded border border-hhOrange/50 text-hhBG`}
+                  className={`flex h-5 w-5 items-center justify-center rounded-sm border border-hhOrange/50 text-hhBG`}
                   onMouseEnter={showTip}
                   onMouseLeave={hideTip}
                 >
@@ -362,7 +362,7 @@ const PresetFilter: React.FC<Props> = ({
                         ? { background: "#ffa047" }
                         : { background: "#545963" }
                     }
-                    className={`flex h-5 w-5 items-center justify-center rounded border border-hhOrange/50 text-hhBG`}
+                    className={`flex h-5 w-5 items-center justify-center rounded-sm border border-hhOrange/50 text-hhBG`}
                   >
                     {showReportedPresets && (
                       <motion.div className="text-xs">

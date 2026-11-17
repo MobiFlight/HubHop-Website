@@ -10,7 +10,7 @@ const EditToggle: React.FC<Props> = ({ toggleEdit, setEdit }) => {
   return (
     <button
       onClick={(e) => setEdit(e)}
-      className={`w-30 relative flex items-center space-x-1 rounded-lg text-lg font-semibold xl:h-full ${
+      className={`relative flex items-center rounded-lg text-lg font-semibold xl:h-full ${
         toggleEdit ? "bg-hhCard" : "bg-hhBG"
       }`}
     >
@@ -28,12 +28,12 @@ const EditToggle: React.FC<Props> = ({ toggleEdit, setEdit }) => {
       >
         <div>{toggleEdit ? "Edit" : "View"}</div>
       </motion.div>
-      <div className="hidden items-center space-x-2 px-4 py-1.5 xl:flex">
+      <div className="ml-1 hidden items-center space-x-2 px-4 py-1.5 xl:flex">
         <BiLockAlt />
         <div className="w-2"></div>
         <BiLockOpenAlt />
       </div>
-      <div className="flex items-center space-x-2 px-4 py-1.5 xl:hidden">
+      <div className="ml-1 flex items-center space-x-2 px-4 py-1.5 xl:hidden">
         <BiLockAlt />
         <div className="w-8"></div>
         <BiLockOpenAlt />

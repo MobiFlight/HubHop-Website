@@ -784,7 +784,7 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
             If you want to upload many presets at once, you can download or open
             the import-file and post it on the{" "}
             <a
-              className="rounded bg-hhOrange px-2 font-semibold text-hhBG transition-all hover:bg-hhOrangeShade-600"
+              className="rounded-sm bg-hhOrange px-2 font-semibold text-hhBG transition-all hover:bg-hhOrangeShade-600"
               href="https://discord.gg/weZwE4sD"
               target={"_blank"}
             >

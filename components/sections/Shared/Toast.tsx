@@ -11,7 +11,7 @@ const Toast: React.FC<React.PropsWithChildren<Props>> = ({
   return (
     <div
       style={{ backgroundColor: bg, color: textColor }}
-      className={`fixed bottom-5 right-5 z-50 rounded-lg p-5 font-semibold`}
+      className={`fixed right-5 bottom-5 z-50 rounded-lg p-5 font-semibold`}
     >
       <div className="flex items-center">{children}</div>
     </div>

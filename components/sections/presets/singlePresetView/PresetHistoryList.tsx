@@ -87,7 +87,7 @@ const PresetHistoryList: React.FC<Props> = ({
                 return (
                   <div
                     key={history.createdDate}
-                    className="mb-5 ml-3 mr-1 rounded-lg bg-hhBG/70"
+                    className="mr-1 mb-5 ml-3 rounded-lg bg-hhBG/70"
                   >
                     <div className="flex w-full flex-col p-5 text-hhText md:flex-row md:space-x-5">
                       <div className="flex w-full flex-col space-y-2 md:w-1/6">

@@ -78,7 +78,7 @@ const ExportPresetsModal: React.FC<Props> = ({ setExportModalOpen }) => {
           <h2 className="border-b-2 border-hhCard text-xl font-semibold">
             Mobiflight
           </h2>
-          <p className="max-w-[13rem] rounded-lg bg-red-800 p-3 text-justify text-xs font-semibold leading-3 text-hhText">
+          <p className="max-w-52 rounded-lg bg-red-800 p-3 text-justify text-xs leading-3 font-semibold text-hhText">
             Please use the build-in update funcionality inside Mobiflight to
             update your Hubhop presets.
           </p>

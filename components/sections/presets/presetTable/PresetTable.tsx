@@ -232,7 +232,7 @@ const PresetTable: React.FC<Props> = ({
 
   return (
     <div className="relative flex w-full flex-col rounded-lg bg-hhCard/40">
-      <div className="absolute right-0 z-10 mr-2 mt-2 hidden items-center space-x-3 md:flex">
+      <div className="absolute right-0 z-10 mt-2 mr-2 hidden items-center space-x-3 md:flex">
         <div
           onClick={() => {
             if (localStorage.getItem("username")) {
@@ -243,7 +243,7 @@ const PresetTable: React.FC<Props> = ({
           <AddPresetButton />
         </div>
       </div>
-      <div className="absolute bottom-3 left-3 z-10 mr-2 mt-2 hidden items-center space-x-3 md:flex">
+      <div className="absolute bottom-3 left-3 z-10 mt-2 mr-2 hidden items-center space-x-3 md:flex">
         <div
           onClick={() => {
             if (localStorage.getItem("username")) {
