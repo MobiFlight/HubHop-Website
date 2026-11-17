@@ -51,7 +51,9 @@ const DeleteConfirmationModal: React.FC<Props> = ({
           : await db.presetsXplane
               .clear()
               .then(() => db.presetsXplane.bulkAdd(result))
-      } catch (error) {}
+      } catch (error) {
+        console.error(error)
+      }
       deletedToast()
     })
   }

@@ -106,10 +106,6 @@ const TableStats: React.FC<Props> = ({ data, added }) => {
   }
 
   const ExpandedComponent = ({ data }: { data: any }) => {
-    const [updatedBy, setUpdatedBy] = useState(data.updatedBy)
-    const [createdDate, setCreatedDate] = useState(data.createdDate)
-    const [version, setVersion] = useState(data.version)
-    const [reported, setReported] = useState(data.reported)
     const [vendor, setVendor] = useState(data.vendor)
     const [aircraft, setAircraft] = useState(data.aircraft)
     const [system, setSystem] = useState(data.system)
@@ -117,7 +113,6 @@ const TableStats: React.FC<Props> = ({ data, added }) => {
     const [label, setLabel] = useState(data.label)
     const [code, setCode] = useState(data.code)
     const [description, setDescription] = useState(data.description)
-    const [author, setAuthor] = useState(data.author)
 
     return (
       <div className="relative -mx-3 md:m-0">
@@ -129,23 +124,29 @@ const TableStats: React.FC<Props> = ({ data, added }) => {
               <h2 className={`ml-5 pt-3 font-bold text-hhText`}>{label}</h2>
               <div className="flex w-full flex-col space-y-2 p-5 text-sm text-hhText md:flex-row md:space-y-0 md:space-x-5">
                 <div className="flex w-full flex-col space-y-2 md:w-1/6">
-                  {version > "1" ? (
+                  {data.version > "1" ? (
                     <PresetPreviewLabel
                       title={"Updated by"}
-                      editData={updatedBy}
+                      editData={data.updatedBy}
                     />
                   ) : (
-                    <PresetPreviewLabel title={"Author"} editData={author} />
+                    <PresetPreviewLabel
+                      title={"Author"}
+                      editData={data.author}
+                    />
                   )}
                   <PresetPreviewLabel
-                    title={version > "1" ? "Updated" : "Added"}
-                    editData={new Date(createdDate).toLocaleString()}
+                    title={data.version > "1" ? "Updated" : "Added"}
+                    editData={new Date(data.createdDate).toLocaleString()}
                   />
-                  <PresetPreviewLabel title={"Version"} editData={version} />
+                  <PresetPreviewLabel
+                    title={"Version"}
+                    editData={data.version}
+                  />
                   {
                     <PresetPreviewLabel
                       title={"Reported"}
-                      editData={reported >= "1" ? reported : "0"}
+                      editData={data.reported >= "1" ? data.reported : "0"}
                     />
                   }
                 </div>

@@ -15,7 +15,6 @@ import { AnimatePresence, motion } from "motion/react"
 import Toast from "../../../Shared/Toast"
 import { AuthenticatedTemplate } from "@azure/msal-react"
 import { RiListSettingsLine } from "react-icons/ri"
-import { db } from "../../../../../services/db"
 
 interface Props {
   setAddModalOpen: Function
@@ -31,7 +30,6 @@ interface AddPresetForm {
   systems: string
   addPresetTypes: string
   presetTypes: string
-  addCodeTypes: string
   codeTypes: string
   label: string
   code: string
@@ -71,7 +69,6 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
   const [addAircraft, setAddAircraft] = useState(false)
   const [addSystem, setAddSystem] = useState(false)
   const [addPresetType, setAddPresetType] = useState(false)
-  const [addCodeType, setAddCodeType] = useState(false)
   const [buttonSubmit, setButtonSubmit] = useState(false)
   const [bulkUpload, setBulkUpload] = useState(false)
   const [presetToast, setPresetToast] = useState(false)
@@ -133,43 +130,6 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
       return preset.code.toLowerCase().includes(code.toLowerCase())
     }
   })
-
-  const uniqueVendor = Array.from(
-    new Set(
-      filteredInputTypeList
-        .map((item: any) => item.vendor)
-        .sort((a: any, b: any) =>
-          a.toLowerCase().localeCompare(b.toLowerCase()),
-        ),
-    ),
-  )
-  const uniqueAircraft = Array.from(
-    new Set(
-      filteredInputTypeList
-        .map((item: any) => item.aircraft)
-        .sort((a: any, b: any) =>
-          a.toLowerCase().localeCompare(b.toLowerCase()),
-        ),
-    ),
-  )
-  const uniqueSystem = Array.from(
-    new Set(
-      filteredInputTypeList
-        .map((item: any) => item.system)
-        .sort((a: any, b: any) =>
-          a.toLowerCase().localeCompare(b.toLowerCase()),
-        ),
-    ),
-  )
-  const uniqueType = Array.from(
-    new Set(
-      filteredInputTypeList
-        .map((item: any) => item.presetType)
-        .sort((a: any, b: any) =>
-          a.toLowerCase().localeCompare(b.toLowerCase()),
-        ),
-    ),
-  )
 
   const {
     register,
@@ -586,66 +546,32 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                         <label htmlFor="searchfield">Select Code Type</label>
                       </div>
                       <div className="flex space-x-2">
-                        {addCodeType ? (
-                          <input
-                            type={"text"}
-                            placeholder={"Provide code type"}
-                            className={`w-full rounded-lg border bg-hhBG/75 px-3 py-1 text-hhText ${
-                              errors.addCodeTypes
-                                ? "border-red-500"
-                                : "border-hhOrange/75"
-                            }`}
-                            {...register("addCodeTypes", {
-                              required: "Provide code type",
-                            })}
-                          />
-                        ) : (
-                          <select
-                            className={`w-full rounded-lg border bg-hhBG/75 px-3 py-1 text-hhText ${
-                              errors.addCodeTypes
-                                ? "border-red-500"
-                                : "border-hhOrange/75"
-                            }`}
-                            value={filteredCodeTypes}
-                            {...register("codeTypes", {
-                              required: "Select code type",
-                            })}
-                          >
-                            <option value="">All Code Types</option>
-                            {Array.from(
-                              new Set(
-                                presets
-                                  .map((item: any) => item.codeType)
-                                  .sort((a: any, b: any) =>
-                                    a
-                                      .toLowerCase()
-                                      .localeCompare(b.toLowerCase()),
-                                  ),
-                              ),
-                            ).map((o, i) => (
-                              <option key={i as any}>{o as string[]}</option>
-                            ))}
-                          </select>
-                        )}
-                        <AuthenticatedTemplate>
-                          {localStorage
-                            .getItem("roles")
-                            ?.includes("moderator") && (
-                            <button
-                              onClick={() => (
-                                setAddPresetType((prev) => !prev),
-                                resetField("addPresetTypes", {
-                                  defaultValue: "",
-                                }),
-                                resetField("presetTypes", { defaultValue: "" })
-                              )}
-                              type={"button"}
-                              className="rounded-lg bg-hhOrange p-2 text-hhBG transition-all hover:bg-hhOrangeShade-600"
-                            >
-                              {addPresetType ? <BsList /> : <BiAddToQueue />}
-                            </button>
-                          )}
-                        </AuthenticatedTemplate>
+                        <select
+                          className={`w-full rounded-lg border bg-hhBG/75 px-3 py-1 text-hhText ${
+                            errors.codeTypes
+                              ? "border-red-500"
+                              : "border-hhOrange/75"
+                          }`}
+                          value={filteredCodeTypes}
+                          {...register("codeTypes", {
+                            required: "Select code type",
+                          })}
+                        >
+                          <option value="">All Code Types</option>
+                          {Array.from(
+                            new Set(
+                              presets
+                                .map((item: any) => item.codeType)
+                                .sort((a: any, b: any) =>
+                                  a
+                                    .toLowerCase()
+                                    .localeCompare(b.toLowerCase()),
+                                ),
+                            ),
+                          ).map((o, i) => (
+                            <option key={i as any}>{o as string[]}</option>
+                          ))}
+                        </select>
                       </div>
                     </div>
                   )}

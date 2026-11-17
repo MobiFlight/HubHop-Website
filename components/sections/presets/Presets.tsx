@@ -11,16 +11,12 @@ import { getAccessToken } from "../../../services/msalFunctions"
 import { msalInstance, msalReady } from "../../../services/msal"
 import { db } from "../../../services/db"
 import { syncSim } from "../../../services/presetSync"
-import Image from "next/image"
 import { useLiveQuery } from "dexie-react-hooks"
 import { ToastContainer, toast } from "react-toastify"
 
 import { useRouter } from "next/router"
 
 const Presets: React.FC = () => {
-  const customLoader = ({ src }: any) => {
-    return src
-  }
   const [loading, setLoading] = useState(false)
   const [presetsMsfs, setPresetsMsfs] = useState<any[]>([])
   const [presetsXplane, setPresetsXplane] = useState<any[]>([])

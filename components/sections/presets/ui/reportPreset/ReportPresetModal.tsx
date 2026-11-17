@@ -9,7 +9,6 @@ interface Props {
 }
 
 const ReportPresetModal: React.FC<Props> = ({
-  presetId,
   setReportModalOpen,
   reportedToast,
 }) => {

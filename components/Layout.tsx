@@ -13,18 +13,11 @@ type Props = {
 const Layout = ({ children, title = "Hubhop" }: Props) => {
   const [clientWindowHeight, setClientWindowHeight] = useState(0)
 
-  const handleScroll = () => {
-    setClientWindowHeight(window.scrollY)
-  }
-
   useEffect(() => {
-    let isSubscribed = true
+    const handleScroll = () => setClientWindowHeight(window.scrollY)
     window.addEventListener("scroll", handleScroll)
-    return () => (
-      (isSubscribed = false),
-      window.removeEventListener("scroll", handleScroll)
-    )
-  })
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
 
   function toTop() {
     window.scrollTo(0, 0)

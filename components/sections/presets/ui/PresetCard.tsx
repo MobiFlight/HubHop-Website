@@ -87,7 +87,6 @@ const PresetCard: React.FC<Props> = ({
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
   const [reportModalOpen, setReportModalOpen] = useState(false)
   const [fixedModalOpen, setFixedModalOpen] = useState(false)
-  const [showHistory, setShowHistory] = useState(showingHistory)
   const [edit, setEdit] = useState(false)
   const [editButton, setEditButton] = useState(false)
   const [editTooltip, seteditTooltip] = useState(false)
@@ -502,7 +501,7 @@ const PresetCard: React.FC<Props> = ({
             </div>
           </div>
         </div>
-        {simType === "msfs2020" && showHistory && (
+        {simType === "msfs2020" && showingHistory && (
           <div className="flex flex-col">
             {version > "1" ? (
               <PresetHistoryList
