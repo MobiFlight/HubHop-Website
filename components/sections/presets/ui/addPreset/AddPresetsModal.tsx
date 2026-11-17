@@ -16,6 +16,7 @@ import Toast from "../../../Shared/Toast"
 import { AuthenticatedTemplate } from "@azure/msal-react"
 import { RiListSettingsLine } from "react-icons/ri"
 import { CODE_TYPES } from "../../../../../lib/codeTypes"
+import { sortedUnique } from "../../../../../lib/presetFacets"
 
 interface Props {
   setAddModalOpen: Function
@@ -132,11 +133,32 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
     }
   })
 
+  // An aircraft belongs to a vendor: each list only offers values that fit the other
+  const vendorsOf = (aircraft: string) =>
+    sortedUnique(
+      presets
+        .filter((preset: any) => !aircraft || preset.aircraft === aircraft)
+        .map((preset: any) => preset.vendor),
+    )
+  const vendorOptions = sortedUnique([
+    ...vendorsOf(filteredAircrafts),
+    filteredVendors,
+  ])
+  const aircraftOptions = sortedUnique([
+    ...presets
+      .filter(
+        (preset: any) => !filteredVendors || preset.vendor === filteredVendors,
+      )
+      .map((preset: any) => preset.aircraft),
+    filteredAircrafts,
+  ])
+
   const {
     register,
     handleSubmit,
     watch,
     resetField,
+    setValue,
     formState: { errors },
   } = useForm<AddPresetForm>()
 
@@ -301,18 +323,8 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                           })}
                         >
                           <option value="">All Vendors</option>
-                          {Array.from(
-                            new Set(
-                              presets
-                                .map((item: any) => item.vendor)
-                                .sort((a: any, b: any) =>
-                                  a
-                                    .toLowerCase()
-                                    .localeCompare(b.toLowerCase()),
-                                ),
-                            ),
-                          ).map((o, i) => (
-                            <option key={i as any}>{o as string[]}</option>
+                          {vendorOptions.map((vendor) => (
+                            <option key={vendor}>{vendor}</option>
                           ))}
                         </select>
                       )}
@@ -366,23 +378,20 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                         value={filteredAircrafts}
                         {...register("aircrafts", {
                           required: "Select Aircraft",
+                          // picking an aircraft first fills in its vendor
+                          onChange: (e) => {
+                            const [vendor, ...others] = vendorsOf(
+                              e.target.value,
+                            )
+                            if (!filteredVendors && vendor && !others.length)
+                              setValue("vendors", vendor)
+                          },
                         })}
                       >
                         <option value="">All Aircraft</option>
-                        {Array.from(
-                          new Set(
-                            presets
-                              .map((item: any) => item.aircraft)
-                              .sort((a: any, b: any) =>
-                                a.toLowerCase().localeCompare(b.toLowerCase()),
-                              ),
-                          ),
-                        ).map((o, i) => (
-                          <option key={i as any}>{o as string[]}</option>
+                        {aircraftOptions.map((aircraft) => (
+                          <option key={aircraft}>{aircraft}</option>
                         ))}
-                        {/* {uniqueAircraft.map((o, i) => (
-                          <option key={i as any}>{o as string[]}</option>
-                        ))} */}
                       </select>
                     )}
                     <button

@@ -94,6 +94,45 @@ test.describe("Add preset - user", () => {
     })
   })
 
+  test("Add preset - selecting a vendor lists only its aircraft", async ({
+    page,
+  }) => {
+    const selects = page.locator("form").getByRole("combobox")
+    const [vendor, aircraft, system] = [0, 1, 2].map((i) => selects.nth(i))
+
+    await vendor.selectOption("FlyByWire")
+
+    await expect(aircraft.getByRole("option")).toHaveText([
+      "All Aircraft",
+      "A32NX",
+    ])
+    await test.step("All systems stay available", async () => {
+      await expect(system.getByRole("option")).toHaveText([
+        "All Systems",
+        "Autopilot",
+        "Electrical",
+        "Engine",
+        "Lights",
+        "Overhead",
+      ])
+    })
+  })
+
+  test("Add preset - selecting an aircraft first fills in its vendor", async ({
+    page,
+  }) => {
+    const selects = page.locator("form").getByRole("combobox")
+    const [vendor, aircraft] = [0, 1].map((i) => selects.nth(i))
+
+    await aircraft.selectOption("C172")
+
+    await expect(vendor).toHaveValue("Asobo")
+    await expect(vendor.getByRole("option")).toHaveText([
+      "All Vendors",
+      "Asobo",
+    ])
+  })
+
   test("Add preset - shows similar presets while typing", async ({ page }) => {
     const form = page.locator("form")
 
