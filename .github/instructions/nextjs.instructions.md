@@ -86,6 +86,8 @@ public/                  # Static assets
 - Prettier 3 with `prettier-plugin-tailwindcss` (auto-sorted Tailwind classes), config in `.prettierrc`:
   no semicolons, double quotes. Same style as other MobiFlight projects.
 - Format on save is enabled in the devcontainer; `npm run format:check` must pass.
+- ESLint (`eslint.config.mjs`: Next.js core-web-vitals + TypeScript rules, Prettier-compatible): `npm run lint` must report no errors.
+  `any`, `Function` types and missing hook dependencies are warnings in legacy code; do not add new ones.
 
 ## Deployment
 
