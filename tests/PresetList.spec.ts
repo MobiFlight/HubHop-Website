@@ -217,6 +217,30 @@ test.describe("Preset list", () => {
     await expect(presetsPage.row("Oil temperature")).toHaveCount(1)
   })
 
+  // independent of the order the server sends or the cache returns (#61)
+  test("Preset list - presets are listed by vendor, aircraft and name", async ({
+    presetsPage,
+  }) => {
+    await presetsPage.gotoPage()
+
+    const names = [
+      "AP altitude hold",
+      "AP heading hold",
+      "AP master toggle",
+      "AP NAV mode",
+      "AP speed hold",
+      "Landing lights off",
+      "Landing lights on",
+      "Strobe toggle",
+      "Alternator 1 on",
+    ]
+    await Promise.all(
+      names.map((name, index) =>
+        expect(presetsPage.rows.nth(index)).toContainText(name),
+      ),
+    )
+  })
+
   test("Preset list - sorts by preset name", async ({ presetsPage, page }) => {
     await presetsPage.gotoPage()
 

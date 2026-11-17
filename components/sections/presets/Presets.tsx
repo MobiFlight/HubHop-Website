@@ -15,12 +15,12 @@ import { useLiveQuery } from "dexie-react-hooks"
 import { ToastContainer, toast } from "react-toastify"
 
 import { useRouter } from "next/router"
+import { type Facet, sortedUnique } from "../../../lib/presetFacets"
 import {
-  type Facet,
-  compareText,
-  sortedUnique,
-} from "../../../lib/presetFacets"
-import { presetRelevance, searchTerms } from "../../../lib/presetSearch"
+  comparePresets,
+  presetRelevance,
+  searchTerms,
+} from "../../../lib/presetSearch"
 
 const Presets: React.FC = () => {
   const [loading, setLoading] = useState(false)
@@ -88,7 +88,12 @@ const Presets: React.FC = () => {
     if (!msfsPresets) return undefined
     setPresetsXplane(xplanePresets)
     setPresetsMsfs(msfsPresets)
-    setPresets(simType === "msfs2020" ? presetsMsfs : presetsXplane)
+    // sorted once here, not on every render
+    setPresets(
+      [...(simType === "msfs2020" ? presetsMsfs : presetsXplane)].sort(
+        comparePresets,
+      ),
+    )
   }, [simType, presetsMsfs, presetsXplane, xplanePresets, msfsPresets])
 
   useEffect(() => {
@@ -171,16 +176,11 @@ const Presets: React.FC = () => {
       (facet) => facet === ignoredFacet || facetFilters[facet](preset),
     )
 
-  const matchingItems = filteredReportedPresets.filter((preset) =>
+  // presets are already in the default order (comparePresets); the table's
+  // stable sort keeps it for presets of equal relevance
+  const filteredItems = filteredReportedPresets.filter((preset) =>
     matchesFilters(preset),
   )
-  // search results sorted by name, so equally relevant ones stay in that order
-  const filteredItems =
-    terms.length > 0
-      ? [...matchingItems].sort((a, b) =>
-          compareText(String(a.label), String(b.label)),
-        )
-      : matchingItems
 
   // Faceted search as in MobiFlight Connector: each dropdown lists the values
   // that match all other filters, so its siblings stay selectable
