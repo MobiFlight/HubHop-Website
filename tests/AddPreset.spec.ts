@@ -62,7 +62,11 @@ test.describe("Add preset - user", () => {
 
     await form.getByRole("button", { name: "Add preset" }).click()
 
-    await expect(page.getByText("Preset successfully added!")).toBeVisible()
+    await expect(
+      page
+        .getByRole("status")
+        .filter({ hasText: "Preset successfully added!" }),
+    ).toHaveClass(/bg-green-800/)
     const requests = hubHopPage.writeRequests("POST")
     expect(requests).toHaveLength(1)
     expect(requests[0].path).toBe("/msfs2020/presets")

@@ -52,7 +52,11 @@ test.describe("Delete preset - moderator", () => {
     ).toContainText("Battery master on")
     await page.getByRole("button", { name: "Delete" }).last().click()
 
-    await expect(page.getByText("Preset successfully deleted!")).toBeVisible()
+    await expect(
+      page
+        .getByRole("status")
+        .filter({ hasText: "Preset successfully deleted!" }),
+    ).toHaveClass(/bg-green-800/)
     const requests = presetViewPage.hubHopPage.writeRequests("DELETE")
     expect(requests).toHaveLength(1)
     expect(requests[0].path).toBe("/msfs2020/presets/msfs-0009")

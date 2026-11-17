@@ -1,17 +1,20 @@
+const background = {
+  success: "bg-green-800",
+  error: "bg-red-900",
+}
+
 interface Props {
-  bg: string
-  textColor: string
+  variant: keyof typeof background
 }
 
 const Toast: React.FC<React.PropsWithChildren<Props>> = ({
-  bg,
+  variant,
   children,
-  textColor,
 }) => {
   return (
     <div
-      style={{ backgroundColor: bg, color: textColor }}
-      className={`fixed right-5 bottom-5 z-50 rounded-lg p-5 font-semibold`}
+      role="status"
+      className={`fixed right-5 bottom-5 z-50 rounded-lg p-5 font-semibold ${background[variant]}`}
     >
       <div className="flex items-center">{children}</div>
     </div>
