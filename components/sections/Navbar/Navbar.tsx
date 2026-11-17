@@ -10,7 +10,7 @@ import {
   HiOutlineUserCircle,
 } from "react-icons/hi"
 import { useState } from "react"
-import { AnimatePresence, motion } from "framer-motion"
+import { AnimatePresence, motion } from "motion/react"
 import { AiOutlineMenu } from "react-icons/ai"
 import { MdOutlineClose } from "react-icons/md"
 import {

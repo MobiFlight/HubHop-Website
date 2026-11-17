@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { AnimatePresence, motion } from "framer-motion"
+import { AnimatePresence, motion } from "motion/react"
 import PresetHistoryList from "../singlePresetView/PresetHistoryList"
 import DeleteButton from "./deletePreset/DeleteButton"
 import EditToggle from "./editPreset/EditToggle"

@@ -1,7 +1,7 @@
 import PresetPreviewLabel from "../ui/PresetInputLabel"
 import { AiOutlineLoading } from "react-icons/ai"
 import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence, type Variants } from "motion/react"
 import { BsArrowUpCircle } from "react-icons/bs"
 import ButtonOrange from "../../Shared/ButtonOrange"
 
@@ -16,7 +16,7 @@ const PresetHistoryList: React.FC<Props> = ({
   loading,
   revertHistory,
 }) => {
-  const divVariants = {
+  const divVariants: Variants = {
     expanded: {
       height: "34vh",
       transition: {

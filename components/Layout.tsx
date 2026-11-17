@@ -3,7 +3,7 @@ import Head from "next/head"
 import Navbar from "./sections/Navbar/Navbar"
 import Footer from "./sections/footer/Footer"
 import { FiArrowUpCircle } from "react-icons/fi"
-import { AnimatePresence, motion } from "framer-motion"
+import { AnimatePresence, motion } from "motion/react"
 
 type Props = {
   children?: ReactNode

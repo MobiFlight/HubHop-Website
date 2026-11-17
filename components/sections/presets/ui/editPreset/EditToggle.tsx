@@ -1,5 +1,5 @@
 import { BiLockAlt, BiLockOpenAlt } from "react-icons/bi"
-import { motion } from "framer-motion"
+import { motion } from "motion/react"
 
 interface Props {
   toggleEdit: boolean

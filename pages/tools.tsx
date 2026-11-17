@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from "framer-motion"
+import { AnimatePresence, motion } from "motion/react"
 import Head from "next/head"
 import { useState } from "react"
 import Layout from "../components/Layout"

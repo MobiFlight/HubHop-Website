@@ -1,5 +1,5 @@
 import { useLiveQuery } from "dexie-react-hooks"
-import { AnimatePresence, motion } from "framer-motion"
+import { AnimatePresence, motion } from "motion/react"
 import { useRouter } from "next/router"
 import { useEffect, useMemo, useState } from "react"
 import { BsCheck2Square } from "react-icons/bs"

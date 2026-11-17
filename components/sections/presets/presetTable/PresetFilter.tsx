@@ -10,7 +10,7 @@ import { GiCommercialAirplane } from "react-icons/gi"
 import { RiListSettingsLine } from "react-icons/ri"
 import { MdBusiness } from "react-icons/md"
 import { BiCog, BiJoystickButton } from "react-icons/bi"
-import { AnimatePresence, motion } from "framer-motion"
+import { AnimatePresence, motion, type Variants } from "motion/react"
 import { AuthenticatedTemplate } from "@azure/msal-react"
 
 interface Props {
@@ -106,7 +106,7 @@ const PresetFilter: React.FC<Props> = ({
     ),
   )
 
-  const draw = {
+  const draw: Variants = {
     hidden: {
       pathLength: 0,
       transition: {

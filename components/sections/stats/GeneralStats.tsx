@@ -1,4 +1,4 @@
-import { AnimatePresence } from "framer-motion"
+import { AnimatePresence } from "motion/react"
 import { useEffect, useState } from "react"
 import DataTable, { createTheme } from "react-data-table-component"
 import LoadingSpinner from "../Shared/LoadingSpinner"
