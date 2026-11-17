@@ -572,25 +572,6 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                             <option key={i as any}>{o as string[]}</option>
                           ))}
                         </select>
-                        <AuthenticatedTemplate>
-                          {localStorage
-                            .getItem("roles")
-                            ?.includes("moderator") && (
-                            <button
-                              onClick={() => (
-                                setAddPresetType((prev) => !prev),
-                                resetField("addPresetTypes", {
-                                  defaultValue: "",
-                                }),
-                                resetField("presetTypes", { defaultValue: "" })
-                              )}
-                              type={"button"}
-                              className="rounded-lg bg-hhOrange p-2 text-hhBG transition-all hover:bg-hhOrangeShade-600"
-                            >
-                              {addPresetType ? <BsList /> : <BiAddToQueue />}
-                            </button>
-                          )}
-                        </AuthenticatedTemplate>
                       </div>
                     </div>
                   )}
