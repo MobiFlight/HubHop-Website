@@ -3,7 +3,11 @@ interface Props {
   textColor: string
 }
 
-const Toast: React.FC<Props> = ({ bg, children, textColor }) => {
+const Toast: React.FC<React.PropsWithChildren<Props>> = ({
+  bg,
+  children,
+  textColor,
+}) => {
   return (
     <div
       style={{ backgroundColor: bg, color: textColor }}

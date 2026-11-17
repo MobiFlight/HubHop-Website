@@ -5,7 +5,9 @@ import { AppProps } from "next/app"
 import { MsalProvider } from "@azure/msal-react"
 import { msalInstance } from "../services/msal"
 
-export const SafeHydrate: React.FC = ({ children }) => {
+export const SafeHydrate: React.FC<React.PropsWithChildren> = ({
+  children,
+}) => {
   return <div suppressHydrationWarning>{children}</div>
 }
 

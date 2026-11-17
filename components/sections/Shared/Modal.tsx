@@ -8,7 +8,7 @@ interface Props {
   height?: boolean
 }
 
-const Modal: React.FC<Props> = ({
+const Modal: React.FC<React.PropsWithChildren<Props>> = ({
   children,
   title,
   closeModal,

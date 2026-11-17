@@ -22,6 +22,22 @@ interface Props {
   presets: any
 }
 
+interface AddPresetForm {
+  addVendors: string
+  vendors: string
+  addAircrafts: string
+  aircrafts: string
+  addSystems: string
+  systems: string
+  addPresetTypes: string
+  presetTypes: string
+  addCodeTypes: string
+  codeTypes: string
+  label: string
+  code: string
+  description: string
+}
+
 const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
   const [filteredVendors, setFilteredVendors] = useState(
     localStorage.getItem("vendorFilter") === ""
@@ -161,18 +177,18 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
     watch,
     resetField,
     formState: { errors },
-  } = useForm()
+  } = useForm<AddPresetForm>()
 
   useEffect(() => {
     const subscription = watch((value) => {
-      setFilteredVendors(value.vendors)
-      setFilteredAircrafts(value.aircrafts)
-      setFilteredSystems(value.systems)
-      setFilteredPresetTypes(value.presetTypes)
-      setFilteredCodeTypes(value.codeTypes)
-      setCode(value.code)
-      setLabel(value.label)
-      setDescription(value.description)
+      setFilteredVendors(value.vendors ?? "")
+      setFilteredAircrafts(value.aircrafts ?? "")
+      setFilteredSystems(value.systems ?? "")
+      setFilteredPresetTypes(value.presetTypes ?? "")
+      setFilteredCodeTypes(value.codeTypes ?? "")
+      setCode(value.code ?? "")
+      setLabel(value.label ?? "")
+      setDescription(value.description ?? "")
     })
     return () => subscription.unsubscribe()
   }, [watch])
@@ -411,7 +427,7 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                     <button
                       onClick={() => (
                         setAddAircraft((prev) => !prev),
-                        resetField("addAicrafts", { defaultValue: "" }),
+                        resetField("addAircrafts", { defaultValue: "" }),
                         resetField("aircrafts", { defaultValue: "" })
                       )}
                       type={"button"}
