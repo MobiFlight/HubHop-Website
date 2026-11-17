@@ -68,4 +68,4 @@ Always check for the following items before marking a PR as ready to merge, if a
 - PR description includes screenshots or screen recordings for UI changes
 - All new code is covered by end-to-end tests where applicable
 - All existing and new tests pass successfully
-- Add label `docs` if documentation updates are required
+- Add label `documentation` if documentation updates are required
