@@ -89,5 +89,6 @@ test.describe("Preset view - moderator", () => {
     const [request] = presetViewPage.hubHopPage.writeRequests("PUT")
     expect(request.path).toBe("/msfs2020/presets/msfs-0001")
     expect(request.body).toMatchObject({ label: "AP master", version: 1 })
+    await expect(presetViewPage.title).toHaveText("AP master")
   })
 })

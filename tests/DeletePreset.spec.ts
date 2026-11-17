@@ -80,3 +80,28 @@ test.describe("Delete preset - moderator", () => {
     )
   })
 })
+
+test.describe("Delete preset - preset list", () => {
+  test.use({ storageState: authFile.moderator })
+
+  test("Delete preset - a failed delete keeps the preset", async ({
+    presetsPage,
+    page,
+  }) => {
+    presetsPage.hubHopPage.api.writeStatus.DELETE = 500
+    page.on("dialog", (dialog) => dialog.accept())
+    await presetsPage.gotoPage()
+
+    const details = await presetsPage.expand("Battery master on")
+    await details.getByRole("button", { name: "Delete" }).click()
+    await page.getByRole("button", { name: "Delete" }).last().click()
+    await expect
+      .poll(() => presetsPage.hubHopPage.writeRequests("DELETE"))
+      .toHaveLength(1)
+
+    await test.step("The cached list still has the preset", async () => {
+      await presetsPage.hubHopPage.reload()
+      await expect(presetsPage.row("Battery master on")).toHaveCount(1)
+    })
+  })
+})

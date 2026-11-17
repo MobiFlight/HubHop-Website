@@ -118,3 +118,62 @@ test.describe("Edit preset - moderator", () => {
     ).toMatchObject({ codeType: "DataRef" })
   })
 })
+
+test.describe("Edit preset - preset list", () => {
+  test.use({ storageState: authFile.moderator })
+
+  test("Edit preset - a failed save keeps the preset unchanged", async ({
+    presetsPage,
+    page,
+  }) => {
+    presetsPage.hubHopPage.api.writeStatus.PUT = 500
+    page.on("dialog", (dialog) => dialog.accept())
+    await presetsPage.gotoPage()
+
+    const details = await presetsPage.expand("Battery master on")
+    await details.getByRole("button", { name: "View" }).click()
+    await details
+      .getByRole("textbox", { name: "Preset name" })
+      .fill("Battery master switch on")
+    await details.getByRole("button", { name: "Save" }).click()
+    await expect
+      .poll(() => presetsPage.hubHopPage.writeRequests("PUT"))
+      .toHaveLength(1)
+
+    await test.step("The cached list still has the old name", async () => {
+      await presetsPage.hubHopPage.reload()
+      await expect(presetsPage.row("Battery master on")).toHaveCount(1)
+      await expect(presetsPage.row("Battery master switch on")).toHaveCount(0)
+    })
+  })
+
+  test("Edit preset - edit mode stays on after the saved message disappears", async ({
+    presetsPage,
+    page,
+  }) => {
+    await page.clock.install()
+    await presetsPage.gotoPage()
+
+    await test.step("Save a change", async () => {
+      const details = await presetsPage.expand("Battery master on")
+      await details.getByRole("button", { name: "View" }).click()
+      await details
+        .getByRole("textbox", { name: "Preset name" })
+        .fill("Battery master switch on")
+      await details.getByRole("button", { name: "Save" }).click()
+      await expect
+        .poll(() => presetsPage.hubHopPage.writeRequests("PUT"))
+        .toHaveLength(1)
+    })
+
+    const other = await presetsPage.expand("Landing lights on")
+    await test.step("Edit another preset right away", async () => {
+      await other.getByRole("button", { name: "View" }).click()
+      await expect(other.getByRole("button", { name: "Save" })).toBeVisible()
+    })
+
+    await page.clock.fastForward(6000)
+
+    await expect(other.getByRole("button", { name: "Save" })).toBeVisible()
+  })
+})
