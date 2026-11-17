@@ -132,27 +132,30 @@ export class HubHopPage {
     }
     this.requests.push({ method, path, body: undefined, headers: {} })
 
-    let match: RegExpMatchArray | null
-    if ((match = path.match(/^\/(msfs2020|xplane)\/statistics\/last$/))) {
-      return route.fulfill({ json: this.api.last[match[1] as Sim] })
-    }
-    if ((match = path.match(/^\/(msfs2020|xplane)\/statistics\/general$/))) {
-      return route.fulfill({ json: this.api.stats[match[1] as Sim] })
-    }
-    if ((match = path.match(/^\/(msfs2020|xplane)\/presets$/))) {
-      this.downloads[match[1] as Sim]++
-      return route.fulfill({ json: this.api.presets[match[1] as Sim] })
-    }
-    if ((match = path.match(/^\/(msfs2020|xplane)\/presets\/(.+)$/))) {
-      const preset = (this.api.presets[match[1] as Sim] as any[]).find(
-        (p) => p.id === match![2],
-      )
-      return preset
-        ? route.fulfill({ json: preset })
-        : route.fulfill({ status: 404, json: {} })
-    }
-    if (path.match(/^\/msfs2020\/history\/presets\/.+$/)) {
-      return route.fulfill({ json: this.api.history })
+    const simRoute = path.match(/^\/(msfs2020|xplane)\/(.+)$/)
+    if (simRoute) {
+      const sim = simRoute[1] as Sim
+      const resource = simRoute[2]
+      if (resource === "statistics/last") {
+        return route.fulfill({ json: this.api.last[sim] })
+      }
+      if (resource === "statistics/general") {
+        return route.fulfill({ json: this.api.stats[sim] })
+      }
+      if (resource === "presets") {
+        this.downloads[sim]++
+        return route.fulfill({ json: this.api.presets[sim] })
+      }
+      if (resource.startsWith("presets/")) {
+        const id = resource.slice("presets/".length)
+        const preset = (this.api.presets[sim] as any[]).find((p) => p.id === id)
+        return preset
+          ? route.fulfill({ json: preset })
+          : route.fulfill({ status: 404, json: {} })
+      }
+      if (sim === "msfs2020" && resource.startsWith("history/presets/")) {
+        return route.fulfill({ json: this.api.history })
+      }
     }
     if (path === "/export/presets") {
       return route.fulfill({

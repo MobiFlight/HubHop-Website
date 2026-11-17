@@ -9,7 +9,7 @@ import {
   HiOutlineTrendingUp,
   HiOutlineUserCircle,
 } from "react-icons/hi"
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { AnimatePresence, motion } from "motion/react"
 import { AiOutlineMenu } from "react-icons/ai"
 import { MdOutlineClose } from "react-icons/md"
@@ -97,16 +97,17 @@ const Navbar: React.FC = () => {
 
   const { accounts } = useMsal()
 
-  let timeout: any
+  // kept in a ref so the pending timer survives re-renders
+  const timeout = useRef<ReturnType<typeof setTimeout>>(undefined)
 
   const showTip = () => {
-    timeout = setTimeout(() => {
+    timeout.current = setTimeout(() => {
       setShowDropdown(true)
     }, 400)
   }
 
   const hideTip = () => {
-    clearInterval(timeout)
+    clearTimeout(timeout.current)
     setShowDropdown(false)
   }
 

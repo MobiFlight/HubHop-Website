@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 import {
   HiAdjustments,
   HiOutlineSearchCircle,
@@ -127,16 +127,17 @@ const PresetFilter: React.FC<Props> = ({
     },
   }
 
-  let timeout: any
+  // kept in a ref so the pending timer survives re-renders
+  const timeout = useRef<ReturnType<typeof setTimeout>>(undefined)
 
   const showTip = () => {
-    timeout = setTimeout(() => {
+    timeout.current = setTimeout(() => {
       setMyPresetTooltip(true)
     }, 400)
   }
 
   const hideTip = () => {
-    clearInterval(timeout)
+    clearTimeout(timeout.current)
     setMyPresetTooltip(false)
   }
 

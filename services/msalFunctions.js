@@ -26,13 +26,13 @@ export async function getAccessToken() {
     forceRefresh: false,
   }
   try {
-    let tokenResponse = await msalInstance.acquireTokenSilent(silentRequest)
+    const tokenResponse = await msalInstance.acquireTokenSilent(silentRequest)
     localStorage.setItem("accessToken", tokenResponse.accessToken)
   } catch (error) {
     console.error(
       `"Silent token acquisition failed. Using interactive mode" + ${error}`,
     )
-    let tokenResponse = await msalInstance.acquireTokenPopup(silentRequest)
+    const tokenResponse = await msalInstance.acquireTokenPopup(silentRequest)
     console.log(
       `Access token acquired via interactive auth ${tokenResponse.accessToken}`,
     )
