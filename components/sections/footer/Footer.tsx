@@ -6,6 +6,21 @@ const Footer: React.FC = () => {
     <footer className="grid grid-cols-3 items-center justify-between bg-hhBG/50 px-5 py-5 text-hhText">
       <div>
         <span>&#169;</span> HubHop and its contributors 2024 - Version 2.9.5
+        <p className="text-xs text-hhText/50">
+          Build {process.env.NEXT_PUBLIC_BUILD_NUMBER}
+          {process.env.NEXT_PUBLIC_BUILD_COMMIT && (
+            <>
+              {" · "}
+              <a
+                href={process.env.NEXT_PUBLIC_BUILD_COMMIT_URL}
+                target="_blank"
+                className="hover:text-hhOrange"
+              >
+                {process.env.NEXT_PUBLIC_BUILD_COMMIT}
+              </a>
+            </>
+          )}
+        </p>
       </div>
       <div className="flex items-center justify-center">
         <div className="flex">
