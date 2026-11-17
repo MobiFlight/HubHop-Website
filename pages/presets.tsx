@@ -2,7 +2,7 @@ import Head from "next/head"
 import Layout from "../components/Layout"
 import PresetList from "../components/sections/presets/Presets"
 
-const Presets: React.FC = () => {
+const Presets = () => {
   return (
     <Layout title="Presets | Hubhop by Mobiflight">
       <Head>

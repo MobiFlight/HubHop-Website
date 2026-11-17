@@ -26,7 +26,7 @@ import {
   getAccessToken,
 } from "../../../services/msalFunctions"
 
-const Navbar: React.FC = () => {
+const Navbar = () => {
   if (
     typeof window !== "undefined" &&
     localStorage.getItem("searchFilter") === null

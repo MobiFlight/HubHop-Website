@@ -1,6 +1,6 @@
 import { AiOutlineLoading } from "react-icons/ai"
 
-const LoadingSpinner: React.FC = () => {
+const LoadingSpinner = () => {
   return (
     <div className="mt-1 flex items-center justify-start">
       <div className="animate-spin text-hhOrange">

@@ -3,7 +3,7 @@ import { useState } from "react"
 import { MdSwapHoriz } from "react-icons/md"
 import ButtonOrange from "../Shared/ButtonOrange"
 
-const Potti: React.FC = () => {
+const Potti = () => {
   const presets = [
     { name: "Arduino", min: 0, max: 1023 },
     { name: "Joystick", min: 0, max: 65535 },

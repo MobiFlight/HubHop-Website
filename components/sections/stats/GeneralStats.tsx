@@ -5,12 +5,12 @@ import LoadingSpinner from "../Shared/LoadingSpinner"
 import Modal from "../Shared/Modal"
 import StatsCard from "./ui/StatsCard"
 
-interface Props {
+type GeneralStatsProps = {
   presets: string[]
   stats: any
 }
 
-const GeneralStats: React.FC<Props> = ({ presets, stats }) => {
+const GeneralStats = ({ presets, stats }: GeneralStatsProps) => {
   const [modal, setModal] = useState(false)
   const [contModal, setContModal] = useState(false)
   const [singleCont, setSingleCont] = useState("")

@@ -19,7 +19,7 @@ type ChangeHandler = (
   e: React.ChangeEvent<HTMLTextAreaElement | HTMLSelectElement>,
 ) => void
 
-interface Props {
+type PresetFilterProps = {
   search: ChangeHandler
   filterVendor: ChangeHandler
   filterAircraft: ChangeHandler
@@ -42,7 +42,7 @@ interface Props {
   setFilterOpen: () => void
 }
 
-const PresetFilter: React.FC<Props> = ({
+const PresetFilter = ({
   filteredPresets,
   filteredVendors,
   options,
@@ -63,7 +63,7 @@ const PresetFilter: React.FC<Props> = ({
   setShowMyPresets,
   filterOpen,
   setFilterOpen,
-}) => {
+}: PresetFilterProps) => {
   const [myPresetTooltip, setMyPresetTooltip] = useState(false)
 
   const draw: Variants = {

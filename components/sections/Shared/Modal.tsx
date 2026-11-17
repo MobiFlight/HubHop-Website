@@ -1,6 +1,7 @@
 import { FiX } from "react-icons/fi"
 
-interface Props {
+type ModalProps = {
+  children: React.ReactNode
   title: string
   closeModal: Function
   position: string
@@ -8,14 +9,14 @@ interface Props {
   height?: boolean
 }
 
-const Modal: React.FC<React.PropsWithChildren<Props>> = ({
+const Modal = ({
   children,
   title,
   closeModal,
   position,
   closeModalX,
   height,
-}) => {
+}: ModalProps) => {
   return (
     <div>
       <div

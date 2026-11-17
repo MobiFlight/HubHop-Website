@@ -1,12 +1,12 @@
 import { BiLockAlt, BiLockOpenAlt } from "react-icons/bi"
 import { motion } from "motion/react"
 
-interface Props {
+type EditToggleProps = {
   toggleEdit: boolean
   setEdit: Function
 }
 
-const EditToggle: React.FC<Props> = ({ toggleEdit, setEdit }) => {
+const EditToggle = ({ toggleEdit, setEdit }: EditToggleProps) => {
   return (
     <button
       onClick={(e) => setEdit(e)}

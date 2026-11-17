@@ -40,30 +40,31 @@ type PresetFields = Pick<
 
 type ChangeHandler = (e: InputChangeEvent) => void
 
-export interface PresetToasts {
+export type PresetToasts = {
   deletedToast: () => void
   reportedToast: () => void
   fixedToast: () => void
   savedToast: () => void
 }
 
-interface Props extends PresetFields, PresetToasts {
-  loading?: boolean
-  history?: Preset[]
-  setVendor: ChangeHandler
-  setAircraft: ChangeHandler
-  setSystem: ChangeHandler
-  setPresetType: ChangeHandler
-  setLabel: ChangeHandler
-  setCodeType: ChangeHandler
-  setCode: ChangeHandler
-  setDescription: ChangeHandler
-  showingHistory: boolean
-  text: string
-  card: boolean
-}
+type PresetCardProps = PresetFields &
+  PresetToasts & {
+    loading?: boolean
+    history?: Preset[]
+    setVendor: ChangeHandler
+    setAircraft: ChangeHandler
+    setSystem: ChangeHandler
+    setPresetType: ChangeHandler
+    setLabel: ChangeHandler
+    setCodeType: ChangeHandler
+    setCode: ChangeHandler
+    setDescription: ChangeHandler
+    showingHistory: boolean
+    text: string
+    card: boolean
+  }
 
-const PresetCard: React.FC<Props> = ({
+const PresetCard = ({
   id,
   updatedBy,
   author,
@@ -95,7 +96,7 @@ const PresetCard: React.FC<Props> = ({
   reportedToast,
   savedToast,
   fixedToast,
-}) => {
+}: PresetCardProps) => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
   const [reportModalOpen, setReportModalOpen] = useState(false)
   const [fixedModalOpen, setFixedModalOpen] = useState(false)

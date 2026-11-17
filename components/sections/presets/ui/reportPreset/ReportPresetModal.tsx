@@ -1,17 +1,17 @@
 import Modal from "../../../Shared/Modal"
 import ReportPresetButton from "./ReportPresetButton"
 
-interface Props {
+type ReportPresetModalProps = {
   label: string
   presetId: string
   setReportModalOpen: Function
   reportedToast: Function
 }
 
-const ReportPresetModal: React.FC<Props> = ({
+const ReportPresetModal = ({
   setReportModalOpen,
   reportedToast,
-}) => {
+}: ReportPresetModalProps) => {
   return (
     <Modal
       position={"absolute"}

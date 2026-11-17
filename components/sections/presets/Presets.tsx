@@ -26,7 +26,7 @@ import {
 // wait this long after the last keystroke before searching
 const SEARCH_DELAY_MS = 250
 
-const Presets: React.FC = () => {
+const Presets = () => {
   const [loading, setLoading] = useState(false)
   const [presetsMsfs, setPresetsMsfs] = useState<Preset[]>([])
   const [presetsXplane, setPresetsXplane] = useState<Preset[]>([])

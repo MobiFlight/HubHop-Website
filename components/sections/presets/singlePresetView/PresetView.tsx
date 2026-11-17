@@ -8,14 +8,14 @@ import type { InputChangeEvent } from "../ui/PresetInputLabel"
 import { BiSad } from "react-icons/bi"
 import { AiOutlineLoading } from "react-icons/ai"
 
-interface Props extends PresetToasts {
+type PresetViewProps = PresetToasts & {
   // undefined while loading, empty if the preset doesn't exist
   preset: Preset[] | undefined
   history: Preset[]
   loading: boolean
 }
 
-const PresetView: React.FC<Props> = ({
+const PresetView = ({
   preset,
   history,
   loading,
@@ -23,7 +23,7 @@ const PresetView: React.FC<Props> = ({
   reportedToast,
   fixedToast,
   savedToast,
-}) => {
+}: PresetViewProps) => {
   const [id, setId] = useState("")
   const [updatedBy, setUpdatedBy] = useState<string>()
   const [createdDate, setCreatedDate] = useState<string>()

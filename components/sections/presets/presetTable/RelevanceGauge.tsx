@@ -1,10 +1,10 @@
-interface Props {
+type RelevanceGaugeProps = {
   // relevance in percent (0-100)
   value: number
 }
 
 // Thin bar gauge with a pointer, in the style of a Garmin engine gauge
-const RelevanceGauge: React.FC<Props> = ({ value }) => (
+const RelevanceGauge = ({ value }: RelevanceGaugeProps) => (
   <div
     role="meter"
     aria-label="Relevance"

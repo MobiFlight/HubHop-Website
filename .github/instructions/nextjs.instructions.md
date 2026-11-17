@@ -73,6 +73,9 @@ public/                  # Static assets
 
 - Prefer TypeScript for new and touched files; convert `.js` files when reasonable.
 - Use functional components and hooks; keep components small and single-purpose.
+- Write components as in MobiFlight: no `React.FC`; a props type named after the component,
+  `type PresetCardProps = { … }` and `const PresetCard = ({ … }: PresetCardProps) => {`.
+  Declare `children: React.ReactNode` in the props type.
 - Prefer `const` and immutable data over mutable variables (`let`, reassignment, in-place mutation).
   Keep values that must persist across renders in `useRef`/`useState`, not in reassigned locals.
 - Use Tailwind for new styling; do not add new `styled-components`.

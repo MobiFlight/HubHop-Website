@@ -2,11 +2,13 @@ import { useState } from "react"
 import Modal from "../../../Shared/Modal"
 import ExportButton from "./ExportButton"
 
-interface Props {
+type ExportPresetsModalProps = {
   setExportModalOpen: Function
 }
 
-const ExportPresetsModal: React.FC<Props> = ({ setExportModalOpen }) => {
+const ExportPresetsModal = ({
+  setExportModalOpen,
+}: ExportPresetsModalProps) => {
   const [downloadTxt, setDownloadTxt] = useState(false)
 
   function downloadEventsTxt() {

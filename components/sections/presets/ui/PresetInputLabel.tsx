@@ -2,7 +2,7 @@ export type InputChangeEvent = React.ChangeEvent<
   HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
 >
 
-interface Props {
+type PresetPreviewLabelProps = {
   title: string
   edit?: boolean
   inputHandler?: (e: InputChangeEvent) => void
@@ -12,14 +12,14 @@ interface Props {
   options?: readonly string[]
 }
 
-const PresetPreviewLabel: React.FC<Props> = ({
+const PresetPreviewLabel = ({
   title,
   edit,
   inputHandler,
   editData,
   codeOrDescriptionBox,
   options,
-}) => {
+}: PresetPreviewLabelProps) => {
   return (
     <div>
       <div>{title}</div>

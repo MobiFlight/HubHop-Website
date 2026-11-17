@@ -1,12 +1,12 @@
 import { AiOutlineLoading } from "react-icons/ai"
 
-interface Props {
+type ExportButtonProps = {
   text: string
   loading: boolean
   disabled: boolean
 }
 
-const ExportButton: React.FC<Props> = ({ text, loading, disabled }) => {
+const ExportButton = ({ text, loading, disabled }: ExportButtonProps) => {
   return (
     <div
       className={`relative flex w-full items-center justify-center space-x-1 rounded-lg px-4 py-1.5 text-sm font-semibold transition-all ${

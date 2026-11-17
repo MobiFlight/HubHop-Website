@@ -11,7 +11,7 @@ import { ToastContainer, toast } from "react-toastify"
 
 import { IoSaveOutline } from "react-icons/io5"
 
-const Preset: React.FC = () => {
+const Preset = () => {
   useEffect(() => {
     localStorage.getItem("simType") === "msfs2020"
       ? document.body.classList.remove("xplane")
