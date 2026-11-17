@@ -154,34 +154,26 @@ const Presets: React.FC = () => {
       ].some((field) => field?.toLowerCase().includes(search)),
   )
 
-  async function deleteToast() {
+  function deleteToast() {
     setDeletedToast(true)
-    setPresetsMsfs((await db.presetsMsfs.orderBy("vendor").toArray()) || [])
-    setPresetsMsfs((await db.presetsXplane.orderBy("vendor").toArray()) || [])
     setTimeout(() => {
       setDeletedToast(false)
     }, 5000)
   }
-  async function reportToast() {
+  function reportToast() {
     setReportedToast(true)
-    setPresetsMsfs((await db.presetsMsfs.orderBy("vendor").toArray()) || [])
-    setPresetsMsfs((await db.presetsXplane.orderBy("vendor").toArray()) || [])
     setTimeout(() => {
       setReportedToast(false)
     }, 5000)
   }
-  async function fixToast() {
+  function fixToast() {
     setFixedToast(true)
-    setPresetsMsfs((await db.presetsMsfs.orderBy("vendor").toArray()) || [])
-    setPresetsMsfs((await db.presetsXplane.orderBy("vendor").toArray()) || [])
     setTimeout(() => {
       setFixedToast(false)
     }, 5000)
   }
-  async function saveToast() {
+  function saveToast() {
     setSavedToast(true)
-    setPresetsMsfs((await db.presetsMsfs.orderBy("vendor").toArray()) || [])
-    setPresetsMsfs((await db.presetsXplane.orderBy("vendor").toArray()) || [])
     setTimeout(() => {
       setSavedToast(false)
     }, 5000)
