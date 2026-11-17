@@ -282,12 +282,15 @@ const Presets: React.FC = () => {
   const router = useRouter()
 
   const updateQueryParam = (key: string, value: string) => {
-    const newQuery = { ...router.query, [key]: value }
-    if (!value) delete newQuery[key] // Remove the key if value is empty
+    // Start from the current URL: router.query can still be stale when
+    // filters change in quick succession, which would drop other filters.
+    const params = new URLSearchParams(window.location.search)
+    if (value) params.set(key, value)
+    else params.delete(key) // Remove the key if value is empty
     router.push(
       {
         pathname: router.pathname,
-        query: newQuery,
+        query: Object.fromEntries(params),
       },
       undefined,
       { shallow: true },
