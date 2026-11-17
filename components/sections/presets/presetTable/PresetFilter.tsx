@@ -22,7 +22,7 @@ interface Props {
   filteredPresets: any
   filterAircraft: Function
   filteredVendors: any
-  filteredItems: any
+  options: Record<"vendor" | "aircraft" | "system" | "presetType", string[]>
   filteredAircrafts: any
   filteredSystems: any
   filteredPresetTypes: any
@@ -41,7 +41,7 @@ interface Props {
 const PresetFilter: React.FC<Props> = ({
   filteredPresets,
   filteredVendors,
-  filteredItems,
+  options,
   search,
   filterVendor,
   resetFilter,
@@ -61,43 +61,6 @@ const PresetFilter: React.FC<Props> = ({
   setFilterOpen,
 }) => {
   const [myPresetTooltip, setMyPresetTooltip] = useState(false)
-
-  const uniqueVendor = Array.from(
-    new Set(
-      filteredItems
-        .map((item: any) => item.vendor)
-        .sort((a: any, b: any) =>
-          a.toLowerCase().localeCompare(b.toLowerCase()),
-        ),
-    ),
-  )
-  const uniqueAircraft = Array.from(
-    new Set(
-      filteredItems
-        .map((item: any) => item.aircraft)
-        .sort((a: any, b: any) =>
-          a.toLowerCase().localeCompare(b.toLowerCase()),
-        ),
-    ),
-  )
-  const uniqueSystem = Array.from(
-    new Set(
-      filteredItems
-        .map((item: any) => item.system)
-        .sort((a: any, b: any) =>
-          a.toLowerCase().localeCompare(b.toLowerCase()),
-        ),
-    ),
-  )
-  const uniqueType = Array.from(
-    new Set(
-      filteredItems
-        .map((item: any) => item.presetType)
-        .sort((a: any, b: any) =>
-          a.toLowerCase().localeCompare(b.toLowerCase()),
-        ),
-    ),
-  )
 
   const draw: Variants = {
     hidden: {
@@ -195,9 +158,9 @@ const PresetFilter: React.FC<Props> = ({
                 value={filteredVendors}
               >
                 <option value="">All Vendors</option>
-                {uniqueVendor.map((o) => (
-                  <option className="bg-hhBG" key={o as any}>
-                    {o as string[]}
+                {options.vendor.map((o) => (
+                  <option className="bg-hhBG" key={o}>
+                    {o}
                   </option>
                 ))}
               </select>
@@ -214,9 +177,9 @@ const PresetFilter: React.FC<Props> = ({
                 value={filteredAircrafts}
               >
                 <option value="">All Aircraft</option>
-                {uniqueAircraft.map((o) => (
-                  <option className="bg-hhBG" key={o as any}>
-                    {o as string[]}
+                {options.aircraft.map((o) => (
+                  <option className="bg-hhBG" key={o}>
+                    {o}
                   </option>
                 ))}
               </select>
@@ -233,9 +196,9 @@ const PresetFilter: React.FC<Props> = ({
                 value={filteredSystems}
               >
                 <option value="">All Systems</option>
-                {uniqueSystem.map((o) => (
-                  <option className="bg-hhBG" key={o as any}>
-                    {o as string[]}
+                {options.system.map((o) => (
+                  <option className="bg-hhBG" key={o}>
+                    {o}
                   </option>
                 ))}
               </select>
@@ -255,9 +218,9 @@ const PresetFilter: React.FC<Props> = ({
                 value={filteredPresetTypes}
               >
                 <option value="">All Inputs/Outputs</option>
-                {uniqueType.map((o) => (
-                  <option className="bg-hhBG" key={o as any}>
-                    {o as string[]}
+                {options.presetType.map((o) => (
+                  <option className="bg-hhBG" key={o}>
+                    {o}
                   </option>
                 ))}
               </select>

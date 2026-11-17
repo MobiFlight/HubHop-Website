@@ -124,6 +124,50 @@ test.describe("Preset list", () => {
     })
   })
 
+  test("Preset list - a selected filter keeps its sibling options", async ({
+    presetsPage,
+    page,
+  }) => {
+    await presetsPage.gotoPage()
+
+    await test.step("Selecting a vendor narrows the other filters only", async () => {
+      await presetsPage.vendorFilter.selectOption("FlyByWire")
+      await expect(page).toHaveURL(/vendor=FlyByWire/)
+      await expect(presetsPage.vendorFilter.getByRole("option")).toHaveText([
+        "All Vendors",
+        "Asobo",
+        "FlyByWire",
+      ])
+      await expect(presetsPage.aircraftFilter.getByRole("option")).toHaveText([
+        "All Aircraft",
+        "A32NX",
+      ])
+    })
+
+    await test.step("Selecting a system keeps the other systems of the vendor", async () => {
+      await presetsPage.systemFilter.selectOption("Autopilot")
+      await expect(page).toHaveURL(/system=Autopilot/)
+      await expect(presetsPage.systemFilter.getByRole("option")).toHaveText([
+        "All Systems",
+        "Autopilot",
+        "Overhead",
+      ])
+    })
+
+    await test.step("The vendor can be switched directly", async () => {
+      await presetsPage.vendorFilter.selectOption("Asobo")
+      await expect(page).toHaveURL(/vendor=Asobo/)
+      await expect(presetsPage.rows).toHaveCount(5)
+      await expect(presetsPage.systemFilter.getByRole("option")).toHaveText([
+        "All Systems",
+        "Autopilot",
+        "Electrical",
+        "Engine",
+        "Lights",
+      ])
+    })
+  })
+
   test("Preset list - filters are prefilled from the URL", async ({
     presetsPage,
   }) => {

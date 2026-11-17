@@ -15,6 +15,7 @@ import { useLiveQuery } from "dexie-react-hooks"
 import { ToastContainer, toast } from "react-toastify"
 
 import { useRouter } from "next/router"
+import { type Facet, sortedUnique } from "../../../lib/presetFacets"
 
 const Presets: React.FC = () => {
   const [loading, setLoading] = useState(false)
@@ -137,22 +138,50 @@ const Presets: React.FC = () => {
   const isFilteredBy = (value: string | undefined, filter: string) =>
     !filter || value?.toLowerCase() === filter.toLowerCase()
   const search = filteredPresets.toLowerCase()
+  const matchesSearch = (preset: any) =>
+    [
+      preset.label,
+      preset.code,
+      preset.description,
+      preset.author,
+      preset.updatedBy,
+    ].some((field) => field?.toLowerCase().includes(search))
 
-  const filteredItems = filteredReportedPresets.filter(
-    (preset) =>
-      preset.vendor.toLowerCase().includes(filteredVendors.toLowerCase()) &&
-      isFilteredBy(preset.aircraft, filteredAircrafts) &&
-      isFilteredBy(preset.system, filteredSystems) &&
-      isFilteredBy(preset.presetType, filteredPresetTypes) &&
-      isFilteredBy(preset.codeType, filteredCodeTypes) &&
-      [
-        preset.label,
-        preset.code,
-        preset.description,
-        preset.author,
-        preset.updatedBy,
-      ].some((field) => field?.toLowerCase().includes(search)),
+  const facetFilters: Record<Facet, (preset: any) => boolean> = {
+    vendor: (preset) =>
+      preset.vendor.toLowerCase().includes(filteredVendors.toLowerCase()),
+    aircraft: (preset) => isFilteredBy(preset.aircraft, filteredAircrafts),
+    system: (preset) => isFilteredBy(preset.system, filteredSystems),
+    presetType: (preset) =>
+      isFilteredBy(preset.presetType, filteredPresetTypes),
+    codeType: (preset) => isFilteredBy(preset.codeType, filteredCodeTypes),
+  }
+  // ignoring one facet gives the presets its dropdown options come from
+  const matchesFilters = (preset: any, ignoredFacet?: Facet) =>
+    matchesSearch(preset) &&
+    (Object.keys(facetFilters) as Facet[]).every(
+      (facet) => facet === ignoredFacet || facetFilters[facet](preset),
+    )
+
+  const filteredItems = filteredReportedPresets.filter((preset) =>
+    matchesFilters(preset),
   )
+
+  // Faceted search as in MobiFlight Connector: each dropdown lists the values
+  // that match all other filters, so its siblings stay selectable
+  const facetOptions = (facet: Facet, selected: string) =>
+    sortedUnique([
+      ...filteredReportedPresets
+        .filter((preset) => matchesFilters(preset, facet))
+        .map((preset) => preset[facet]),
+      selected,
+    ])
+  const filterOptions = {
+    vendor: facetOptions("vendor", filteredVendors),
+    aircraft: facetOptions("aircraft", filteredAircrafts),
+    system: facetOptions("system", filteredSystems),
+    presetType: facetOptions("presetType", filteredPresetTypes),
+  }
 
   function deleteToast() {
     setDeletedToast(true)
@@ -333,7 +362,7 @@ const Presets: React.FC = () => {
                 filteredSystems={filteredSystems}
                 filteredPresetTypes={filteredPresetTypes}
                 filteredCodeTypes={filteredCodeTypes}
-                filteredItems={filteredItems}
+                options={filterOptions}
                 setShowMyPresets={() => setShowMyPresets((prev) => !prev)}
                 setShowReportedPresets={() =>
                   setShowReportedPresets((prev) => !prev)
