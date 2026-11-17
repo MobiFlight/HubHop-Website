@@ -15,7 +15,12 @@ import { useLiveQuery } from "dexie-react-hooks"
 import { ToastContainer, toast } from "react-toastify"
 
 import { useRouter } from "next/router"
-import { type Facet, sortedUnique } from "../../../lib/presetFacets"
+import {
+  type Facet,
+  compareText,
+  sortedUnique,
+} from "../../../lib/presetFacets"
+import { presetRelevance, searchTerms } from "../../../lib/presetSearch"
 
 const Presets: React.FC = () => {
   const [loading, setLoading] = useState(false)
@@ -137,15 +142,18 @@ const Presets: React.FC = () => {
   // an empty filter matches every preset, including ones without that field
   const isFilteredBy = (value: string | undefined, filter: string) =>
     !filter || value?.toLowerCase() === filter.toLowerCase()
-  const search = filteredPresets.toLowerCase()
+  // relevance per preset, computed once per render; empty while not searching
+  const terms = searchTerms(filteredPresets)
+  const relevance = new Map(
+    terms.length > 0
+      ? filteredReportedPresets.map((preset) => [
+          preset,
+          presetRelevance(preset, terms),
+        ])
+      : [],
+  )
   const matchesSearch = (preset: any) =>
-    [
-      preset.label,
-      preset.code,
-      preset.description,
-      preset.author,
-      preset.updatedBy,
-    ].some((field) => field?.toLowerCase().includes(search))
+    terms.length === 0 || (relevance.get(preset) ?? 0) > 0
 
   const facetFilters: Record<Facet, (preset: any) => boolean> = {
     vendor: (preset) =>
@@ -163,9 +171,16 @@ const Presets: React.FC = () => {
       (facet) => facet === ignoredFacet || facetFilters[facet](preset),
     )
 
-  const filteredItems = filteredReportedPresets.filter((preset) =>
+  const matchingItems = filteredReportedPresets.filter((preset) =>
     matchesFilters(preset),
   )
+  // search results sorted by name, so equally relevant ones stay in that order
+  const filteredItems =
+    terms.length > 0
+      ? [...matchingItems].sort((a, b) =>
+          compareText(String(a.label), String(b.label)),
+        )
+      : matchingItems
 
   // Faceted search as in MobiFlight Connector: each dropdown lists the values
   // that match all other filters, so its siblings stay selectable
@@ -375,6 +390,7 @@ const Presets: React.FC = () => {
               setAddModalOpen={() => setAddModalOpen(true)}
               setExportModalOpen={() => setExportModalOpen(true)}
               data={filteredItems}
+              relevance={terms.length > 0 ? relevance : undefined}
               deletedToast={deleteToast}
               reportedToast={reportToast}
               fixedToast={fixToast}

@@ -5,6 +5,7 @@ import DataTable, {
   type SortFunction,
 } from "react-data-table-component"
 import { useState } from "react"
+import { compareText } from "../../../../lib/presetFacets"
 import AddPresetButton from "../ui/addPreset/AddPresetButton"
 import ExportPresetsButton from "../ui/exportPresets/ExportPresetsButton"
 import PresetCard from "../ui/PresetCard"
@@ -22,6 +23,8 @@ interface Props {
   reportedToast: Function
   savedToast: Function
   fixedToast: Function
+  // relevance in percent per preset; only set while searching
+  relevance?: Map<unknown, number>
 }
 
 // sort text columns ignoring case ("Alternator" before "AP master")
@@ -29,11 +32,7 @@ const sortIgnoringCase: SortFunction<any> = (rows, selector, direction) => {
   const sign = direction === SortOrder.DESC ? -1 : 1
   return [...rows].sort(
     (a, b) =>
-      sign *
-      String(selector(a) ?? "").localeCompare(String(selector(b) ?? ""), "en", {
-        sensitivity: "base",
-        numeric: true,
-      }),
+      sign * compareText(String(selector(a) ?? ""), String(selector(b) ?? "")),
   )
 }
 
@@ -125,8 +124,22 @@ const PresetTable: React.FC<Props> = ({
   reportedToast,
   fixedToast,
   savedToast,
+  relevance,
 }) => {
   const columns: any = [
+    ...(relevance
+      ? [
+          {
+            id: "relevance",
+            name: "Relevance",
+            selector: (row: unknown) => relevance.get(row) ?? 0,
+            format: (row: unknown) => `${relevance.get(row) ?? 0}%`,
+            sortable: true,
+            minWidth: "130px",
+            maxWidth: "10%",
+          },
+        ]
+      : []),
     {
       name: "Vendor",
       selector: (row: any) => row.vendor,
@@ -283,6 +296,8 @@ const PresetTable: React.FC<Props> = ({
         </div>
       </div>
       <DataTable
+        // remount when a search starts or ends, to apply its default sort
+        key={relevance ? "search" : "list"}
         columns={columns}
         data={data}
         customStyles={customStyles}
@@ -311,7 +326,8 @@ const PresetTable: React.FC<Props> = ({
           setUserPagination(currentRowsPerPage),
           localStorage.setItem("pagination", currentRowsPerPage.toString())
         )}
-        defaultSortFieldId={1}
+        defaultSortFieldId={relevance ? "relevance" : 1}
+        defaultSortAsc={!relevance}
       />
     </div>
   )
