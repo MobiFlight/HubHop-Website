@@ -93,4 +93,28 @@ test.describe("Edit preset - moderator", () => {
       presetViewPage.hubHopPage.writeRequests("PUT")[0].body,
     ).toMatchObject({ system: "Power", presetType: "Output" })
   })
+
+  test("Edit preset - code type can only be one of the known code types", async ({
+    presetViewPage,
+    page,
+  }) => {
+    await presetViewPage.gotoPage("xplane-0001", "xplane")
+
+    await page.getByRole("button", { name: "View" }).click()
+
+    const codeType = page.getByRole("combobox", { name: "Code Type" })
+    await expect(codeType.getByRole("option")).toHaveText([
+      "DataRef",
+      "Command",
+    ])
+    await codeType.selectOption("DataRef")
+    await page.getByRole("button", { name: "Save" }).click()
+
+    await expect
+      .poll(() => presetViewPage.hubHopPage.writeRequests("PUT"))
+      .toHaveLength(1)
+    expect(
+      presetViewPage.hubHopPage.writeRequests("PUT")[0].body,
+    ).toMatchObject({ codeType: "DataRef" })
+  })
 })
