@@ -350,85 +350,89 @@ const Presets = () => {
                   </div>
                 </button>
               </div>
-              <PresetFilter
-                filterOpen={filterOpen}
-                setFilterOpen={() => setFilterOpen((prev) => !prev)}
-                search={(e) => {
-                  const value = e.target.value
-                  setSearchText(value)
-                  clearTimeout(searchTimer.current)
-                  searchTimer.current = setTimeout(() => {
-                    setFilteredPresets(value)
-                    localStorage.setItem("searchFilter", value)
-                    // replace: typing must not add a history entry per search
-                    updateQueryParam("search", value, { replace: true })
-                  }, SEARCH_DELAY_MS)
-                }}
-                filterVendor={(e) => {
-                  const value = e.target.value
-                  setFilteredVendors(value)
-                  localStorage.setItem("vendorFilter", value)
-                  updateQueryParam("vendor", value)
-                }}
-                filterAircraft={(e) => {
-                  const value = e.target.value
-                  setFilteredAircrafts(value)
-                  localStorage.setItem("aircraftFilter", value)
-                  updateQueryParam("aircraft", value)
-                }}
-                filterSystem={(e) => {
-                  const value = e.target.value
-                  setFilteredSystems(value)
-                  localStorage.setItem("systemFilter", value)
-                  updateQueryParam("system", value)
-                }}
-                filterPresetType={(e) => {
-                  const value = e.target.value
-                  setFilteredPresetTypes(value)
-                  localStorage.setItem("presetTypeFilter", value)
-                  updateQueryParam("presetType", value)
-                }}
-                filterCodeType={(e) => {
-                  const value = e.target.value
-                  setFilteredCodeTypes(value)
-                  localStorage.setItem("codeTypeFilter", value)
-                  updateQueryParam("codeType", value)
-                }}
-                resetFilter={() => {
-                  clearTimeout(searchTimer.current)
-                  setSearchText("")
-                  setFilteredPresets("")
-                  setFilteredVendors("")
-                  setFilteredAircrafts("")
-                  setFilteredSystems("")
-                  setFilteredPresetTypes("")
-                  setFilteredCodeTypes("")
-                  localStorage.setItem("searchFilter", "")
-                  localStorage.setItem("vendorFilter", "")
-                  localStorage.setItem("aircraftFilter", "")
-                  localStorage.setItem("systemFilter", "")
-                  localStorage.setItem("presetTypeFilter", "")
-                  router.push(router.pathname, undefined, { shallow: true }) // reset URL
-                }}
-                filteredPresets={searchText}
-                filteredVendors={filteredVendors}
-                filteredAircrafts={filteredAircrafts}
-                filteredSystems={filteredSystems}
-                filteredPresetTypes={filteredPresetTypes}
-                filteredCodeTypes={filteredCodeTypes}
-                options={filterOptions}
-                setShowMyPresets={() => setShowMyPresets((prev) => !prev)}
-                setShowReportedPresets={() =>
-                  setShowReportedPresets((prev) => !prev)
-                }
-                showMyPresets={showMyPresets}
-                showReportedPresets={showReportedPresets}
-              />
-              <PromoSlot
-                slot="filter-sidebar"
-                context={promotionContext}
-                className="mb-3"
-              />
+              {/* sticky together, so the filter doesn't slide over the promotion */}
+              <div className="flex flex-col md:sticky md:top-3">
+                <PresetFilter
+                  filterOpen={filterOpen}
+                  setFilterOpen={() => setFilterOpen((prev) => !prev)}
+                  search={(e) => {
+                    const value = e.target.value
+                    setSearchText(value)
+                    clearTimeout(searchTimer.current)
+                    searchTimer.current = setTimeout(() => {
+                      setFilteredPresets(value)
+                      localStorage.setItem("searchFilter", value)
+                      // replace: typing must not add a history entry per search
+                      updateQueryParam("search", value, { replace: true })
+                    }, SEARCH_DELAY_MS)
+                  }}
+                  filterVendor={(e) => {
+                    const value = e.target.value
+                    setFilteredVendors(value)
+                    localStorage.setItem("vendorFilter", value)
+                    updateQueryParam("vendor", value)
+                  }}
+                  filterAircraft={(e) => {
+                    const value = e.target.value
+                    setFilteredAircrafts(value)
+                    localStorage.setItem("aircraftFilter", value)
+                    updateQueryParam("aircraft", value)
+                  }}
+                  filterSystem={(e) => {
+                    const value = e.target.value
+                    setFilteredSystems(value)
+                    localStorage.setItem("systemFilter", value)
+                    updateQueryParam("system", value)
+                  }}
+                  filterPresetType={(e) => {
+                    const value = e.target.value
+                    setFilteredPresetTypes(value)
+                    localStorage.setItem("presetTypeFilter", value)
+                    updateQueryParam("presetType", value)
+                  }}
+                  filterCodeType={(e) => {
+                    const value = e.target.value
+                    setFilteredCodeTypes(value)
+                    localStorage.setItem("codeTypeFilter", value)
+                    updateQueryParam("codeType", value)
+                  }}
+                  resetFilter={() => {
+                    clearTimeout(searchTimer.current)
+                    setSearchText("")
+                    setFilteredPresets("")
+                    setFilteredVendors("")
+                    setFilteredAircrafts("")
+                    setFilteredSystems("")
+                    setFilteredPresetTypes("")
+                    setFilteredCodeTypes("")
+                    localStorage.setItem("searchFilter", "")
+                    localStorage.setItem("vendorFilter", "")
+                    localStorage.setItem("aircraftFilter", "")
+                    localStorage.setItem("systemFilter", "")
+                    localStorage.setItem("presetTypeFilter", "")
+                    router.push(router.pathname, undefined, { shallow: true }) // reset URL
+                  }}
+                  filteredPresets={searchText}
+                  filteredVendors={filteredVendors}
+                  filteredAircrafts={filteredAircrafts}
+                  filteredSystems={filteredSystems}
+                  filteredPresetTypes={filteredPresetTypes}
+                  filteredCodeTypes={filteredCodeTypes}
+                  options={filterOptions}
+                  setShowMyPresets={() => setShowMyPresets((prev) => !prev)}
+                  setShowReportedPresets={() =>
+                    setShowReportedPresets((prev) => !prev)
+                  }
+                  showMyPresets={showMyPresets}
+                  showReportedPresets={showReportedPresets}
+                />
+                <PromoSlot
+                  slot="filter-sidebar"
+                  context={promotionContext}
+                  // the collapsed filter is too narrow for it
+                  className={`mb-3 md:mt-3 md:w-96 ${filterOpen ? "" : "md:hidden"}`}
+                />
+              </div>
             </div>
             <div className="flex w-full flex-col">
               <PresetTable

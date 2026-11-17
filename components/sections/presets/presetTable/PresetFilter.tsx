@@ -103,7 +103,7 @@ const PresetFilter = ({
 
   return (
     <div
-      className={`top-3 mb-5 flex w-full flex-col space-y-3 self-start rounded-lg bg-hhCard/40 p-3 transition-all md:sticky md:mb-0 ${
+      className={`mb-5 flex w-full flex-col space-y-3 rounded-lg bg-hhCard/40 p-3 transition-all md:mb-0 ${
         filterOpen ? `md:w-96` : `md:w-16`
       }`}
     >
