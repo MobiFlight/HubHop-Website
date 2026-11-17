@@ -4,7 +4,7 @@ import DataTable, {
   type ExpanderComponentProps,
   type SortFunction,
 } from "react-data-table-component"
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { compareText } from "../../../../lib/presetSearch"
 import AddPresetButton from "../ui/addPreset/AddPresetButton"
 import ExportPresetsButton from "../ui/exportPresets/ExportPresetsButton"
@@ -126,13 +126,19 @@ const PresetTable: React.FC<Props> = ({
   savedToast,
   relevance,
 }) => {
+  // The table keeps the column object from when the sort was selected, so its
+  // selector would still use the relevance of the first letter typed.
+  // Reading through a ref gives the selector the current relevance.
+  const currentRelevance = useRef(relevance)
+  currentRelevance.current = relevance
+
   const columns: any = [
     ...(relevance
       ? [
           {
             id: "relevance",
             name: "Relevance",
-            selector: (row: unknown) => relevance.get(row) ?? 0,
+            selector: (row: unknown) => currentRelevance.current?.get(row) ?? 0,
             format: (row: unknown) => `${relevance.get(row) ?? 0}%`,
             sortable: true,
             minWidth: "130px",

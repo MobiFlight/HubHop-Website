@@ -95,6 +95,13 @@ test.describe("Preset list", () => {
     await expect(presetsPage.rows.nth(1)).toContainText("Landing lights off")
     await expect(presetsPage.rows.nth(1)).toContainText("80%")
 
+    await test.step("Typing letter by letter keeps the relevance order", async () => {
+      await presetsPage.searchFilter.fill("")
+      await presetsPage.searchFilter.pressSequentially("on landing")
+      await expect(presetsPage.rows.nth(0)).toContainText("Landing lights on")
+      await expect(presetsPage.rows.nth(1)).toContainText("Landing lights off")
+    })
+
     await test.step("Clearing the search hides the relevance", async () => {
       await presetsPage.searchFilter.fill("")
       await expect(relevance).toHaveCount(0)
