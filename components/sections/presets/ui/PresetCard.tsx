@@ -16,6 +16,7 @@ import Modal from "../../Shared/Modal"
 import ButtonOrange from "../../Shared/ButtonOrange"
 import ButtonDark from "../../Shared/ButtonDark"
 import { CODE_TYPES } from "../../../../lib/codeTypes"
+import { REPORTING_ENABLED } from "../../../../lib/features"
 
 interface Props {
   id: string
@@ -319,12 +320,12 @@ const PresetCard: React.FC<Props> = ({
                 editData={new Date(createdDate).toLocaleString()}
               />
               <PresetPreviewLabel title={"Version"} editData={version} />
-              {
+              {REPORTING_ENABLED && (
                 <PresetPreviewLabel
                   title={"Reported"}
                   editData={reported >= "1" ? reported : "0"}
                 />
-              }
+              )}
             </div>
             <div className="flex w-full flex-col space-y-2 lg:w-1/6">
               <PresetPreviewLabel

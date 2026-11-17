@@ -4,6 +4,7 @@ import { useState } from "react"
 import { motion, AnimatePresence, type Variants } from "motion/react"
 import { BsArrowUpCircle } from "react-icons/bs"
 import ButtonOrange from "../../Shared/ButtonOrange"
+import { REPORTING_ENABLED } from "../../../../lib/features"
 
 interface Props {
   presetHistory: any
@@ -112,14 +113,14 @@ const PresetHistoryList: React.FC<Props> = ({
                           title={"Version"}
                           editData={history.version}
                         />
-                        {
+                        {REPORTING_ENABLED && (
                           <PresetPreviewLabel
                             title={"Reported"}
                             editData={
                               history.reported >= 1 ? history.reported : "0"
                             }
                           />
-                        }
+                        )}
                       </div>
                       <div className="mt-2 flex w-full flex-col space-y-2 md:mt-0 md:w-1/6">
                         <PresetPreviewLabel
