@@ -1,13 +1,11 @@
 // db.ts
-import Dexie, { Table } from "dexie"
-
-// A cached preset as returned by the API (detailed typing follows later)
-export type Presets = Record<string, unknown>
+import Dexie, { type Table } from "dexie"
+import type { Preset } from "../interfaces/preset"
 
 export class PresetsDb extends Dexie {
-  presetsMsfs!: Table<Presets>
-  presetsXplane!: Table<Presets>
-  presets!: Table<Presets>
+  presetsMsfs!: Table<Preset, string>
+  presetsXplane!: Table<Preset, string>
+  presets!: Table<Preset, string>
 
   constructor() {
     super("simPresetsDb")

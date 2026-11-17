@@ -15,27 +15,31 @@ import { AuthenticatedTemplate } from "@azure/msal-react"
 import { CODE_TYPES } from "../../../../lib/codeTypes"
 import { REPORTING_ENABLED } from "../../../../lib/features"
 
+type ChangeHandler = (
+  e: React.ChangeEvent<HTMLTextAreaElement | HTMLSelectElement>,
+) => void
+
 interface Props {
-  search: Function
-  filterVendor: Function
-  resetFilter: Function
-  filteredPresets: any
-  filterAircraft: Function
-  filteredVendors: any
+  search: ChangeHandler
+  filterVendor: ChangeHandler
+  filterAircraft: ChangeHandler
+  filterSystem: ChangeHandler
+  filterPresetType: ChangeHandler
+  filterCodeType: ChangeHandler
+  resetFilter: () => void
+  filteredPresets: string
+  filteredVendors: string
+  filteredAircrafts: string
+  filteredSystems: string
+  filteredPresetTypes: string
+  filteredCodeTypes: string
   options: Record<"vendor" | "aircraft" | "system" | "presetType", string[]>
-  filteredAircrafts: any
-  filteredSystems: any
-  filteredPresetTypes: any
-  filteredCodeTypes: any
   filterOpen: boolean
-  filterSystem: Function
-  filterPresetType: Function
-  filterCodeType: Function
   showReportedPresets: boolean
   showMyPresets: boolean
-  setShowReportedPresets: Function
-  setShowMyPresets: Function
-  setFilterOpen: Function
+  setShowReportedPresets: () => void
+  setShowMyPresets: () => void
+  setFilterOpen: () => void
 }
 
 const PresetFilter: React.FC<Props> = ({
@@ -105,7 +109,7 @@ const PresetFilter: React.FC<Props> = ({
     >
       <div>
         <button
-          onClick={(e) => setFilterOpen(e)}
+          onClick={() => setFilterOpen()}
           className="flex w-full items-center justify-between"
         >
           <div className="flex items-center justify-center space-x-1 text-2xl">
@@ -121,7 +125,7 @@ const PresetFilter: React.FC<Props> = ({
         <div className="hidden md:block">
           {!filterOpen && (
             <button
-              onClick={(e) => setFilterOpen(e)}
+              onClick={() => setFilterOpen()}
               className="mt-5 origin-center -rotate-90 pb-10"
             >
               <p className="hidden text-4xl md:block">Filter</p>
@@ -143,7 +147,7 @@ const PresetFilter: React.FC<Props> = ({
                 id="filter-search"
                 className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 px-3 py-1 text-hhText"
                 value={filteredPresets}
-                onChange={(e) => search(e)}
+                onChange={search}
               />
             </div>
             <div>
@@ -154,7 +158,7 @@ const PresetFilter: React.FC<Props> = ({
               <select
                 id="filter-vendor"
                 className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 px-3 py-1 text-hhText"
-                onChange={(e) => filterVendor(e)}
+                onChange={filterVendor}
                 value={filteredVendors}
               >
                 <option value="">All Vendors</option>
@@ -173,7 +177,7 @@ const PresetFilter: React.FC<Props> = ({
               <select
                 id="filter-aircraft"
                 className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 px-3 py-1 text-hhText"
-                onChange={(e) => filterAircraft(e)}
+                onChange={filterAircraft}
                 value={filteredAircrafts}
               >
                 <option value="">All Aircraft</option>
@@ -192,7 +196,7 @@ const PresetFilter: React.FC<Props> = ({
               <select
                 id="filter-system"
                 className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 px-3 py-1 text-hhText"
-                onChange={(e) => filterSystem(e)}
+                onChange={filterSystem}
                 value={filteredSystems}
               >
                 <option value="">All Systems</option>
@@ -214,7 +218,7 @@ const PresetFilter: React.FC<Props> = ({
               <select
                 id="filter-preset-type"
                 className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 px-3 py-1 text-hhText"
-                onChange={(e) => filterPresetType(e)}
+                onChange={filterPresetType}
                 value={filteredPresetTypes}
               >
                 <option value="">All Inputs/Outputs</option>
@@ -244,7 +248,7 @@ const PresetFilter: React.FC<Props> = ({
                   <select
                     id="filter-code-type"
                     className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 px-3 py-1 text-hhText"
-                    onChange={(e) => filterCodeType(e)}
+                    onChange={filterCodeType}
                     value={filteredCodeTypes}
                   >
                     <option value="">All Code Types</option>
@@ -261,7 +265,7 @@ const PresetFilter: React.FC<Props> = ({
           <AuthenticatedTemplate>
             <div>
               <button
-                onClick={(e) => setShowMyPresets(e)}
+                onClick={() => setShowMyPresets()}
                 className="mt-5 flex items-center justify-center space-x-2"
               >
                 <motion.div
@@ -311,7 +315,7 @@ const PresetFilter: React.FC<Props> = ({
                   ?.toLowerCase()
                   .includes("moderator") && (
                   <button
-                    onClick={(e) => setShowReportedPresets(e)}
+                    onClick={() => setShowReportedPresets()}
                     className="mt-5 flex items-center justify-center space-x-2"
                   >
                     <motion.div

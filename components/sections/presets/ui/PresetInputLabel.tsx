@@ -1,8 +1,12 @@
+export type InputChangeEvent = React.ChangeEvent<
+  HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+>
+
 interface Props {
   title: string
   edit?: boolean
-  inputHandler?: any
-  editData?: string
+  inputHandler?: (e: InputChangeEvent) => void
+  editData?: string | number | null
   codeOrDescriptionBox?: boolean
   /** In edit mode, offer only these values (select) instead of free text */
   options?: readonly string[]
@@ -24,8 +28,8 @@ const PresetPreviewLabel: React.FC<Props> = ({
           <select
             aria-label={title}
             className="w-full rounded-lg border border-hhOrange/50 bg-hhCard/50 px-3 py-1"
-            value={editData}
-            onChange={(e) => inputHandler(e)}
+            value={editData ?? ""}
+            onChange={(e) => inputHandler?.(e)}
           >
             {options.map((option) => (
               <option key={option} className="bg-hhBG">
@@ -37,23 +41,23 @@ const PresetPreviewLabel: React.FC<Props> = ({
           <textarea
             aria-label={title}
             className="w-full rounded-lg border border-hhOrange/50 bg-hhCard/50 px-3 py-1 wrap-break-word"
-            value={editData}
-            onInput={(e: any) => inputHandler(e)}
+            value={editData ?? ""}
+            onChange={(e) => inputHandler?.(e)}
             rows={5}
           />
         ) : (
           <input
             aria-label={title}
             className="w-full rounded-lg border border-hhOrange/50 bg-hhCard/50 px-3 py-1 wrap-break-word"
-            value={editData}
-            onInput={(e: any) => inputHandler(e)}
+            value={editData ?? ""}
+            onChange={(e) => inputHandler?.(e)}
           />
         )
       ) : codeOrDescriptionBox ? (
         <textarea
           aria-label={title}
           className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 px-3 py-1 wrap-break-word"
-          value={editData}
+          value={editData ?? ""}
           rows={5}
           disabled
         />

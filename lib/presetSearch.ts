@@ -6,7 +6,7 @@ export interface SearchablePreset {
   aircraft?: string
   label: string
   system?: string
-  description?: string
+  description?: string | null
   code?: string
   author?: string
   updatedBy?: string

@@ -6,6 +6,7 @@ import { BsCheck2Square } from "react-icons/bs"
 import PresetView from "../components/sections/presets/singlePresetView/PresetView"
 import Toast from "../components/sections/Shared/Toast"
 import { presetTable } from "../services/presetSync"
+import type { Preset } from "../interfaces/preset"
 import { ToastContainer, toast } from "react-toastify"
 
 import { IoSaveOutline } from "react-icons/io5"
@@ -20,7 +21,7 @@ const Preset: React.FC = () => {
   const router = useRouter()
   const { id, simType } = router.query
   const [loading, setLoading] = useState(false)
-  const [history, setHistory] = useState([])
+  const [history, setHistory] = useState<Preset[]>([])
   const [deletedToast, setDeletedToast] = useState(false)
   const [reportedToast, setReportedToast] = useState(false)
   const [savedToast, setSavedToast] = useState(false)

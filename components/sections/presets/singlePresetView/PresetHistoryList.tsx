@@ -5,11 +5,13 @@ import { motion, AnimatePresence, type Variants } from "motion/react"
 import { BsArrowUpCircle } from "react-icons/bs"
 import ButtonOrange from "../../Shared/ButtonOrange"
 import { REPORTING_ENABLED } from "../../../../lib/features"
+import type { Preset } from "../../../../interfaces/preset"
 
 interface Props {
-  presetHistory: any
+  presetHistory: Preset[]
   loading: boolean
-  revertHistory: Function
+  // a reverted version without id; older versions may lack some fields
+  revertHistory: (preset: Partial<Preset>) => void
 }
 
 const PresetHistoryList: React.FC<Props> = ({
@@ -80,11 +82,11 @@ const PresetHistoryList: React.FC<Props> = ({
           >
             {presetHistory
               .sort(
-                (a: any, b: any) =>
-                  new Date(b.createdDate).valueOf() -
-                  new Date(a.createdDate).valueOf(),
+                (a, b) =>
+                  new Date(b.createdDate ?? 0).valueOf() -
+                  new Date(a.createdDate ?? 0).valueOf(),
               )
-              .map((history: any) => {
+              .map((history) => {
                 return (
                   <div
                     key={history.createdDate}
@@ -105,9 +107,11 @@ const PresetHistoryList: React.FC<Props> = ({
                         )}
                         <PresetPreviewLabel
                           title={history.version > 1 ? "Updated" : "Added"}
-                          editData={new Date(
-                            history.createdDate,
-                          ).toLocaleString()}
+                          editData={
+                            history.createdDate
+                              ? new Date(history.createdDate).toLocaleString()
+                              : ""
+                          }
                         />
                         <PresetPreviewLabel
                           title={"Version"}
@@ -116,9 +120,7 @@ const PresetHistoryList: React.FC<Props> = ({
                         {REPORTING_ENABLED && (
                           <PresetPreviewLabel
                             title={"Reported"}
-                            editData={
-                              history.reported >= 1 ? history.reported : "0"
-                            }
+                            editData={history.reported ?? 0}
                           />
                         )}
                       </div>
