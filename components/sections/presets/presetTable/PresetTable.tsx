@@ -1,6 +1,8 @@
 import DataTable, {
   createTheme,
+  SortOrder,
   type ExpanderComponentProps,
+  type SortFunction,
 } from "react-data-table-component"
 import { useState } from "react"
 import AddPresetButton from "../ui/addPreset/AddPresetButton"
@@ -20,6 +22,19 @@ interface Props {
   reportedToast: Function
   savedToast: Function
   fixedToast: Function
+}
+
+// sort text columns ignoring case ("Alternator" before "AP master")
+const sortIgnoringCase: SortFunction<any> = (rows, selector, direction) => {
+  const sign = direction === SortOrder.DESC ? -1 : 1
+  return [...rows].sort(
+    (a, b) =>
+      sign *
+      String(selector(a) ?? "").localeCompare(String(selector(b) ?? ""), "en", {
+        sensitivity: "base",
+        numeric: true,
+      }),
+  )
 }
 
 interface RowToasts {
@@ -273,6 +288,7 @@ const PresetTable: React.FC<Props> = ({
         customStyles={customStyles}
         pagination
         expandOnRowClicked
+        sortFunction={sortIgnoringCase}
         expandableRows
         // the library passes expandableRowsComponentProps, but only types { data }
         expandableRowsComponent={

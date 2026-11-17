@@ -139,8 +139,8 @@ test.describe("Preset list", () => {
     await presetsPage.gotoPage()
 
     await page.getByRole("columnheader", { name: "Preset name" }).click()
-    // sorting is case-sensitive: "AP ..." sorts before "Al..."
-    await expect(presetsPage.rows.first()).toContainText("AP NAV mode")
+    // sorting ignores case: "Alternator ..." sorts before "AP ..."
+    await expect(presetsPage.rows.first()).toContainText("Alternator 1 on")
 
     await page.getByRole("columnheader", { name: "Preset name" }).click()
     await expect(presetsPage.rows.first()).toContainText("Strobe toggle")
