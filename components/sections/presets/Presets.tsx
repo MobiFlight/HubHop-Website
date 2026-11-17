@@ -15,6 +15,7 @@ import { useLiveQuery } from "dexie-react-hooks"
 import { ToastContainer, toast } from "react-toastify"
 
 import { useRouter } from "next/router"
+import type { Preset } from "../../../interfaces/preset"
 import { type Facet, sortedUnique } from "../../../lib/presetFacets"
 import {
   comparePresets,
@@ -27,8 +28,8 @@ const SEARCH_DELAY_MS = 250
 
 const Presets: React.FC = () => {
   const [loading, setLoading] = useState(false)
-  const [presetsMsfs, setPresetsMsfs] = useState<any[]>([])
-  const [presetsXplane, setPresetsXplane] = useState<any[]>([])
+  const [presetsMsfs, setPresetsMsfs] = useState<Preset[]>([])
+  const [presetsXplane, setPresetsXplane] = useState<Preset[]>([])
   const [filteredPresets, setFilteredPresets] = useState(
     typeof localStorage !== "undefined" &&
       localStorage.getItem("searchFilter") !== null
@@ -82,7 +83,7 @@ const Presets: React.FC = () => {
       ? localStorage.getItem("simType")
       : "msfs2020",
   )
-  const [presets, setPresets] = useState<any[]>([])
+  const [presets, setPresets] = useState<Preset[]>([])
   const [filterOpen, setFilterOpen] = useState(true)
   const [loadingStatus, setLoadingStatus] = useState("")
 
@@ -135,7 +136,7 @@ const Presets: React.FC = () => {
 
   const filteredMyPresetList = presets.filter((preset) => {
     if (showReportedPresets) {
-      return preset.reported > 0
+      return (preset.reported ?? 0) > 0
     }
     return presets
   })
@@ -163,10 +164,10 @@ const Presets: React.FC = () => {
         ])
       : [],
   )
-  const matchesSearch = (preset: any) =>
+  const matchesSearch = (preset: Preset) =>
     terms.length === 0 || (relevance.get(preset) ?? 0) > 0
 
-  const facetFilters: Record<Facet, (preset: any) => boolean> = {
+  const facetFilters: Record<Facet, (preset: Preset) => boolean> = {
     vendor: (preset) =>
       preset.vendor.toLowerCase().includes(filteredVendors.toLowerCase()),
     aircraft: (preset) => isFilteredBy(preset.aircraft, filteredAircrafts),
@@ -176,7 +177,7 @@ const Presets: React.FC = () => {
     codeType: (preset) => isFilteredBy(preset.codeType, filteredCodeTypes),
   }
   // ignoring one facet gives the presets its dropdown options come from
-  const matchesFilters = (preset: any, ignoredFacet?: Facet) =>
+  const matchesFilters = (preset: Preset, ignoredFacet?: Facet) =>
     matchesSearch(preset) &&
     (Object.keys(facetFilters) as Facet[]).every(
       (facet) => facet === ignoredFacet || facetFilters[facet](preset),
@@ -338,7 +339,7 @@ const Presets: React.FC = () => {
               <PresetFilter
                 filterOpen={filterOpen}
                 setFilterOpen={() => setFilterOpen((prev) => !prev)}
-                search={(e: React.ChangeEvent<HTMLInputElement>) => {
+                search={(e) => {
                   const value = e.target.value
                   setSearchText(value)
                   clearTimeout(searchTimer.current)
@@ -349,31 +350,31 @@ const Presets: React.FC = () => {
                     updateQueryParam("search", value, { replace: true })
                   }, SEARCH_DELAY_MS)
                 }}
-                filterVendor={(e: React.ChangeEvent<HTMLInputElement>) => {
+                filterVendor={(e) => {
                   const value = e.target.value
                   setFilteredVendors(value)
                   localStorage.setItem("vendorFilter", value)
                   updateQueryParam("vendor", value)
                 }}
-                filterAircraft={(e: React.ChangeEvent<HTMLInputElement>) => {
+                filterAircraft={(e) => {
                   const value = e.target.value
                   setFilteredAircrafts(value)
                   localStorage.setItem("aircraftFilter", value)
                   updateQueryParam("aircraft", value)
                 }}
-                filterSystem={(e: React.ChangeEvent<HTMLInputElement>) => {
+                filterSystem={(e) => {
                   const value = e.target.value
                   setFilteredSystems(value)
                   localStorage.setItem("systemFilter", value)
                   updateQueryParam("system", value)
                 }}
-                filterPresetType={(e: React.ChangeEvent<HTMLInputElement>) => {
+                filterPresetType={(e) => {
                   const value = e.target.value
                   setFilteredPresetTypes(value)
                   localStorage.setItem("presetTypeFilter", value)
                   updateQueryParam("presetType", value)
                 }}
-                filterCodeType={(e: React.ChangeEvent<HTMLInputElement>) => {
+                filterCodeType={(e) => {
                   const value = e.target.value
                   setFilteredCodeTypes(value)
                   localStorage.setItem("codeTypeFilter", value)

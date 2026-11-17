@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from "motion/react"
 import PresetHistoryList from "../singlePresetView/PresetHistoryList"
 import DeleteButton from "./deletePreset/DeleteButton"
 import EditToggle from "./editPreset/EditToggle"
-import PresetPreviewLabel from "./PresetInputLabel"
+import PresetPreviewLabel, { type InputChangeEvent } from "./PresetInputLabel"
 import SavePresetButton from "./editPreset/SavePresetButton"
 import ReportPresetModal from "./reportPreset/ReportPresetModal"
 import DeleteConfirmationModal from "./deletePreset/DeleteConfirmationModal"
@@ -16,41 +16,50 @@ import Modal from "../../Shared/Modal"
 import ButtonOrange from "../../Shared/ButtonOrange"
 import ButtonDark from "../../Shared/ButtonDark"
 import { CODE_TYPES } from "../../../../lib/codeTypes"
+import type { Preset } from "../../../../interfaces/preset"
 import { REPORTING_ENABLED } from "../../../../lib/features"
 
-interface Props {
-  id: string
-  label: string
-  updatedBy: string
-  author: string
-  createdDate: string
-  version: string
-  reported: string
-  vendor: string
-  aircraft: string
-  system: string
-  presetType: string
-  codeType: string
-  code: string
-  description: string
-  loading?: any
-  history?: string
-  setVendor: Function
-  setAircraft: Function
-  setSystem: Function
-  setPresetType: Function
-  setLabel: Function
-  setCodeType: Function
-  setCode: Function
-  setDescription: Function
+type PresetFields = Pick<
+  Preset,
+  | "id"
+  | "label"
+  | "updatedBy"
+  | "author"
+  | "createdDate"
+  | "version"
+  | "reported"
+  | "vendor"
+  | "aircraft"
+  | "system"
+  | "presetType"
+  | "codeType"
+  | "code"
+  | "description"
+>
+
+type ChangeHandler = (e: InputChangeEvent) => void
+
+export interface PresetToasts {
+  deletedToast: () => void
+  reportedToast: () => void
+  fixedToast: () => void
+  savedToast: () => void
+}
+
+interface Props extends PresetFields, PresetToasts {
+  loading?: boolean
+  history?: Preset[]
+  setVendor: ChangeHandler
+  setAircraft: ChangeHandler
+  setSystem: ChangeHandler
+  setPresetType: ChangeHandler
+  setLabel: ChangeHandler
+  setCodeType: ChangeHandler
+  setCode: ChangeHandler
+  setDescription: ChangeHandler
   showingHistory: boolean
   text: string
   card: boolean
-  data?: any
-  deletedToast: Function
-  reportedToast: Function
-  fixedToast: Function
-  savedToast: Function
 }
 
 const PresetCard: React.FC<Props> = ({
@@ -93,7 +102,7 @@ const PresetCard: React.FC<Props> = ({
   const [editButton, setEditButton] = useState(false)
   const [editTooltip, seteditTooltip] = useState(false)
   const [deleteTooltip, setDeleteTooltip] = useState(false)
-  const [revertObject, setRevertObject] = useState({})
+  const [revertObject, setRevertObject] = useState<Partial<Preset>>({})
   const [revertModal, setRevertModal] = useState(false)
   const [simType, setSimType] = useState("")
 
@@ -119,7 +128,7 @@ const PresetCard: React.FC<Props> = ({
       id
 
     // post body data
-    const preset =
+    const preset: Omit<Preset, "id"> =
       simType === "msfs2020"
         ? {
             path:
@@ -141,7 +150,7 @@ const PresetCard: React.FC<Props> = ({
             status: "Updated",
             createdDate: new Date().toUTCString(),
             author: author,
-            updatedBy: localStorage.getItem("username"),
+            updatedBy: localStorage.getItem("username") ?? undefined,
             description: description,
             version: version,
           }
@@ -156,13 +165,13 @@ const PresetCard: React.FC<Props> = ({
             status: "Updated",
             createdDate: new Date().toUTCString(),
             author: author,
-            updatedBy: localStorage.getItem("username"),
+            updatedBy: localStorage.getItem("username") ?? undefined,
             description: description,
             version: version,
           }
 
     // request options
-    const options: any = {
+    const options: RequestInit = {
       method: "PUT",
       body: JSON.stringify(preset),
       redirect: "follow",
@@ -181,7 +190,7 @@ const PresetCard: React.FC<Props> = ({
     // update only this preset in the local cache
     await presetTable(simType as SimType).update(id, {
       ...preset,
-      version: Number(version) + 1,
+      version: version + 1,
     })
     savedToast()
   }
@@ -198,7 +207,7 @@ const PresetCard: React.FC<Props> = ({
     const preset = revertObject
 
     // request options
-    const options: any = {
+    const options: RequestInit = {
       method: "PUT",
       body: JSON.stringify(preset),
       redirect: "follow",
@@ -233,20 +242,22 @@ const PresetCard: React.FC<Props> = ({
           )}
           <div className="flex w-full flex-col space-y-2 p-5 text-hhText lg:flex-row lg:space-y-0 lg:space-x-5">
             <div className="flex w-full flex-col space-y-2 lg:w-1/6">
-              {version > "1" ? (
+              {version > 1 ? (
                 <PresetPreviewLabel title={"Updated by"} editData={updatedBy} />
               ) : (
                 <PresetPreviewLabel title={"Author"} editData={author} />
               )}
               <PresetPreviewLabel
-                title={version > "1" ? "Updated" : "Added"}
-                editData={new Date(createdDate).toLocaleString()}
+                title={version > 1 ? "Updated" : "Added"}
+                editData={
+                  createdDate ? new Date(createdDate).toLocaleString() : ""
+                }
               />
               <PresetPreviewLabel title={"Version"} editData={version} />
               {REPORTING_ENABLED && (
                 <PresetPreviewLabel
                   title={"Reported"}
-                  editData={reported >= "1" ? reported : "0"}
+                  editData={reported ?? 0}
                 />
               )}
             </div>
@@ -255,13 +266,13 @@ const PresetCard: React.FC<Props> = ({
                 title={"Vendor"}
                 editData={vendor}
                 edit={edit}
-                inputHandler={(e: any) => setVendor(e)}
+                inputHandler={setVendor}
               />
               <PresetPreviewLabel
                 title={"Aircraft"}
                 editData={aircraft}
                 edit={edit}
-                inputHandler={(e: any) => setAircraft(e)}
+                inputHandler={setAircraft}
               />
               <PresetPreviewLabel
                 title={"System"}
@@ -274,7 +285,7 @@ const PresetCard: React.FC<Props> = ({
                     .includes("moderator") &&
                   edit
                 }
-                inputHandler={(e: any) => setSystem(e)}
+                inputHandler={setSystem}
               />
               <PresetPreviewLabel
                 title={"Input / Output"}
@@ -287,7 +298,7 @@ const PresetCard: React.FC<Props> = ({
                     .includes("moderator") &&
                   edit
                 }
-                inputHandler={(e: any) => setPresetType(e)}
+                inputHandler={setPresetType}
               />
               {typeof window !== "undefined" &&
                 localStorage.getItem("simType") === "xplane" && (
@@ -302,7 +313,7 @@ const PresetCard: React.FC<Props> = ({
                         .includes("moderator") &&
                       edit
                     }
-                    inputHandler={(e: any) => setCodeType(e)}
+                    inputHandler={setCodeType}
                     options={CODE_TYPES}
                   />
                 )}
@@ -312,13 +323,13 @@ const PresetCard: React.FC<Props> = ({
                 title={"Preset name"}
                 editData={label}
                 edit={edit}
-                inputHandler={(e: any) => setLabel(e)}
+                inputHandler={setLabel}
               />
               <PresetPreviewLabel
                 title={"Code"}
                 editData={code}
                 edit={edit}
-                inputHandler={(e: any) => setCode(e)}
+                inputHandler={setCode}
                 codeOrDescriptionBox={true}
               />
               <PresetPreviewLabel
@@ -327,7 +338,7 @@ const PresetCard: React.FC<Props> = ({
                 editData={
                   description ? description : "No description available"
                 }
-                inputHandler={(e: any) => setDescription(e)}
+                inputHandler={setDescription}
                 codeOrDescriptionBox={true}
               />
             </div>
@@ -429,11 +440,11 @@ const PresetCard: React.FC<Props> = ({
         </div>
         {simType === "msfs2020" && showingHistory && (
           <div className="flex flex-col">
-            {version > "1" ? (
+            {version > 1 ? (
               <PresetHistoryList
-                presetHistory={history}
-                loading={loading}
-                revertHistory={(o: any) => (
+                presetHistory={history ?? []}
+                loading={loading ?? false}
+                revertHistory={(o) => (
                   setRevertObject(o),
                   setRevertModal(true)
                 )}

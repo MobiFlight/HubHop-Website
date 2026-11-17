@@ -2,13 +2,17 @@ import DataTable, {
   createTheme,
   SortOrder,
   type ExpanderComponentProps,
+  Media,
   type SortFunction,
+  type TableColumn,
 } from "react-data-table-component"
 import { useRef, useState } from "react"
 import { compareText } from "../../../../lib/presetSearch"
 import AddPresetButton from "../ui/addPreset/AddPresetButton"
 import ExportPresetsButton from "../ui/exportPresets/ExportPresetsButton"
-import PresetCard from "../ui/PresetCard"
+import PresetCard, { type PresetToasts } from "../ui/PresetCard"
+import type { InputChangeEvent } from "../ui/PresetInputLabel"
+import type { Preset } from "../../../../interfaces/preset"
 import RelevanceGauge from "./RelevanceGauge"
 import { msalInstance, msalReady } from "../../../../services/msal"
 import {
@@ -16,32 +20,21 @@ import {
   getAccessToken,
 } from "../../../../services/msalFunctions"
 
-interface Props {
-  data: string[]
-  setExportModalOpen: Function
-  setAddModalOpen: Function
-  deletedToast: Function
-  reportedToast: Function
-  savedToast: Function
-  fixedToast: Function
+interface Props extends PresetToasts {
+  data: Preset[]
+  setExportModalOpen: (open: boolean) => void
+  setAddModalOpen: (open: boolean) => void
   // relevance in percent per preset; only set while searching
-  relevance?: Map<unknown, number>
+  relevance?: Map<Preset, number>
 }
 
 // sort text columns ignoring case ("Alternator" before "AP master")
-const sortIgnoringCase: SortFunction<any> = (rows, selector, direction) => {
+const sortIgnoringCase: SortFunction<Preset> = (rows, selector, direction) => {
   const sign = direction === SortOrder.DESC ? -1 : 1
   return [...rows].sort(
     (a, b) =>
       sign * compareText(String(selector(a) ?? ""), String(selector(b) ?? "")),
   )
-}
-
-interface RowToasts {
-  deletedToast: Function
-  reportedToast: Function
-  savedToast: Function
-  fixedToast: Function
 }
 
 // Defined outside PresetTable: a component created during render gets a new
@@ -52,7 +45,7 @@ const PresetRowDetails = ({
   reportedToast,
   fixedToast,
   savedToast,
-}: { data: any } & RowToasts) => {
+}: { data: Preset } & PresetToasts) => {
   const [vendor, setVendor] = useState(data.vendor)
   const [aircraft, setAircraft] = useState(data.aircraft)
   const [system, setSystem] = useState(data.system)
@@ -79,34 +72,19 @@ const PresetRowDetails = ({
         codeType={codeType}
         code={code}
         description={description}
-        data={data}
         showingHistory={false}
         text={"sm"}
         card={false}
-        setVendor={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setVendor(e.target.value)
+        setVendor={(e: InputChangeEvent) => setVendor(e.target.value)}
+        setAircraft={(e: InputChangeEvent) => setAircraft(e.target.value)}
+        setSystem={(e: InputChangeEvent) => setSystem(e.target.value)}
+        setPresetType={(e: InputChangeEvent) => setPresetType(e.target.value)}
+        setCodeType={(e: InputChangeEvent) =>
+          setCodeType(e.target.value as Preset["codeType"])
         }
-        setAircraft={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setAircraft(e.target.value)
-        }
-        setSystem={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setSystem(e.target.value)
-        }
-        setPresetType={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setPresetType(e.target.value)
-        }
-        setCodeType={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setCodeType(e.target.value)
-        }
-        setLabel={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setLabel(e.target.value)
-        }
-        setCode={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setCode(e.target.value)
-        }
-        setDescription={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setDescription(e.target.value)
-        }
+        setLabel={(e: InputChangeEvent) => setLabel(e.target.value)}
+        setCode={(e: InputChangeEvent) => setCode(e.target.value)}
+        setDescription={(e: InputChangeEvent) => setDescription(e.target.value)}
         deletedToast={deletedToast}
         reportedToast={reportedToast}
         fixedToast={fixedToast}
@@ -133,51 +111,51 @@ const PresetTable: React.FC<Props> = ({
   const currentRelevance = useRef(relevance)
   currentRelevance.current = relevance
 
-  const columns: any = [
+  const columns: TableColumn<Preset>[] = [
     {
       name: "Vendor",
-      selector: (row: any) => row.vendor,
+      selector: (row) => row.vendor,
       sortable: true,
       maxWidth: "10%",
-      hide: "md",
+      hide: Media.MD,
     },
     {
       name: "Aircraft",
-      selector: (row: any) => row.aircraft,
+      selector: (row) => row.aircraft,
       sortable: true,
       maxWidth: "10%",
     },
     {
       name: "System",
-      selector: (row: any) => row.system,
+      selector: (row) => row.system,
       sortable: true,
       maxWidth: "10%",
-      hide: "md",
+      hide: Media.MD,
     },
     {
       name: "Input/Output",
-      selector: (row: any) => row.presetType,
+      selector: (row) => row.presetType,
       sortable: true,
       maxWidth: "10%",
-      hide: "md",
+      hide: Media.MD,
     },
     localStorage.getItem("simType") === "xplane"
       ? {
           name: "Code Type",
-          selector: (row: any) => row.codeType,
+          selector: (row) => row.codeType,
           sortable: true,
           maxWidth: "10%",
-          hide: "md",
+          hide: Media.MD,
         }
       : {
           name: "",
-          selector: (row: any) => row.codeType,
+          selector: (row) => row.codeType,
           sortable: true,
           maxWidth: "0%",
         },
     {
       name: "Preset name",
-      selector: (row: any) => row.label,
+      selector: (row) => row.label,
       sortable: true,
       maxWidth: "50%",
     },
@@ -186,8 +164,8 @@ const PresetTable: React.FC<Props> = ({
           {
             id: "relevance",
             name: "Relevance",
-            selector: (row: unknown) => currentRelevance.current?.get(row) ?? 0,
-            cell: (row: unknown) => (
+            selector: (row: Preset) => currentRelevance.current?.get(row) ?? 0,
+            cell: (row: Preset) => (
               <RelevanceGauge value={relevance.get(row) ?? 0} />
             ),
             sortable: true,
@@ -201,7 +179,7 @@ const PresetTable: React.FC<Props> = ({
       id: "add-preset-space",
       name: "",
       width: "150px",
-      hide: "md",
+      hide: Media.MD,
     },
   ]
 
@@ -324,7 +302,7 @@ const PresetTable: React.FC<Props> = ({
         // the library passes expandableRowsComponentProps, but only types { data }
         expandableRowsComponent={
           PresetRowDetails as unknown as React.ComponentType<
-            ExpanderComponentProps<string>
+            ExpanderComponentProps<Preset>
           >
         }
         expandableRowsComponentProps={{

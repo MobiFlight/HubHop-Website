@@ -2,18 +2,17 @@ import Head from "next/head"
 import Layout from "../../../Layout"
 import { useEffect, useState } from "react"
 
-import PresetCard from "../ui/PresetCard"
+import PresetCard, { type PresetToasts } from "../ui/PresetCard"
+import type { Preset } from "../../../../interfaces/preset"
+import type { InputChangeEvent } from "../ui/PresetInputLabel"
 import { BiSad } from "react-icons/bi"
 import { AiOutlineLoading } from "react-icons/ai"
 
-interface Props {
-  preset: any
-  history: any
+interface Props extends PresetToasts {
+  // undefined while loading, empty if the preset doesn't exist
+  preset: Preset[] | undefined
+  history: Preset[]
   loading: boolean
-  deletedToast: Function
-  reportedToast: Function
-  savedToast: Function
-  fixedToast: Function
 }
 
 const PresetView: React.FC<Props> = ({
@@ -26,18 +25,18 @@ const PresetView: React.FC<Props> = ({
   savedToast,
 }) => {
   const [id, setId] = useState("")
-  const [updatedBy, setUpdatedBy] = useState("")
-  const [createdDate, setCreatedDate] = useState("")
-  const [version, setVersion] = useState("")
-  const [reported, setReported] = useState("")
+  const [updatedBy, setUpdatedBy] = useState<string>()
+  const [createdDate, setCreatedDate] = useState<string>()
+  const [version, setVersion] = useState(1)
+  const [reported, setReported] = useState<number | null>()
   const [vendor, setVendor] = useState("")
   const [aircraft, setAircraft] = useState("")
   const [system, setSystem] = useState("")
-  const [presetType, setPresetType] = useState("")
-  const [codeType, setCodeType] = useState("")
+  const [presetType, setPresetType] = useState<Preset["presetType"]>("")
+  const [codeType, setCodeType] = useState<Preset["codeType"]>("")
   const [label, setLabel] = useState("")
   const [code, setCode] = useState("")
-  const [description, setDescription] = useState("")
+  const [description, setDescription] = useState<string | null>()
   const [author, setAuthor] = useState("")
   const [notFound, setNotFound] = useState(false)
   const [loadingPreset, setLoadingPreset] = useState(true)
@@ -114,14 +113,18 @@ const PresetView: React.FC<Props> = ({
           showingHistory={true}
           text=""
           card
-          setVendor={(e: any) => setVendor(e.target.value)}
-          setAircraft={(e: any) => setAircraft(e.target.value)}
-          setSystem={(e: any) => setSystem(e.target.value)}
-          setPresetType={(e: any) => setPresetType(e.target.value)}
-          setCodeType={(e: any) => setCodeType(e.target.value)}
-          setLabel={(e: any) => setLabel(e.target.value)}
-          setCode={(e: any) => setCode(e.target.value)}
-          setDescription={(e: any) => setDescription(e.target.value)}
+          setVendor={(e: InputChangeEvent) => setVendor(e.target.value)}
+          setAircraft={(e: InputChangeEvent) => setAircraft(e.target.value)}
+          setSystem={(e: InputChangeEvent) => setSystem(e.target.value)}
+          setPresetType={(e: InputChangeEvent) => setPresetType(e.target.value)}
+          setCodeType={(e: InputChangeEvent) =>
+            setCodeType(e.target.value as Preset["codeType"])
+          }
+          setLabel={(e: InputChangeEvent) => setLabel(e.target.value)}
+          setCode={(e: InputChangeEvent) => setCode(e.target.value)}
+          setDescription={(e: InputChangeEvent) =>
+            setDescription(e.target.value)
+          }
           deletedToast={deletedToast}
           reportedToast={reportedToast}
           fixedToast={fixedToast}
