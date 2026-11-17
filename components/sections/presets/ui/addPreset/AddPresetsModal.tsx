@@ -30,7 +30,6 @@ interface AddPresetForm {
   systems: string
   addPresetTypes: string
   presetTypes: string
-  addCodeTypes: string
   codeTypes: string
   label: string
   code: string
@@ -70,8 +69,6 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
   const [addAircraft, setAddAircraft] = useState(false)
   const [addSystem, setAddSystem] = useState(false)
   const [addPresetType, setAddPresetType] = useState(false)
-  // there is no button to add a new code type, so the select is always shown
-  const addCodeType = false
   const [buttonSubmit, setButtonSubmit] = useState(false)
   const [bulkUpload, setBulkUpload] = useState(false)
   const [presetToast, setPresetToast] = useState(false)
@@ -549,47 +546,32 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                         <label htmlFor="searchfield">Select Code Type</label>
                       </div>
                       <div className="flex space-x-2">
-                        {addCodeType ? (
-                          <input
-                            type={"text"}
-                            placeholder={"Provide code type"}
-                            className={`w-full rounded-lg border bg-hhBG/75 px-3 py-1 text-hhText ${
-                              errors.addCodeTypes
-                                ? "border-red-500"
-                                : "border-hhOrange/75"
-                            }`}
-                            {...register("addCodeTypes", {
-                              required: "Provide code type",
-                            })}
-                          />
-                        ) : (
-                          <select
-                            className={`w-full rounded-lg border bg-hhBG/75 px-3 py-1 text-hhText ${
-                              errors.addCodeTypes
-                                ? "border-red-500"
-                                : "border-hhOrange/75"
-                            }`}
-                            value={filteredCodeTypes}
-                            {...register("codeTypes", {
-                              required: "Select code type",
-                            })}
-                          >
-                            <option value="">All Code Types</option>
-                            {Array.from(
-                              new Set(
-                                presets
-                                  .map((item: any) => item.codeType)
-                                  .sort((a: any, b: any) =>
-                                    a
-                                      .toLowerCase()
-                                      .localeCompare(b.toLowerCase()),
-                                  ),
-                              ),
-                            ).map((o, i) => (
-                              <option key={i as any}>{o as string[]}</option>
-                            ))}
-                          </select>
-                        )}
+                        <select
+                          className={`w-full rounded-lg border bg-hhBG/75 px-3 py-1 text-hhText ${
+                            errors.codeTypes
+                              ? "border-red-500"
+                              : "border-hhOrange/75"
+                          }`}
+                          value={filteredCodeTypes}
+                          {...register("codeTypes", {
+                            required: "Select code type",
+                          })}
+                        >
+                          <option value="">All Code Types</option>
+                          {Array.from(
+                            new Set(
+                              presets
+                                .map((item: any) => item.codeType)
+                                .sort((a: any, b: any) =>
+                                  a
+                                    .toLowerCase()
+                                    .localeCompare(b.toLowerCase()),
+                                ),
+                            ),
+                          ).map((o, i) => (
+                            <option key={i as any}>{o as string[]}</option>
+                          ))}
+                        </select>
                         <AuthenticatedTemplate>
                           {localStorage
                             .getItem("roles")
