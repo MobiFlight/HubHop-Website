@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import PresetFilter from "./presetTable/PresetFilter"
 import PresetTable from "./presetTable/PresetTable"
 import { AiOutlineLoading } from "react-icons/ai"
@@ -22,6 +22,9 @@ import {
   searchTerms,
 } from "../../../lib/presetSearch"
 
+// wait this long after the last keystroke before searching
+const SEARCH_DELAY_MS = 250
+
 const Presets: React.FC = () => {
   const [loading, setLoading] = useState(false)
   const [presetsMsfs, setPresetsMsfs] = useState<any[]>([])
@@ -32,6 +35,9 @@ const Presets: React.FC = () => {
       ? localStorage.getItem("searchFilter") || ""
       : "",
   )
+  // what is typed in the search box; filteredPresets follows it after a delay
+  const [searchText, setSearchText] = useState(filteredPresets)
+  const searchTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
   const [filteredVendors, setFilteredVendors] = useState(
     typeof localStorage !== "undefined" &&
       localStorage.getItem("vendorFilter") !== null
@@ -231,13 +237,17 @@ const Presets: React.FC = () => {
 
   const router = useRouter()
 
-  const updateQueryParam = (key: string, value: string) => {
+  const updateQueryParam = (
+    key: string,
+    value: string,
+    { replace = false } = {},
+  ) => {
     // Start from the current URL: router.query can still be stale when
     // filters change in quick succession, which would drop other filters.
     const params = new URLSearchParams(window.location.search)
     if (value) params.set(key, value)
     else params.delete(key) // Remove the key if value is empty
-    router.push(
+    router[replace ? "replace" : "push"](
       {
         pathname: router.pathname,
         query: Object.fromEntries(params),
@@ -247,9 +257,16 @@ const Presets: React.FC = () => {
     )
   }
 
+  // a pending search must not change the URL after leaving the page
+  useEffect(() => {
+    const timer = searchTimer
+    return () => clearTimeout(timer.current)
+  }, [])
+
   // Populate filters from query parameters on mount
   useEffect(() => {
     setFilteredPresets((router.query.search as string) || "")
+    setSearchText((router.query.search as string) || "")
     setFilteredVendors((router.query.vendor as string) || "")
     setFilteredAircrafts((router.query.aircraft as string) || "")
     setFilteredSystems((router.query.system as string) || "")
@@ -323,9 +340,14 @@ const Presets: React.FC = () => {
                 setFilterOpen={() => setFilterOpen((prev) => !prev)}
                 search={(e: React.ChangeEvent<HTMLInputElement>) => {
                   const value = e.target.value
-                  setFilteredPresets(value)
-                  localStorage.setItem("searchFilter", value)
-                  updateQueryParam("search", value)
+                  setSearchText(value)
+                  clearTimeout(searchTimer.current)
+                  searchTimer.current = setTimeout(() => {
+                    setFilteredPresets(value)
+                    localStorage.setItem("searchFilter", value)
+                    // replace: typing must not add a history entry per search
+                    updateQueryParam("search", value, { replace: true })
+                  }, SEARCH_DELAY_MS)
                 }}
                 filterVendor={(e: React.ChangeEvent<HTMLInputElement>) => {
                   const value = e.target.value
@@ -358,6 +380,8 @@ const Presets: React.FC = () => {
                   updateQueryParam("codeType", value)
                 }}
                 resetFilter={() => {
+                  clearTimeout(searchTimer.current)
+                  setSearchText("")
                   setFilteredPresets("")
                   setFilteredVendors("")
                   setFilteredAircrafts("")
@@ -371,7 +395,7 @@ const Presets: React.FC = () => {
                   localStorage.setItem("presetTypeFilter", "")
                   router.push(router.pathname, undefined, { shallow: true }) // reset URL
                 }}
-                filteredPresets={filteredPresets}
+                filteredPresets={searchText}
                 filteredVendors={filteredVendors}
                 filteredAircrafts={filteredAircrafts}
                 filteredSystems={filteredSystems}

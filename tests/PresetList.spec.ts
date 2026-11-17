@@ -42,6 +42,31 @@ test.describe("Preset list", () => {
     )
   })
 
+  test("Preset list - search waits until typing pauses", async ({
+    presetsPage,
+    page,
+  }) => {
+    await page.clock.install()
+    await presetsPage.gotoPage()
+    const historyLength = await page.evaluate(() => history.length)
+
+    await presetsPage.searchFilter.pressSequentially("landing lights")
+
+    await test.step("Nothing is searched while typing", async () => {
+      await expect(presetsPage.searchFilter).toHaveValue("landing lights")
+      await expect(presetsPage.rows).toHaveCount(15)
+      await expect(page).not.toHaveURL(/search=/)
+    })
+
+    await page.clock.runFor(300)
+
+    await expect(presetsPage.rows).toHaveCount(2)
+    await expect(page).toHaveURL(/search=landing/)
+    await test.step("Typing adds no browser history entries", async () => {
+      expect(await page.evaluate(() => history.length)).toBe(historyLength)
+    })
+  })
+
   test("Preset list - search also matches the code", async ({
     presetsPage,
   }) => {
