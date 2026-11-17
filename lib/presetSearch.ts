@@ -1,7 +1,9 @@
-// Preset text search, shared with MobiFlight Connector: keep this file free of
+// Preset search and order, shared with MobiFlight Connector: keep this file free of
 // project imports so it can be copied as is, and both give the same results.
 
 export interface SearchablePreset {
+  vendor?: string
+  aircraft?: string
   label: string
   system?: string
   description?: string
@@ -48,3 +50,17 @@ export const presetRelevance = (
   const total = weights.reduce((sum, weight) => sum + weight, 0)
   return Math.round((total / (MAX_WEIGHT * terms.length)) * 100)
 }
+
+// Compares text ignoring case, with numbers in natural order ("A320" before "A1000").
+// One shared collator: localeCompare with options is much slower on 35,000 presets.
+export const compareText = new Intl.Collator("en", {
+  sensitivity: "base",
+  numeric: true,
+}).compare
+
+// Default preset order: vendor, aircraft, then name. Also orders presets of
+// equal relevance, so the list doesn't depend on the order the server sends.
+export const comparePresets = (a: SearchablePreset, b: SearchablePreset) =>
+  compareText(a.vendor ?? "", b.vendor ?? "") ||
+  compareText(a.aircraft ?? "", b.aircraft ?? "") ||
+  compareText(a.label ?? "", b.label ?? "")

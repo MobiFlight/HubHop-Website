@@ -5,7 +5,7 @@ import DataTable, {
   type SortFunction,
 } from "react-data-table-component"
 import { useState } from "react"
-import { compareText } from "../../../../lib/presetFacets"
+import { compareText } from "../../../../lib/presetSearch"
 import AddPresetButton from "../ui/addPreset/AddPresetButton"
 import ExportPresetsButton from "../ui/exportPresets/ExportPresetsButton"
 import PresetCard from "../ui/PresetCard"
