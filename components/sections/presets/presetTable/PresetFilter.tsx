@@ -12,6 +12,7 @@ import { MdBusiness } from "react-icons/md"
 import { BiCog, BiJoystickButton } from "react-icons/bi"
 import { AnimatePresence, motion, type Variants } from "motion/react"
 import { AuthenticatedTemplate } from "@azure/msal-react"
+import { CODE_TYPES } from "../../../../lib/codeTypes"
 
 interface Props {
   search: Function
@@ -91,15 +92,6 @@ const PresetFilter: React.FC<Props> = ({
     new Set(
       filteredItems
         .map((item: any) => item.presetType)
-        .sort((a: any, b: any) =>
-          a.toLowerCase().localeCompare(b.toLowerCase()),
-        ),
-    ),
-  )
-  const uniqueCodeType = Array.from(
-    new Set(
-      filteredItems
-        .map((item: any) => item.codeType)
         .sort((a: any, b: any) =>
           a.toLowerCase().localeCompare(b.toLowerCase()),
         ),
@@ -292,9 +284,9 @@ const PresetFilter: React.FC<Props> = ({
                     value={filteredCodeTypes}
                   >
                     <option value="">All Code Types</option>
-                    {uniqueCodeType.map((o, i) => (
-                      <option className="bg-hhBG" key={i as any}>
-                        {o as string[]}
+                    {CODE_TYPES.map((codeType) => (
+                      <option className="bg-hhBG" key={codeType}>
+                        {codeType}
                       </option>
                     ))}
                   </select>

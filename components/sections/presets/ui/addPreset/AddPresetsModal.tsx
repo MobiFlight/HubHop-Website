@@ -15,6 +15,7 @@ import { AnimatePresence, motion } from "motion/react"
 import Toast from "../../../Shared/Toast"
 import { AuthenticatedTemplate } from "@azure/msal-react"
 import { RiListSettingsLine } from "react-icons/ri"
+import { CODE_TYPES } from "../../../../../lib/codeTypes"
 
 interface Props {
   setAddModalOpen: Function
@@ -558,18 +559,8 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                           })}
                         >
                           <option value="">All Code Types</option>
-                          {Array.from(
-                            new Set(
-                              presets
-                                .map((item: any) => item.codeType)
-                                .sort((a: any, b: any) =>
-                                  a
-                                    .toLowerCase()
-                                    .localeCompare(b.toLowerCase()),
-                                ),
-                            ),
-                          ).map((o, i) => (
-                            <option key={i as any}>{o as string[]}</option>
+                          {CODE_TYPES.map((codeType) => (
+                            <option key={codeType}>{codeType}</option>
                           ))}
                         </select>
                       </div>

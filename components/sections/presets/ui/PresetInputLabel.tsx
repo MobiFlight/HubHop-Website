@@ -4,6 +4,8 @@ interface Props {
   inputHandler?: any
   editData?: string
   codeOrDescriptionBox?: boolean
+  /** In edit mode, offer only these values (select) instead of free text */
+  options?: readonly string[]
 }
 
 const PresetPreviewLabel: React.FC<Props> = ({
@@ -12,12 +14,26 @@ const PresetPreviewLabel: React.FC<Props> = ({
   inputHandler,
   editData,
   codeOrDescriptionBox,
+  options,
 }) => {
   return (
     <div>
       <div>{title}</div>
       {edit ? (
-        codeOrDescriptionBox ? (
+        options ? (
+          <select
+            aria-label={title}
+            className="w-full rounded-lg border border-hhOrange/50 bg-hhCard/50 px-3 py-1"
+            value={editData}
+            onChange={(e) => inputHandler(e)}
+          >
+            {options.map((option) => (
+              <option key={option} className="bg-hhBG">
+                {option}
+              </option>
+            ))}
+          </select>
+        ) : codeOrDescriptionBox ? (
           <textarea
             aria-label={title}
             className="w-full rounded-lg border border-hhOrange/50 bg-hhCard/50 px-3 py-1 wrap-break-word"

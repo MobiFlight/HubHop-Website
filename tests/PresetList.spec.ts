@@ -132,6 +132,11 @@ test.describe("Preset list", () => {
     expect(presetsPage.hubHopPage.downloads.xplane).toBe(1)
 
     await test.step("Code type filter is available for X-Plane", async () => {
+      await expect(presetsPage.codeTypeFilter.getByRole("option")).toHaveText([
+        "All Code Types",
+        "DataRef",
+        "Command",
+      ])
       await presetsPage.codeTypeFilter.selectOption("DataRef")
       await expect(presetsPage.rows).toHaveCount(2)
     })

@@ -15,6 +15,7 @@ import { db } from "../../../../services/db"
 import Modal from "../../Shared/Modal"
 import ButtonOrange from "../../Shared/ButtonOrange"
 import ButtonDark from "../../Shared/ButtonDark"
+import { CODE_TYPES } from "../../../../lib/codeTypes"
 
 interface Props {
   id: string
@@ -378,6 +379,7 @@ const PresetCard: React.FC<Props> = ({
                       edit
                     }
                     inputHandler={(e: any) => setCodeType(e)}
+                    options={CODE_TYPES}
                   />
                 )}
             </div>
