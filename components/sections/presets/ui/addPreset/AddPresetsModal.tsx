@@ -70,7 +70,8 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
   const [addAircraft, setAddAircraft] = useState(false)
   const [addSystem, setAddSystem] = useState(false)
   const [addPresetType, setAddPresetType] = useState(false)
-  const [addCodeType] = useState(false)
+  // there is no button to add a new code type, so the select is always shown
+  const addCodeType = false
   const [buttonSubmit, setButtonSubmit] = useState(false)
   const [bulkUpload, setBulkUpload] = useState(false)
   const [presetToast, setPresetToast] = useState(false)

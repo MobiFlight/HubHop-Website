@@ -132,10 +132,6 @@ const PresetTable: React.FC<Props> = ({
   }
 
   const ExpandedComponent = ({ data }: { data: any }) => {
-    const [updatedBy] = useState(data.updatedBy)
-    const [createdDate] = useState(data.createdDate)
-    const [version] = useState(data.version)
-    const [reported] = useState(data.reported)
     const [vendor, setVendor] = useState(data.vendor)
     const [aircraft, setAircraft] = useState(data.aircraft)
     const [system, setSystem] = useState(data.system)
@@ -144,18 +140,17 @@ const PresetTable: React.FC<Props> = ({
     const [label, setLabel] = useState(data.label)
     const [code, setCode] = useState(data.code)
     const [description, setDescription] = useState(data.description)
-    const [author] = useState(data.author)
 
     return (
       <div className="relative -mx-3 md:m-0">
         <PresetCard
           id={data.id}
           label={label}
-          updatedBy={updatedBy}
-          author={author}
-          createdDate={createdDate}
-          version={version}
-          reported={reported}
+          updatedBy={data.updatedBy}
+          author={data.author}
+          createdDate={data.createdDate}
+          version={data.version}
+          reported={data.reported}
           vendor={vendor}
           aircraft={aircraft}
           system={system}
