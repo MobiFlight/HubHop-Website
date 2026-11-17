@@ -35,7 +35,8 @@ const Modal: React.FC<React.PropsWithChildren<Props>> = ({
           <div className="flex items-center justify-between rounded-t-lg bg-hhBG/50 px-5 py-2">
             <h3 className="text-2xl">{title}</h3>
             <button
-              onClick={(e) => closeModalX(e)}
+              aria-label="Close dialog"
+              onClick={(e) => (closeModalX ?? closeModal)(e)}
               className="flex items-center space-x-1 rounded-lg py-1.5 text-sm font-semibold"
             >
               <div className="text-lg">

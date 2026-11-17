@@ -40,6 +40,21 @@ test.describe("Delete preset - moderator", () => {
     expect(presetViewPage.hubHopPage.writeRequests()).toHaveLength(0)
   })
 
+  test("Delete preset - the close button hides the dialog", async ({
+    presetViewPage,
+    page,
+  }) => {
+    await presetViewPage.gotoPage("msfs-0009")
+
+    await page.getByRole("button", { name: "Delete" }).click()
+    await page.getByRole("button", { name: "Close dialog" }).click()
+
+    await expect(
+      page.getByRole("heading", { name: "Delete Preset" }),
+    ).toHaveCount(0)
+    expect(presetViewPage.hubHopPage.writeRequests()).toHaveLength(0)
+  })
+
   test("Delete preset - confirm sends the delete request", async ({
     presetViewPage,
     page,
