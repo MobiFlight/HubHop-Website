@@ -13,8 +13,8 @@
   "dependencies": {
     "@azure/msal-browser": "^4.30.0",
     "@azure/msal-react": "^3.0.29",
-    "dexie": "^3.2.7",
-    "dexie-react-hooks": "^1.1.7",
+    "dexie": "^4.4.7",
+    "dexie-react-hooks": "^4.4.0",
     "eslint-config-next": "^15.5.29",
     "motion": "^14.14.0",
     "next": "^15.5.29",
