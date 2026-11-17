@@ -10,7 +10,7 @@ import { GiCommercialAirplane } from "react-icons/gi"
 import { RiListSettingsLine } from "react-icons/ri"
 import { MdBusiness } from "react-icons/md"
 import { BiCog, BiJoystickButton } from "react-icons/bi"
-import { AnimatePresence, motion } from "framer-motion"
+import { AnimatePresence, motion, type Variants } from "motion/react"
 import { AuthenticatedTemplate } from "@azure/msal-react"
 
 interface Props {
@@ -106,7 +106,7 @@ const PresetFilter: React.FC<Props> = ({
     ),
   )
 
-  const draw = {
+  const draw: Variants = {
     hidden: {
       pathLength: 0,
       transition: {
@@ -313,7 +313,7 @@ const PresetFilter: React.FC<Props> = ({
                       ? { background: "#ffa047" }
                       : { background: "#545963" }
                   }
-                  className={`flex h-5 w-5 items-center justify-center rounded border border-hhOrange/50 text-hhBG`}
+                  className={`flex h-5 w-5 items-center justify-center rounded-sm border border-hhOrange/50 text-hhBG`}
                   onMouseEnter={showTip}
                   onMouseLeave={hideTip}
                 >
@@ -362,7 +362,7 @@ const PresetFilter: React.FC<Props> = ({
                         ? { background: "#ffa047" }
                         : { background: "#545963" }
                     }
-                    className={`flex h-5 w-5 items-center justify-center rounded border border-hhOrange/50 text-hhBG`}
+                    className={`flex h-5 w-5 items-center justify-center rounded-sm border border-hhOrange/50 text-hhBG`}
                   >
                     {showReportedPresets && (
                       <motion.div className="text-xs">

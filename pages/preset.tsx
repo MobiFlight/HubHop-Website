@@ -1,5 +1,5 @@
 import { useLiveQuery } from "dexie-react-hooks"
-import { AnimatePresence, motion } from "framer-motion"
+import { AnimatePresence, motion } from "motion/react"
 import { useRouter } from "next/router"
 import { useEffect, useMemo, useState } from "react"
 import { BsCheck2Square } from "react-icons/bs"
@@ -8,7 +8,6 @@ import Toast from "../components/sections/Shared/Toast"
 import { presetTable } from "../services/presetSync"
 import { ToastContainer, toast } from "react-toastify"
 
-import "react-toastify/dist/ReactToastify.css"
 import { IoSaveOutline } from "react-icons/io5"
 
 const Preset: React.FC = () => {
@@ -199,7 +198,7 @@ const Preset: React.FC = () => {
         pauseOnHover
         theme="light"
         toastClassName={() =>
-          "bg-hhOrange text-black font-bold rounded-lg p-1 flex"
+          "relative w-80 bg-hhOrange text-black font-bold rounded-lg p-1 flex"
         }
         icon={<IoSaveOutline size={"2rem"} />}
       />

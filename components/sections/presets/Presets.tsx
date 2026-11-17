@@ -3,7 +3,7 @@ import PresetFilter from "./presetTable/PresetFilter"
 import PresetTable from "./presetTable/PresetTable"
 import { AiOutlineLoading } from "react-icons/ai"
 import ExportPresetsModal from "./ui/exportPresets/ExportPresetsModal"
-import { AnimatePresence, motion } from "framer-motion"
+import { AnimatePresence, motion } from "motion/react"
 import AddPresetsModal from "./ui/addPreset/AddPresetsModal"
 import Toast from "../Shared/Toast"
 import { BsCheck2Square } from "react-icons/bs"
@@ -15,7 +15,6 @@ import Image from "next/image"
 import { useLiveQuery } from "dexie-react-hooks"
 import { ToastContainer, toast } from "react-toastify"
 
-import "react-toastify/dist/ReactToastify.css"
 import { useRouter } from "next/router"
 
 const Presets: React.FC = () => {
@@ -283,12 +282,15 @@ const Presets: React.FC = () => {
   const router = useRouter()
 
   const updateQueryParam = (key: string, value: string) => {
-    const newQuery = { ...router.query, [key]: value }
-    if (!value) delete newQuery[key] // Remove the key if value is empty
+    // Start from the current URL: router.query can still be stale when
+    // filters change in quick succession, which would drop other filters.
+    const params = new URLSearchParams(window.location.search)
+    if (value) params.set(key, value)
+    else params.delete(key) // Remove the key if value is empty
     router.push(
       {
         pathname: router.pathname,
-        query: newQuery,
+        query: Object.fromEntries(params),
       },
       undefined,
       { shallow: true },

@@ -3,7 +3,7 @@ import Head from "next/head"
 import Navbar from "./sections/Navbar/Navbar"
 import Footer from "./sections/footer/Footer"
 import { FiArrowUpCircle } from "react-icons/fi"
-import { AnimatePresence, motion } from "framer-motion"
+import { AnimatePresence, motion } from "motion/react"
 
 type Props = {
   children?: ReactNode
@@ -75,7 +75,7 @@ const Layout = ({ children, title = "Hubhop" }: Props) => {
           >
             <button
               onClick={() => toTop()}
-              className="fixed bottom-5 right-5 rounded-xl bg-hhOrange p-1.5 text-2xl font-bold text-hhBG"
+              className="fixed right-5 bottom-5 rounded-xl bg-hhOrange p-1.5 text-2xl font-bold text-hhBG"
             >
               <FiArrowUpCircle />
             </button>

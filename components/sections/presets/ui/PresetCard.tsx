@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { AnimatePresence, motion } from "framer-motion"
+import { AnimatePresence, motion } from "motion/react"
 import PresetHistoryList from "../singlePresetView/PresetHistoryList"
 import DeleteButton from "./deletePreset/DeleteButton"
 import EditToggle from "./editPreset/EditToggle"
@@ -307,7 +307,7 @@ const PresetCard: React.FC<Props> = ({
               {label}
             </h2>
           )}
-          <div className="flex w-full flex-col space-y-2 p-5 text-hhText lg:flex-row lg:space-x-5 lg:space-y-0">
+          <div className="flex w-full flex-col space-y-2 p-5 text-hhText lg:flex-row lg:space-y-0 lg:space-x-5">
             <div className="flex w-full flex-col space-y-2 lg:w-1/6">
               {version > "1" ? (
                 <PresetPreviewLabel title={"Updated by"} editData={updatedBy} />
@@ -407,8 +407,8 @@ const PresetCard: React.FC<Props> = ({
               />
             </div>
           </div>
-          <div className="flex w-full justify-between px-5 pb-5 pt-2">
-            <div className="flex flex-col space-y-2 xl:flex-row xl:items-center xl:space-x-5 xl:space-y-0">
+          <div className="flex w-full justify-between px-5 pt-2 pb-5">
+            <div className="flex flex-col space-y-2 xl:flex-row xl:items-center xl:space-y-0 xl:space-x-5">
               <div
                 onClick={() => {
                   if (
@@ -430,7 +430,7 @@ const PresetCard: React.FC<Props> = ({
                 <DeleteButton />
               </div>
             </div>
-            <div className="flex flex-col-reverse justify-between space-y-2 space-y-reverse xl:flex-row xl:items-center xl:space-x-5 xl:space-y-0">
+            <div className="flex flex-col-reverse justify-between space-y-2 space-y-reverse xl:flex-row xl:items-center xl:space-y-0 xl:space-x-5">
               <AnimatePresence>
                 {edit && (
                   <motion.div
@@ -454,7 +454,7 @@ const PresetCard: React.FC<Props> = ({
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed bottom-5 right-0 z-50 mx-3 rounded-lg bg-red-800 p-5 px-5 py-2 font-semibold text-hhText md:right-5"
+                        className="fixed right-0 bottom-5 z-50 mx-3 rounded-lg bg-red-800 p-5 px-5 py-2 font-semibold text-hhText md:right-5"
                       >
                         No permission to edit this preset. You have to be logged
                         in to perform this action.
@@ -544,7 +544,7 @@ const PresetCard: React.FC<Props> = ({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed bottom-5 right-0 z-50 mx-3 rounded-lg bg-red-800 p-5 px-5 py-2 text-sm font-semibold text-hhText md:right-5"
+              className="fixed right-0 bottom-5 z-50 mx-3 rounded-lg bg-red-800 p-5 px-5 py-2 text-sm font-semibold text-hhText md:right-5"
             >
               No permission to delete a preset. You have to be a moderator to
               perform this action.

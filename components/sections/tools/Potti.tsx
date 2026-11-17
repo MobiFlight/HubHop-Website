@@ -386,7 +386,7 @@ const Potti: React.FC = () => {
           </div>
         </div>
       </div>
-      <h2 className="mb-5 mt-5 text-center text-xl font-semibold">
+      <h2 className="mt-5 mb-5 text-center text-xl font-semibold">
         Generated RPN Code
       </h2>
       <textarea

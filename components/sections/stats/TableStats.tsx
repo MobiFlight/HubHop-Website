@@ -53,9 +53,12 @@ const TableStats: React.FC<Props> = ({ data, added }) => {
   ]
 
   createTheme("hubhop", {
+    // v8 draws lines between header columns by default; v7 did not
+    headerSeparator: false,
     text: {
       primary: "#D2D0D2",
       secondary: "#D2D0D2",
+      disabled: "rgba(0, 0, 0, .38)",
     },
     background: {
       default: "transparent",
@@ -70,7 +73,6 @@ const TableStats: React.FC<Props> = ({ data, added }) => {
     highlightOnHover: {
       default: "#ffa047",
       text: "#33353e",
-      fontWeight: 700,
     },
     button: {
       default: "#D2D0D2",
@@ -125,7 +127,7 @@ const TableStats: React.FC<Props> = ({ data, added }) => {
           >
             <div>
               <h2 className={`ml-5 pt-3 font-bold text-hhText`}>{label}</h2>
-              <div className="flex w-full flex-col space-y-2 p-5 text-sm text-hhText md:flex-row md:space-x-5 md:space-y-0">
+              <div className="flex w-full flex-col space-y-2 p-5 text-sm text-hhText md:flex-row md:space-y-0 md:space-x-5">
                 <div className="flex w-full flex-col space-y-2 md:w-1/6">
                   {version > "1" ? (
                     <PresetPreviewLabel
@@ -189,8 +191,8 @@ const TableStats: React.FC<Props> = ({ data, added }) => {
                   />
                 </div>
               </div>
-              <div className="flex w-full justify-end px-5 pb-5 pt-2">
-                <div className="flex flex-col-reverse justify-between space-y-reverse md:flex-row md:items-center md:space-x-5 md:space-y-0">
+              <div className="flex w-full justify-end px-5 pt-2 pb-5">
+                <div className="flex flex-col-reverse justify-between space-y-reverse md:flex-row md:items-center md:space-y-0 md:space-x-5">
                   {<OpenPresetButton id={data._id} />}
                 </div>
               </div>

@@ -18,11 +18,15 @@ export class PresetsPage {
     return this.page.getByRole("table")
   }
 
-  /** Data rows of the preset table (excludes the header row) */
+  /** Data rows of the preset table (excludes header and empty-state rows) */
   get rows(): Locator {
-    return this.table
-      .getByRole("row")
-      .filter({ has: this.page.getByRole("cell") })
+    return (
+      this.table
+        .getByRole("row")
+        .filter({ hasNot: this.page.getByRole("columnheader") })
+        // the "no records" message is rendered as a row, too
+        .filter({ hasNot: this.page.getByRole("status") })
+    )
   }
 
   row(label: string): Locator {

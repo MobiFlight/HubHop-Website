@@ -1,7 +1,7 @@
 import PresetPreviewLabel from "../ui/PresetInputLabel"
 import { AiOutlineLoading } from "react-icons/ai"
 import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence, type Variants } from "motion/react"
 import { BsArrowUpCircle } from "react-icons/bs"
 import ButtonOrange from "../../Shared/ButtonOrange"
 
@@ -16,7 +16,7 @@ const PresetHistoryList: React.FC<Props> = ({
   loading,
   revertHistory,
 }) => {
-  const divVariants = {
+  const divVariants: Variants = {
     expanded: {
       height: "34vh",
       transition: {
@@ -87,7 +87,7 @@ const PresetHistoryList: React.FC<Props> = ({
                 return (
                   <div
                     key={history.createdDate}
-                    className="mb-5 ml-3 mr-1 rounded-lg bg-hhBG/70"
+                    className="mr-1 mb-5 ml-3 rounded-lg bg-hhBG/70"
                   >
                     <div className="flex w-full flex-col p-5 text-hhText md:flex-row md:space-x-5">
                       <div className="flex w-full flex-col space-y-2 md:w-1/6">

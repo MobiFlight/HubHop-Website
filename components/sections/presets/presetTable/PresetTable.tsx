@@ -79,9 +79,12 @@ const PresetTable: React.FC<Props> = ({
   ]
 
   createTheme("hubhop", {
+    // v8 draws lines between header columns by default; v7 did not
+    headerSeparator: false,
     text: {
       primary: "#D2D0D2",
       secondary: "#D2D0D2",
+      disabled: "rgba(0, 0, 0, .38)",
     },
     background: {
       default: "transparent",
@@ -96,7 +99,6 @@ const PresetTable: React.FC<Props> = ({
     highlightOnHover: {
       default: "#ffa047",
       text: "#33353e",
-      fontWeight: 700,
     },
     button: {
       default: "#D2D0D2",
@@ -230,7 +232,7 @@ const PresetTable: React.FC<Props> = ({
 
   return (
     <div className="relative flex w-full flex-col rounded-lg bg-hhCard/40">
-      <div className="absolute right-0 z-10 mr-2 mt-2 hidden items-center space-x-3 md:flex">
+      <div className="absolute right-0 z-10 mt-2 mr-2 hidden items-center space-x-3 md:flex">
         <div
           onClick={() => {
             if (localStorage.getItem("username")) {
@@ -241,7 +243,7 @@ const PresetTable: React.FC<Props> = ({
           <AddPresetButton />
         </div>
       </div>
-      <div className="absolute bottom-3 left-3 z-10 mr-2 mt-2 hidden items-center space-x-3 md:flex">
+      <div className="absolute bottom-3 left-3 z-10 mt-2 mr-2 hidden items-center space-x-3 md:flex">
         <div
           onClick={() => {
             if (localStorage.getItem("username")) {

@@ -11,7 +11,7 @@ import { useForm } from "react-hook-form"
 import { FiExternalLink, FiRepeat } from "react-icons/fi"
 import Link from "next/link"
 import { AiOutlineLoading } from "react-icons/ai"
-import { AnimatePresence, motion } from "framer-motion"
+import { AnimatePresence, motion } from "motion/react"
 import Toast from "../../../Shared/Toast"
 import { AuthenticatedTemplate } from "@azure/msal-react"
 import { RiListSettingsLine } from "react-icons/ri"
@@ -20,6 +20,22 @@ import { db } from "../../../../../services/db"
 interface Props {
   setAddModalOpen: Function
   presets: any
+}
+
+interface AddPresetForm {
+  addVendors: string
+  vendors: string
+  addAircrafts: string
+  aircrafts: string
+  addSystems: string
+  systems: string
+  addPresetTypes: string
+  presetTypes: string
+  addCodeTypes: string
+  codeTypes: string
+  label: string
+  code: string
+  description: string
 }
 
 const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
@@ -161,18 +177,18 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
     watch,
     resetField,
     formState: { errors },
-  } = useForm()
+  } = useForm<AddPresetForm>()
 
   useEffect(() => {
     const subscription = watch((value) => {
-      setFilteredVendors(value.vendors)
-      setFilteredAircrafts(value.aircrafts)
-      setFilteredSystems(value.systems)
-      setFilteredPresetTypes(value.presetTypes)
-      setFilteredCodeTypes(value.codeTypes)
-      setCode(value.code)
-      setLabel(value.label)
-      setDescription(value.description)
+      setFilteredVendors(value.vendors ?? "")
+      setFilteredAircrafts(value.aircrafts ?? "")
+      setFilteredSystems(value.systems ?? "")
+      setFilteredPresetTypes(value.presetTypes ?? "")
+      setFilteredCodeTypes(value.codeTypes ?? "")
+      setCode(value.code ?? "")
+      setLabel(value.label ?? "")
+      setDescription(value.description ?? "")
     })
     return () => subscription.unsubscribe()
   }, [watch])
@@ -411,7 +427,7 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                     <button
                       onClick={() => (
                         setAddAircraft((prev) => !prev),
-                        resetField("addAicrafts", { defaultValue: "" }),
+                        resetField("addAircrafts", { defaultValue: "" }),
                         resetField("aircrafts", { defaultValue: "" })
                       )}
                       type={"button"}
@@ -768,7 +784,7 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
             If you want to upload many presets at once, you can download or open
             the import-file and post it on the{" "}
             <a
-              className="rounded bg-hhOrange px-2 font-semibold text-hhBG transition-all hover:bg-hhOrangeShade-600"
+              className="rounded-sm bg-hhOrange px-2 font-semibold text-hhBG transition-all hover:bg-hhOrangeShade-600"
               href="https://discord.gg/weZwE4sD"
               target={"_blank"}
             >

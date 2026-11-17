@@ -1,6 +1,115 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --font-sans: Assistant, Helvetica, Arial, sans-serif;
+
+  --color-mfBlue: #3366cc;
+  --color-hhBG: #33353e;
+  --color-hhCard: #545963;
+  --color-hhText: #d2d0d2;
+  --color-hhIcons: #f9e7e7;
+  --color-hhOrange: #ffa047;
+
+  --color-hhOrangeShade-100: #ffe2c6;
+  --color-hhOrangeShade-200: #ffd5ad;
+  --color-hhOrangeShade-300: #ffc793;
+  --color-hhOrangeShade-400: #ffba7a;
+  --color-hhOrangeShade-500: #ffa047;
+  --color-hhOrangeShade-600: #ff932d;
+  --color-hhOrangeShade-700: #ff8614;
+  --color-hhOrangeShade-800: #f97900;
+  --color-hhOrangeShade-900: #e06c00;
+
+  /*
+    Tailwind CSS v4 changed its default palette (OKLCH). Keep the Tailwind CSS
+    v3 values of the built-in colors used on the site, so nothing changes visually.
+  */
+  --color-red-500: #ef4444;
+  --color-red-600: #dc2626;
+  --color-red-700: #b91c1c;
+  --color-red-800: #991b1b;
+  --color-red-900: #7f1d1d;
+  --color-green-800: #166534;
+  --color-green-900: #14532d;
+  --color-gray-200: #e5e7eb;
+  --color-gray-400: #9ca3af;
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+/*
+  Tailwind CSS v4 no longer shows a pointer cursor on buttons and uses a
+  different placeholder color. Keep the Tailwind CSS v3 behavior.
+*/
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--color-gray-400);
+  }
+
+  /* v4 resets all padding; v3 kept the browser's default table cell padding */
+  td,
+  th {
+    padding: 1px;
+  }
+}
+
+@utility font-thin {
+  font-variation-settings: "wght" 100 !important;
+}
+
+@utility font-extralight {
+  font-variation-settings: "wght" 200 !important;
+}
+
+@utility font-light {
+  font-variation-settings: "wght" 300 !important;
+}
+
+@utility font-normal {
+  font-variation-settings: "wght" 400 !important;
+}
+
+@utility font-medium {
+  font-variation-settings: "wght" 500 !important;
+}
+
+@utility font-semibold {
+  font-variation-settings: "wght" 600 !important;
+}
+
+@utility font-bold {
+  font-variation-settings: "wght" 700 !important;
+}
+
+@utility font-extrabold {
+  font-variation-settings: "wght" 800 !important;
+}
+
+@utility font-black {
+  font-variation-settings: "wght" 900 !important;
+}
 
 @layer base {
   @font-face {
@@ -10,58 +119,35 @@
     font-weight: 100 900 !important;
   }
 }
-@layer utilities {
-  .font-thin {
-    font-variation-settings: "wght" 100 !important;
-  }
-  .font-extralight {
-    font-variation-settings: "wght" 200 !important;
-  }
-  .font-light {
-    font-variation-settings: "wght" 300 !important;
-  }
-  .font-normal {
-    font-variation-settings: "wght" 400 !important;
-  }
-  .font-medium {
-    font-variation-settings: "wght" 500 !important;
-  }
-  .font-semibold {
-    font-variation-settings: "wght" 600 !important;
-  }
-  .font-bold {
-    font-variation-settings: "wght" 700 !important;
-  }
-  .font-extrabold {
-    font-variation-settings: "wght" 800 !important;
-  }
-  .font-black {
-    font-variation-settings: "wght" 900 !important;
-  }
-}
 
-html {
-  padding: 0;
-  margin: 0;
-  scroll-behavior: smooth;
-}
+/*
+  Element base styles live in the base layer: in Tailwind CSS v4, unlayered
+  CSS would override utility classes (e.g. text colors on links).
+*/
+@layer base {
+  html {
+    padding: 0;
+    margin: 0;
+    scroll-behavior: smooth;
+  }
 
-body {
-  background: url("../public/images/bg-hubhop.png");
-  @apply bg-hhBG bg-cover bg-fixed bg-no-repeat text-hhText transition-all;
-}
-body.xplane {
-  background: url("../public/images/bg-hubhop-xplane.png");
-  @apply bg-hhBG bg-cover bg-fixed bg-no-repeat text-hhText transition-all;
-}
+  body {
+    background: url("../public/images/bg-hubhop.png");
+    @apply bg-hhBG bg-cover bg-fixed bg-no-repeat text-hhText transition-all;
+  }
+  body.xplane {
+    background: url("../public/images/bg-hubhop-xplane.png");
+    @apply bg-hhBG bg-cover bg-fixed bg-no-repeat text-hhText transition-all;
+  }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 
-* {
-  box-sizing: border-box;
+  * {
+    box-sizing: border-box;
+  }
 }
 
 ::-webkit-scrollbar {
