@@ -161,7 +161,6 @@ test.describe("Preset list", () => {
 test.describe("Preset list - local cache", () => {
   test("Preset cache - does not download again when nothing changed", async ({
     presetsPage,
-    page,
   }) => {
     await presetsPage.gotoPage()
     await expect(presetsPage.rows).toHaveCount(15)
@@ -174,7 +173,6 @@ test.describe("Preset list - local cache", () => {
 
   test("Preset cache - downloads again when the server has newer presets", async ({
     presetsPage,
-    page,
   }) => {
     await presetsPage.gotoPage()
     await expect(presetsPage.rows).toHaveCount(15)

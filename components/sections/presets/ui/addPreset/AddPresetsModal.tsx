@@ -15,7 +15,6 @@ import { AnimatePresence, motion } from "motion/react"
 import Toast from "../../../Shared/Toast"
 import { AuthenticatedTemplate } from "@azure/msal-react"
 import { RiListSettingsLine } from "react-icons/ri"
-import { db } from "../../../../../services/db"
 
 interface Props {
   setAddModalOpen: Function
@@ -71,7 +70,7 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
   const [addAircraft, setAddAircraft] = useState(false)
   const [addSystem, setAddSystem] = useState(false)
   const [addPresetType, setAddPresetType] = useState(false)
-  const [addCodeType, setAddCodeType] = useState(false)
+  const [addCodeType] = useState(false)
   const [buttonSubmit, setButtonSubmit] = useState(false)
   const [bulkUpload, setBulkUpload] = useState(false)
   const [presetToast, setPresetToast] = useState(false)
@@ -133,43 +132,6 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
       return preset.code.toLowerCase().includes(code.toLowerCase())
     }
   })
-
-  const uniqueVendor = Array.from(
-    new Set(
-      filteredInputTypeList
-        .map((item: any) => item.vendor)
-        .sort((a: any, b: any) =>
-          a.toLowerCase().localeCompare(b.toLowerCase()),
-        ),
-    ),
-  )
-  const uniqueAircraft = Array.from(
-    new Set(
-      filteredInputTypeList
-        .map((item: any) => item.aircraft)
-        .sort((a: any, b: any) =>
-          a.toLowerCase().localeCompare(b.toLowerCase()),
-        ),
-    ),
-  )
-  const uniqueSystem = Array.from(
-    new Set(
-      filteredInputTypeList
-        .map((item: any) => item.system)
-        .sort((a: any, b: any) =>
-          a.toLowerCase().localeCompare(b.toLowerCase()),
-        ),
-    ),
-  )
-  const uniqueType = Array.from(
-    new Set(
-      filteredInputTypeList
-        .map((item: any) => item.presetType)
-        .sort((a: any, b: any) =>
-          a.toLowerCase().localeCompare(b.toLowerCase()),
-        ),
-    ),
-  )
 
   const {
     register,

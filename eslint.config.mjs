@@ -20,6 +20,8 @@ const config = [
       "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/no-unsafe-function-type": "warn",
       "react-hooks/exhaustive-deps": "warn",
+      // unused imports and variables are errors (next/typescript only warns)
+      "@typescript-eslint/no-unused-vars": "error",
     },
   },
   prettier,

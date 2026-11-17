@@ -106,10 +106,10 @@ const TableStats: React.FC<Props> = ({ data, added }) => {
   }
 
   const ExpandedComponent = ({ data }: { data: any }) => {
-    const [updatedBy, setUpdatedBy] = useState(data.updatedBy)
-    const [createdDate, setCreatedDate] = useState(data.createdDate)
-    const [version, setVersion] = useState(data.version)
-    const [reported, setReported] = useState(data.reported)
+    const [updatedBy] = useState(data.updatedBy)
+    const [createdDate] = useState(data.createdDate)
+    const [version] = useState(data.version)
+    const [reported] = useState(data.reported)
     const [vendor, setVendor] = useState(data.vendor)
     const [aircraft, setAircraft] = useState(data.aircraft)
     const [system, setSystem] = useState(data.system)
@@ -117,7 +117,7 @@ const TableStats: React.FC<Props> = ({ data, added }) => {
     const [label, setLabel] = useState(data.label)
     const [code, setCode] = useState(data.code)
     const [description, setDescription] = useState(data.description)
-    const [author, setAuthor] = useState(data.author)
+    const [author] = useState(data.author)
 
     return (
       <div className="relative -mx-3 md:m-0">

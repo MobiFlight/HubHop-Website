@@ -8,8 +8,6 @@ interface Props {
 
 const ExportPresetsModal: React.FC<Props> = ({ setExportModalOpen }) => {
   const [downloadTxt, setDownloadTxt] = useState(false)
-  const [downloadCip, setDownloadCip] = useState(false)
-  const [downloadSimvars, setDownloadSimvars] = useState(false)
 
   function downloadEventsTxt() {
     setDownloadTxt(true)
@@ -28,44 +26,6 @@ const ExportPresetsModal: React.FC<Props> = ({ setExportModalOpen }) => {
       })
       .then(() => setDownloadTxt(false))
   }
-  function downloadEventsCip() {
-    setDownloadCip(true)
-    fetch(
-      "https://hubhop-api-mgtm.azure-api.net/api/v1/export/presets?type=cip",
-      { redirect: "follow" },
-    )
-      .then((response) => response.blob())
-      .then((blob) => {
-        const url = window.URL.createObjectURL(blob)
-        const a = document.createElement("a")
-        a.href = url
-        a.download = "msfs2020_eventids.cip"
-        document.body.appendChild(a)
-        a.click()
-        a.remove()
-      })
-      .then(() => setDownloadCip(false))
-  }
-
-  function downloadSimVars() {
-    setDownloadSimvars(true)
-    fetch(
-      "https://hubhop-api-mgtm.azure-api.net/api/v1/export/presets?type=simVars",
-      { redirect: "follow" },
-    )
-      .then((response) => response.blob())
-      .then((blob) => {
-        const url = window.URL.createObjectURL(blob)
-        const a = document.createElement("a")
-        a.href = url
-        a.download = "msfs2020_simvars.cip"
-        document.body.appendChild(a)
-        a.click()
-        a.remove()
-      })
-      .then(() => setDownloadSimvars(false))
-  }
-
   return (
     <Modal
       position="fixed"
@@ -90,12 +50,12 @@ const ExportPresetsModal: React.FC<Props> = ({ setExportModalOpen }) => {
             />
             <ExportButton
               text={"msfs2020_eventids.cip"}
-              loading={downloadCip}
+              loading={false}
               disabled={true}
             />
             <ExportButton
               text={"msfs2020_simvars.cip"}
-              loading={downloadSimvars}
+              loading={false}
               disabled={true}
             />
           </div>

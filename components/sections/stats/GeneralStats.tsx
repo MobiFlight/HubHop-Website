@@ -4,9 +4,6 @@ import DataTable, { createTheme } from "react-data-table-component"
 import LoadingSpinner from "../Shared/LoadingSpinner"
 import Modal from "../Shared/Modal"
 import StatsCard from "./ui/StatsCard"
-import { db } from "../../../services/db"
-import OpenPresetButton from "../presets/ui/OpenPresetButton"
-import PresetPreviewLabel from "../presets/ui/PresetInputLabel"
 
 interface Props {
   presets: string[]

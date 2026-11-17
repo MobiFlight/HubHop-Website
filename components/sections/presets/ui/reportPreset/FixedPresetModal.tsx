@@ -9,7 +9,6 @@ interface Props {
 }
 
 const FixedPresetModal: React.FC<Props> = ({
-  presetId,
   setFixedModalOpen,
   fixedToast,
 }) => {
