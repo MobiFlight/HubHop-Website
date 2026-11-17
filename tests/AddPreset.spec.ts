@@ -133,6 +133,19 @@ test.describe("Add preset - user", () => {
     ])
   })
 
+  test("Add preset - Input/Output offers only the known values", async ({
+    page,
+  }) => {
+    const presetType = page.locator("form").getByRole("combobox").nth(3)
+
+    await expect(presetType.getByRole("option")).toHaveText([
+      "All Inputs/Outputs",
+      "Input",
+      "Output",
+      "Input (Potentiometer)",
+    ])
+  })
+
   test("Add preset - shows similar presets while typing", async ({ page }) => {
     const form = page.locator("form")
 

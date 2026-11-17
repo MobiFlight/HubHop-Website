@@ -32,7 +32,7 @@ const PresetView: React.FC<Props> = ({
   const [vendor, setVendor] = useState("")
   const [aircraft, setAircraft] = useState("")
   const [system, setSystem] = useState("")
-  const [presetType, setPresetType] = useState<Preset["presetType"]>("")
+  const [presetType, setPresetType] = useState<Preset["presetType"]>("Input")
   const [codeType, setCodeType] = useState<Preset["codeType"]>("")
   const [label, setLabel] = useState("")
   const [code, setCode] = useState("")
@@ -116,7 +116,9 @@ const PresetView: React.FC<Props> = ({
           setVendor={(e: InputChangeEvent) => setVendor(e.target.value)}
           setAircraft={(e: InputChangeEvent) => setAircraft(e.target.value)}
           setSystem={(e: InputChangeEvent) => setSystem(e.target.value)}
-          setPresetType={(e: InputChangeEvent) => setPresetType(e.target.value)}
+          setPresetType={(e: InputChangeEvent) =>
+            setPresetType(e.target.value as Preset["presetType"])
+          }
           setCodeType={(e: InputChangeEvent) =>
             setCodeType(e.target.value as Preset["codeType"])
           }

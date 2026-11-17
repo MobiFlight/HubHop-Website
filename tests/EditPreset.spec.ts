@@ -28,7 +28,7 @@ test.describe("Edit preset - author", () => {
     await test.step("Moderator-only fields stay read-only", async () => {
       await expect(page.getByRole("textbox", { name: "System" })).toHaveCount(0)
       await expect(
-        page.getByRole("textbox", { name: "Input / Output" }),
+        page.getByRole("combobox", { name: "Input / Output" }),
       ).toHaveCount(0)
     })
 
@@ -83,7 +83,15 @@ test.describe("Edit preset - moderator", () => {
 
     await page.getByRole("button", { name: "View" }).click()
     await page.getByRole("textbox", { name: "System" }).fill("Power")
-    await page.getByRole("textbox", { name: "Input / Output" }).fill("Output")
+    const presetType = page.getByRole("combobox", { name: "Input / Output" })
+    await test.step("Input/Output offers only the known values", async () => {
+      await expect(presetType.getByRole("option")).toHaveText([
+        "Input",
+        "Output",
+        "Input (Potentiometer)",
+      ])
+    })
+    await presetType.selectOption("Output")
     await page.getByRole("button", { name: "Save" }).click()
 
     await expect

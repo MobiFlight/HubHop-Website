@@ -16,6 +16,7 @@ import Modal from "../../Shared/Modal"
 import ButtonOrange from "../../Shared/ButtonOrange"
 import ButtonDark from "../../Shared/ButtonDark"
 import { CODE_TYPES } from "../../../../lib/codeTypes"
+import { presetTypesFor } from "../../../../lib/presetTypes"
 import type { Preset } from "../../../../interfaces/preset"
 import { REPORTING_ENABLED } from "../../../../lib/features"
 
@@ -299,6 +300,7 @@ const PresetCard: React.FC<Props> = ({
                   edit
                 }
                 inputHandler={setPresetType}
+                options={presetTypesFor(simType)}
               />
               {typeof window !== "undefined" &&
                 localStorage.getItem("simType") === "xplane" && (
