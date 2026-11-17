@@ -1,11 +1,11 @@
 import { MdTabUnselected } from "react-icons/md"
 import Link from "next/link"
 
-interface Props {
+type OpenPresetButtonProps = {
   id: string
 }
 
-const OpenPresetButton: React.FC<Props> = ({ id }) => {
+const OpenPresetButton = ({ id }: OpenPresetButtonProps) => {
   return (
     <Link
       legacyBehavior

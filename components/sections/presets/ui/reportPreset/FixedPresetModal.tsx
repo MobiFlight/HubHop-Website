@@ -1,17 +1,17 @@
 import Modal from "../../../Shared/Modal"
 import FixedPresetButton from "./FixedPresetButton"
 
-interface Props {
+type FixedPresetModalProps = {
   label: string
   presetId: string
   setFixedModalOpen: Function
   fixedToast: Function
 }
 
-const FixedPresetModal: React.FC<Props> = ({
+const FixedPresetModal = ({
   setFixedModalOpen,
   fixedToast,
-}) => {
+}: FixedPresetModalProps) => {
   return (
     <Modal
       position={"absolute"}

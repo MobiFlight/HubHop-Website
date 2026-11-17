@@ -1,4 +1,8 @@
-const UserDropdown: React.FC<React.PropsWithChildren> = ({ children }) => {
+type UserDropdownProps = {
+  children: React.ReactNode
+}
+
+const UserDropdown = ({ children }: UserDropdownProps) => {
   return (
     <div className="absolute z-50">
       <div>

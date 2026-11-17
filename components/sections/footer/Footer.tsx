@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { FaDiscord, FaFingerprint, FaGithub, FaReadme } from "react-icons/fa"
 
-const Footer: React.FC = () => {
+const Footer = () => {
   return (
     <footer className="grid grid-cols-3 items-center justify-between bg-hhBG/50 px-5 py-5 text-hhText">
       <div>

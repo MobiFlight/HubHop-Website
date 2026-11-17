@@ -7,18 +7,18 @@ import ButtonOrange from "../../Shared/ButtonOrange"
 import { REPORTING_ENABLED } from "../../../../lib/features"
 import type { Preset } from "../../../../interfaces/preset"
 
-interface Props {
+type PresetHistoryListProps = {
   presetHistory: Preset[]
   loading: boolean
   // a reverted version without id; older versions may lack some fields
   revertHistory: (preset: Partial<Preset>) => void
 }
 
-const PresetHistoryList: React.FC<Props> = ({
+const PresetHistoryList = ({
   presetHistory,
   loading,
   revertHistory,
-}) => {
+}: PresetHistoryListProps) => {
   const divVariants: Variants = {
     expanded: {
       height: "34vh",

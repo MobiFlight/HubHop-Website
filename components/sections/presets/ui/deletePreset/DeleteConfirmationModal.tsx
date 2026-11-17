@@ -3,19 +3,19 @@ import DeleteButton from "./DeleteButton"
 import { FiAlertTriangle } from "react-icons/fi"
 import { presetTable, type SimType } from "../../../../../services/presetSync"
 
-interface Props {
+type DeleteConfirmationModalProps = {
   label: string
   presetId: string
   setDeleteModalOpen: Function
   deletedToast: Function
 }
 
-const DeleteConfirmationModal: React.FC<Props> = ({
+const DeleteConfirmationModal = ({
   label,
   presetId,
   setDeleteModalOpen,
   deletedToast,
-}) => {
+}: DeleteConfirmationModalProps) => {
   async function deletePreset() {
     const sim = (localStorage.getItem("simType") || "msfs2020") as SimType
     const deleted = await fetch(

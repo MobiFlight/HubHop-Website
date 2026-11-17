@@ -3,14 +3,12 @@ const background = {
   error: "bg-red-900",
 }
 
-interface Props {
+type ToastProps = {
+  children: React.ReactNode
   variant: keyof typeof background
 }
 
-const Toast: React.FC<React.PropsWithChildren<Props>> = ({
-  variant,
-  children,
-}) => {
+const Toast = ({ variant, children }: ToastProps) => {
   return (
     <div
       role="status"

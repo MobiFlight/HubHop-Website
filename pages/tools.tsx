@@ -5,7 +5,7 @@ import Layout from "../components/Layout"
 import ButtonOrange from "../components/sections/Shared/ButtonOrange"
 import Potti from "../components/sections/tools/Potti"
 
-const Tools: React.FC = () => {
+const Tools = () => {
   const [tool, setTool] = useState("potti")
 
   return (

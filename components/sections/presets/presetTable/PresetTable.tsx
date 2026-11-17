@@ -20,7 +20,7 @@ import {
   getAccessToken,
 } from "../../../../services/msalFunctions"
 
-interface Props extends PresetToasts {
+type PresetTableProps = PresetToasts & {
   data: Preset[]
   setExportModalOpen: (open: boolean) => void
   setAddModalOpen: (open: boolean) => void
@@ -97,7 +97,7 @@ const PresetRowDetails = ({
   )
 }
 
-const PresetTable: React.FC<Props> = ({
+const PresetTable = ({
   data,
   setExportModalOpen,
   setAddModalOpen,
@@ -106,7 +106,7 @@ const PresetTable: React.FC<Props> = ({
   fixedToast,
   savedToast,
   relevance,
-}) => {
+}: PresetTableProps) => {
   // The table keeps the column object from when the sort was selected, so its
   // selector would still use the relevance of the first letter typed.
   // Reading through a ref gives the selector the current relevance.

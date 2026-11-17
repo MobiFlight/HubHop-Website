@@ -3,7 +3,7 @@ import Hero from "../components/sections/home/Hero"
 import { db } from "../services/db"
 import { useEffect } from "react"
 
-const Home: React.FC = () => {
+const Home = () => {
   useEffect(() => {
     db.presets.count()
     db.presetsMsfs.count()

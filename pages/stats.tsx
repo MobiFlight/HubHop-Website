@@ -7,7 +7,7 @@ import GeneralStats from "../components/sections/stats/GeneralStats"
 import TableStats from "../components/sections/stats/TableStats"
 import { presetTable, syncSim } from "../services/presetSync"
 
-const Stats: React.FC = () => {
+const Stats = () => {
   const [presets, setPresets] = useState([])
   const [stats, setStats] = useState<any>([])
   const [simType, setSimType] = useState<string | null>(null)

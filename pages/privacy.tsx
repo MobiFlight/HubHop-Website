@@ -1,7 +1,7 @@
 import Head from "next/head"
 import Layout from "../components/Layout"
 
-const Privacy: React.FC = () => (
+const Privacy = () => (
   <Layout title="Privacy Policy | Hubhop by Mobiflight">
     <Head>
       <meta name="title" content="Privacy Policy | Hubhop by Mobiflight" />

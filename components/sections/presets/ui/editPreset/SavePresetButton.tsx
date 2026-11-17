@@ -1,11 +1,11 @@
 import { AiOutlineLoading } from "react-icons/ai"
 import { MdDone } from "react-icons/md"
 
-interface Props {
+type SavePresetButtonProps = {
   disabled: boolean
 }
 
-const SavePresetButton: React.FC<Props> = ({ disabled }) => {
+const SavePresetButton = ({ disabled }: SavePresetButtonProps) => {
   return (
     <button
       disabled={disabled}

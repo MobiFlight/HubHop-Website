@@ -4,12 +4,12 @@ import OpenPresetButton from "../presets/ui/OpenPresetButton"
 import PresetPreviewLabel from "../presets/ui/PresetInputLabel"
 import { REPORTING_ENABLED } from "../../../lib/features"
 
-interface Props {
+type TableStatsProps = {
   data: string[]
   added: boolean
 }
 
-const TableStats: React.FC<Props> = ({ data, added }) => {
+const TableStats = ({ data, added }: TableStatsProps) => {
   const columns: any = [
     {
       name: added ? "Added" : "Updated",

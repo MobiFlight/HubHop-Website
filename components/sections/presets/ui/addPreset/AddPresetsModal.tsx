@@ -19,7 +19,7 @@ import { CODE_TYPES } from "../../../../../lib/codeTypes"
 import { presetTypesFor } from "../../../../../lib/presetTypes"
 import { sortedUnique } from "../../../../../lib/presetFacets"
 
-interface Props {
+type AddPresetsModalProps = {
   setAddModalOpen: Function
   presets: any
 }
@@ -38,7 +38,10 @@ interface AddPresetForm {
   description: string
 }
 
-const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
+const AddPresetsModal = ({
+  setAddModalOpen,
+  presets,
+}: AddPresetsModalProps) => {
   const [filteredVendors, setFilteredVendors] = useState(
     localStorage.getItem("vendorFilter") === ""
       ? ""

@@ -3,7 +3,7 @@ import hubhopLogo from "../../../public/images/logo.png"
 import mfLogo from "../../../public/images/mf_logo.jpg"
 import Link from "next/link"
 
-const Hero: React.FC = () => {
+const Hero = () => {
   const customLoader = ({ src }: any) => {
     return src
   }
