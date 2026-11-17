@@ -109,7 +109,7 @@ const PresetFilter: React.FC<Props> = ({
             >
               <option value="">All Vendors</option>
               {uniqueVendor.map((o, i) => (
-                <option key={i as any}>{o as String[]}</option>
+                <option key={i as any}>{o as string[]}</option>
               ))}
             </select>
           </div>
@@ -125,7 +125,7 @@ const PresetFilter: React.FC<Props> = ({
             >
               <option value="">All Aircraft</option>
               {uniqueAircraft.map((o, i) => (
-                <option key={i as any}>{o as String[]}</option>
+                <option key={i as any}>{o as string[]}</option>
               ))}
             </select>
           </div>
@@ -141,7 +141,7 @@ const PresetFilter: React.FC<Props> = ({
             >
               <option value="">All Systems</option>
               {uniqueSystem.map((o, i) => (
-                <option key={i as any}>{o as String[]}</option>
+                <option key={i as any}>{o as string[]}</option>
               ))}
             </select>
           </div>
@@ -160,7 +160,7 @@ const PresetFilter: React.FC<Props> = ({
             >
               <option value="">All Inputs/Outputs</option>
               {uniqueType.map((o, i) => (
-                <option key={i as any}>{o as String[]}</option>
+                <option key={i as any}>{o as string[]}</option>
               ))}
             </select>
           </div>

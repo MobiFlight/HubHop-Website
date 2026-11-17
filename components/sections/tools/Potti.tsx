@@ -134,8 +134,8 @@ const Potti: React.FC = () => {
   const [NameEir, setNameEir] = useState("")
 
   function invertMinMax() {
-    var max2 = Mineir
-    var min2 = Maxeir
+    const max2 = Mineir
+    const min2 = Maxeir
 
     setMineir(min2)
     setMaxeir(max2)

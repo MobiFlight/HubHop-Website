@@ -71,8 +71,8 @@ const Privacy: React.FC = () => (
         Auf unseren Seiten sind Plugins des sozialen Netzwerks Facebook
         (Facebook Inc., 1601 Willow Road, Menlo Park, California, 94025, USA)
         integriert. Die Facebook-Plugins erkennen Sie an dem Facebook-Logo oder
-        dem "Like-Button" ("Gefällt mir") auf unserer Seite. Eine Übersicht über
-        die Facebook-Plugins finden Sie hier:
+        dem &quot;Like-Button&quot; (&quot;Gefällt mir&quot;) auf unserer Seite.
+        Eine Übersicht über die Facebook-Plugins finden Sie hier:
         <a href="http://developers.facebook.com/docs/plugins/" target="_blank">
           http://developers.facebook.com/docs/plugins/
         </a>
@@ -80,14 +80,14 @@ const Privacy: React.FC = () => (
         Wenn Sie unsere Seiten besuchen, wird über das Plugin eine direkte
         Verbindung zwischen Ihrem Browser und dem Facebook-Server hergestellt.
         Facebook erhält dadurch die Information, dass Sie mit Ihrer IP-Adresse
-        unsere Seite besucht haben. Wenn Sie den Facebook "Like-Button"
-        anklicken während Sie in Ihrem Facebook-Account eingeloggt sind, können
-        Sie die Inhalte unserer Seiten auf Ihrem Facebook-Profil verlinken.
-        Dadurch kann Facebook den Besuch unserer Seiten Ihrem Benutzerkonto
-        zuordnen. Wir weisen darauf hin, dass wir als Anbieter der Seiten keine
-        Kenntnis vom Inhalt der übermittelten Daten sowie deren Nutzung durch
-        Facebook erhalten. Weitere Informationen hierzu finden Sie in der
-        Datenschutzerklärung von facebook unter
+        unsere Seite besucht haben. Wenn Sie den Facebook
+        &quot;Like-Button&quot; anklicken während Sie in Ihrem Facebook-Account
+        eingeloggt sind, können Sie die Inhalte unserer Seiten auf Ihrem
+        Facebook-Profil verlinken. Dadurch kann Facebook den Besuch unserer
+        Seiten Ihrem Benutzerkonto zuordnen. Wir weisen darauf hin, dass wir als
+        Anbieter der Seiten keine Kenntnis vom Inhalt der übermittelten Daten
+        sowie deren Nutzung durch Facebook erhalten. Weitere Informationen
+        hierzu finden Sie in der Datenschutzerklärung von facebook unter
         <a href="http://de-de.facebook.com/policy.php" target="_blank">
           http://de-de.facebook.com/policy.php
         </a>
@@ -105,15 +105,16 @@ const Privacy: React.FC = () => (
       </p>
       <p>
         Diese Website benutzt Google Analytics, einen Webanalysedienst der
-        Google Inc. ("Google"). Google Analytics verwendet sog. "Cookies",
-        Textdateien, die auf Ihrem Computer gespeichert werden und die eine
-        Analyse der Benutzung der Website durch Sie ermöglichen. Die durch den
-        Cookie erzeugten Informationen über Ihre Benutzung dieser Website werden
-        in der Regel an einen Server von Google in den USA übertragen und dort
-        gespeichert. Im Falle der Aktivierung der IP-Anonymisierung auf dieser
-        Webseite wird Ihre IP-Adresse von Google jedoch innerhalb von
-        Mitgliedstaaten der Europäischen Union oder in anderen Vertragsstaaten
-        des Abkommens über den Europäischen Wirtschaftsraum zuvor gekürzt.
+        Google Inc. (&quot;Google&quot;). Google Analytics verwendet sog.
+        &quot;Cookies&quot;, Textdateien, die auf Ihrem Computer gespeichert
+        werden und die eine Analyse der Benutzung der Website durch Sie
+        ermöglichen. Die durch den Cookie erzeugten Informationen über Ihre
+        Benutzung dieser Website werden in der Regel an einen Server von Google
+        in den USA übertragen und dort gespeichert. Im Falle der Aktivierung der
+        IP-Anonymisierung auf dieser Webseite wird Ihre IP-Adresse von Google
+        jedoch innerhalb von Mitgliedstaaten der Europäischen Union oder in
+        anderen Vertragsstaaten des Abkommens über den Europäischen
+        Wirtschaftsraum zuvor gekürzt.
       </p>
       <p>
         Nur in Ausnahmefällen wird die volle IP-Adresse an einen Server von
@@ -149,12 +150,12 @@ const Privacy: React.FC = () => (
       </p>
       <p>
         Diese Website benutzt Google AdSense, einen Dienst zum Einbinden von
-        Werbeanzeigen der Google Inc. ("Google"). Google AdSense verwendet sog.
-        "Cookies", Textdateien, die auf Ihrem Computer gespeichert werden und
-        die eine Analyse der Benutzung der Website ermöglicht. Google AdSense
-        verwendet auch so genannte Web Beacons (unsichtbare Grafiken). Durch
-        diese Web Beacons können Informationen wie der Besucherverkehr auf
-        diesen Seiten ausgewertet werden.
+        Werbeanzeigen der Google Inc. (&quot;Google&quot;). Google AdSense
+        verwendet sog. &quot;Cookies&quot;, Textdateien, die auf Ihrem Computer
+        gespeichert werden und die eine Analyse der Benutzung der Website
+        ermöglicht. Google AdSense verwendet auch so genannte Web Beacons
+        (unsichtbare Grafiken). Durch diese Web Beacons können Informationen wie
+        der Besucherverkehr auf diesen Seiten ausgewertet werden.
       </p>
       <p>
         Die durch Cookies und Web Beacons erzeugten Informationen über die
@@ -224,9 +225,10 @@ const Privacy: React.FC = () => (
         Auf unseren Seiten sind Funktionen des Dienstes Twitter eingebunden.
         Diese Funktionen werden angeboten durch die Twitter Inc., Twitter, Inc.
         1355 Market St, Suite 900, San Francisco, CA 94103, USA. Durch das
-        Benutzen von Twitter und der Funktion "Re-Tweet" werden die von Ihnen
-        besuchten Webseiten mit Ihrem Twitter-Account verknüpft und anderen
-        Nutzern bekannt gegeben. Dabei werden auch Daten an Twitter übertragen.
+        Benutzen von Twitter und der Funktion &quot;Re-Tweet&quot; werden die
+        von Ihnen besuchten Webseiten mit Ihrem Twitter-Account verknüpft und
+        anderen Nutzern bekannt gegeben. Dabei werden auch Daten an Twitter
+        übertragen.
       </p>
       <p>
         Wir weisen darauf hin, dass wir als Anbieter der Seiten keine Kenntnis

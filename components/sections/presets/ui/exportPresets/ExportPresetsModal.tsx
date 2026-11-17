@@ -18,8 +18,8 @@ const ExportPresetsModal: React.FC<Props> = ({ setExportModalOpen }) => {
     })
       .then((response) => response.blob())
       .then((blob) => {
-        var url = window.URL.createObjectURL(blob)
-        var a = document.createElement("a")
+        const url = window.URL.createObjectURL(blob)
+        const a = document.createElement("a")
         a.href = url
         a.download = "events.txt"
         document.body.appendChild(a)
@@ -36,8 +36,8 @@ const ExportPresetsModal: React.FC<Props> = ({ setExportModalOpen }) => {
     )
       .then((response) => response.blob())
       .then((blob) => {
-        var url = window.URL.createObjectURL(blob)
-        var a = document.createElement("a")
+        const url = window.URL.createObjectURL(blob)
+        const a = document.createElement("a")
         a.href = url
         a.download = "msfs2020_eventids.cip"
         document.body.appendChild(a)
@@ -55,8 +55,8 @@ const ExportPresetsModal: React.FC<Props> = ({ setExportModalOpen }) => {
     )
       .then((response) => response.blob())
       .then((blob) => {
-        var url = window.URL.createObjectURL(blob)
-        var a = document.createElement("a")
+        const url = window.URL.createObjectURL(blob)
+        const a = document.createElement("a")
         a.href = url
         a.download = "msfs2020_simvars.cip"
         document.body.appendChild(a)

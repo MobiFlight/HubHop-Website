@@ -40,7 +40,7 @@ const DeleteConfirmationModal: React.FC<Props> = ({
           ? (await db.presetsMsfs.toArray()) || []
           : (await db.presetsXplane.toArray()) || []
 
-      let result = localStoragePresets.filter(
+      const result = localStoragePresets.filter(
         (item: any) => item.id !== presetId,
       )
       try {

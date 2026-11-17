@@ -351,7 +351,7 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                                 ),
                             ),
                           ).map((o, i) => (
-                            <option key={i as any}>{o as String[]}</option>
+                            <option key={i as any}>{o as string[]}</option>
                           ))}
                         </select>
                       )}
@@ -417,10 +417,10 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                               ),
                           ),
                         ).map((o, i) => (
-                          <option key={i as any}>{o as String[]}</option>
+                          <option key={i as any}>{o as string[]}</option>
                         ))}
                         {/* {uniqueAircraft.map((o, i) => (
-                          <option key={i as any}>{o as String[]}</option>
+                          <option key={i as any}>{o as string[]}</option>
                         ))} */}
                       </select>
                     )}
@@ -482,10 +482,10 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                               ),
                           ),
                         ).map((o, i) => (
-                          <option key={i as any}>{o as String[]}</option>
+                          <option key={i as any}>{o as string[]}</option>
                         ))}
                         {/* {uniqueSystem.map((o, i) => (
-                          <option key={i as any}>{o as String[]}</option>
+                          <option key={i as any}>{o as string[]}</option>
                         ))} */}
                       </select>
                     )}
@@ -557,7 +557,7 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                               ),
                           ),
                         ).map((o, i) => (
-                          <option key={i as any}>{o as String[]}</option>
+                          <option key={i as any}>{o as string[]}</option>
                         ))}
                       </select>
                     )}
@@ -623,7 +623,7 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                                   ),
                               ),
                             ).map((o, i) => (
-                              <option key={i as any}>{o as String[]}</option>
+                              <option key={i as any}>{o as string[]}</option>
                             ))}
                           </select>
                         )}

@@ -97,7 +97,7 @@ const Navbar: React.FC = () => {
 
   const { accounts } = useMsal()
 
-  var timeout: any
+  let timeout: any
 
   const showTip = () => {
     timeout = setTimeout(() => {

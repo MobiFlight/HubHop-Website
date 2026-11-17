@@ -127,7 +127,7 @@ const PresetFilter: React.FC<Props> = ({
     },
   }
 
-  var timeout: any
+  let timeout: any
 
   const showTip = () => {
     timeout = setTimeout(() => {
@@ -203,7 +203,7 @@ const PresetFilter: React.FC<Props> = ({
                 <option value="">All Vendors</option>
                 {uniqueVendor.map((o) => (
                   <option className="bg-hhBG" key={o as any}>
-                    {o as String[]}
+                    {o as string[]}
                   </option>
                 ))}
               </select>
@@ -222,7 +222,7 @@ const PresetFilter: React.FC<Props> = ({
                 <option value="">All Aircraft</option>
                 {uniqueAircraft.map((o) => (
                   <option className="bg-hhBG" key={o as any}>
-                    {o as String[]}
+                    {o as string[]}
                   </option>
                 ))}
               </select>
@@ -241,7 +241,7 @@ const PresetFilter: React.FC<Props> = ({
                 <option value="">All Systems</option>
                 {uniqueSystem.map((o) => (
                   <option className="bg-hhBG" key={o as any}>
-                    {o as String[]}
+                    {o as string[]}
                   </option>
                 ))}
               </select>
@@ -263,7 +263,7 @@ const PresetFilter: React.FC<Props> = ({
                 <option value="">All Inputs/Outputs</option>
                 {uniqueType.map((o) => (
                   <option className="bg-hhBG" key={o as any}>
-                    {o as String[]}
+                    {o as string[]}
                   </option>
                 ))}
               </select>
@@ -293,7 +293,7 @@ const PresetFilter: React.FC<Props> = ({
                     <option value="">All Code Types</option>
                     {uniqueCodeType.map((o, i) => (
                       <option className="bg-hhBG" key={i as any}>
-                        {o as String[]}
+                        {o as string[]}
                       </option>
                     ))}
                   </select>
