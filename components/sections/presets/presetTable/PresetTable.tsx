@@ -9,6 +9,7 @@ import { compareText } from "../../../../lib/presetSearch"
 import AddPresetButton from "../ui/addPreset/AddPresetButton"
 import ExportPresetsButton from "../ui/exportPresets/ExportPresetsButton"
 import PresetCard from "../ui/PresetCard"
+import RelevanceGauge from "./RelevanceGauge"
 import { msalInstance, msalReady } from "../../../../services/msal"
 import {
   getUserSettings,
@@ -133,19 +134,6 @@ const PresetTable: React.FC<Props> = ({
   currentRelevance.current = relevance
 
   const columns: any = [
-    ...(relevance
-      ? [
-          {
-            id: "relevance",
-            name: "Relevance",
-            selector: (row: unknown) => currentRelevance.current?.get(row) ?? 0,
-            format: (row: unknown) => `${relevance.get(row) ?? 0}%`,
-            sortable: true,
-            minWidth: "130px",
-            maxWidth: "10%",
-          },
-        ]
-      : []),
     {
       name: "Vendor",
       selector: (row: any) => row.vendor,
@@ -192,6 +180,28 @@ const PresetTable: React.FC<Props> = ({
       selector: (row: any) => row.label,
       sortable: true,
       maxWidth: "50%",
+    },
+    ...(relevance
+      ? [
+          {
+            id: "relevance",
+            name: "Relevance",
+            selector: (row: unknown) => currentRelevance.current?.get(row) ?? 0,
+            cell: (row: unknown) => (
+              <RelevanceGauge value={relevance.get(row) ?? 0} />
+            ),
+            sortable: true,
+            minWidth: "130px",
+            maxWidth: "10%",
+          },
+        ]
+      : []),
+    // keeps the top-right corner free for the "Add preset" button
+    {
+      id: "add-preset-space",
+      name: "",
+      width: "150px",
+      hide: "md",
     },
   ]
 
