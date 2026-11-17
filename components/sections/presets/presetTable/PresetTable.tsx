@@ -78,7 +78,9 @@ const PresetRowDetails = ({
         setVendor={(e: InputChangeEvent) => setVendor(e.target.value)}
         setAircraft={(e: InputChangeEvent) => setAircraft(e.target.value)}
         setSystem={(e: InputChangeEvent) => setSystem(e.target.value)}
-        setPresetType={(e: InputChangeEvent) => setPresetType(e.target.value)}
+        setPresetType={(e: InputChangeEvent) =>
+          setPresetType(e.target.value as Preset["presetType"])
+        }
         setCodeType={(e: InputChangeEvent) =>
           setCodeType(e.target.value as Preset["codeType"])
         }

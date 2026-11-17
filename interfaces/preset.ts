@@ -3,11 +3,10 @@
 // - MobiFlight Connector: frontend/src/types/preset.d.ts (same names and values)
 
 import type { CodeType } from "../lib/codeTypes"
+import type { PresetType, XplanePresetType } from "../lib/presetTypes"
 
-export type { CodeType }
+export type { CodeType, PresetType, XplanePresetType }
 
-export type PresetType = "Input" | "Output" | "Input (Potentiometer)"
-export type XplanePresetType = PresetType | "InputOutput"
 export type PresetStatus = "Submitted" | "Updated"
 
 export interface Preset {
@@ -19,8 +18,7 @@ export interface Preset {
   label: string
   code: string
   description?: string | null
-  // the known values; moderators may add new ones
-  presetType: XplanePresetType | (string & {})
+  presetType: XplanePresetType
   // X-Plane only
   codeType?: CodeType | ""
   status?: PresetStatus
