@@ -86,9 +86,12 @@ const GeneralStats: React.FC<Props> = ({ presets, stats }) => {
   ]
 
   createTheme("hubhop", {
+    // v8 draws lines between header columns by default; v7 did not
+    headerSeparator: false,
     text: {
       primary: "#D2D0D2",
       secondary: "#D2D0D2",
+      disabled: "rgba(0, 0, 0, .38)",
     },
     background: {
       default: "transparent",
@@ -103,7 +106,6 @@ const GeneralStats: React.FC<Props> = ({ presets, stats }) => {
     highlightOnHover: {
       default: "#ffa047",
       text: "#33353e",
-      fontWeight: 700,
     },
     button: {
       default: "#D2D0D2",
