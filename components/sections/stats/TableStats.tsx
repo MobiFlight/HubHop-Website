@@ -2,6 +2,7 @@ import DataTable, { createTheme } from "react-data-table-component"
 import { useState } from "react"
 import OpenPresetButton from "../presets/ui/OpenPresetButton"
 import PresetPreviewLabel from "../presets/ui/PresetInputLabel"
+import { REPORTING_ENABLED } from "../../../lib/features"
 
 interface Props {
   data: string[]
@@ -143,12 +144,12 @@ const TableStats: React.FC<Props> = ({ data, added }) => {
                     title={"Version"}
                     editData={data.version}
                   />
-                  {
+                  {REPORTING_ENABLED && (
                     <PresetPreviewLabel
                       title={"Reported"}
                       editData={data.reported >= "1" ? data.reported : "0"}
                     />
-                  }
+                  )}
                 </div>
                 <div className="flex w-full flex-col space-y-2 md:w-1/6">
                   <PresetPreviewLabel

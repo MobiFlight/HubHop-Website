@@ -71,15 +71,22 @@ test.describe("User menu - logged in", () => {
 test.describe("User menu - moderator", () => {
   test.use({ storageState: authFile.moderator })
 
-  test("User menu - moderators can show reported presets", async ({
+  // reporting is hidden until the feature is finished (lib/features.ts)
+  test("User menu - reported presets are hidden until reporting is available", async ({
     presetsPage,
+    presetViewPage,
     page,
   }) => {
     await presetsPage.gotoPage()
 
-    await page.getByRole("button", { name: "Show reported presets" }).click()
+    await expect(
+      page.getByRole("button", { name: "Show reported presets" }),
+    ).toHaveCount(0)
 
-    await expect(presetsPage.rows).toHaveCount(1)
-    await expect(presetsPage.row("Battery master on")).toHaveCount(1)
+    await test.step("Preset details show no reported count", async () => {
+      await presetViewPage.gotoPage("msfs-0009")
+      await expect(page.getByText("Version", { exact: true })).toBeVisible()
+      await expect(page.getByText("Reported", { exact: true })).toHaveCount(0)
+    })
   })
 })
