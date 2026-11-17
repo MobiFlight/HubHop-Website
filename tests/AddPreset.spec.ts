@@ -66,7 +66,7 @@ test.describe("Add preset - user", () => {
       page
         .getByRole("status")
         .filter({ hasText: "Preset successfully added!" }),
-    ).toHaveCSS("background-color", "rgb(22, 101, 52)")
+    ).toHaveClass(/bg-green-800/)
     const requests = hubHopPage.writeRequests("POST")
     expect(requests).toHaveLength(1)
     expect(requests[0].path).toBe("/msfs2020/presets")
