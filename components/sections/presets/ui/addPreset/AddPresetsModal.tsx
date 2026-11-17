@@ -16,6 +16,7 @@ import Toast from "../../../Shared/Toast"
 import { AuthenticatedTemplate } from "@azure/msal-react"
 import { RiListSettingsLine } from "react-icons/ri"
 import { CODE_TYPES } from "../../../../../lib/codeTypes"
+import { presetTypesFor } from "../../../../../lib/presetTypes"
 import { sortedUnique } from "../../../../../lib/presetFacets"
 
 interface Props {
@@ -30,7 +31,6 @@ interface AddPresetForm {
   aircrafts: string
   addSystems: string
   systems: string
-  addPresetTypes: string
   presetTypes: string
   codeTypes: string
   label: string
@@ -70,7 +70,6 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
   const [addVendor, setAddVendor] = useState(false)
   const [addAircraft, setAddAircraft] = useState(false)
   const [addSystem, setAddSystem] = useState(false)
-  const [addPresetType, setAddPresetType] = useState(false)
   const [buttonSubmit, setButtonSubmit] = useState(false)
   const [bulkUpload, setBulkUpload] = useState(false)
   const [presetToast, setPresetToast] = useState(false)
@@ -219,9 +218,7 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                       "." +
                       (data.systems == "" ? data.addSystems : data.systems) +
                       "." +
-                      (data.presetTypes == ""
-                        ? data.addPresetTypes
-                        : data.presetTypes) +
+                      data.presetTypes +
                       "." +
                       data.label,
                     vendor: data.vendors == "" ? data.addVendors : data.vendors,
@@ -230,10 +227,7 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                     system: data.systems == "" ? data.addSystems : data.systems,
                     code: data.code,
                     label: data.label,
-                    presetType:
-                      data.presetTypes == ""
-                        ? data.addPresetTypes
-                        : data.presetTypes,
+                    presetType: data.presetTypes,
                     status: "Submitted",
                     createdDate: new Date().toUTCString(),
                     author: localStorage.getItem("username"),
@@ -246,10 +240,7 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                     system: data.systems == "" ? data.addSystems : data.systems,
                     code: data.code,
                     label: data.label,
-                    presetType:
-                      data.presetTypes == ""
-                        ? data.addPresetTypes
-                        : data.presetTypes,
+                    presetType: data.presetTypes,
                     codeType: data.codeTypes,
                     status: "Submitted",
                     createdDate: new Date().toUTCString(),
@@ -487,65 +478,27 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                       <BiJoystickButton />
                       <HiOutlineLightBulb />
                     </div>
-                    <label htmlFor="searchfield">
-                      {addPresetType ? "Name" : "Select"} Input/Output
-                    </label>
+                    <label htmlFor="searchfield">Select Input/Output</label>
                   </div>
                   <div className="flex space-x-2">
-                    {addPresetType ? (
-                      <input
-                        type={"text"}
-                        placeholder={"Provide action type"}
-                        className={`w-full rounded-lg border bg-hhBG/75 px-3 py-1 text-hhText ${
-                          errors.addPresetTypes
-                            ? "border-red-500"
-                            : "border-hhOrange/75"
-                        }`}
-                        {...register("addPresetTypes", {
-                          required: "Provide action type",
-                        })}
-                      />
-                    ) : (
-                      <select
-                        className={`w-full rounded-lg border bg-hhBG/75 px-3 py-1 text-hhText ${
-                          errors.addPresetTypes
-                            ? "border-red-500"
-                            : "border-hhOrange/75"
-                        }`}
-                        value={filteredPresetTypes}
-                        {...register("presetTypes", {
-                          required: "Select preset type",
-                        })}
-                      >
-                        <option value="">All Inputs/Outputs</option>
-                        {Array.from(
-                          new Set(
-                            presets
-                              .map((item: any) => item.presetType)
-                              .sort((a: any, b: any) =>
-                                a.toLowerCase().localeCompare(b.toLowerCase()),
-                              ),
-                          ),
-                        ).map((o, i) => (
-                          <option key={i as any}>{o as string[]}</option>
-                        ))}
-                      </select>
-                    )}
-                    <AuthenticatedTemplate>
-                      {localStorage.getItem("roles")?.includes("moderator") && (
-                        <button
-                          onClick={() => (
-                            setAddPresetType((prev) => !prev),
-                            resetField("addPresetTypes", { defaultValue: "" }),
-                            resetField("presetTypes", { defaultValue: "" })
-                          )}
-                          type={"button"}
-                          className="rounded-lg bg-hhOrange p-2 text-hhBG transition-all hover:bg-hhOrangeShade-600"
-                        >
-                          {addPresetType ? <BsList /> : <BiAddToQueue />}
-                        </button>
+                    <select
+                      className={`w-full rounded-lg border bg-hhBG/75 px-3 py-1 text-hhText ${
+                        errors.presetTypes
+                          ? "border-red-500"
+                          : "border-hhOrange/75"
+                      }`}
+                      value={filteredPresetTypes}
+                      {...register("presetTypes", {
+                        required: "Select preset type",
+                      })}
+                    >
+                      <option value="">All Inputs/Outputs</option>
+                      {presetTypesFor(localStorage.getItem("simType")).map(
+                        (presetType) => (
+                          <option key={presetType}>{presetType}</option>
+                        ),
                       )}
-                    </AuthenticatedTemplate>
+                    </select>
                   </div>
                   {localStorage.getItem("simType") === "xplane" && (
                     <div>
@@ -576,9 +529,7 @@ const AddPresetsModal: React.FC<Props> = ({ setAddModalOpen, presets }) => {
                     </div>
                   )}
                   <p className="font-semibold text-red-500">
-                    {addPresetType
-                      ? errors.addPresetTypes?.message
-                      : errors.presetTypes?.message}
+                    {errors.presetTypes?.message}
                   </p>
                 </div>
               </div>
