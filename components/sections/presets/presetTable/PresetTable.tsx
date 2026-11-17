@@ -3,7 +3,7 @@ import { useState } from "react"
 import AddPresetButton from "../ui/addPreset/AddPresetButton"
 import ExportPresetsButton from "../ui/exportPresets/ExportPresetsButton"
 import PresetCard from "../ui/PresetCard"
-import { msalInstance } from "../../../../services/msal"
+import { msalInstance, msalReady } from "../../../../services/msal"
 import {
   getUserSettings,
   getAccessToken,
@@ -200,6 +200,7 @@ const PresetTable: React.FC<Props> = ({
   }
 
   async function login() {
+    await msalReady
     await msalInstance.handleRedirectPromise()
     const accounts = msalInstance.getAllAccounts()
     if (accounts.length === 0) {

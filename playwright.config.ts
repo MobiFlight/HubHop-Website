@@ -57,6 +57,10 @@ export default defineConfig({
   /* Run your local dev server before starting the tests */
   webServer: {
     command: "npm run dev",
+    env: {
+      // the login popup must return to the test server, not to production
+      NEXT_PUBLIC_HUBHOP_OAUTH_REDIRECT_URI_DEV: "http://localhost:3000/",
+    },
     url: "http://localhost:3000/",
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,

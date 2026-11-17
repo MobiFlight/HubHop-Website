@@ -41,8 +41,10 @@ applyTo: "**"
   endpoint with `page.route()` via the page objects in `tests/fixtures/`, serving data from `tests/data/*.testdata.json`.
 - **Write operations** (add, edit, delete, report): assert on the intercepted request (method, URL, body)
   instead of relying on server state.
-- **Authentication**: logged-in states (user, moderator) are prepared by `tests/auth.setup.ts` as storage states in
-  `tests/.auth/` (fake MSAL session, `accessToken` and `roles` in `localStorage`). Never use real credentials in tests.
+- **Authentication**: login runs the app's real MSAL code against a fake OpenID Connect provider
+  (`tests/fixtures/FakeIdentityProvider.ts`). Logged-in states (user, moderator) are prepared by `tests/auth.setup.ts`
+  as storage states in `tests/.auth/`; use `hubHopPage.login(roles)` to test the login flow itself.
+  Never use real credentials in tests.
 - **IndexedDB**: each test starts with a fresh browser context, so the preset cache is empty unless the test seeds it.
 
 ## Example Test Structure

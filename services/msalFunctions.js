@@ -1,4 +1,4 @@
-import { msalInstance } from "./msal"
+import { msalInstance, msalReady } from "./msal"
 
 export async function getUserSettings() {
   const url = process.env.NEXT_PUBLIC_HUBHOP_API_BASEURL + "/settings/user"
@@ -18,6 +18,7 @@ export async function getUserSettings() {
 }
 
 export async function getAccessToken() {
+  await msalReady
   const accounts = msalInstance.getAllAccounts()
   var silentRequest = {
     scopes: [process.env.NEXT_PUBLIC_HUBHOP_OAUTH_SCOPES],

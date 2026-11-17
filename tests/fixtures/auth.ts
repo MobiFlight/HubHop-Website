@@ -1,6 +1,6 @@
 import path from "path"
 
-export const AUTH_DIR = path.join(__dirname, "..", ".auth")
+const AUTH_DIR = path.join(__dirname, "..", ".auth")
 
 /** Storage states created by `tests/auth.setup.ts` */
 export const authFile = {

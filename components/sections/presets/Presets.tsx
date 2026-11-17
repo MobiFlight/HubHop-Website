@@ -8,7 +8,7 @@ import AddPresetsModal from "./ui/addPreset/AddPresetsModal"
 import Toast from "../Shared/Toast"
 import { BsCheck2Square } from "react-icons/bs"
 import { getAccessToken } from "../../../services/msalFunctions"
-import { msalInstance } from "../../../services/msal"
+import { msalInstance, msalReady } from "../../../services/msal"
 import { db } from "../../../services/db"
 import { syncSim } from "../../../services/presetSync"
 import Image from "next/image"
@@ -113,11 +113,12 @@ const Presets: React.FC = () => {
   }, [simType, addModalOpen])
 
   useEffect(() => {
-    const myAccounts = msalInstance.getAllAccounts()
-    const account = myAccounts[0]
-    if (account) {
-      getAccessToken()
-    }
+    msalReady.then(() => {
+      const account = msalInstance.getAllAccounts()[0]
+      if (account) {
+        getAccessToken()
+      }
+    })
   }, [])
 
   const filteredMyPresetList = presets.filter((preset) => {

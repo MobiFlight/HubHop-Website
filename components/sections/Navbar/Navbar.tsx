@@ -18,7 +18,7 @@ import {
   UnauthenticatedTemplate,
   useMsal,
 } from "@azure/msal-react"
-import { msalInstance } from "../../../services/msal"
+import { msalInstance, msalReady } from "../../../services/msal"
 import UserDropdown from "../Shared/UserDropdown"
 import ButtonOrange from "../Shared/ButtonOrange"
 import {
@@ -111,6 +111,7 @@ const Navbar: React.FC = () => {
   }
 
   async function login() {
+    await msalReady
     await msalInstance.handleRedirectPromise()
     const accounts = msalInstance.getAllAccounts()
     if (accounts.length === 0) {
@@ -132,7 +133,9 @@ const Navbar: React.FC = () => {
 
   function logout(instance: any) {
     const logoutRequest = {
-      account: instance.getAccountByHomeId(accounts[0].homeAccountId),
+      account: instance.getAccount({
+        homeAccountId: accounts[0].homeAccountId,
+      }),
       postLogoutRedirectUri: "/",
     }
     localStorage.clear()
