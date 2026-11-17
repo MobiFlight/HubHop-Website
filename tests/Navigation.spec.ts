@@ -34,6 +34,11 @@ test.describe("Navigation", () => {
     })
   })
 
+  test("Navigation - footer shows the build number", async ({ page }) => {
+    // "dev" locally; the GitHub run number and commit in deployed builds
+    await expect(page.locator("footer")).toContainText(/Build (dev|\d+)/)
+  })
+
   test("Navigation - footer links", async ({ page }) => {
     await expect(
       page.getByRole("link", { name: "Join us on Discord" }),
