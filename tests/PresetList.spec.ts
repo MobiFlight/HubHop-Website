@@ -234,9 +234,11 @@ test.describe("Preset list", () => {
       "Strobe toggle",
       "Alternator 1 on",
     ]
-    for (const [index, name] of names.entries()) {
-      await expect(presetsPage.rows.nth(index)).toContainText(name)
-    }
+    await Promise.all(
+      names.map((name, index) =>
+        expect(presetsPage.rows.nth(index)).toContainText(name),
+      ),
+    )
   })
 
   test("Preset list - sorts by preset name", async ({ presetsPage, page }) => {
