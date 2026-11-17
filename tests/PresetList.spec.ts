@@ -64,6 +64,44 @@ test.describe("Preset list", () => {
     await expect(presetsPage.row("AP master toggle")).toHaveCount(1)
   })
 
+  test("Preset list - search finds all words in any order, also in the system", async ({
+    presetsPage,
+  }) => {
+    await presetsPage.gotoPage()
+
+    // "autopilot" is the system, "hold" is in the name
+    await presetsPage.searchFilter.fill("hold autopilot")
+
+    await expect(presetsPage.rows).toHaveCount(3)
+    await expect(presetsPage.row("AP heading hold")).toHaveCount(1)
+  })
+
+  test("Preset list - search results are sorted by relevance", async ({
+    presetsPage,
+    page,
+  }) => {
+    await presetsPage.gotoPage()
+    const relevance = page.getByRole("columnheader", { name: "Relevance" })
+    await expect(relevance).toHaveCount(0)
+
+    // both words are in "Landing lights on"; "on" is only in the
+    // description ("Test description ...") of "Landing lights off"
+    await presetsPage.searchFilter.fill("on landing")
+
+    await expect(relevance).toHaveCount(1)
+    await expect(presetsPage.rows).toHaveCount(2)
+    await expect(presetsPage.rows.nth(0)).toContainText("Landing lights on")
+    await expect(presetsPage.rows.nth(0)).toContainText("100%")
+    await expect(presetsPage.rows.nth(1)).toContainText("Landing lights off")
+    await expect(presetsPage.rows.nth(1)).toContainText("80%")
+
+    await test.step("Clearing the search hides the relevance", async () => {
+      await presetsPage.searchFilter.fill("")
+      await expect(relevance).toHaveCount(0)
+      await expect(presetsPage.rows).toHaveCount(15)
+    })
+  })
+
   test("Preset list - presets without an aircraft are listed", async ({
     presetsPage,
   }) => {
