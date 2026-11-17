@@ -60,6 +60,8 @@ export default defineConfig({
     env: {
       // the login popup must return to the test server, not to production
       NEXT_PUBLIC_HUBHOP_OAUTH_REDIRECT_URI_DEV: "http://localhost:3000/",
+      // promotions are off in .env until their content is ready
+      NEXT_PUBLIC_PROMOTIONS_ENABLED: "true",
     },
     url: "http://localhost:3000/",
     reuseExistingServer: !process.env.CI,

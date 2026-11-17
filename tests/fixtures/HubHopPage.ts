@@ -107,6 +107,11 @@ export class HubHopPage {
     )
   }
 
+  /** Promotion slots for MobiFlight on the current page */
+  get promotions() {
+    return this.page.getByRole("complementary", { name: "Promotion" })
+  }
+
   /** Write requests (POST, PUT, DELETE) received by the mocked API */
   writeRequests(method?: string) {
     return this.requests.filter(

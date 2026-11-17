@@ -6,6 +6,7 @@ import ExportPresetsModal from "./ui/exportPresets/ExportPresetsModal"
 import { AnimatePresence, motion } from "motion/react"
 import AddPresetsModal from "./ui/addPreset/AddPresetsModal"
 import Toast from "../Shared/Toast"
+import PromoSlot from "../Shared/PromoSlot"
 import { BsCheck2Square } from "react-icons/bs"
 import { getAccessToken } from "../../../services/msalFunctions"
 import { msalInstance, msalReady } from "../../../services/msal"
@@ -17,6 +18,7 @@ import { ToastContainer, toast } from "react-toastify"
 import { useRouter } from "next/router"
 import type { Preset } from "../../../interfaces/preset"
 import { type Facet, sortedUnique } from "../../../lib/presetFacets"
+import type { PromotionContext } from "../../../lib/promotions"
 import {
   comparePresets,
   presetRelevance,
@@ -283,6 +285,13 @@ const Presets = () => {
     }
   }
 
+  const promotionContext: PromotionContext = {
+    sim: simType === "xplane" ? "xplane" : "msfs2020",
+    vendor: filteredVendors || undefined,
+    aircraft: filteredAircrafts || undefined,
+    search: filteredPresets || undefined,
+  }
+
   return (
     <div>
       {loading ? (
@@ -293,6 +302,11 @@ const Presets = () => {
           <p className="mt-5 font-semibold">
             {loadingStatus != "" ? loadingStatus : "Loading Presets"}
           </p>
+          <PromoSlot
+            slot="loading"
+            context={promotionContext}
+            className="mx-3 mt-10 max-w-md"
+          />
         </div>
       ) : presets.length ? (
         <div className="min-h-screen">
@@ -410,17 +424,29 @@ const Presets = () => {
                 showMyPresets={showMyPresets}
                 showReportedPresets={showReportedPresets}
               />
+              <PromoSlot
+                slot="filter-sidebar"
+                context={promotionContext}
+                className="mb-3"
+              />
             </div>
-            <PresetTable
-              setAddModalOpen={() => setAddModalOpen(true)}
-              setExportModalOpen={() => setExportModalOpen(true)}
-              data={filteredItems}
-              relevance={terms.length > 0 ? relevance : undefined}
-              deletedToast={deleteToast}
-              reportedToast={reportToast}
-              fixedToast={fixToast}
-              savedToast={saveToast}
-            />
+            <div className="flex w-full flex-col">
+              <PresetTable
+                setAddModalOpen={() => setAddModalOpen(true)}
+                setExportModalOpen={() => setExportModalOpen(true)}
+                data={filteredItems}
+                relevance={terms.length > 0 ? relevance : undefined}
+                deletedToast={deleteToast}
+                reportedToast={reportToast}
+                fixedToast={fixToast}
+                savedToast={saveToast}
+              />
+              <PromoSlot
+                slot="below-results"
+                context={promotionContext}
+                className="mt-3"
+              />
+            </div>
           </div>
         </div>
       ) : (
@@ -429,6 +455,11 @@ const Presets = () => {
             <AiOutlineLoading />
           </div>
           <p className="mt-5">Loading Presets</p>
+          <PromoSlot
+            slot="loading"
+            context={promotionContext}
+            className="mx-3 mt-10 max-w-md"
+          />
         </div>
       )}
       <AnimatePresence>
