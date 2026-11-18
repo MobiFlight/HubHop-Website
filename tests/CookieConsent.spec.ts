@@ -1,22 +1,51 @@
 import { test, expect } from "./fixtures"
-import { CONSENT_STORAGE_KEY } from "../lib/consent"
+import { CONSENT_COOKIE } from "../lib/cookieConsent"
 
 const GTM_URL = "https://www.googletagmanager.com/gtm.js?id=GTM-TEST"
+const DAY = 24 * 60 * 60
 
 test.describe("Cookie consent", () => {
   test.describe("without a stored choice", () => {
     test.use({ cookieConsent: "unset" })
 
-    test("Cookie consent - banner asks before anything is loaded from Google", async ({
+    test("Cookie consent - dialog asks before anything is loaded from Google", async ({
       hubHopPage,
     }) => {
       await hubHopPage.goto("/")
 
-      await expect(hubHopPage.cookieBanner).toBeVisible()
+      const dialog = hubHopPage.cookieDialog
+      await expect(dialog).toBeVisible()
       await expect(
-        hubHopPage.cookieBanner.getByRole("link", { name: "privacy policy" }),
+        dialog.getByRole("button", { name: "Accept all" }),
+      ).toBeVisible()
+      await expect(
+        dialog.getByRole("button", { name: "Reject all" }),
+      ).toBeVisible()
+      await expect(
+        dialog.getByRole("link", { name: "Privacy Policy" }),
       ).toHaveAttribute("href", "/privacy/")
+      await expect(
+        dialog.getByRole("link", { name: "Imprint" }),
+      ).toHaveAttribute("href", "/terms/")
       expect(hubHopPage.tagManagerRequests).toEqual([])
+    })
+
+    test("Cookie consent - dialog blocks the page until a choice is made", async ({
+      hubHopPage,
+      page,
+    }) => {
+      await hubHopPage.goto("/")
+
+      await expect(hubHopPage.cookieDialog).toBeVisible()
+      await expect(page.locator("html")).toHaveClass(/disable--interaction/)
+      await expect(
+        hubHopPage.cookieDialog.getByRole("button", { name: "Close" }),
+      ).toHaveCount(0)
+
+      await test.step("Escape doesn't close the dialog", async () => {
+        await page.keyboard.press("Escape")
+        await expect(hubHopPage.cookieDialog).toBeVisible()
+      })
     })
 
     test("Cookie consent - accept loads Tag Manager with ad signals denied", async ({
@@ -25,13 +54,14 @@ test.describe("Cookie consent", () => {
     }) => {
       await hubHopPage.goto("/")
 
-      await test.step("Accept analytics cookies", async () => {
-        await hubHopPage.cookieBanner
-          .getByRole("button", { name: "Accept" })
+      await test.step("Accept all cookies", async () => {
+        await hubHopPage.cookieDialog
+          .getByRole("button", { name: "Accept all" })
           .click()
       })
 
-      await expect(hubHopPage.cookieBanner).toBeHidden()
+      await expect(hubHopPage.cookieDialog).toBeHidden()
+      await expect(page.locator("html")).not.toHaveClass(/disable--interaction/)
       await expect.poll(() => hubHopPage.tagManagerRequests).toEqual([GTM_URL])
       const consentCommands = await page.evaluate(() =>
         (window.dataLayer ?? [])
@@ -58,46 +88,81 @@ test.describe("Cookie consent", () => {
       await test.step("Reload: the choice is remembered", async () => {
         await hubHopPage.reload()
         await expect.poll(() => hubHopPage.tagManagerRequests).toHaveLength(2)
-        await expect(hubHopPage.cookieBanner).toBeHidden()
+        await expect(hubHopPage.cookieDialog).toBeHidden()
       })
     })
 
-    test("Cookie consent - reject loads nothing and hides the banner", async ({
+    test("Cookie consent - reject loads nothing and closes the dialog", async ({
       hubHopPage,
     }) => {
       await hubHopPage.goto("/")
 
-      await test.step("Reject analytics cookies", async () => {
-        await hubHopPage.cookieBanner
-          .getByRole("button", { name: "Reject" })
+      await test.step("Reject all cookies", async () => {
+        await hubHopPage.cookieDialog
+          .getByRole("button", { name: "Reject all" })
           .click()
       })
-      await expect(hubHopPage.cookieBanner).toBeHidden()
+      await expect(hubHopPage.cookieDialog).toBeHidden()
 
       await test.step("Reload: the choice is remembered", async () => {
         await hubHopPage.reload()
-        await expect(hubHopPage.cookieBanner).toBeHidden()
+        await expect(hubHopPage.cookieDialog).toBeHidden()
       })
       expect(hubHopPage.tagManagerRequests).toEqual([])
     })
 
-    test("Cookie consent - banner asks again after a year", async ({
+    test("Cookie consent - analytics can be allowed in the preferences", async ({
+      hubHopPage,
+    }) => {
+      await hubHopPage.goto("/")
+
+      await test.step("Allow analytics in the preferences", async () => {
+        await hubHopPage.cookieDialog
+          .getByRole("button", { name: "Manage preferences" })
+          .click()
+        await hubHopPage.cookiePreferences
+          .getByRole("checkbox", { name: "Analytics" })
+          .check({ force: true })
+        await hubHopPage.cookiePreferences
+          .getByRole("button", { name: "Save preferences" })
+          .click()
+      })
+
+      await expect(hubHopPage.cookiePreferences).toBeHidden()
+      await expect.poll(() => hubHopPage.tagManagerRequests).toEqual([GTM_URL])
+    })
+
+    test("Cookie consent - the choice is stored in a HubHop cookie for a year", async ({
       hubHopPage,
       page,
     }) => {
-      await page.addInitScript((key) => {
-        const date = new Date()
-        date.setMonth(date.getMonth() - 13)
-        localStorage.setItem(
-          key,
-          JSON.stringify({ analytics: true, date: date.toISOString() }),
-        )
-      }, CONSENT_STORAGE_KEY)
+      await hubHopPage.goto("/")
+      await hubHopPage.cookieDialog
+        .getByRole("button", { name: "Reject all" })
+        .click()
+      await expect(hubHopPage.cookieDialog).toBeHidden()
 
+      const cookies = await page.context().cookies()
+      const consent = cookies.find((cookie) => cookie.name === CONSENT_COOKIE)
+      const days = ((consent?.expires ?? 0) - Date.now() / 1000) / DAY
+      expect(days).toBeGreaterThan(364)
+      expect(days).toBeLessThanOrEqual(365)
+    })
+  })
+
+  test.describe("German browser", () => {
+    test.use({ cookieConsent: "unset", locale: "de-DE" })
+
+    test("Cookie consent - dialog speaks the browser language", async ({
+      hubHopPage,
+      page,
+    }) => {
       await hubHopPage.goto("/")
 
-      await expect(hubHopPage.cookieBanner).toBeVisible()
-      expect(hubHopPage.tagManagerRequests).toEqual([])
+      const dialog = page.getByRole("dialog", { name: "Wir verwenden Cookies" })
+      await expect(
+        dialog.getByRole("button", { name: "Alle ablehnen" }),
+      ).toBeVisible()
     })
   })
 
@@ -114,29 +179,64 @@ test.describe("Cookie consent", () => {
         { name: "other", value: "kept", domain: "localhost", path: "/" },
       ])
       await hubHopPage.goto("/")
+      await expect(hubHopPage.cookieDialog).toBeHidden()
       await expect.poll(() => hubHopPage.tagManagerRequests).toHaveLength(1)
 
       await test.step("Open the cookie settings from the footer", async () => {
         await page.getByRole("button", { name: "Cookie settings" }).click()
-        await expect(hubHopPage.cookieBanner).toContainText(
-          "Your current choice: accepted.",
-        )
+        await expect(
+          hubHopPage.cookiePreferences.getByRole("checkbox", {
+            name: "Analytics",
+          }),
+        ).toBeChecked()
       })
 
-      await test.step("Reject: the page reloads without Tag Manager", async () => {
+      await test.step("Reject all: the page reloads without Tag Manager", async () => {
         const reloaded = page.waitForEvent("load")
-        await hubHopPage.cookieBanner
-          .getByRole("button", { name: "Reject" })
+        await hubHopPage.cookiePreferences
+          .getByRole("button", { name: "Reject all" })
           .click()
         await reloaded
         await hubHopPage.waitForHydration()
       })
 
-      await expect(hubHopPage.cookieBanner).toBeHidden()
-      const cookies = await page.context().cookies()
-      const names = cookies.map((cookie) => cookie.name)
+      await expect(hubHopPage.cookieDialog).toBeHidden()
+      const names = (await page.context().cookies()).map(
+        (cookie) => cookie.name,
+      )
       expect(names).toContain("other")
       expect(names.filter((name) => name.startsWith("_ga"))).toEqual([])
+      expect(hubHopPage.tagManagerRequests).toHaveLength(1)
+    })
+
+    test("Cookie consent - cookie settings can be closed without a new choice", async ({
+      hubHopPage,
+      page,
+    }) => {
+      await hubHopPage.goto("/")
+      await expect.poll(() => hubHopPage.tagManagerRequests).toHaveLength(1)
+      const stored = async () =>
+        (await page.context().cookies()).find(
+          (cookie) => cookie.name === CONSENT_COOKIE,
+        )?.value
+      const before = await stored()
+
+      await test.step("Close with the close button", async () => {
+        await page.getByRole("button", { name: "Cookie settings" }).click()
+        await hubHopPage.cookiePreferences
+          .getByRole("button", { name: "Close" })
+          .click()
+        await expect(hubHopPage.cookiePreferences).toBeHidden()
+      })
+
+      await test.step("Close with Escape", async () => {
+        await page.getByRole("button", { name: "Cookie settings" }).click()
+        await expect(hubHopPage.cookiePreferences).toBeVisible()
+        await page.keyboard.press("Escape")
+        await expect(hubHopPage.cookiePreferences).toBeHidden()
+      })
+
+      expect(await stored()).toBe(before)
       expect(hubHopPage.tagManagerRequests).toHaveLength(1)
     })
   })

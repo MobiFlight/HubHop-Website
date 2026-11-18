@@ -1,6 +1,6 @@
 import type { Page, Request, Route } from "@playwright/test"
 import { FakeIdentityProvider } from "./FakeIdentityProvider"
-import { CONSENT_STORAGE_KEY } from "../../lib/consent"
+import { ANALYTICS, CONSENT_COOKIE } from "../../lib/cookieConsent"
 import msfsPresets from "../data/msfs-presets.testdata.json"
 import xplanePresets from "../data/xplane-presets.testdata.json"
 import msfsLast from "../data/msfs-last.testdata.json"
@@ -16,7 +16,7 @@ export const API_HOST = "https://hubhop-api-mgtm.azure-api.net"
 export const MOBIFLIGHT_HOST = "https://mobiflight.com"
 export const GTM_HOST = "https://www.googletagmanager.com"
 
-/** Cookie choice stored before the page loads; "unset" shows the banner */
+/** Cookie choice stored before the page loads; "unset" shows the consent dialog */
 export type CookieConsentOption = "accepted" | "rejected" | "unset"
 
 // 1 x 1 pixel PNG, served for every image on mobiflight.com
@@ -55,6 +55,29 @@ export const defaultApiData = (): ApiData => ({
   roles: "user",
   writeStatus: { POST: 200, PUT: 201, DELETE: 200 },
 })
+
+/** The consent cookie as vanilla-cookieconsent stores it */
+const consentCookie = (categories: string[]) => {
+  const now = new Date()
+  const expires = new Date(now.getTime() + 24 * 60 * 60 * 1000)
+  const value = {
+    categories,
+    revision: 0,
+    data: null,
+    consentTimestamp: now.toISOString(),
+    consentId: "00000000-0000-4000-8000-000000000000",
+    services: { necessary: [], [ANALYTICS]: [] },
+    languageCode: "en",
+    lastConsentTimestamp: now.toISOString(),
+    expirationTime: expires.getTime(),
+  }
+  return {
+    name: CONSENT_COOKIE,
+    value: encodeURIComponent(JSON.stringify(value)),
+    url: "http://localhost:3000",
+    expires: Math.round(expires.getTime() / 1000),
+  }
+}
 
 /**
  * Base page object: mocks the HubHop API and the B2C login, and records
@@ -95,22 +118,20 @@ export class HubHopPage {
       this.tagManagerRequests.push(request.url())
       return route.fulfill({ contentType: "text/javascript", body: "" })
     })
+    // vanilla-cookieconsent hides its dialog from automated browsers
+    await context.addInitScript(() =>
+      Object.defineProperty(Navigator.prototype, "webdriver", {
+        get: () => false,
+      }),
+    )
     if (cookieConsent !== "unset") {
-      // Only if no choice is stored yet, so a choice made in the test persists.
-      await context.addInitScript(
-        ({ key, analytics }) => {
-          if (localStorage.getItem(key) === null) {
-            localStorage.setItem(
-              key,
-              JSON.stringify({ analytics, date: new Date().toISOString() }),
-            )
-          }
-        },
-        {
-          key: CONSENT_STORAGE_KEY,
-          analytics: cookieConsent === "accepted",
-        },
-      )
+      await context.addCookies([
+        consentCookie(
+          cookieConsent === "accepted"
+            ? ["necessary", ANALYTICS]
+            : ["necessary"],
+        ),
+      ])
     }
     await context.addInitScript(() => {
       // The Next.js dev overlay (shown for console errors) would cover page controls.
@@ -156,9 +177,14 @@ export class HubHopPage {
     )
   }
 
-  /** The cookie banner */
-  get cookieBanner() {
-    return this.page.getByRole("dialog", { name: "Cookies on HubHop" })
+  /** The cookie consent dialog */
+  get cookieDialog() {
+    return this.page.getByRole("dialog", { name: "We use cookies" })
+  }
+
+  /** The cookie preferences dialog ("Cookie settings" in the footer) */
+  get cookiePreferences() {
+    return this.page.getByRole("dialog", { name: "Cookie preferences" })
   }
 
   /** Promotion slots for MobiFlight on the current page */
