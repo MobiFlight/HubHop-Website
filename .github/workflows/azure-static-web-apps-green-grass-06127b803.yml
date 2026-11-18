@@ -4,10 +4,23 @@ on:
   push:
     branches:
       - main
+    # no deployment for changes that don't affect the website
+    paths-ignore:
+      - "**.md"
+      - "tests/**"
+      - ".devcontainer/**"
+      - ".github/dependabot.yml"
+      - ".github/CODEOWNERS"
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
       - main
+    paths-ignore:
+      - "**.md"
+      - "tests/**"
+      - ".devcontainer/**"
+      - ".github/dependabot.yml"
+      - ".github/CODEOWNERS"
 
 jobs:
   build_and_deploy_job:
