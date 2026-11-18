@@ -1,0 +1,2 @@
+# Store all text files with LF line endings, also when checked out on Windows
+* text=auto eol=lf
