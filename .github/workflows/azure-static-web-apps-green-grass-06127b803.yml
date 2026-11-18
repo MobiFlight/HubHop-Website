@@ -37,8 +37,8 @@ jobs:
         uses: Azure/static-web-apps-deploy@v1
         env:
           IS_STATIC_EXPORT: true
-          # Google Tag Manager only on production, not in PR previews (repository variable GTM_ID)
-          NEXT_PUBLIC_GTM_ID: ${{ github.event_name == 'push' && vars.GTM_ID || '' }}
+          # Google Tag Manager only on production, not in PR previews (repository variable PUBLIC_GTM_ID)
+          NEXT_PUBLIC_GTM_ID: ${{ github.event_name == 'push' && vars.PUBLIC_GTM_ID || '' }}
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_GREEN_GRASS_06127B803 }}
           repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
