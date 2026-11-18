@@ -1,7 +1,7 @@
 import { test, expect } from "./fixtures"
 import { CONSENT_STORAGE_KEY } from "../lib/consent"
 
-const GTM_URL = "https://www.googletagmanager.com/gtm.js?id=GTM-NKF4WXJF"
+const GTM_URL = "https://www.googletagmanager.com/gtm.js?id=GTM-TEST"
 
 test.describe("Cookie consent", () => {
   test.describe("without a stored choice", () => {

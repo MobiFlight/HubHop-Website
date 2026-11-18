@@ -71,7 +71,8 @@ public/                  # Static assets
 
 ### Analytics and cookie consent
 
-- Google Tag Manager (`NEXT_PUBLIC_GTM_ID`) loads only after the visitor accepted the cookie banner
+- Google Tag Manager (`NEXT_PUBLIC_GTM_ID`) comes from the GitHub repository variable `GTM_ID` and is set only for production builds in the deployment workflow,
+  so dev, PR previews and tests don't send data (tests use `GTM-TEST`). It loads only after the visitor accepted the cookie banner
   (`components/sections/Shared/CookieConsent.tsx`, Consent Mode v2 "basic", ad signals always denied).
   The choice is stored in `localStorage.cookieConsent` for a year; "Cookie settings" in the footer changes it.
 - Google Analytics and any other tag are configured in the GTM container, not in code. Non-Google tags in GTM
