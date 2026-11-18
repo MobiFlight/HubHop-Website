@@ -39,12 +39,6 @@ const withBold = (line: string) =>
       index % 2 ? <strong key={index}>{part}</strong> : part,
     )
 
-// TEMPORARY for the design preview: localStorage.promotionButton = "blue"
-const buttonColors = () =>
-  localStorage.getItem("promotionButton") === "blue"
-    ? "bg-blue-700 text-white hover:bg-blue-800"
-    : "bg-hhOrange text-hhBG hover:bg-hhOrangeShade-600"
-
 const PromoSlot = ({
   slot,
   context = {},
@@ -155,7 +149,7 @@ const PromoSlot = ({
             href={href}
             target="_blank"
             rel={rel}
-            className={`self-start rounded-lg px-4 py-2 font-semibold transition-all ${buttonColors()}`}
+            className="self-start rounded-lg bg-hhOrange px-4 py-2 font-semibold text-hhBG transition-all hover:bg-hhOrangeShade-600"
           >
             {promotion.action.title}
           </a>
