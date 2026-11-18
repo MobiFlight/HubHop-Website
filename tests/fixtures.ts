@@ -1,19 +1,22 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { test as base } from "@playwright/test"
-import { HubHopPage } from "./fixtures/HubHopPage"
+import { HubHopPage, type CookieConsentOption } from "./fixtures/HubHopPage"
 import { PresetsPage } from "./fixtures/PresetsPage"
 import { PresetViewPage } from "./fixtures/PresetViewPage"
 
 type HHFixtures = {
+  /** Cookie choice before the test; tests default to "rejected" so the banner stays hidden */
+  cookieConsent: CookieConsentOption
   hubHopPage: HubHopPage
   presetsPage: PresetsPage
   presetViewPage: PresetViewPage
 }
 
 export const test = base.extend<HHFixtures>({
-  hubHopPage: async ({ page }, use) => {
+  cookieConsent: ["rejected", { option: true }],
+  hubHopPage: async ({ page, cookieConsent }, use) => {
     const hubHopPage = new HubHopPage(page)
-    await hubHopPage.init()
+    await hubHopPage.init(cookieConsent)
     await use(hubHopPage)
   },
   presetsPage: async ({ hubHopPage }, use) => {

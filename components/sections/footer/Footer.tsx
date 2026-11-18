@@ -1,7 +1,15 @@
 import Link from "next/link"
-import { FaDiscord, FaFingerprint, FaGithub, FaReadme } from "react-icons/fa"
+import {
+  FaCookieBite,
+  FaDiscord,
+  FaFingerprint,
+  FaGithub,
+  FaReadme,
+} from "react-icons/fa"
+import { useCookieConsent } from "../Shared/CookieConsent"
 
 const Footer = () => {
+  const cookieConsent = useCookieConsent()
   return (
     <footer className="grid grid-cols-3 items-center justify-between bg-hhBG/50 px-5 py-5 text-hhText">
       <div>
@@ -70,6 +78,18 @@ const Footer = () => {
             </Link>
           </button>
         </div>
+        {cookieConsent.enabled && (
+          <div>
+            <button
+              className="flex items-center justify-around space-x-1 transition-all hover:text-hhOrange"
+              aria-label="Cookie settings"
+              onClick={cookieConsent.openSettings}
+            >
+              <FaCookieBite />
+              <p className="hidden md:block">Cookie settings</p>
+            </button>
+          </div>
+        )}
       </div>
     </footer>
   )
