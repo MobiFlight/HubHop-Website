@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { AnimatePresence, motion } from "motion/react"
 import PresetHistoryList from "../singlePresetView/PresetHistoryList"
+import PromoSlot from "../../Shared/PromoSlot"
 import DeleteButton from "./deletePreset/DeleteButton"
 import EditToggle from "./editPreset/EditToggle"
 import PresetPreviewLabel, { type InputChangeEvent } from "./PresetInputLabel"
@@ -441,6 +442,18 @@ const PresetCard = ({
             </div>
           </div>
         </div>
+        {card && (
+          <PromoSlot
+            slot="preset-detail"
+            layout="row"
+            context={{
+              sim: simType === "xplane" ? "xplane" : "msfs2020",
+              vendor,
+              aircraft,
+            }}
+            className="mb-5"
+          />
+        )}
         {simType === "msfs2020" && showingHistory && (
           <div className="flex flex-col">
             {version > 1 ? (

@@ -6,6 +6,7 @@ import ExportPresetsModal from "./ui/exportPresets/ExportPresetsModal"
 import { AnimatePresence, motion } from "motion/react"
 import AddPresetsModal from "./ui/addPreset/AddPresetsModal"
 import Toast from "../Shared/Toast"
+import PromoSlot from "../Shared/PromoSlot"
 import { BsCheck2Square } from "react-icons/bs"
 import { getAccessToken } from "../../../services/msalFunctions"
 import { msalInstance, msalReady } from "../../../services/msal"
@@ -17,6 +18,7 @@ import { ToastContainer, toast } from "react-toastify"
 import { useRouter } from "next/router"
 import type { Preset } from "../../../interfaces/preset"
 import { type Facet, sortedUnique } from "../../../lib/presetFacets"
+import type { PromotionContext } from "../../../lib/promotions"
 import {
   comparePresets,
   presetRelevance,
@@ -283,6 +285,13 @@ const Presets = () => {
     }
   }
 
+  const promotionContext: PromotionContext = {
+    sim: simType === "xplane" ? "xplane" : "msfs2020",
+    vendor: filteredVendors || undefined,
+    aircraft: filteredAircrafts || undefined,
+    search: filteredPresets || undefined,
+  }
+
   return (
     <div>
       {loading ? (
@@ -293,6 +302,11 @@ const Presets = () => {
           <p className="mt-5 font-semibold">
             {loadingStatus != "" ? loadingStatus : "Loading Presets"}
           </p>
+          <PromoSlot
+            slot="loading"
+            context={promotionContext}
+            className="mx-3 mt-10 max-w-md"
+          />
         </div>
       ) : presets.length ? (
         <div className="min-h-screen">
@@ -336,91 +350,113 @@ const Presets = () => {
                   </div>
                 </button>
               </div>
-              <PresetFilter
-                filterOpen={filterOpen}
-                setFilterOpen={() => setFilterOpen((prev) => !prev)}
-                search={(e) => {
-                  const value = e.target.value
-                  setSearchText(value)
-                  clearTimeout(searchTimer.current)
-                  searchTimer.current = setTimeout(() => {
-                    setFilteredPresets(value)
-                    localStorage.setItem("searchFilter", value)
-                    // replace: typing must not add a history entry per search
-                    updateQueryParam("search", value, { replace: true })
-                  }, SEARCH_DELAY_MS)
-                }}
-                filterVendor={(e) => {
-                  const value = e.target.value
-                  setFilteredVendors(value)
-                  localStorage.setItem("vendorFilter", value)
-                  updateQueryParam("vendor", value)
-                }}
-                filterAircraft={(e) => {
-                  const value = e.target.value
-                  setFilteredAircrafts(value)
-                  localStorage.setItem("aircraftFilter", value)
-                  updateQueryParam("aircraft", value)
-                }}
-                filterSystem={(e) => {
-                  const value = e.target.value
-                  setFilteredSystems(value)
-                  localStorage.setItem("systemFilter", value)
-                  updateQueryParam("system", value)
-                }}
-                filterPresetType={(e) => {
-                  const value = e.target.value
-                  setFilteredPresetTypes(value)
-                  localStorage.setItem("presetTypeFilter", value)
-                  updateQueryParam("presetType", value)
-                }}
-                filterCodeType={(e) => {
-                  const value = e.target.value
-                  setFilteredCodeTypes(value)
-                  localStorage.setItem("codeTypeFilter", value)
-                  updateQueryParam("codeType", value)
-                }}
-                resetFilter={() => {
-                  clearTimeout(searchTimer.current)
-                  setSearchText("")
-                  setFilteredPresets("")
-                  setFilteredVendors("")
-                  setFilteredAircrafts("")
-                  setFilteredSystems("")
-                  setFilteredPresetTypes("")
-                  setFilteredCodeTypes("")
-                  localStorage.setItem("searchFilter", "")
-                  localStorage.setItem("vendorFilter", "")
-                  localStorage.setItem("aircraftFilter", "")
-                  localStorage.setItem("systemFilter", "")
-                  localStorage.setItem("presetTypeFilter", "")
-                  router.push(router.pathname, undefined, { shallow: true }) // reset URL
-                }}
-                filteredPresets={searchText}
-                filteredVendors={filteredVendors}
-                filteredAircrafts={filteredAircrafts}
-                filteredSystems={filteredSystems}
-                filteredPresetTypes={filteredPresetTypes}
-                filteredCodeTypes={filteredCodeTypes}
-                options={filterOptions}
-                setShowMyPresets={() => setShowMyPresets((prev) => !prev)}
-                setShowReportedPresets={() =>
-                  setShowReportedPresets((prev) => !prev)
-                }
-                showMyPresets={showMyPresets}
-                showReportedPresets={showReportedPresets}
-              />
+              {/* sticky together, so the filter doesn't slide over the promotion */}
+              <div className="flex flex-col md:sticky md:top-3">
+                <PresetFilter
+                  filterOpen={filterOpen}
+                  setFilterOpen={() => setFilterOpen((prev) => !prev)}
+                  search={(e) => {
+                    const value = e.target.value
+                    setSearchText(value)
+                    clearTimeout(searchTimer.current)
+                    searchTimer.current = setTimeout(() => {
+                      setFilteredPresets(value)
+                      localStorage.setItem("searchFilter", value)
+                      // replace: typing must not add a history entry per search
+                      updateQueryParam("search", value, { replace: true })
+                    }, SEARCH_DELAY_MS)
+                  }}
+                  filterVendor={(e) => {
+                    const value = e.target.value
+                    setFilteredVendors(value)
+                    localStorage.setItem("vendorFilter", value)
+                    updateQueryParam("vendor", value)
+                  }}
+                  filterAircraft={(e) => {
+                    const value = e.target.value
+                    setFilteredAircrafts(value)
+                    localStorage.setItem("aircraftFilter", value)
+                    updateQueryParam("aircraft", value)
+                  }}
+                  filterSystem={(e) => {
+                    const value = e.target.value
+                    setFilteredSystems(value)
+                    localStorage.setItem("systemFilter", value)
+                    updateQueryParam("system", value)
+                  }}
+                  filterPresetType={(e) => {
+                    const value = e.target.value
+                    setFilteredPresetTypes(value)
+                    localStorage.setItem("presetTypeFilter", value)
+                    updateQueryParam("presetType", value)
+                  }}
+                  filterCodeType={(e) => {
+                    const value = e.target.value
+                    setFilteredCodeTypes(value)
+                    localStorage.setItem("codeTypeFilter", value)
+                    updateQueryParam("codeType", value)
+                  }}
+                  resetFilter={() => {
+                    clearTimeout(searchTimer.current)
+                    setSearchText("")
+                    setFilteredPresets("")
+                    setFilteredVendors("")
+                    setFilteredAircrafts("")
+                    setFilteredSystems("")
+                    setFilteredPresetTypes("")
+                    setFilteredCodeTypes("")
+                    localStorage.setItem("searchFilter", "")
+                    localStorage.setItem("vendorFilter", "")
+                    localStorage.setItem("aircraftFilter", "")
+                    localStorage.setItem("systemFilter", "")
+                    localStorage.setItem("presetTypeFilter", "")
+                    router.push(router.pathname, undefined, { shallow: true }) // reset URL
+                  }}
+                  filteredPresets={searchText}
+                  filteredVendors={filteredVendors}
+                  filteredAircrafts={filteredAircrafts}
+                  filteredSystems={filteredSystems}
+                  filteredPresetTypes={filteredPresetTypes}
+                  filteredCodeTypes={filteredCodeTypes}
+                  options={filterOptions}
+                  setShowMyPresets={() => setShowMyPresets((prev) => !prev)}
+                  setShowReportedPresets={() =>
+                    setShowReportedPresets((prev) => !prev)
+                  }
+                  showMyPresets={showMyPresets}
+                  showReportedPresets={showReportedPresets}
+                />
+                <PromoSlot
+                  slot="filter-sidebar"
+                  context={promotionContext}
+                  // the collapsed filter is too narrow for it
+                  className={`mb-3 md:mt-3 md:w-96 ${filterOpen ? "" : "md:hidden"}`}
+                />
+              </div>
             </div>
-            <PresetTable
-              setAddModalOpen={() => setAddModalOpen(true)}
-              setExportModalOpen={() => setExportModalOpen(true)}
-              data={filteredItems}
-              relevance={terms.length > 0 ? relevance : undefined}
-              deletedToast={deleteToast}
-              reportedToast={reportToast}
-              fixedToast={fixToast}
-              savedToast={saveToast}
-            />
+            <div className="flex w-full flex-col">
+              <PresetTable
+                setAddModalOpen={() => setAddModalOpen(true)}
+                setExportModalOpen={() => setExportModalOpen(true)}
+                data={filteredItems}
+                relevance={terms.length > 0 ? relevance : undefined}
+                deletedToast={deleteToast}
+                reportedToast={reportToast}
+                fixedToast={fixToast}
+                savedToast={saveToast}
+              />
+              {/* three next to each other: one promotion alone leaves most of the width empty */}
+              <div className="mt-3 grid gap-3 lg:grid-cols-3">
+                {[1, 2, 3].map((position) => (
+                  <PromoSlot
+                    key={position}
+                    slot="below-results"
+                    layout="row"
+                    context={promotionContext}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       ) : (
@@ -429,6 +465,11 @@ const Presets = () => {
             <AiOutlineLoading />
           </div>
           <p className="mt-5">Loading Presets</p>
+          <PromoSlot
+            slot="loading"
+            context={promotionContext}
+            className="mx-3 mt-10 max-w-md"
+          />
         </div>
       )}
       <AnimatePresence>
