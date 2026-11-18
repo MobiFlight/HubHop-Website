@@ -60,6 +60,8 @@ export default defineConfig({
     env: {
       // the login popup must return to the test server, not to production
       NEXT_PUBLIC_HUBHOP_OAUTH_REDIRECT_URI_DEV: "http://localhost:3000/",
+      // test container, requests to Google Tag Manager are mocked
+      NEXT_PUBLIC_GTM_ID: "GTM-TEST",
     },
     url: "http://localhost:3000/",
     reuseExistingServer: !process.env.CI,

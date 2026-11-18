@@ -46,7 +46,7 @@ npx playwright install chromium
 
 - Use the personas: `test.use({ storageState: authFile.user })` (or `moderator`). The default is anonymous.
 - Tests start with the cookie banner answered ("rejected"). Use `test.use({ cookieConsent: "unset" })` or
-  `"accepted"` to test the banner; requests to Google Tag Manager are mocked and listed in `hubHopPage.tagManagerRequests`.
+  `"accepted"` to test the banner; requests to Google Tag Manager (container `GTM-TEST`, set in `playwright.config.ts`) are mocked and listed in `hubHopPage.tagManagerRequests`.
 - Change mocked data per test through `hubHopPage.api` (e.g. add a preset, change `writeStatus`).
 - Assert on write operations through the recorded requests instead of server state:
   `expect.poll(() => hubHopPage.writeRequests("PUT")).toHaveLength(1)`.
