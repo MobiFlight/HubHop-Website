@@ -1,5 +1,6 @@
 "use client"
 
+import "vanilla-cookieconsent/dist/cookieconsent.css"
 import "../styles/globals.css"
 import { AppProps } from "next/app"
 import { MsalProvider } from "@azure/msal-react"

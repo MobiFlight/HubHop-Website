@@ -206,3 +206,36 @@
   --toastify-color-progress-warning: var(--toastify-color-warning);
   --toastify-color-progress-error: var(--toastify-color-error);
 }
+
+/* Cookie consent dialog (vanilla-cookieconsent) in HubHop colors */
+#cc-main {
+  --cc-font-family: inherit;
+  --cc-bg: var(--color-hhBG);
+  --cc-primary-color: var(--color-hhText);
+  --cc-secondary-color: var(--color-hhText);
+  --cc-btn-primary-bg: var(--color-hhOrange);
+  --cc-btn-primary-color: var(--color-hhBG);
+  --cc-btn-primary-border-color: var(--color-hhOrange);
+  --cc-btn-primary-hover-bg: var(--color-hhOrangeShade-700);
+  --cc-btn-primary-hover-color: var(--color-hhBG);
+  --cc-btn-primary-hover-border-color: var(--color-hhOrangeShade-700);
+  --cc-btn-secondary-bg: var(--color-hhCard);
+  --cc-btn-secondary-color: var(--color-hhText);
+  --cc-btn-secondary-border-color: var(--color-hhCard);
+  --cc-btn-secondary-hover-bg: var(--color-hhOrange);
+  --cc-btn-secondary-hover-color: var(--color-hhBG);
+  --cc-btn-secondary-hover-border-color: var(--color-hhOrange);
+  --cc-separator-border-color: var(--color-hhCard);
+  --cc-toggle-on-bg: var(--color-hhOrange);
+  --cc-toggle-off-bg: var(--color-hhCard);
+  --cc-toggle-readonly-bg: var(--color-hhCard);
+  --cc-cookie-category-block-bg: var(--color-hhCard);
+  --cc-cookie-category-block-border: var(--color-hhCard);
+  --cc-cookie-category-block-hover-bg: var(--color-hhCard);
+  --cc-cookie-category-block-hover-border: var(--color-hhCard);
+  --cc-footer-bg: var(--color-hhBG);
+  --cc-footer-color: var(--color-hhText);
+  --cc-footer-border-color: var(--color-hhCard);
+  --cc-overlay-bg: rgb(0 0 0 / 60%);
+  --cc-link-color: var(--color-hhOrange);
+}

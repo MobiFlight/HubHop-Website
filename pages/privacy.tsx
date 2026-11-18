@@ -77,11 +77,13 @@ const Privacy = () => (
         keine Cookies.
       </p>
       <p>
-        Beide Dienste werden erst geladen, nachdem Sie im Cookie-Banner auf
-        &quot;Accept&quot; geklickt haben. Vorher werden keine Daten an Google
-        übertragen. Rechtsgrundlage ist Ihre Einwilligung nach Art. 6 Abs. 1
-        lit. a DSGVO und § 25 Abs. 1 TDDDG. Werbefunktionen und Google Signals
-        sind deaktiviert.
+        Beide Dienste werden erst geladen, nachdem Sie im Cookie-Dialog der
+        Kategorie &quot;Statistik&quot; (&quot;Analytics&quot;) zugestimmt
+        haben. Vorher werden keine Daten an Google übertragen. Ihre Auswahl wird
+        für ein Jahr im Cookie &quot;hubhop_cookie_consent&quot; gespeichert.
+        Rechtsgrundlage ist Ihre Einwilligung nach Art. 6 Abs. 1 lit. a DSGVO
+        und § 25 Abs. 1 TDDDG. Werbefunktionen und Google Signals sind
+        deaktiviert.
       </p>
       <p>
         Google Analytics speichert Cookies (&quot;_ga&quot; und
@@ -94,9 +96,10 @@ const Privacy = () => (
       <p>
         Sie können Ihre Einwilligung jederzeit mit Wirkung für die Zukunft
         widerrufen: Klicken Sie unten auf jeder Seite auf &quot;Cookie
-        settings&quot; und wählen Sie &quot;Reject&quot;. Die Cookies von Google
-        Analytics werden dann gelöscht. Weitere Informationen finden Sie in der
-        Datenschutzerklärung von Google unter{" "}
+        settings&quot; und lehnen Sie &quot;Statistik&quot; ab, z.B. mit
+        &quot;Alle ablehnen&quot; (&quot;Reject all&quot;). Die Cookies von
+        Google Analytics werden dann gelöscht. Weitere Informationen finden Sie
+        in der Datenschutzerklärung von Google unter{" "}
         <a href="https://policies.google.com/privacy" target="_blank">
           https://policies.google.com/privacy
         </a>

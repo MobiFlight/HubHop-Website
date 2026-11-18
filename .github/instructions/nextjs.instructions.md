@@ -72,9 +72,13 @@ public/                  # Static assets
 ### Analytics and cookie consent
 
 - Google Tag Manager (`NEXT_PUBLIC_GTM_ID`) comes from the GitHub repository variable `PUBLIC_GTM_ID` and is set only for production builds in the deployment workflow,
-  so dev, PR previews and tests don't send data (tests use `GTM-TEST`). It loads only after the visitor accepted the cookie banner
-  (`components/sections/Shared/CookieConsent.tsx`, Consent Mode v2 "basic", ad signals always denied).
-  The choice is stored in `localStorage.cookieConsent` for a year; "Cookie settings" in the footer changes it.
+  so dev, PR previews and tests don't send data (tests use `GTM-TEST`). It loads only after the visitor accepted the "analytics"
+  category (Consent Mode v2 "basic", ad signals always denied).
+- The consent dialog is vanilla-cookieconsent, configured like mobiflight.com (`MobiFlight/mobiflight-website`,
+  `astro/src/components/mobiflight/consent/`): `lib/cookieConsent.ts` (config and texts in en/de/es),
+  `components/sections/Shared/CookieConsent.tsx` (runs it, loads GTM), colors in `styles/globals.css` (`#cc-main`).
+  The choice is stored in the cookie `hubhop_cookie_consent` for a year (mobiflight.com's `mf_cookie_consent` is set for
+  the whole domain, so HubHop needs its own name). "Cookie settings" in the footer opens the preferences.
 - Google Analytics and any other tag are configured in the GTM container, not in code. Non-Google tags in GTM
   need their own consent check, and new tags or cookies need an update of the privacy page.
 
