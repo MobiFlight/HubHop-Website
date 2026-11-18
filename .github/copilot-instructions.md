@@ -12,8 +12,7 @@ report and export presets. Data comes from the HubHop API; this repo contains no
 - Branch names: `<issue-number>/<descriptive-name>` when an issue exists, otherwise `<type>/<descriptive-name>` (e.g. `chore/update-deps`).
 - Do not add `Co-Authored-By` or other attribution trailers to commit messages, and no "Generated with ..." footers in PR descriptions.
 - Keep PRs focused: one concern per PR. Fill in `.github/pull_request_template.md`.
-- PRs are squash-merged. For stacked PRs, rebase the follow-up with `git rebase --onto origin/main <old base>` and
-  retarget it to `main` once the base PR is merged.
+- PRs are squash-merged.
 - CI only runs on PRs into `main`. To re-run it without a new commit, close and reopen the PR (don't open a new one).
 
 ## Working agreements
