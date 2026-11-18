@@ -1,18 +1,18 @@
 // Promotions for MobiFlight shown in slots across HubHop (#98).
 //
-// Content brief
+// Promotions use the item format of the MobiFlight news feed
+// (https://mobiflight.com/feed/en/feed.json, source in MobiFlight/mobiflight-website),
+// so news, partner deals and sponsors from mobiflight.com show up here without
+// extra work. PROMOTIONS below are our own entries; they also fill the slots
+// when the feed can't be loaded.
+//
+// Content brief, the same as for the news feed:
 // - title: at most 40 characters
-// - text: at most 120 characters, one or two short sentences
-// - cta: the link text, two or three words ("Join the Club")
-// - image per slot:
-//   - list-inline: small logo or none
-//   - filter-sidebar, below-results, preset-detail, home-featured: 16:9
-//   - loading: larger image
-//   - home-sponsors: logo on a transparent background
+// - content: one or two short sentences
+// - media: 16:9 image (the feed uses 500 x 281) with alt text; sponsor logos are shown on white
+// - action: the button text, two or three words, and the link
 // - tone: community, thankful, not pushy
 // - sponsor promotions are labelled "Sponsored" and their links use rel="sponsored"
-//
-// The entries in PROMOTIONS are placeholders until the real content exists (see #98).
 
 export type PromotionKind = "club" | "donation" | "sponsor" | "news" | "shop"
 
@@ -35,15 +35,36 @@ export type PromotionMatch = {
   keywords?: string[]
 }
 
+// An item of the MobiFlight news feed (NewsItem in mobiflight-website's news-card.astro)
+export type FeedItem = {
+  date: string
+  title: string
+  content: string[]
+  media?: { type: string; src: string; alt: string }
+  tags: string[]
+  action?: { title: string; url: string }
+  // last day the item is shown (YYYY-MM-DD)
+  expires?: string
+}
+
+// An entry of https://mobiflight.com/sponsors.json
+export type Sponsor = {
+  name: string
+  logo: string
+  href: string
+}
+
 export type Promotion = {
   id: string
   kind: PromotionKind
+  date?: string
   title: string
-  text: string
-  cta: string
-  url: string
-  image?: string
-  sponsorTier?: "gold" | "silver"
+  content: string[]
+  // "logo" is shown whole on a white background, "image" fills the area
+  media?: { type: "image" | "logo"; src: string; alt: string }
+  action: { title: string; url: string }
+  // the feed tag of items from the MobiFlight news feed
+  tag?: FeedTag
   // slots this promotion may appear in; all slots when missing
   slots?: SlotId[]
   match?: PromotionMatch
@@ -58,64 +79,107 @@ export type PromotionContext = {
   search?: string
 }
 
-const MOBIFLIGHT_URL = "https://www.mobiflight.com/"
-
 export const PROMOTIONS: Promotion[] = [
   {
     id: "club",
     kind: "club",
     title: "Join the MobiFlight Club",
-    text: "HubHop is free for everyone. Club members keep it that way and get early access to new features.",
-    cta: "Join the Club",
-    url: MOBIFLIGHT_URL,
+    content: [
+      "HubHop and MobiFlight are free for everyone.",
+      "Club members keep it that way.",
+    ],
+    action: { title: "Join the Club", url: "https://mobiflight.com/club/" },
     weight: 3,
   },
   {
     id: "donation",
     kind: "donation",
     title: "Did HubHop help you?",
-    text: "MobiFlight and HubHop are made by volunteers. A small donation helps us keep them running.",
-    cta: "Donate via PayPal",
-    url: MOBIFLIGHT_URL,
+    content: [
+      "MobiFlight and HubHop are made by volunteers.",
+      "Your support keeps them running.",
+    ],
+    action: {
+      title: "Support us",
+      url: "https://github.com/sponsors/MobiFlight",
+    },
     weight: 2,
-  },
-  {
-    id: "sponsor-gold",
-    kind: "sponsor",
-    sponsorTier: "gold",
-    title: "Gold sponsor",
-    text: "Placeholder for a Gold sponsor of MobiFlight.",
-    cta: "Visit sponsor",
-    url: MOBIFLIGHT_URL,
-  },
-  {
-    id: "sponsor-silver",
-    kind: "sponsor",
-    sponsorTier: "silver",
-    title: "Silver sponsor",
-    text: "Placeholder for a Silver sponsor of MobiFlight.",
-    cta: "Visit sponsor",
-    url: MOBIFLIGHT_URL,
-  },
-  {
-    id: "news",
-    kind: "news",
-    title: "What's new in MobiFlight",
-    text: "Read about the latest MobiFlight releases and community projects.",
-    cta: "Read the news",
-    url: MOBIFLIGHT_URL,
-    slots: ["filter-sidebar", "below-results", "loading", "home-featured"],
   },
   {
     id: "shop",
     kind: "shop",
     title: "Build your own cockpit",
-    text: "Boards, displays and kits for your home cockpit from the MobiFlight shop.",
-    cta: "Visit the shop",
-    url: MOBIFLIGHT_URL,
+    content: [
+      "Boards, displays and kits for your home cockpit from the MobiFlight shop.",
+    ],
+    action: { title: "Visit the shop", url: "https://shop.mobiflight.com/" },
     match: { keywords: ["display", "led", "panel", "switch", "encoder"] },
   },
 ]
+
+// Today in the user's time zone as YYYY-MM-DD, the format of the feed's dates.
+const localDate = (date: Date) =>
+  [
+    date.getFullYear(),
+    String(date.getMonth() + 1).padStart(2, "0"),
+    String(date.getDate()).padStart(2, "0"),
+  ].join("-")
+
+// Feed items with one of these tags are shown, in the order the filter sidebar prefers them.
+export const FEED_TAGS = ["promo", "shop", "community"] as const
+export type FeedTag = (typeof FEED_TAGS)[number]
+
+// Feed items with a button that are published and not expired;
+// media paths are relative to mediaBaseUrl.
+export const feedPromotions = (
+  items: FeedItem[],
+  mediaBaseUrl: string,
+  today: string = localDate(new Date()),
+): Promotion[] =>
+  items.flatMap((item) => {
+    const tag = FEED_TAGS.find((feedTag) => item.tags.includes(feedTag))
+    const { action } = item
+    const current =
+      item.date <= today && (!item.expires || item.expires >= today)
+    if (!tag || !action || !current) return []
+    return [
+      {
+        id: `news-${item.date}-${item.title}`,
+        kind: "news" as const,
+        tag,
+        date: item.date,
+        title: item.title,
+        content: item.content,
+        media:
+          item.media?.type === "image"
+            ? {
+                type: "image" as const,
+                src: new URL(item.media.src, mediaBaseUrl).toString(),
+                alt: item.media.alt,
+              }
+            : undefined,
+        action,
+      },
+    ]
+  })
+
+// Logo paths are relative to the sponsors file.
+export const sponsorPromotions = (
+  sponsors: Sponsor[],
+  sponsorsUrl: string,
+): Promotion[] =>
+  sponsors.map((sponsor) => ({
+    id: `sponsor-${sponsor.name}`,
+    kind: "sponsor",
+    title: sponsor.name,
+    content: [`${sponsor.name} sponsors MobiFlight. Thank you!`],
+    media: {
+      type: "logo",
+      src: new URL(sponsor.logo, sponsorsUrl).toString(),
+      alt: `${sponsor.name} logo`,
+    },
+    action: { title: `Visit ${sponsor.name}`, url: sponsor.href },
+  }))
 
 const normalize = (value: string) => value.trim().toLowerCase()
 
@@ -146,20 +210,38 @@ export const matchScore = (
   return checks.every(Boolean) ? checks.length : -1
 }
 
-// The promotions that fit the slot and match the context best.
+// Slots that prefer feed items by tag, in this order; other promotions come after them.
+const SLOT_TAG_ORDER: Partial<Record<SlotId, readonly FeedTag[]>> = {
+  "filter-sidebar": FEED_TAGS,
+}
+
+// 0 for the preferred tag; the same for all promotions in other slots.
+const tagRank = (promotion: Promotion, slot: SlotId): number => {
+  const order = SLOT_TAG_ORDER[slot] ?? []
+  const index = promotion.tag ? order.indexOf(promotion.tag) : -1
+  return index === -1 ? order.length : index
+}
+
+// The promotions that fit the slot, have its preferred tag and match the context best.
 export const bestPromotions = (
   slot: SlotId,
   context: PromotionContext,
   promotions: Promotion[] = PROMOTIONS,
   excludeIds: string[] = [],
 ): Promotion[] => {
-  const scored = promotions
+  const ranked = promotions
     .filter((promotion) => !promotion.slots || promotion.slots.includes(slot))
     .filter((promotion) => !excludeIds.includes(promotion.id))
-    .map((promotion) => ({ promotion, score: matchScore(promotion, context) }))
+    .map((promotion) => ({
+      promotion,
+      rank: tagRank(promotion, slot),
+      score: matchScore(promotion, context),
+    }))
     .filter(({ score }) => score >= 0)
-  const best = Math.max(...scored.map(({ score }) => score))
-  return scored
+  const topRank = Math.min(...ranked.map(({ rank }) => rank))
+  const preferred = ranked.filter(({ rank }) => rank === topRank)
+  const best = Math.max(...preferred.map(({ score }) => score))
+  return preferred
     .filter(({ score }) => score === best)
     .map(({ promotion }) => promotion)
 }
@@ -191,18 +273,9 @@ export const pickPromotion = (
 ): Promotion | undefined =>
   pickWeighted(bestPromotions(slot, context, promotions, excludeIds), random)
 
-// Gold sponsors first, then Silver; for the sponsor strip.
-export const sponsors = (promotions: Promotion[] = PROMOTIONS): Promotion[] =>
-  promotions
-    .filter((promotion) => promotion.kind === "sponsor")
-    .sort(
-      (a, b) =>
-        Number(b.sponsorTier === "gold") - Number(a.sponsorTier === "gold"),
-    )
-
 // Adds UTM parameters so clicks can be counted on the target site.
 export const promotionUrl = (promotion: Promotion, slot: SlotId): string => {
-  const url = new URL(promotion.url)
+  const url = new URL(promotion.action.url)
   url.searchParams.set("utm_source", "hubhop")
   url.searchParams.set("utm_medium", "promotion")
   url.searchParams.set("utm_campaign", promotion.id)

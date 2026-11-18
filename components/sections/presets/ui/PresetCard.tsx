@@ -445,6 +445,7 @@ const PresetCard = ({
         {card && (
           <PromoSlot
             slot="preset-detail"
+            layout="row"
             context={{
               sim: simType === "xplane" ? "xplane" : "msfs2020",
               vendor,

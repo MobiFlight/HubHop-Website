@@ -445,11 +445,17 @@ const Presets = () => {
                 fixedToast={fixToast}
                 savedToast={saveToast}
               />
-              <PromoSlot
-                slot="below-results"
-                context={promotionContext}
-                className="mt-3"
-              />
+              {/* three next to each other: one promotion alone leaves most of the width empty */}
+              <div className="mt-3 grid gap-3 lg:grid-cols-3">
+                {[1, 2, 3].map((position) => (
+                  <PromoSlot
+                    key={position}
+                    slot="below-results"
+                    layout="row"
+                    context={promotionContext}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </div>

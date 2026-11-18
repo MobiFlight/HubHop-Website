@@ -7,8 +7,18 @@ import xplaneLast from "../data/xplane-last.testdata.json"
 import msfsStats from "../data/msfs-stats.testdata.json"
 import xplaneStats from "../data/xplane-stats.testdata.json"
 import msfsHistory from "../data/msfs-history.testdata.json"
+import mobiflightFeed from "../data/mobiflight-feed.testdata.json"
+import mobiflightSponsors from "../data/mobiflight-sponsors.testdata.json"
 
 export const API_HOST = "https://hubhop-api-mgtm.azure-api.net"
+/** mobiflight.com: news feed, sponsors and their images */
+export const MOBIFLIGHT_HOST = "https://mobiflight.com"
+
+// 1 x 1 pixel PNG, served for every image on mobiflight.com
+const PIXEL = Buffer.from(
+  "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
+  "base64",
+)
 const API_BASE = "/api/v1"
 
 export type Sim = "msfs2020" | "xplane"
@@ -63,6 +73,16 @@ export class HubHopPage {
     await context.route(`${API_HOST}/**`, (route, request) =>
       this.handleApi(route, request),
     )
+    await context.route(`${MOBIFLIGHT_HOST}/**`, (route, request) => {
+      const path = new URL(request.url()).pathname
+      if (path === "/feed/en/feed.json") {
+        return route.fulfill({ json: mobiflightFeed })
+      }
+      if (path === "/sponsors.json") {
+        return route.fulfill({ json: mobiflightSponsors })
+      }
+      return route.fulfill({ contentType: "image/png", body: PIXEL })
+    })
     await context.addInitScript(() => {
       // The Next.js dev overlay (shown for console errors) would cover page controls.
       document.addEventListener("DOMContentLoaded", () => {

@@ -1,0 +1,55 @@
+{
+  "community": [
+    {
+      "date": "2026-11-11",
+      "title": "Test partner deal",
+      "content": ["A partner has a **test deal**.", "Second line of the deal."],
+      "media": {
+        "type": "image",
+        "src": "media/test/deal.jpg",
+        "alt": "Thumbnail for the test deal"
+      },
+      "tags": ["community", "promo"],
+      "action": {
+        "title": "Test deal now!",
+        "url": "https://partner.example.com/?ref=test"
+      }
+    },
+    {
+      "date": "2026-09-28",
+      "title": "Test release",
+      "content": ["A test release of MobiFlight."],
+      "media": {
+        "type": "image",
+        "src": "media/releases/test-release.jpg",
+        "alt": "Thumbnail for the test release"
+      },
+      "tags": ["community", "shop"],
+      "action": {
+        "title": "Watch it now!",
+        "url": "https://www.youtube.com/watch?v=test"
+      }
+    },
+    {
+      "date": "2026-09-18",
+      "title": "Test community news",
+      "content": ["Community news that is not a promotion."],
+      "tags": ["community"],
+      "action": {
+        "title": "Read more",
+        "url": "https://mobiflight.com/"
+      }
+    },
+    {
+      "date": "2026-06-01",
+      "title": "Test event without a link",
+      "content": ["An event without a button."],
+      "media": {
+        "type": "image",
+        "src": "media/events/test-event.jpg",
+        "alt": "Thumbnail for the test event"
+      },
+      "tags": ["events"]
+    }
+  ]
+}
