@@ -229,6 +229,15 @@ test.describe("Promotion selection", () => {
     expect(bestPromotions("below-results", {}, promotions)).toEqual(promotions)
   })
 
+  test("Promotion selection - donations go to the HubHop PayPal button", () => {
+    const donation = PROMOTIONS.find((p) => p.kind === "donation")
+
+    expect(donation?.action).toEqual({
+      title: "Donate via PayPal",
+      url: "https://www.paypal.com/donate/?hosted_button_id=URY7DDNXZ8Q3U",
+    })
+  })
+
   test("Promotion selection - sponsors become sponsor promotions with their logo", () => {
     const [sponsor] = sponsorPromotions(
       [

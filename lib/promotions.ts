@@ -100,8 +100,8 @@ export const PROMOTIONS: Promotion[] = [
       "Your support keeps them running.",
     ],
     action: {
-      title: "Support us",
-      url: "https://github.com/sponsors/MobiFlight",
+      title: "Donate via PayPal",
+      url: "https://www.paypal.com/donate/?hosted_button_id=URY7DDNXZ8Q3U",
     },
     weight: 2,
   },
