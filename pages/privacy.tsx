@@ -63,45 +63,42 @@ const Privacy = () => (
       <p></p>
       <p>
         <strong className="text-xl font-bold">
-          Datenschutzerklärung für die Nutzung von Google Analytics
+          Datenschutzerklärung für die Nutzung von Google Tag Manager und Google
+          Analytics
         </strong>
       </p>
       <p>
-        Diese Website benutzt Google Analytics, einen Webanalysedienst der
-        Google Inc. (&quot;Google&quot;). Google Analytics verwendet sog.
-        &quot;Cookies&quot;, Textdateien, die auf Ihrem Computer gespeichert
-        werden und die eine Analyse der Benutzung der Website durch Sie
-        ermöglichen. Die durch den Cookie erzeugten Informationen über Ihre
-        Benutzung dieser Website werden in der Regel an einen Server von Google
-        in den USA übertragen und dort gespeichert. Im Falle der Aktivierung der
-        IP-Anonymisierung auf dieser Webseite wird Ihre IP-Adresse von Google
-        jedoch innerhalb von Mitgliedstaaten der Europäischen Union oder in
-        anderen Vertragsstaaten des Abkommens über den Europäischen
-        Wirtschaftsraum zuvor gekürzt.
+        Mit Ihrer Einwilligung nutzen wir Google Tag Manager und Google
+        Analytics 4, Dienste der Google Ireland Limited, Gordon House, Barrow
+        Street, Dublin 4, Irland (&quot;Google&quot;). Google Analytics hilft
+        uns zu verstehen, wie HubHop genutzt wird (z.B. aufgerufene Seiten,
+        Verweildauer, ungefähre Herkunft, Gerät und Browser), um die Website zu
+        verbessern. Google Tag Manager lädt Google Analytics; er selbst setzt
+        keine Cookies.
       </p>
       <p>
-        Nur in Ausnahmefällen wird die volle IP-Adresse an einen Server von
-        Google in den USA übertragen und dort gekürzt. Im Auftrag des Betreibers
-        dieser Website wird Google diese Informationen benutzen, um Ihre Nutzung
-        der Website auszuwerten, um Reports über die Websiteaktivitäten
-        zusammenzustellen und um weitere mit der Websitenutzung und der
-        Internetnutzung verbundene Dienstleistungen gegenüber dem
-        Websitebetreiber zu erbringen. Die im Rahmen von Google Analytics von
-        Ihrem Browser übermittelte IP-Adresse wird nicht mit anderen Daten von
-        Google zusammengeführt.
+        Beide Dienste werden erst geladen, nachdem Sie im Cookie-Banner auf
+        &quot;Accept&quot; geklickt haben. Vorher werden keine Daten an Google
+        übertragen. Rechtsgrundlage ist Ihre Einwilligung nach Art. 6 Abs. 1
+        lit. a DSGVO und § 25 Abs. 1 TDDDG. Werbefunktionen und Google Signals
+        sind deaktiviert.
       </p>
       <p>
-        Sie können die Speicherung der Cookies durch eine entsprechende
-        Einstellung Ihrer Browser-Software verhindern; wir weisen Sie jedoch
-        darauf hin, dass Sie in diesem Fall gegebenenfalls nicht sämtliche
-        Funktionen dieser Website vollumfänglich werden nutzen können. Sie
-        können darüber hinaus die Erfassung der durch das Cookie erzeugten und
-        auf Ihre Nutzung der Website bezogenen Daten (inkl. Ihrer IP-Adresse) an
-        Google sowie die Verarbeitung dieser Daten durch Google verhindern,
-        indem sie das unter dem folgenden Link verfügbare Browser-Plugin
-        herunterladen und installieren:
-        <a href="http://tools.google.com/dlpage/gaoptout?hl=de">
-          http://tools.google.com/dlpage/gaoptout?hl=de
+        Google Analytics speichert Cookies (&quot;_ga&quot; und
+        &quot;_ga_&lt;ID&gt;&quot;) mit einer Laufzeit von bis zu zwei Jahren.
+        Ihre IP-Adresse wird von Google Analytics 4 nicht gespeichert. Die Daten
+        können an Google LLC in den USA übertragen werden. Google ist unter dem
+        EU-US Data Privacy Framework zertifiziert; die USA verfügen damit über
+        einen Angemessenheitsbeschluss der EU-Kommission.
+      </p>
+      <p>
+        Sie können Ihre Einwilligung jederzeit mit Wirkung für die Zukunft
+        widerrufen: Klicken Sie unten auf jeder Seite auf &quot;Cookie
+        settings&quot; und wählen Sie &quot;Reject&quot;. Die Cookies von Google
+        Analytics werden dann gelöscht. Weitere Informationen finden Sie in der
+        Datenschutzerklärung von Google unter{" "}
+        <a href="https://policies.google.com/privacy" target="_blank">
+          https://policies.google.com/privacy
         </a>
         .
       </p>
@@ -119,7 +116,7 @@ const Privacy = () => (
           ,
           <a
             rel="nofollow"
-            href="http://www.google.com/intl/de/analytics/learn/privacy.html"
+            href="https://policies.google.com/privacy"
             target="_blank"
           >
             Datenschutzerklärung Google Analytics

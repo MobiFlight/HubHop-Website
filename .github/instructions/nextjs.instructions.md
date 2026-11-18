@@ -69,6 +69,14 @@ public/                  # Static assets
 - Who may create new values: vendor and aircraft everyone; system moderators only (moderators are admins);
   Input/Output and Code Type nobody. These are fixed lists in `lib/presetTypes.ts` and `lib/codeTypes.ts`.
 
+### Analytics and cookie consent
+
+- Google Tag Manager (`NEXT_PUBLIC_GTM_ID`) loads only after the visitor accepted the cookie banner
+  (`components/sections/Shared/CookieConsent.tsx`, Consent Mode v2 "basic", ad signals always denied).
+  The choice is stored in `localStorage.cookieConsent` for a year; "Cookie settings" in the footer changes it.
+- Google Analytics and any other tag are configured in the GTM container, not in code. Non-Google tags in GTM
+  need their own consent check, and new tags or cookies need an update of the privacy page.
+
 ### Types and shared code
 
 - `interfaces/preset.ts` follows the HubHop API (`PresetDbSchema` in HubHopApi's `model/Preset.ts`, the interface

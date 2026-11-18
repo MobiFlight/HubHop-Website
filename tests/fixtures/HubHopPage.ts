@@ -1,5 +1,6 @@
 import type { Page, Request, Route } from "@playwright/test"
 import { FakeIdentityProvider } from "./FakeIdentityProvider"
+import { CONSENT_STORAGE_KEY } from "../../lib/consent"
 import msfsPresets from "../data/msfs-presets.testdata.json"
 import xplanePresets from "../data/xplane-presets.testdata.json"
 import msfsLast from "../data/msfs-last.testdata.json"
@@ -13,6 +14,10 @@ import mobiflightSponsors from "../data/mobiflight-sponsors.testdata.json"
 export const API_HOST = "https://hubhop-api-mgtm.azure-api.net"
 /** mobiflight.com: news feed, sponsors and their images */
 export const MOBIFLIGHT_HOST = "https://mobiflight.com"
+export const GTM_HOST = "https://www.googletagmanager.com"
+
+/** Cookie choice stored before the page loads; "unset" shows the banner */
+export type CookieConsentOption = "accepted" | "rejected" | "unset"
 
 // 1 x 1 pixel PNG, served for every image on mobiflight.com
 const PIXEL = Buffer.from(
@@ -60,13 +65,15 @@ export class HubHopPage {
   readonly requests: RecordedRequest[] = []
   /** number of full preset list downloads per sim */
   readonly downloads: Record<Sim, number> = { msfs2020: 0, xplane: 0 }
+  /** URLs of requests to Google Tag Manager */
+  readonly tagManagerRequests: string[] = []
 
   constructor(public readonly page: Page) {}
 
   readonly identityProvider = new FakeIdentityProvider()
 
   /** Installs all mocks. Must be called before the first navigation. */
-  async init() {
+  async init(cookieConsent: CookieConsentOption = "rejected") {
     const context = this.page.context()
     // Mocks are installed on the browser context, so the login popup gets them too.
     await this.identityProvider.install(context)
@@ -83,6 +90,28 @@ export class HubHopPage {
       }
       return route.fulfill({ contentType: "image/png", body: PIXEL })
     })
+    // Google Tag Manager is answered with an empty script, nothing reaches Google.
+    await context.route(`${GTM_HOST}/**`, (route, request) => {
+      this.tagManagerRequests.push(request.url())
+      return route.fulfill({ contentType: "text/javascript", body: "" })
+    })
+    if (cookieConsent !== "unset") {
+      // Only if no choice is stored yet, so a choice made in the test persists.
+      await context.addInitScript(
+        ({ key, analytics }) => {
+          if (localStorage.getItem(key) === null) {
+            localStorage.setItem(
+              key,
+              JSON.stringify({ analytics, date: new Date().toISOString() }),
+            )
+          }
+        },
+        {
+          key: CONSENT_STORAGE_KEY,
+          analytics: cookieConsent === "accepted",
+        },
+      )
+    }
     await context.addInitScript(() => {
       // The Next.js dev overlay (shown for console errors) would cover page controls.
       document.addEventListener("DOMContentLoaded", () => {
@@ -125,6 +154,11 @@ export class HubHopPage {
     await this.page.waitForFunction(
       () => localStorage.getItem("simType") !== null,
     )
+  }
+
+  /** The cookie banner */
+  get cookieBanner() {
+    return this.page.getByRole("dialog", { name: "Cookies on HubHop" })
   }
 
   /** Promotion slots for MobiFlight on the current page */
