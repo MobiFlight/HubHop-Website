@@ -1,6 +1,5 @@
 import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
-import { PROMOTIONS_ENABLED } from "../../../lib/features"
 import {
   bestPromotions,
   pickWeighted,
@@ -26,7 +25,7 @@ const shownIds = new Set<string>()
 
 // The single place that decides whether promotions are shown at all.
 // Step 2 of #98 hides them for MobiFlight Club members here.
-export const showPromotions = () => PROMOTIONS_ENABLED
+export const showPromotions = () => true
 
 // images come from mobiflight.com as they are (next.config uses a custom loader)
 const passThrough = ({ src }: { src: string }) => src
