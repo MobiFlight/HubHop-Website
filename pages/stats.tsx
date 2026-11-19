@@ -1,8 +1,8 @@
-import { motion } from "motion/react"
 import Head from "next/head"
 import { useEffect, useState } from "react"
 import Layout from "../components/Layout"
-import LoadingSpinner from "../components/sections/Shared/LoadingSpinner"
+import { Skeleton } from "@/components/ui/skeleton"
+import SimSwitch from "../components/sections/Shared/SimSwitch"
 import GeneralStats from "../components/sections/stats/GeneralStats"
 import TableStats from "../components/sections/stats/TableStats"
 import { presetTable, syncSim } from "../services/presetSync"
@@ -52,12 +52,9 @@ const Stats = () => {
     }
   }, [simType])
 
-  const toggleSimType = () => {
-    if (typeof window !== "undefined") {
-      const newSimType = simType === "msfs2020" ? "xplane" : "msfs2020"
-      setSimType(newSimType)
-      localStorage.setItem("simType", newSimType)
-    }
+  const changeSimType = (newSimType: string) => {
+    setSimType(newSimType)
+    localStorage.setItem("simType", newSimType)
   }
 
   return (
@@ -86,45 +83,12 @@ const Stats = () => {
         <meta property="twitter:image" content="@/assets/logo-big.png" />
       </Head>
       <div className="mb-5 min-h-screen p-3">
-        <div className="container mx-auto flex grid-cols-4 gap-10 md:grid">
-          <div className="mb-3 w-full rounded-lg bg-hhCard/40 py-3">
-            <button
-              onClick={toggleSimType}
-              className="grid w-full grid-cols-3 items-center justify-items-center gap-x-5 px-3 text-xl"
-            >
-              <div
-                className={`${
-                  simType === "msfs2020" ? "font-bold" : "font-normal"
-                }`}
-              >
-                MSFS 2020
-              </div>
-              <div
-                className={`relative flex h-fit w-full items-center rounded-lg bg-hhBG transition-all ${
-                  simType === "msfs2020" ? "justify-start" : "justify-end"
-                }`}
-              >
-                <motion.div
-                  transition={{
-                    type: "spring",
-                    stiffness: 700,
-                    damping: 50,
-                  }}
-                  layout
-                  className={`h-4 w-10 rounded-lg transition-colors ${
-                    simType === "msfs2020" ? "bg-[#bfcad1]" : "bg-[#0fb5e8]"
-                  }`}
-                ></motion.div>
-              </div>
-              <div
-                className={`${
-                  simType === "xplane" ? "font-bold" : "font-normal"
-                }`}
-              >
-                X-Plane
-              </div>
-            </button>
-          </div>
+        <div className="container mx-auto mb-3">
+          <SimSwitch
+            value={simType}
+            onValueChange={changeSimType}
+            className="w-fit"
+          />
         </div>
         <GeneralStats presets={presets} stats={stats} />
         {presets.length ? (
@@ -135,9 +99,7 @@ const Stats = () => {
         ) : (
           <div className="container mx-auto mt-5">
             <h2 className="text-2xl font-semibold">Latest added presets</h2>
-            <div className="mt-5 flex justify-center rounded-lg bg-hhCard/40 py-10 text-6xl">
-              <LoadingSpinner />
-            </div>
+            <Skeleton className="mt-5 h-48 w-full" />
           </div>
         )}
         {presets.length ? (
@@ -148,9 +110,7 @@ const Stats = () => {
         ) : (
           <div className="container mx-auto mt-5">
             <h2 className="text-2xl font-semibold">Latest updated presets</h2>
-            <div className="mt-5 flex justify-center rounded-lg bg-hhCard/40 py-10 text-6xl">
-              <LoadingSpinner />
-            </div>
+            <Skeleton className="mt-5 h-48 w-full" />
           </div>
         )}
       </div>

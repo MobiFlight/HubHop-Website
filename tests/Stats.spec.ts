@@ -25,7 +25,7 @@ test.describe("Stats", () => {
   }) => {
     await expect(page.getByText("Asobo - A320neo")).toBeVisible()
 
-    await page.getByRole("button", { name: /MSFS 2020.*X-Plane/ }).click()
+    await page.getByRole("radio", { name: "X-Plane" }).click()
 
     await expect(page.getByText("Laminar Research - C172")).toBeVisible()
     await expect(page.getByText("5", { exact: true }).first()).toBeVisible()

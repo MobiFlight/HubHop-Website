@@ -52,9 +52,9 @@ export class PresetsPage {
     return this.page.getByLabel("Select Code Type")
   }
 
-  /** The MSFS 2020 / X-Plane switch */
-  get simToggle() {
-    return this.page.getByRole("button", { name: /MSFS 2020.*X-Plane/ })
+  /** The X-Plane option of the MSFS 2020 / X-Plane switch */
+  get xplaneSwitch() {
+    return this.page.getByRole("radio", { name: "X-Plane" })
   }
 
   /** Expands a preset row and returns the expanded details area */

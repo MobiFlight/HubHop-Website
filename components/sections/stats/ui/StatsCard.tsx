@@ -1,3 +1,5 @@
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+
 type StatsCardProps = {
   children: React.ReactNode
   title: string
@@ -5,10 +7,12 @@ type StatsCardProps = {
 
 const StatsCard = ({ title, children }: StatsCardProps) => {
   return (
-    <div className="w-full rounded-lg bg-hhCard/40 p-5 transition-all">
-      <p className="font-semibold text-hhOrange">{title}</p>
-      {children}
-    </div>
+    <Card className="h-full w-full">
+      <CardHeader>
+        <CardTitle className="text-primary">{title}</CardTitle>
+      </CardHeader>
+      <CardContent>{children}</CardContent>
+    </Card>
   )
 }
 export default StatsCard
