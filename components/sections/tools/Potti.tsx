@@ -127,10 +127,11 @@ const Potti = () => {
     },
   ]
 
-  const [Mindo, setMindo] = useState(0)
-  const [Maxdo, setMaxdo] = useState(0)
-  const [Mineir, setMineir] = useState(0)
-  const [Maxeir, setMaxeir] = useState(0)
+  // text while typing ("-", "12."), a number after leaving the field
+  const [Mindo, setMindo] = useState<number | string>(0)
+  const [Maxdo, setMaxdo] = useState<number | string>(0)
+  const [Mineir, setMineir] = useState<number | string>(0)
+  const [Maxeir, setMaxeir] = useState<number | string>(0)
   const [NameEir, setNameEir] = useState("")
 
   function invertMinMax() {
@@ -142,10 +143,10 @@ const Potti = () => {
   }
 
   function eir_delta() {
-    return Maxeir - Mineir
+    return Number(Maxeir) - Number(Mineir)
   }
   function dor_delta() {
-    return Maxdo - Mindo
+    return Number(Maxdo) - Number(Mindo)
   }
   function dor_eir_ratio() {
     return parseFloat((eir_delta() / dor_delta()).toFixed(4))
@@ -178,14 +179,14 @@ const Potti = () => {
     if (Mineir == 0) {
       return ""
     } else {
-      return Math.abs(Mineir)
+      return Math.abs(Number(Mineir))
     }
   }
   function rpnEirMinMath() {
     if (Mineir == 0) {
       return ""
     } else {
-      if (Mineir > 0) {
+      if (Number(Mineir) > 0) {
         return " + "
       } else {
         return " - "
@@ -193,10 +194,10 @@ const Potti = () => {
     }
   }
   function rpnMin() {
-    return Math.min(Mineir, Maxeir)
+    return Math.min(Number(Mineir), Number(Maxeir))
   }
   function rpnMax() {
-    return Math.max(Mineir, Maxeir)
+    return Math.max(Number(Mineir), Number(Maxeir))
   }
   function rpnLeft() {
     for (let index = 0; index < eir_preset.length; index++) {
@@ -204,7 +205,7 @@ const Potti = () => {
       if (preset.event == NameEir) {
         if (preset.event.substring(0, 1) == "2") {
           return "index "
-        } else ""
+        }
       }
     }
     return ""
@@ -274,10 +275,10 @@ const Potti = () => {
                 onChange={(e) => {
                   const value = e.target.value
                   if (value === "-" || !isNaN(parseFloat(value))) {
-                    setMindo(value as any)
+                    setMindo(value)
                   }
                 }}
-                onBlur={() => setMindo((prev: any) => parseFloat(prev) || 0)}
+                onBlur={() => setMindo((prev) => parseFloat(String(prev)) || 0)}
                 value={Mindo}
               />
             </div>
@@ -290,10 +291,10 @@ const Potti = () => {
                 onChange={(e) => {
                   const value = e.target.value
                   if (value === "-" || !isNaN(parseFloat(value))) {
-                    setMaxdo(value as any)
+                    setMaxdo(value)
                   }
                 }}
-                onBlur={() => setMaxdo((prev: any) => parseFloat(prev) || 0)}
+                onBlur={() => setMaxdo((prev) => parseFloat(String(prev)) || 0)}
                 value={Maxdo}
               />
             </div>
@@ -347,10 +348,12 @@ const Potti = () => {
                 onChange={(e) => {
                   const value = e.target.value
                   if (value === "-" || !isNaN(parseFloat(value))) {
-                    setMineir(value as any)
+                    setMineir(value)
                   }
                 }}
-                onBlur={() => setMineir((prev: any) => parseFloat(prev) || 0)}
+                onBlur={() =>
+                  setMineir((prev) => parseFloat(String(prev)) || 0)
+                }
               />
             </div>
             <div className="flex w-full flex-col">
@@ -363,10 +366,12 @@ const Potti = () => {
                 onChange={(e) => {
                   const value = e.target.value
                   if (value === "-" || !isNaN(parseFloat(value))) {
-                    setMaxeir(value as any)
+                    setMaxeir(value)
                   }
                 }}
-                onBlur={() => setMaxeir((prev: any) => parseFloat(prev) || 0)}
+                onBlur={() =>
+                  setMaxeir((prev) => parseFloat(String(prev)) || 0)
+                }
               />
             </div>
           </div>

@@ -490,7 +490,7 @@ const Presets = () => {
           >
             <AddPresetsModal
               presets={presets}
-              setAddModalOpen={() => setAddModalOpen(false)}
+              onClose={() => setAddModalOpen(false)}
             />
           </motion.div>
         )}
