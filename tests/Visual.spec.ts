@@ -13,8 +13,9 @@ const themes = ["dark"] as const
 const screenshotOptions = {
   fullPage: true,
   animations: "disabled",
-  // small rendering differences between machines (anti-aliasing)
-  maxDiffPixelRatio: 0.01,
+  // anti-aliasing differs by a few pixels between the devcontainer and CI;
+  // real changes are thousands of pixels (a ratio would hide them)
+  maxDiffPixels: 100,
 } as const
 
 /** Makes promotions and dates deterministic. Call before the first navigation. */

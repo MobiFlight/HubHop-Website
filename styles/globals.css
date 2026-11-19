@@ -1,8 +1,97 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
+/* HubHop is dark-only until the theme switch (#165); pages/_document.tsx sets `<html class="dark">` */
+@custom-variant dark (&:is(.dark *));
+
+/* shadcn/ui theme (base color "neutral"), unchanged */
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+}
+
+/* HubHop brand colors on top of the shadcn theme */
+:root,
+.dark {
+  --primary: #ffa047;
+  --primary-foreground: #1e1f24;
+  --ring: #ffa047;
+}
+
+.dark {
+  --background: #202228;
+  --card: #282a31;
+  --popover: #282a31;
+}
+
+@theme inline {
+  --font-sans: var(--font-assistant), Helvetica, Arial, sans-serif;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
+/* Colors of the pages that don't use the theme tokens yet; removed in #162 */
 @theme {
-  --font-sans: Assistant, Helvetica, Arial, sans-serif;
-
   --color-mfBlue: #3366cc;
   --color-hhBG: #33353e;
   --color-hhCard: #545963;
@@ -21,8 +110,8 @@
   --color-hhOrangeShade-900: #e06c00;
 
   /*
-    Tailwind CSS v4 changed its default palette (OKLCH). Keep the Tailwind CSS
-    v3 values of the built-in colors used on the site, so nothing changes visually.
+    Tailwind CSS v3 values of the built-in colors used on the old pages;
+    replaced by theme colors when the pages are migrated.
   */
   --color-red-500: #ef4444;
   --color-red-600: #dc2626;
@@ -35,88 +124,28 @@
   --color-gray-400: #9ca3af;
 }
 
-/*
-  The default border color has changed to `currentcolor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
-*/
+/* shadcn/ui base styles */
 @layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-gray-200, currentcolor);
+  * {
+    @apply border-border outline-ring/50;
   }
 }
 
-/*
-  Tailwind CSS v4 no longer shows a pointer cursor on buttons and uses a
-  different placeholder color. Keep the Tailwind CSS v3 behavior.
-*/
 @layer base {
+  /* pointer cursor on buttons, as recommended by shadcn/ui for Tailwind CSS v4 */
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;
   }
 
-  input::placeholder,
-  textarea::placeholder {
-    color: var(--color-gray-400);
+  ::placeholder {
+    color: var(--color-muted-foreground);
   }
 
-  /* v4 resets all padding; v3 kept the browser's default table cell padding */
+  /* cell padding of the old data tables; removed with them (#158, #161) */
   td,
   th {
     padding: 1px;
-  }
-}
-
-@utility font-thin {
-  font-variation-settings: "wght" 100 !important;
-}
-
-@utility font-extralight {
-  font-variation-settings: "wght" 200 !important;
-}
-
-@utility font-light {
-  font-variation-settings: "wght" 300 !important;
-}
-
-@utility font-normal {
-  font-variation-settings: "wght" 400 !important;
-}
-
-@utility font-medium {
-  font-variation-settings: "wght" 500 !important;
-}
-
-@utility font-semibold {
-  font-variation-settings: "wght" 600 !important;
-}
-
-@utility font-bold {
-  font-variation-settings: "wght" 700 !important;
-}
-
-@utility font-extrabold {
-  font-variation-settings: "wght" 800 !important;
-}
-
-@utility font-black {
-  font-variation-settings: "wght" 900 !important;
-}
-
-@layer base {
-  @font-face {
-    font-family: Assistant;
-    src:
-      local("Assistant"), url(../public/fonts/Assistant-VariableFont_wght.ttf);
-    font-weight: 100 900 !important;
   }
 }
 
@@ -133,11 +162,11 @@
 
   body {
     background: url("../public/images/bg-hubhop.png");
-    @apply bg-hhBG bg-cover bg-fixed bg-no-repeat text-hhText transition-all;
+    @apply bg-background bg-cover bg-fixed bg-no-repeat text-foreground transition-all;
   }
   body.xplane {
     background: url("../public/images/bg-hubhop-xplane.png");
-    @apply bg-hhBG bg-cover bg-fixed bg-no-repeat text-hhText transition-all;
+    @apply bg-background bg-cover bg-fixed bg-no-repeat text-foreground transition-all;
   }
 
   a {

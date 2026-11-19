@@ -21,11 +21,8 @@ test.describe("User menu - anonymous", () => {
     })
 
     await test.step("Log out", async () => {
-      // the pointer still rests where the Log-in button was; move it away so
-      // hovering the user name triggers mouseenter
-      await page.mouse.move(0, 0)
-      await page.getByRole("button", { name: testUser.name }).hover()
-      await page.getByRole("button", { name: "Log-out" }).click()
+      await page.getByRole("button", { name: testUser.name }).click()
+      await page.getByRole("menuitem", { name: "Log-out" }).click()
       await expect(page.getByRole("button", { name: "Log-in" })).toBeVisible()
       expect(
         await page.evaluate(() => localStorage.getItem("roles")),
@@ -47,9 +44,10 @@ test.describe("User menu - logged in", () => {
     await expect(userButton).toBeVisible()
     await expect(page.getByRole("button", { name: "Log-in" })).toHaveCount(0)
 
-    await userButton.hover()
-    await expect(page.getByText(testUser.username)).toBeVisible()
-    await expect(page.getByRole("button", { name: "Log-out" })).toBeVisible()
+    await userButton.click()
+    const menu = page.getByRole("menu")
+    await expect(menu).toContainText(testUser.username)
+    await expect(menu.getByRole("menuitem", { name: "Log-out" })).toBeVisible()
   })
 
   test("User menu - show my presets filters the list", async ({
