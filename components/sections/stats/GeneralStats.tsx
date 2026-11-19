@@ -1,12 +1,17 @@
-import { AnimatePresence } from "motion/react"
 import { useMemo, useState } from "react"
 import DataTable, {
   createTheme,
   Media,
   type TableColumn,
 } from "react-data-table-component"
-import LoadingSpinner from "../Shared/LoadingSpinner"
-import Modal from "../Shared/Modal"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Skeleton } from "@/components/ui/skeleton"
 import StatsCard from "./ui/StatsCard"
 import { compareText } from "../../../lib/presetSearch"
 import type { Preset, Statistics } from "../../../interfaces/preset"
@@ -171,7 +176,11 @@ const GeneralStats = ({ presets, stats }: GeneralStatsProps) => {
       <div className="flex flex-col justify-items-center space-y-3 md:grid md:grid-cols-2 md:gap-10 md:space-y-0 xl:grid-cols-4">
         <StatsCard title={"Total presets"}>
           <div className="text-3xl font-bold">
-            {presets.length ? <p>{presets.length}</p> : <LoadingSpinner />}
+            {presets.length ? (
+              <p>{presets.length}</p>
+            ) : (
+              <Skeleton className="h-9 w-24" />
+            )}
           </div>
         </StatsCard>
         <StatsCard title={"Aircraft with most presets"}>
@@ -184,13 +193,14 @@ const GeneralStats = ({ presets, stats }: GeneralStatsProps) => {
                 </p>
               </div>
             ) : (
-              <LoadingSpinner />
+              <Skeleton className="h-9 w-24" />
             )}
           </div>
         </StatsCard>
-        <div
-          onClick={() => setModal((prev) => !prev)}
-          className="w-full cursor-pointer rounded-xl transition-all hover:bg-hhCard"
+        <button
+          type="button"
+          onClick={() => setModal(true)}
+          className="w-full rounded-xl text-left transition-opacity hover:opacity-80"
         >
           <StatsCard title={"Total contributors"}>
             <div>
@@ -200,13 +210,11 @@ const GeneralStats = ({ presets, stats }: GeneralStatsProps) => {
                   <p>Individual users</p>
                 </div>
               ) : (
-                <div className="text-3xl">
-                  <LoadingSpinner />
-                </div>
+                <Skeleton className="h-9 w-24" />
               )}
             </div>
           </StatsCard>
-        </div>
+        </button>
         <StatsCard title={"Top contributor"}>
           <div className="text-3xl font-bold">
             {topContributor ? (
@@ -215,104 +223,105 @@ const GeneralStats = ({ presets, stats }: GeneralStatsProps) => {
                 <p className="text-base font-normal">{topContributor._id}</p>
               </div>
             ) : (
-              <LoadingSpinner />
+              <Skeleton className="h-9 w-24" />
             )}
           </div>
         </StatsCard>
       </div>
-      <AnimatePresence>
-        {modal && (
-          <Modal
-            title="Contributors"
-            closeModal={() => (setModal(false), setContSearch(""))}
-            closeModalX={() => setModal(false)}
-            position="fixed"
-            height={true}
-          >
-            <input
-              placeholder="Search contributor"
-              className={`w-1/4 rounded-lg border bg-hhBG px-3 py-1 text-sm text-hhText`}
-              onChange={(e) => setContSearch(e.target.value)}
-            />
-            <div className="w-[80vw]">
-              <DataTable
-                columns={columns}
-                data={cont.filter((contributor) =>
-                  contributor.name.toLowerCase().includes(contSearch),
-                )}
-                customStyles={customStyles}
-                pagination
-                highlightOnHover
-                responsive={true}
-                theme="hubhop"
-                paginationPerPage={5}
-                paginationRowsPerPageOptions={[5, 10, 20, 30, 50, 100]}
-                defaultSortFieldId={2}
-                defaultSortAsc={false}
-                onRowClicked={(row) => {
-                  setSingleCont(row.name)
-                  setContModal((prev) => !prev)
-                }}
-              />
-              {contModal && (
-                <Modal
-                  title={"Presets by " + singleCont}
-                  position="fixed"
-                  closeModal={() => setContModal(false)}
-                  closeModalX={() => setContModal(false)}
-                >
-                  <input
-                    placeholder="Search preset"
-                    className={`w-1/4 rounded-lg border bg-hhBG px-3 py-1 text-sm text-hhText`}
-                    onChange={(e) => setContPresetSearch(e.target.value)}
-                  />
-                  <div className="w-[70vw]">
-                    <DataTable
-                      columns={columnSingle}
-                      data={presets
-                        .filter(
-                          (preset) =>
-                            preset.author === singleCont ||
-                            preset.updatedBy === singleCont,
-                        )
-                        .filter((preset) =>
-                          [
-                            preset.label,
-                            preset.vendor,
-                            preset.aircraft,
-                            preset.system,
-                            preset.presetType,
-                            preset.code,
-                          ].some((text) =>
-                            text.toLowerCase().includes(contPresetSearch),
-                          ),
-                        )
-                        .sort(
-                          (a, b) =>
-                            new Date(b.createdDate ?? "").valueOf() -
-                            new Date(a.createdDate ?? "").valueOf(),
-                        )}
-                      customStyles={customStyles}
-                      pagination
-                      highlightOnHover
-                      responsive={true}
-                      theme="hubhop"
-                      paginationPerPage={5}
-                      paginationRowsPerPageOptions={[5, 10, 20, 30, 50, 100]}
-                      onRowClicked={(row) =>
-                        window.open(
-                          "https://hubhop.mobiflight.com/preset/?id=" + row.id,
-                          "_blank",
-                        )
-                      }
-                    />
-                  </div>
-                </Modal>
+      <Dialog
+        open={modal}
+        onOpenChange={(open) => {
+          setModal(open)
+          if (!open) setContSearch("")
+        }}
+      >
+        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-[85vw]">
+          <DialogHeader>
+            <DialogTitle>Contributors</DialogTitle>
+          </DialogHeader>
+          <Input
+            placeholder="Search contributor"
+            aria-label="Search contributor"
+            className="w-full sm:w-1/4"
+            onChange={(e) => setContSearch(e.target.value)}
+          />
+          <div>
+            <DataTable
+              columns={columns}
+              data={cont.filter((contributor) =>
+                contributor.name.toLowerCase().includes(contSearch),
               )}
-            </div>
-          </Modal>
-        )}
-      </AnimatePresence>
+              customStyles={customStyles}
+              pagination
+              highlightOnHover
+              responsive={true}
+              theme="hubhop"
+              paginationPerPage={5}
+              paginationRowsPerPageOptions={[5, 10, 20, 30, 50, 100]}
+              defaultSortFieldId={2}
+              defaultSortAsc={false}
+              onRowClicked={(row) => {
+                setSingleCont(row.name)
+                setContModal(true)
+              }}
+            />
+            <Dialog open={contModal} onOpenChange={setContModal}>
+              <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-[75vw]">
+                <DialogHeader>
+                  <DialogTitle>{"Presets by " + singleCont}</DialogTitle>
+                </DialogHeader>
+                <Input
+                  placeholder="Search preset"
+                  aria-label="Search preset"
+                  className="w-full sm:w-1/4"
+                  onChange={(e) => setContPresetSearch(e.target.value)}
+                />
+                <div>
+                  <DataTable
+                    columns={columnSingle}
+                    data={presets
+                      .filter(
+                        (preset) =>
+                          preset.author === singleCont ||
+                          preset.updatedBy === singleCont,
+                      )
+                      .filter((preset) =>
+                        [
+                          preset.label,
+                          preset.vendor,
+                          preset.aircraft,
+                          preset.system,
+                          preset.presetType,
+                          preset.code,
+                        ].some((text) =>
+                          text.toLowerCase().includes(contPresetSearch),
+                        ),
+                      )
+                      .sort(
+                        (a, b) =>
+                          new Date(b.createdDate ?? "").valueOf() -
+                          new Date(a.createdDate ?? "").valueOf(),
+                      )}
+                    customStyles={customStyles}
+                    pagination
+                    highlightOnHover
+                    responsive={true}
+                    theme="hubhop"
+                    paginationPerPage={5}
+                    paginationRowsPerPageOptions={[5, 10, 20, 30, 50, 100]}
+                    onRowClicked={(row) =>
+                      window.open(
+                        "https://hubhop.mobiflight.com/preset/?id=" + row.id,
+                        "_blank",
+                      )
+                    }
+                  />
+                </div>
+              </DialogContent>
+            </Dialog>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
