@@ -1,10 +1,10 @@
-import Image from "next/image"
+import Image, { type ImageLoaderProps } from "next/image"
 import hubhopLogo from "../../../public/images/logo.png"
 import mfLogo from "../../../public/images/mf_logo.jpg"
 import Link from "next/link"
 
 const Hero = () => {
-  const customLoader = ({ src }: any) => {
+  const customLoader = ({ src }: ImageLoaderProps) => {
     return src
   }
   return (

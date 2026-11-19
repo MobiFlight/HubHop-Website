@@ -41,7 +41,7 @@ export interface ApiData {
 export interface RecordedRequest {
   method: string
   path: string
-  body: any
+  body: unknown
   headers: Record<string, string>
 }
 
@@ -233,7 +233,9 @@ export class HubHopPage {
       }
       if (resource.startsWith("presets/")) {
         const id = resource.slice("presets/".length)
-        const preset = (this.api.presets[sim] as any[]).find((p) => p.id === id)
+        const preset = (this.api.presets[sim] as { id: string }[]).find(
+          (p) => p.id === id,
+        )
         return preset
           ? route.fulfill({ json: preset })
           : route.fulfill({ status: 404, json: {} })

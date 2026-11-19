@@ -4,20 +4,16 @@ import ReportPresetButton from "./ReportPresetButton"
 type ReportPresetModalProps = {
   label: string
   presetId: string
-  setReportModalOpen: Function
-  reportedToast: Function
+  onClose: () => void
+  reportedToast: () => void
 }
 
 const ReportPresetModal = ({
-  setReportModalOpen,
+  onClose,
   reportedToast,
 }: ReportPresetModalProps) => {
   return (
-    <Modal
-      position={"absolute"}
-      closeModal={setReportModalOpen}
-      title={"Report Preset"}
-    >
+    <Modal position={"absolute"} closeModal={onClose} title={"Report Preset"}>
       <div className="flex flex-col items-center justify-center space-y-3">
         <form className="flex space-x-10">
           <div className="flex flex-col">
@@ -53,7 +49,7 @@ const ReportPresetModal = ({
         </form>
         <div className="flex w-full items-center justify-between">
           <button
-            onClick={(e) => setReportModalOpen(e)}
+            onClick={onClose}
             className="flex items-center space-x-1 rounded-lg bg-hhBG px-4 py-1.5 text-sm font-semibold transition-all hover:bg-hhBG/70"
           >
             Cancel

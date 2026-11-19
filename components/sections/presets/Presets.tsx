@@ -106,8 +106,8 @@ const Presets = () => {
   }, [simType, presetsMsfs, presetsXplane, xplanePresets, msfsPresets])
 
   useEffect(() => {
-    savedToast == true ? toast("Saved") : null
-  }, [])
+    if (savedToast) toast("Saved")
+  }, [savedToast])
 
   useEffect(() => {
     if (addModalOpen) return
@@ -232,11 +232,11 @@ const Presets = () => {
     }, 5000)
   }
 
+  const storedSimType =
+    typeof localStorage !== "undefined" && localStorage.getItem("simType")
   useEffect(() => {
-    localStorage.getItem("simType") === "msfs2020"
-      ? document.body.classList.remove("xplane")
-      : document.body.classList.add("xplane")
-  }, [typeof localStorage !== "undefined" && localStorage.getItem("simType")])
+    document.body.classList.toggle("xplane", storedSimType !== "msfs2020")
+  }, [storedSimType])
 
   const router = useRouter()
 
@@ -475,9 +475,7 @@ const Presets = () => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.05 }}
           >
-            <ExportPresetsModal
-              setExportModalOpen={() => setExportModalOpen(false)}
-            />
+            <ExportPresetsModal onClose={() => setExportModalOpen(false)} />
           </motion.div>
         )}
         {addModalOpen && (

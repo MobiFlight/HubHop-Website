@@ -1,5 +1,5 @@
 import NavbarLinks from "../../../lib/Constants"
-import Image from "next/image"
+import Image, { type ImageLoaderProps } from "next/image"
 import hhLogo from "../../../public/images/logo-big.png"
 import Link from "next/link"
 import {
@@ -18,6 +18,7 @@ import {
   UnauthenticatedTemplate,
   useMsal,
 } from "@azure/msal-react"
+import type { IPublicClientApplication } from "@azure/msal-browser"
 import { msalInstance, msalReady } from "../../../services/msal"
 import UserDropdown from "../Shared/UserDropdown"
 import ButtonOrange from "../Shared/ButtonOrange"
@@ -132,7 +133,7 @@ const Navbar = () => {
     }
   }
 
-  function logout(instance: any) {
+  function logout(instance: IPublicClientApplication) {
     const logoutRequest = {
       account: instance.getAccount({
         homeAccountId: accounts[0].homeAccountId,
@@ -147,7 +148,7 @@ const Navbar = () => {
     localStorage.setItem("username", accounts[0].name || "")
   }
 
-  const customLoader = ({ src }: any) => {
+  const customLoader = ({ src }: ImageLoaderProps) => {
     return src
   }
 

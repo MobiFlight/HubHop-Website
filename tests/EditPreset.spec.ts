@@ -139,6 +139,7 @@ test.describe("Edit preset - preset list", () => {
 
   test("Edit preset - all fields can be changed in an expanded row", async ({
     presetsPage,
+    page,
   }) => {
     await presetsPage.gotoPage()
 
@@ -175,6 +176,7 @@ test.describe("Edit preset - preset list", () => {
       description: "Turns on the battery",
       path: "Carenado.C182.Power.Output.Battery master switch on",
     })
+    await expect(page.getByText("Saved")).toBeVisible()
   })
 
   test("Edit preset - a failed save keeps the preset unchanged", async ({

@@ -13,9 +13,10 @@ import { IoSaveOutline } from "react-icons/io5"
 
 const Preset = () => {
   useEffect(() => {
-    localStorage.getItem("simType") === "msfs2020"
-      ? document.body.classList.remove("xplane")
-      : document.body.classList.add("xplane")
+    document.body.classList.toggle(
+      "xplane",
+      localStorage.getItem("simType") !== "msfs2020",
+    )
   }, [])
 
   const router = useRouter()
@@ -28,53 +29,18 @@ const Preset = () => {
   const [fixedToast, setFixedToast] = useState(false)
 
   if (typeof window !== "undefined") {
-    window.location.href.includes("msfs2020")
-      ? localStorage.setItem("simType", "msfs2020")
-      : localStorage.setItem("simType", "xplane")
+    localStorage.setItem(
+      "simType",
+      window.location.href.includes("msfs2020") ? "msfs2020" : "xplane",
+    )
   }
 
   useEffect(() => {
-    savedToast == true ? toast("Saved") : null
+    if (savedToast) toast("Saved")
   }, [savedToast])
 
   const sim = simType === "xplane" ? "xplane" : "msfs2020"
   const [fetchDone, setFetchDone] = useState(false)
-
-  // fetch the newest version of this one preset and store it in the local cache
-  const fetchPreset = async () => {
-    setFetchDone(false)
-    try {
-      const res = await fetch(
-        process.env.NEXT_PUBLIC_HUBHOP_API_BASEURL +
-          "/" +
-          sim +
-          "/presets/" +
-          id,
-        { redirect: "follow" },
-      )
-      if (res.ok) {
-        const fetchedPreset = await res.json()
-        await presetTable(sim).put({ ...fetchedPreset, id })
-      } else if (res.status === 404) {
-        await presetTable(sim).delete(id as string)
-      } else {
-        throw new Error(`Loading preset ${id} failed: ${res.status}`)
-      }
-      // only a real answer from the server may turn into "does not exist"
-      setFetchDone(true)
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  const fetchHistory = async () => {
-    const res = await fetch(
-      `https://hubhop-api-mgtm.azure-api.net/api/v1/msfs2020/history/presets/${id}`,
-      { redirect: "follow" },
-    )
-    const fetchedHistory = await res.json()
-    return setHistory(fetchedHistory[0]?.history || [])
-  }
 
   const cachedPreset = useLiveQuery(
     () => (id ? presetTable(sim).get(id as string) : undefined),
@@ -82,6 +48,42 @@ const Preset = () => {
   )
 
   useEffect(() => {
+    // fetch the newest version of this one preset and store it in the local cache
+    const fetchPreset = async () => {
+      setFetchDone(false)
+      try {
+        const res = await fetch(
+          process.env.NEXT_PUBLIC_HUBHOP_API_BASEURL +
+            "/" +
+            sim +
+            "/presets/" +
+            id,
+          { redirect: "follow" },
+        )
+        if (res.ok) {
+          const fetchedPreset = await res.json()
+          await presetTable(sim).put({ ...fetchedPreset, id })
+        } else if (res.status === 404) {
+          await presetTable(sim).delete(id as string)
+        } else {
+          throw new Error(`Loading preset ${id} failed: ${res.status}`)
+        }
+        // only a real answer from the server may turn into "does not exist"
+        setFetchDone(true)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    const fetchHistory = async () => {
+      const res = await fetch(
+        `https://hubhop-api-mgtm.azure-api.net/api/v1/msfs2020/history/presets/${id}`,
+        { redirect: "follow" },
+      )
+      const fetchedHistory = await res.json()
+      return setHistory(fetchedHistory[0]?.history || [])
+    }
+
     async function fetchHistoryRoutine() {
       if (!id || !simType) {
         return
@@ -94,7 +96,7 @@ const Preset = () => {
       }
     }
     fetchHistoryRoutine()
-  }, [id, simType])
+  }, [id, simType, sim])
 
   // undefined keeps PresetView in its loading state until we know the answer
   const filterPreset = useMemo(

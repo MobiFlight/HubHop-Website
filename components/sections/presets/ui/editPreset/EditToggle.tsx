@@ -3,13 +3,13 @@ import { motion } from "motion/react"
 
 type EditToggleProps = {
   toggleEdit: boolean
-  setEdit: Function
+  onToggle: () => void
 }
 
-const EditToggle = ({ toggleEdit, setEdit }: EditToggleProps) => {
+const EditToggle = ({ toggleEdit, onToggle }: EditToggleProps) => {
   return (
     <button
-      onClick={(e) => setEdit(e)}
+      onClick={onToggle}
       className={`relative flex items-center rounded-lg text-lg font-semibold xl:h-full ${
         toggleEdit ? "bg-hhCard" : "bg-hhBG"
       }`}

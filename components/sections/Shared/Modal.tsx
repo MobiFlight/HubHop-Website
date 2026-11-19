@@ -3,9 +3,10 @@ import { FiX } from "react-icons/fi"
 type ModalProps = {
   children: React.ReactNode
   title: string
-  closeModal: Function
+  closeModal: () => void
   position: string
-  closeModalX?: any
+  /** close button; defaults to closeModal */
+  closeModalX?: () => void
   height?: boolean
 }
 
@@ -20,7 +21,7 @@ const Modal = ({
   return (
     <div>
       <div
-        onClick={(e) => closeModal(e)}
+        onClick={() => closeModal()}
         className={`${
           position === "absolute" ? "absolute" : "fixed"
         } top-0 left-0 z-50 flex h-full w-full items-center justify-center bg-black/60 backdrop-blur-xs`}
@@ -37,7 +38,7 @@ const Modal = ({
             <h3 className="text-2xl">{title}</h3>
             <button
               aria-label="Close dialog"
-              onClick={(e) => (closeModalX ?? closeModal)(e)}
+              onClick={() => (closeModalX ?? closeModal)()}
               className="flex items-center space-x-1 rounded-lg py-1.5 text-sm font-semibold"
             >
               <div className="text-lg">

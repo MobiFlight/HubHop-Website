@@ -21,4 +21,26 @@ test.describe("Export presets", () => {
 
     expect((await download).suggestedFilename()).toBe("events.txt")
   })
+
+  test("Export presets - cancel and the close button hide the dialog", async ({
+    presetsPage,
+    page,
+  }) => {
+    await presetsPage.gotoPage()
+    const heading = page.getByRole("heading", { name: "Export Presets" })
+
+    await test.step("Cancel", async () => {
+      await page.getByRole("button", { name: "Export presets" }).click()
+      await expect(heading).toBeVisible()
+      await page.getByRole("button", { name: "Cancel" }).click()
+      await expect(heading).toHaveCount(0)
+    })
+
+    await test.step("Close button", async () => {
+      await page.getByRole("button", { name: "Export presets" }).click()
+      await expect(heading).toBeVisible()
+      await page.getByRole("button", { name: "Close dialog" }).click()
+      await expect(heading).toHaveCount(0)
+    })
+  })
 })

@@ -6,14 +6,14 @@ import { presetTable, type SimType } from "../../../../../services/presetSync"
 type DeleteConfirmationModalProps = {
   label: string
   presetId: string
-  setDeleteModalOpen: Function
-  deletedToast: Function
+  onClose: () => void
+  deletedToast: () => void
 }
 
 const DeleteConfirmationModal = ({
   label,
   presetId,
-  setDeleteModalOpen,
+  onClose,
   deletedToast,
 }: DeleteConfirmationModalProps) => {
   async function deletePreset() {
@@ -43,11 +43,7 @@ const DeleteConfirmationModal = ({
   }
 
   return (
-    <Modal
-      position={"absolute"}
-      closeModal={setDeleteModalOpen}
-      title={"Delete Preset"}
-    >
+    <Modal position={"absolute"} closeModal={onClose} title={"Delete Preset"}>
       <div className="flex flex-col items-center justify-center space-y-3">
         <div className="text-6xl text-red-600">
           <FiAlertTriangle />
@@ -64,7 +60,7 @@ const DeleteConfirmationModal = ({
         </div>
         <div className="flex w-full items-center justify-between">
           <button
-            onClick={(e) => setDeleteModalOpen(e)}
+            onClick={onClose}
             className="flex items-center space-x-1 rounded-lg bg-hhBG px-4 py-1.5 text-sm font-semibold transition-all hover:bg-hhBG/70"
           >
             Cancel
