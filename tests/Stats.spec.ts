@@ -55,4 +55,48 @@ test.describe("Stats", () => {
       latestAdded.getByText("Test description for AP master toggle"),
     ).toBeVisible()
   })
+
+  test("Stats - contributors list counts added and updated presets", async ({
+    page,
+  }) => {
+    await page.getByText("Total contributors").click()
+
+    const dialog = (title: string) =>
+      page
+        .locator("div")
+        .filter({ has: page.getByRole("heading", { name: title }) })
+        .filter({ has: page.getByRole("table") })
+        .last()
+    const contributors = dialog("Contributors").getByRole("table").first()
+    await test.step("Contributors are sorted by their presets", async () => {
+      await expect(contributors.getByRole("row")).toHaveText([
+        /Name.*Submissions or updates/,
+        /Test Author.*16/,
+        /Test User.*2/,
+      ])
+    })
+
+    await test.step("Search for a contributor", async () => {
+      await page.getByPlaceholder("Search contributor").fill("user")
+      await expect(contributors.getByRole("row")).toHaveCount(2)
+    })
+
+    await test.step("Open the presets of a contributor", async () => {
+      await contributors.getByRole("row", { name: /Test User/ }).click()
+      await expect(
+        page.getByRole("heading", { name: "Presets by Test User" }),
+      ).toBeVisible()
+      const presets = dialog("Presets by Test User").getByRole("table")
+      await expect(presets.getByRole("row")).toHaveText([
+        /Preset name/,
+        /AP master toggle/,
+        /Landing lights on/,
+      ])
+      await page.getByPlaceholder("Search preset").fill("landing")
+      await expect(presets.getByRole("row")).toHaveText([
+        /Preset name/,
+        /Landing lights on/,
+      ])
+    })
+  })
 })

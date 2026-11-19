@@ -1,13 +1,40 @@
 import { AnimatePresence } from "motion/react"
-import { useEffect, useState } from "react"
-import DataTable, { createTheme } from "react-data-table-component"
+import { useMemo, useState } from "react"
+import DataTable, {
+  createTheme,
+  Media,
+  type TableColumn,
+} from "react-data-table-component"
 import LoadingSpinner from "../Shared/LoadingSpinner"
 import Modal from "../Shared/Modal"
 import StatsCard from "./ui/StatsCard"
+import { compareText } from "../../../lib/presetSearch"
+import type { Preset, Statistics } from "../../../interfaces/preset"
 
 type GeneralStatsProps = {
-  presets: string[]
-  stats: any
+  presets: Preset[]
+  stats: Statistics | null
+}
+
+type Contributor = {
+  name: string
+  presets: number
+}
+
+/** Authors with the number of presets they added or updated */
+const contributorsOf = (presets: Preset[]): Contributor[] => {
+  const withAuthor = presets.filter((preset) => preset.author != undefined)
+  const counts = new Map<string, number>(
+    withAuthor.map((preset) => [preset.author, 0]),
+  )
+  for (const { author, updatedBy } of withAuthor) {
+    counts.set(author, (counts.get(author) ?? 0) + 1)
+    if (updatedBy && updatedBy !== author && counts.has(updatedBy))
+      counts.set(updatedBy, (counts.get(updatedBy) ?? 0) + 1)
+  }
+  return Array.from(counts, ([name, count]) => ({ name, presets: count })).sort(
+    (a, b) => compareText(a.name, b.name),
+  )
 }
 
 const GeneralStats = ({ presets, stats }: GeneralStatsProps) => {
@@ -16,67 +43,67 @@ const GeneralStats = ({ presets, stats }: GeneralStatsProps) => {
   const [singleCont, setSingleCont] = useState("")
   const [contSearch, setContSearch] = useState("")
   const [contPresetSearch, setContPresetSearch] = useState("")
-  const [cont, setCont] = useState<any>([])
+  const cont = useMemo(() => contributorsOf(presets), [presets])
 
-  const columns: any = [
+  const columns: TableColumn<Contributor>[] = [
     {
       name: "Name",
-      selector: (row: any) => row.name,
+      selector: (row) => row.name,
       maxWidth: "60%",
       sortable: true,
     },
     {
       name: "Submissions or updates",
-      selector: (row: any) => row.presets,
+      selector: (row) => row.presets,
       maxWidth: "40%",
       sortable: true,
     },
   ]
-  const columnSingle: any = [
+  const columnSingle: TableColumn<Preset>[] = [
     {
       name: "Last modification",
-      selector: (row: any) => new Date(row.createdDate).toLocaleString(),
+      selector: (row) => new Date(row.createdDate ?? "").toLocaleString(),
       sortable: true,
       maxWidth: "15%",
-      hide: "md",
+      hide: Media.MD,
     },
     {
       name: "Author / Updated",
-      selector: (row: any) => (row.author ? "Author" : "Updated"),
+      selector: (row) => (row.author ? "Author" : "Updated"),
       sortable: true,
       maxWidth: "10%",
-      hide: "md",
+      hide: Media.MD,
     },
     {
       name: "Vendor",
-      selector: (row: any) => row.vendor,
+      selector: (row) => row.vendor,
       sortable: true,
       maxWidth: "10%",
-      hide: "md",
+      hide: Media.MD,
     },
     {
       name: "Aircraft",
-      selector: (row: any) => row.aircraft,
+      selector: (row) => row.aircraft,
       sortable: true,
       maxWidth: "10%",
     },
     {
       name: "System",
-      selector: (row: any) => row.system,
+      selector: (row) => row.system,
       sortable: true,
       maxWidth: "10%",
-      hide: "md",
+      hide: Media.MD,
     },
     {
       name: "Input/Output",
-      selector: (row: any) => row.presetType,
+      selector: (row) => row.presetType,
       sortable: true,
       maxWidth: "10%",
-      hide: "md",
+      hide: Media.MD,
     },
     {
       name: "Preset name",
-      selector: (row: any) => row.label,
+      selector: (row) => row.label,
       sortable: true,
       maxWidth: "50%",
     },
@@ -135,30 +162,8 @@ const GeneralStats = ({ presets, stats }: GeneralStatsProps) => {
     },
   }
 
-  const contributor = Array.from(
-    new Set(
-      presets
-        .filter((un: any) => un.author != undefined)
-        .map((item: any) => item.author)
-        .sort(),
-    ),
-  )
-
-  useEffect(() => {
-    const ar = []
-    for (const contribute of contributor) {
-      ar.push({
-        name: contribute,
-        presets: presets
-          .filter((un: any) => un.author != undefined)
-          .filter(
-            (fi: any) =>
-              fi.author === contribute || fi.updatedBy === contribute,
-          ).length,
-      })
-    }
-    setCont(ar)
-  }, [presets])
+  const topAircraft = stats?.aircrafts[0]
+  const topContributor = stats?.contributors[0]
 
   return (
     <div className="container mx-auto flex flex-col">
@@ -171,12 +176,11 @@ const GeneralStats = ({ presets, stats }: GeneralStatsProps) => {
         </StatsCard>
         <StatsCard title={"Aircraft with most presets"}>
           <div className="text-3xl font-bold">
-            {stats.aircrafts ? (
+            {topAircraft ? (
               <div className="flex items-baseline space-x-2">
-                <p>{stats.aircrafts[0].presetCount}</p>
+                <p>{topAircraft.presetCount}</p>
                 <p className="text-base font-normal">
-                  {stats.aircrafts[0]._id.vendor} -{" "}
-                  {stats.aircrafts[0]._id.aircraft}
+                  {topAircraft._id.vendor} - {topAircraft._id.aircraft}
                 </p>
               </div>
             ) : (
@@ -190,17 +194,9 @@ const GeneralStats = ({ presets, stats }: GeneralStatsProps) => {
         >
           <StatsCard title={"Total contributors"}>
             <div>
-              {new Set(presets.map((preset: any) => preset.author)).size > 0 ? (
+              {presets.length > 0 ? (
                 <div className="flex items-baseline space-x-2">
-                  <p className="text-3xl font-bold">
-                    {
-                      new Set(
-                        presets
-                          .filter((un: any) => un.author != undefined)
-                          .map((preset: any) => preset.author),
-                      ).size
-                    }
-                  </p>
+                  <p className="text-3xl font-bold">{cont.length}</p>
                   <p>Individual users</p>
                 </div>
               ) : (
@@ -213,12 +209,10 @@ const GeneralStats = ({ presets, stats }: GeneralStatsProps) => {
         </div>
         <StatsCard title={"Top contributor"}>
           <div className="text-3xl font-bold">
-            {stats.contributors ? (
+            {topContributor ? (
               <div className="flex items-baseline space-x-2">
-                <p>{stats.contributors[0].contributions}</p>
-                <p className="text-base font-normal">
-                  {stats.contributors[0]._id}
-                </p>
+                <p>{topContributor.contributions}</p>
+                <p className="text-base font-normal">{topContributor._id}</p>
               </div>
             ) : (
               <LoadingSpinner />
@@ -243,8 +237,8 @@ const GeneralStats = ({ presets, stats }: GeneralStatsProps) => {
             <div className="w-[80vw]">
               <DataTable
                 columns={columns}
-                data={cont.filter((search: any) =>
-                  search.name.toLowerCase().includes(contSearch),
+                data={cont.filter((contributor) =>
+                  contributor.name.toLowerCase().includes(contSearch),
                 )}
                 customStyles={customStyles}
                 pagination
@@ -255,10 +249,10 @@ const GeneralStats = ({ presets, stats }: GeneralStatsProps) => {
                 paginationRowsPerPageOptions={[5, 10, 20, 30, 50, 100]}
                 defaultSortFieldId={2}
                 defaultSortAsc={false}
-                onRowClicked={(row: any) => (
-                  setSingleCont(row.name),
+                onRowClicked={(row) => {
+                  setSingleCont(row.name)
                   setContModal((prev) => !prev)
-                )}
+                }}
               />
               {contModal && (
                 <Modal
@@ -277,31 +271,26 @@ const GeneralStats = ({ presets, stats }: GeneralStatsProps) => {
                       columns={columnSingle}
                       data={presets
                         .filter(
-                          (cont: any) =>
-                            cont.author === singleCont ||
-                            cont.updatedBy === singleCont,
+                          (preset) =>
+                            preset.author === singleCont ||
+                            preset.updatedBy === singleCont,
                         )
-                        .filter(
-                          (na: any) =>
-                            na.label.toLowerCase().includes(contPresetSearch) ||
-                            na.vendor
-                              .toLowerCase()
-                              .includes(contPresetSearch) ||
-                            na.aircraft
-                              .toLowerCase()
-                              .includes(contPresetSearch) ||
-                            na.system
-                              .toLowerCase()
-                              .includes(contPresetSearch) ||
-                            na.presetType
-                              .toLowerCase()
-                              .includes(contPresetSearch) ||
-                            na.code.toLowerCase().includes(contPresetSearch),
+                        .filter((preset) =>
+                          [
+                            preset.label,
+                            preset.vendor,
+                            preset.aircraft,
+                            preset.system,
+                            preset.presetType,
+                            preset.code,
+                          ].some((text) =>
+                            text.toLowerCase().includes(contPresetSearch),
+                          ),
                         )
                         .sort(
-                          (a: any, b: any) =>
-                            new Date(b.createdDate).valueOf() -
-                            new Date(a.createdDate).valueOf(),
+                          (a, b) =>
+                            new Date(b.createdDate ?? "").valueOf() -
+                            new Date(a.createdDate ?? "").valueOf(),
                         )}
                       customStyles={customStyles}
                       pagination
@@ -310,7 +299,7 @@ const GeneralStats = ({ presets, stats }: GeneralStatsProps) => {
                       theme="hubhop"
                       paginationPerPage={5}
                       paginationRowsPerPageOptions={[5, 10, 20, 30, 50, 100]}
-                      onRowClicked={(row: any) =>
+                      onRowClicked={(row) =>
                         window.open(
                           "https://hubhop.mobiflight.com/preset/?id=" + row.id,
                           "_blank",
