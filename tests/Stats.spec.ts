@@ -30,4 +30,29 @@ test.describe("Stats", () => {
     await expect(page.getByText("Laminar Research - C172")).toBeVisible()
     await expect(page.getByText("5", { exact: true }).first()).toBeVisible()
   })
+
+  test("Stats - expanding a latest added preset shows its details", async ({
+    page,
+  }) => {
+    const latestAdded = page
+      .locator("div")
+      .filter({
+        has: page.getByRole("heading", { name: "Latest added presets" }),
+      })
+      .last()
+
+    await latestAdded
+      .getByRole("row", { name: /AP master toggle/ })
+      .getByRole("cell")
+      .last()
+      .click()
+
+    await expect(
+      latestAdded.getByRole("heading", { name: "AP master toggle" }),
+    ).toBeVisible()
+    await expect(latestAdded.getByText("(>K:TEST_0001)")).toBeVisible()
+    await expect(
+      latestAdded.getByText("Test description for AP master toggle"),
+    ).toBeVisible()
+  })
 })

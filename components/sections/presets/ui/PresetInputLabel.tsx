@@ -1,11 +1,7 @@
-export type InputChangeEvent = React.ChangeEvent<
-  HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
->
-
 type PresetPreviewLabelProps = {
   title: string
   edit?: boolean
-  inputHandler?: (e: InputChangeEvent) => void
+  onValueChange?: (value: string) => void
   editData?: string | number | null
   codeOrDescriptionBox?: boolean
   /** In edit mode, offer only these values (select) instead of free text */
@@ -15,7 +11,7 @@ type PresetPreviewLabelProps = {
 const PresetPreviewLabel = ({
   title,
   edit,
-  inputHandler,
+  onValueChange,
   editData,
   codeOrDescriptionBox,
   options,
@@ -29,7 +25,7 @@ const PresetPreviewLabel = ({
             aria-label={title}
             className="w-full rounded-lg border border-hhOrange/50 bg-hhCard/50 px-3 py-1"
             value={editData ?? ""}
-            onChange={(e) => inputHandler?.(e)}
+            onChange={(e) => onValueChange?.(e.target.value)}
           >
             {options.map((option) => (
               <option key={option} className="bg-hhBG">
@@ -42,7 +38,7 @@ const PresetPreviewLabel = ({
             aria-label={title}
             className="w-full rounded-lg border border-hhOrange/50 bg-hhCard/50 px-3 py-1 wrap-break-word"
             value={editData ?? ""}
-            onChange={(e) => inputHandler?.(e)}
+            onChange={(e) => onValueChange?.(e.target.value)}
             rows={5}
           />
         ) : (
@@ -50,7 +46,7 @@ const PresetPreviewLabel = ({
             aria-label={title}
             className="w-full rounded-lg border border-hhOrange/50 bg-hhCard/50 px-3 py-1 wrap-break-word"
             value={editData ?? ""}
-            onChange={(e) => inputHandler?.(e)}
+            onChange={(e) => onValueChange?.(e.target.value)}
           />
         )
       ) : codeOrDescriptionBox ? (

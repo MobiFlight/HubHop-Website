@@ -1,5 +1,4 @@
 import DataTable, { createTheme } from "react-data-table-component"
-import { useState } from "react"
 import OpenPresetButton from "../presets/ui/OpenPresetButton"
 import PresetPreviewLabel from "../presets/ui/PresetInputLabel"
 import { REPORTING_ENABLED } from "../../../lib/features"
@@ -107,13 +106,8 @@ const TableStats = ({ data, added }: TableStatsProps) => {
   }
 
   const ExpandedComponent = ({ data }: { data: any }) => {
-    const [vendor, setVendor] = useState(data.vendor)
-    const [aircraft, setAircraft] = useState(data.aircraft)
-    const [system, setSystem] = useState(data.system)
-    const [presetType, setPresetType] = useState(data.presetType)
-    const [label, setLabel] = useState(data.label)
-    const [code, setCode] = useState(data.code)
-    const [description, setDescription] = useState(data.description)
+    const { vendor, aircraft, system, presetType, label, code, description } =
+      data
 
     return (
       <div className="relative -mx-3 md:m-0">
@@ -152,44 +146,22 @@ const TableStats = ({ data, added }: TableStatsProps) => {
                   )}
                 </div>
                 <div className="flex w-full flex-col space-y-2 md:w-1/6">
-                  <PresetPreviewLabel
-                    title={"Vendor"}
-                    editData={vendor}
-                    inputHandler={(e: any) => setVendor(e)}
-                  />
-                  <PresetPreviewLabel
-                    title={"Aircraft"}
-                    editData={aircraft}
-                    inputHandler={(e: any) => setAircraft(e)}
-                  />
-                  <PresetPreviewLabel
-                    title={"System"}
-                    editData={system}
-                    inputHandler={(e: any) => setSystem(e)}
-                  />
+                  <PresetPreviewLabel title={"Vendor"} editData={vendor} />
+                  <PresetPreviewLabel title={"Aircraft"} editData={aircraft} />
+                  <PresetPreviewLabel title={"System"} editData={system} />
                   <PresetPreviewLabel
                     title={"Input / Output"}
                     editData={presetType}
-                    inputHandler={(e: any) => setPresetType(e)}
                   />
                 </div>
                 <div className="flex w-full flex-col space-y-2 md:w-4/6">
-                  <PresetPreviewLabel
-                    title={"Preset name"}
-                    editData={label}
-                    inputHandler={(e: any) => setLabel(e)}
-                  />
-                  <PresetPreviewLabel
-                    title={"Code"}
-                    editData={code}
-                    inputHandler={(e: any) => setCode(e)}
-                  />
+                  <PresetPreviewLabel title={"Preset name"} editData={label} />
+                  <PresetPreviewLabel title={"Code"} editData={code} />
                   <PresetPreviewLabel
                     title={"Description"}
                     editData={
                       description ? description : "No description available"
                     }
-                    inputHandler={(e: any) => setDescription(e)}
                   />
                 </div>
               </div>
