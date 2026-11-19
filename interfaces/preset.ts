@@ -46,6 +46,9 @@ export interface PresetHistory {
   history: Preset[]
 }
 
+// presetsUpdated are database documents and carry the MongoDB _id
+export type StatisticsPreset = Preset & { _id?: string }
+
 // GET /{sim}/statistics/general
 export interface Statistics {
   contributors: { _id: string; contributions: number }[]
@@ -54,6 +57,6 @@ export interface Statistics {
     presetCount: number
   }[]
   votes: Preset[]
-  presetsAdded: Preset[]
-  presetsUpdated: Preset[]
+  presetsAdded: StatisticsPreset[]
+  presetsUpdated: StatisticsPreset[]
 }

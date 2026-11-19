@@ -6,10 +6,11 @@ import LoadingSpinner from "../components/sections/Shared/LoadingSpinner"
 import GeneralStats from "../components/sections/stats/GeneralStats"
 import TableStats from "../components/sections/stats/TableStats"
 import { presetTable, syncSim } from "../services/presetSync"
+import type { Preset, Statistics } from "../interfaces/preset"
 
 const Stats = () => {
-  const [presets, setPresets] = useState([])
-  const [stats, setStats] = useState<any>([])
+  const [presets, setPresets] = useState<Preset[]>([])
+  const [stats, setStats] = useState<Statistics | null>(null)
   const [simType, setSimType] = useState<string | null>(null)
 
   useEffect(() => {
@@ -22,7 +23,7 @@ const Stats = () => {
   useEffect(() => {
     // Fetch stats and presets based on simType, once it is known
     if (!simType) return
-    setStats([])
+    setStats(null)
     setPresets([])
     const statsUrl =
       simType === "msfs2020"
@@ -33,12 +34,12 @@ const Stats = () => {
 
     fetch(statsUrl || "", { redirect: "follow" })
       .then((res) => res.json())
-      .then((data) => !cancelled && setStats(data))
+      .then((data: Statistics) => !cancelled && setStats(data))
 
     syncSim(sim)
       .catch((error) => console.error(error))
       .then(() => presetTable(sim).toArray())
-      .then((data: any) => !cancelled && setPresets(data))
+      .then((data) => !cancelled && setPresets(data))
 
     return () => {
       cancelled = true
@@ -129,7 +130,7 @@ const Stats = () => {
         {presets.length ? (
           <div className="container mx-auto mt-5">
             <h2 className="text-2xl font-semibold">Latest added presets</h2>
-            <TableStats data={stats.presetsAdded} added={true} />
+            <TableStats data={stats?.presetsAdded ?? []} added={true} />
           </div>
         ) : (
           <div className="container mx-auto mt-5">
@@ -142,7 +143,7 @@ const Stats = () => {
         {presets.length ? (
           <div className="container mx-auto mt-5">
             <h2 className="text-2xl font-semibold">Latest updated presets</h2>
-            <TableStats data={stats.presetsUpdated} added={false} />
+            <TableStats data={stats?.presetsUpdated ?? []} added={false} />
           </div>
         ) : (
           <div className="container mx-auto mt-5">
