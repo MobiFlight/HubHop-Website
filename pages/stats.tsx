@@ -93,10 +93,16 @@ const Stats = () => {
               onValueChange={changeSimType}
               aria-label="Simulator"
             >
-              <ToggleGroupItem value="msfs2020" className="px-4 text-lg">
+              <ToggleGroupItem
+                value="msfs2020"
+                className="px-4 text-lg data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
+              >
                 MSFS 2020
               </ToggleGroupItem>
-              <ToggleGroupItem value="xplane" className="px-4 text-lg">
+              <ToggleGroupItem
+                value="xplane"
+                className="px-4 text-lg data-[state=on]:bg-[#0fb5e8] data-[state=on]:text-primary-foreground"
+              >
                 X-Plane
               </ToggleGroupItem>
             </ToggleGroup>
