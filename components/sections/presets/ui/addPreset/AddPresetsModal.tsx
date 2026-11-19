@@ -18,10 +18,11 @@ import { RiListSettingsLine } from "react-icons/ri"
 import { CODE_TYPES } from "../../../../../lib/codeTypes"
 import { presetTypesFor } from "../../../../../lib/presetTypes"
 import { sortedUnique } from "../../../../../lib/presetFacets"
+import type { Preset } from "../../../../../interfaces/preset"
 
 type AddPresetsModalProps = {
-  setAddModalOpen: Function
-  presets: any
+  onClose: () => void
+  presets: Preset[]
 }
 
 interface AddPresetForm {
@@ -38,10 +39,7 @@ interface AddPresetForm {
   description: string
 }
 
-const AddPresetsModal = ({
-  setAddModalOpen,
-  presets,
-}: AddPresetsModalProps) => {
+const AddPresetsModal = ({ onClose, presets }: AddPresetsModalProps) => {
   const [filteredVendors, setFilteredVendors] = useState(
     localStorage.getItem("vendorFilter") === ""
       ? ""
@@ -78,69 +76,31 @@ const AddPresetsModal = ({
   const [presetToast, setPresetToast] = useState(false)
   const [presetToastError, setPresetToastError] = useState(false)
 
-  const filteredVendorList = presets.filter((preset: any) =>
-    preset.vendor.toLowerCase().includes(filteredVendors.toLowerCase()),
+  const includesText = (text: string, search: string) =>
+    text.toLowerCase().includes(search.toLowerCase())
+  // without a selection only presets with a value match, as before
+  const matchesSelection = (value: string, selected: string) =>
+    selected ? value.toLowerCase() === selected.toLowerCase() : value !== ""
+
+  // presets similar to the input, shown next to the form
+  const filteredItems = presets.filter(
+    (preset) =>
+      includesText(preset.vendor, filteredVendors) &&
+      matchesSelection(preset.aircraft, filteredAircrafts) &&
+      matchesSelection(preset.system, filteredSystems) &&
+      (!preset.presetType ||
+        matchesSelection(preset.presetType, filteredPresetTypes)) &&
+      includesText(preset.label, label) &&
+      includesText(preset.code, code) &&
+      (!preset.description || includesText(preset.description, description)),
   )
-  const filteredAircraftList = filteredVendorList.filter((preset: any) => {
-    if (filteredAircrafts.length == 0) {
-      return preset.aircraft.toLowerCase("")
-    } else {
-      return preset.aircraft.toLowerCase() === filteredAircrafts.toLowerCase()
-    }
-  })
-  const filteredSystemList = filteredAircraftList.filter((preset: any) => {
-    if (filteredSystems.length == 0) {
-      return preset.system.toLowerCase("")
-    } else {
-      return preset.system.toLowerCase() === filteredSystems.toLowerCase()
-    }
-  })
-  const filteredInputTypeList = filteredSystemList.filter((preset: any) => {
-    if (preset.presetType) {
-      if (filteredPresetTypes.length == 0) {
-        return preset.presetType.toLowerCase("")
-      } else {
-        return (
-          preset.presetType.toLowerCase() === filteredPresetTypes.toLowerCase()
-        )
-      }
-    } else {
-      return preset
-    }
-  })
-
-  const filteredItemsLabel = filteredInputTypeList.filter((preset: any) => {
-    if (preset.description) {
-      return preset.label.toLowerCase().includes(label.toLowerCase())
-    } else {
-      return preset.label.toLowerCase().includes(label.toLowerCase())
-    }
-  })
-
-  const filteredItemsCode = filteredItemsLabel.filter((preset: any) => {
-    if (preset.description) {
-      return preset.code.toLowerCase().includes(code.toLowerCase())
-    } else {
-      return preset.code.toLowerCase().includes(code.toLowerCase())
-    }
-  })
-
-  const filteredItems = filteredItemsCode.filter((preset: any) => {
-    if (preset.description) {
-      return preset.description
-        .toLowerCase()
-        .includes(description.toLowerCase())
-    } else {
-      return preset.code.toLowerCase().includes(code.toLowerCase())
-    }
-  })
 
   // An aircraft belongs to a vendor: each list only offers values that fit the other
   const vendorsOf = (aircraft: string) =>
     sortedUnique(
       presets
-        .filter((preset: any) => !aircraft || preset.aircraft === aircraft)
-        .map((preset: any) => preset.vendor),
+        .filter((preset) => !aircraft || preset.aircraft === aircraft)
+        .map((preset) => preset.vendor),
     )
   const vendorOptions = sortedUnique([
     ...vendorsOf(filteredAircrafts),
@@ -148,10 +108,8 @@ const AddPresetsModal = ({
   ])
   const aircraftOptions = sortedUnique([
     ...presets
-      .filter(
-        (preset: any) => !filteredVendors || preset.vendor === filteredVendors,
-      )
-      .map((preset: any) => preset.aircraft),
+      .filter((preset) => !filteredVendors || preset.vendor === filteredVendors)
+      .map((preset) => preset.aircraft),
     filteredAircrafts,
   ])
 
@@ -195,7 +153,7 @@ const AddPresetsModal = ({
     <Modal
       position={"fixed"}
       title="Add Preset"
-      closeModalX={setAddModalOpen}
+      closeModalX={onClose}
       closeModal={() => {}}
     >
       <div className="w-[70vw]">
@@ -252,7 +210,7 @@ const AddPresetsModal = ({
                   }
 
             // request options
-            const options: any = {
+            const options: RequestInit = {
               method: "POST",
               body: JSON.stringify(preset),
               redirect: "follow",
@@ -437,20 +395,11 @@ const AddPresetsModal = ({
                         {...register("systems", { required: "Select System" })}
                       >
                         <option value="">All Systems</option>
-                        {Array.from(
-                          new Set(
-                            presets
-                              .map((item: any) => item.system)
-                              .sort((a: any, b: any) =>
-                                a.toLowerCase().localeCompare(b.toLowerCase()),
-                              ),
-                          ),
-                        ).map((o, i) => (
-                          <option key={i as any}>{o as string[]}</option>
+                        {sortedUnique(
+                          presets.map((preset) => preset.system),
+                        ).map((system) => (
+                          <option key={system}>{system}</option>
                         ))}
-                        {/* {uniqueSystem.map((o, i) => (
-                          <option key={i as any}>{o as string[]}</option>
-                        ))} */}
                       </select>
                     )}
                     <AuthenticatedTemplate>
@@ -599,7 +548,7 @@ const AddPresetsModal = ({
                   {filteredItems.length === 0 ? (
                     <div>No matches</div>
                   ) : filteredItems.length <= 10 ? (
-                    filteredItems.map((preset: any) => (
+                    filteredItems.map((preset) => (
                       <Link
                         legacyBehavior
                         href={{
@@ -627,7 +576,7 @@ const AddPresetsModal = ({
             </div>
           </div>
           <div className="mt-5 flex justify-between px-3">
-            <button type={"button"} onClick={() => setAddModalOpen(false)}>
+            <button type={"button"} onClick={onClose}>
               <ButtonDark>
                 <p>Close</p>
               </ButtonDark>

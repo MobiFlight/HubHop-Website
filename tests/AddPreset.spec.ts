@@ -157,6 +157,34 @@ test.describe("Add preset - user", () => {
     ).toBeVisible()
   })
 
+  test("Add preset - similar presets match the selected aircraft, system, type and description", async ({
+    page,
+  }) => {
+    const form = page.locator("form")
+    const selects = form.getByRole("combobox")
+
+    await test.step("Select aircraft and system", async () => {
+      await selects.nth(1).selectOption("C172")
+      await selects.nth(2).selectOption("Electrical")
+      await expect(form.getByText("3 presets found.")).toBeVisible()
+    })
+
+    await test.step("Type a description", async () => {
+      await form
+        .getByPlaceholder("This is your space for a nice description")
+        .fill("battery")
+      await expect(form.getByText("1 presets found.")).toBeVisible()
+      await expect(
+        form.getByRole("link", { name: "Battery master on" }),
+      ).toBeVisible()
+    })
+
+    await test.step("Select a type without presets", async () => {
+      await selects.nth(3).selectOption("Output")
+      await expect(form.getByText("No matches")).toBeVisible()
+    })
+  })
+
   test("Add preset - bulk upload explains the import file", async ({
     page,
   }) => {
