@@ -17,6 +17,8 @@ Conventions follow MobiFlight-Connector; see
   personas `anonymous`, `user` and `moderator`. The role comes from the mocked `/settings/user` API.
   MSAL encrypts its cache with a key kept in a session cookie; the storage states contain both.
 - **`data/*.testdata.json`**: synthetic API responses (presets, "last" stamps, statistics, history).
+- **`Visual.spec.ts`**: full-page screenshots of the main pages, stored in `Visual.spec.ts-snapshots/`.
+- **`Accessibility.spec.ts`**: axe check of the main pages. Known violations are listed per page; new ones fail.
 
 Tests never call the real HubHop API or login service. API requests are answered from `data/` (404 for
 anything that isn't mocked); login requests are answered by the fake identity provider. The test server
@@ -51,3 +53,6 @@ npx playwright install chromium
 - Assert on write operations through the recorded requests instead of server state:
   `expect.poll(() => hubHopPage.writeRequests("PUT")).toHaveLength(1)`.
 - Navigate with `hubHopPage.goto()`, which waits for React hydration before the test interacts with the page.
+- When a visual change is intended, update the screenshots with `npx playwright test Visual --update-snapshots`
+  and review the changed images in the pull request. Screenshots are taken in the devcontainer (Linux) and match CI.
+- When a change fixes an axe violation, remove it from the known violations in `Accessibility.spec.ts`.
