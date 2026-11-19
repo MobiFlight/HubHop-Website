@@ -20,6 +20,7 @@ import { CODE_TYPES } from "../../../../lib/codeTypes"
 import { presetTypesFor } from "../../../../lib/presetTypes"
 import type { Preset } from "../../../../interfaces/preset"
 import { REPORTING_ENABLED } from "../../../../lib/features"
+import { isModerator } from "../../../../services/roles"
 
 type PresetFields = Pick<
   Preset,
@@ -280,27 +281,13 @@ const PresetCard = ({
               <PresetPreviewLabel
                 title={"System"}
                 editData={system}
-                edit={
-                  typeof window !== "undefined" &&
-                  localStorage
-                    .getItem("roles")
-                    ?.toLocaleLowerCase()
-                    .includes("moderator") &&
-                  edit
-                }
+                edit={isModerator() && edit}
                 onValueChange={setSystem}
               />
               <PresetPreviewLabel
                 title={"Input / Output"}
                 editData={presetType}
-                edit={
-                  typeof window !== "undefined" &&
-                  localStorage
-                    .getItem("roles")
-                    ?.toLocaleLowerCase()
-                    .includes("moderator") &&
-                  edit
-                }
+                edit={isModerator() && edit}
                 onValueChange={(value) =>
                   setPresetType(value as Preset["presetType"])
                 }
@@ -311,14 +298,7 @@ const PresetCard = ({
                   <PresetPreviewLabel
                     title={"Code Type"}
                     editData={codeType}
-                    edit={
-                      typeof window !== "undefined" &&
-                      localStorage
-                        .getItem("roles")
-                        ?.toLocaleLowerCase()
-                        .includes("moderator") &&
-                      edit
-                    }
+                    edit={isModerator() && edit}
                     onValueChange={(value) =>
                       setCodeType(value as Preset["codeType"])
                     }
@@ -355,13 +335,7 @@ const PresetCard = ({
             <div className="flex flex-col space-y-2 xl:flex-row xl:items-center xl:space-y-0 xl:space-x-5">
               <div
                 onClick={() => {
-                  if (
-                    typeof window !== "undefined" &&
-                    localStorage
-                      .getItem("roles")
-                      ?.toLocaleLowerCase()
-                      .includes("moderator")
-                  ) {
+                  if (isModerator()) {
                     setDeleteModalOpen(true)
                   } else {
                     setDeleteTooltip(true)
@@ -409,11 +383,7 @@ const PresetCard = ({
                     onToggle={() => {
                       if (
                         localStorage.getItem("username") === author ||
-                        (typeof window !== "undefined" &&
-                          localStorage
-                            .getItem("roles")
-                            ?.toLocaleLowerCase()
-                            .includes("moderator"))
+                        isModerator()
                       ) {
                         setEdit((e) => !e)
                       } else {

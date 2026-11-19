@@ -219,11 +219,47 @@ test.describe("Add preset - user", () => {
     )
   })
 
+  test("Add preset - users can enter a new vendor and aircraft but not a new system", async ({
+    page,
+  }) => {
+    const form = page.locator("form")
+
+    await expect(
+      form.getByRole("button", { name: "Enter a new vendor" }),
+    ).toBeVisible()
+    await expect(
+      form.getByRole("button", { name: "Enter a new aircraft" }),
+    ).toBeVisible()
+    await expect(
+      form.getByRole("button", { name: "Enter a new system" }),
+    ).toHaveCount(0)
+  })
+
   test("Add preset - close hides the dialog", async ({ page }) => {
     await page.getByRole("button", { name: "Close", exact: true }).click()
 
     await expect(page.getByRole("heading", { name: "Add Preset" })).toHaveCount(
       0,
     )
+  })
+})
+
+test.describe("Add preset - moderator", () => {
+  test.use({ storageState: authFile.moderator })
+
+  test("Add preset - moderators can enter a new system", async ({
+    presetsPage,
+    page,
+  }) => {
+    await presetsPage.gotoPage()
+    await page.getByRole("button", { name: "Add preset" }).click()
+    const form = page.locator("form")
+
+    await form.getByRole("button", { name: "Enter a new system" }).click()
+
+    await expect(form.getByPlaceholder("Provide a system name")).toBeVisible()
+    await expect(
+      form.getByRole("button", { name: "Choose an existing system" }),
+    ).toBeVisible()
   })
 })
