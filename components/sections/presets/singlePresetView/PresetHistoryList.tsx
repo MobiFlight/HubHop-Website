@@ -6,6 +6,7 @@ import { BsArrowUpCircle } from "react-icons/bs"
 import ButtonOrange from "../../Shared/ButtonOrange"
 import { REPORTING_ENABLED } from "../../../../lib/features"
 import type { Preset } from "../../../../interfaces/preset"
+import { isModerator } from "../../../../services/roles"
 
 type PresetHistoryListProps = {
   presetHistory: Preset[]
@@ -160,10 +161,7 @@ const PresetHistoryList = ({
                           }
                         />
                       </div>
-                      {localStorage
-                        .getItem("roles")
-                        ?.toLowerCase()
-                        .includes("moderator") && (
+                      {isModerator() && (
                         <div
                           onClick={() =>
                             revertHistory(

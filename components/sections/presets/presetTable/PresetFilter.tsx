@@ -14,6 +14,7 @@ import { AnimatePresence, motion, type Variants } from "motion/react"
 import { AuthenticatedTemplate } from "@azure/msal-react"
 import { CODE_TYPES } from "../../../../lib/codeTypes"
 import { REPORTING_ENABLED } from "../../../../lib/features"
+import { isModerator } from "../../../../services/roles"
 
 type ChangeHandler = (value: string) => void
 
@@ -307,50 +308,46 @@ const PresetFilter = ({
                   <p>Show my presets</p>
                 </label>
               </button>
-              {REPORTING_ENABLED &&
-                localStorage
-                  .getItem("roles")
-                  ?.toLowerCase()
-                  .includes("moderator") && (
-                  <button
-                    onClick={() => setShowReportedPresets()}
-                    className="mt-5 flex items-center justify-center space-x-2"
+              {REPORTING_ENABLED && isModerator() && (
+                <button
+                  onClick={() => setShowReportedPresets()}
+                  className="mt-5 flex items-center justify-center space-x-2"
+                >
+                  <motion.div
+                    animate={
+                      showReportedPresets
+                        ? { background: "#ffa047" }
+                        : { background: "#545963" }
+                    }
+                    className={`flex h-5 w-5 items-center justify-center rounded-sm border border-hhOrange/50 text-hhBG`}
                   >
-                    <motion.div
-                      animate={
-                        showReportedPresets
-                          ? { background: "#ffa047" }
-                          : { background: "#545963" }
-                      }
-                      className={`flex h-5 w-5 items-center justify-center rounded-sm border border-hhOrange/50 text-hhBG`}
-                    >
-                      {showReportedPresets && (
-                        <motion.div className="text-xs">
-                          <motion.svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-6 w-6 p-0.5"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            initial="hidden"
-                            animate="visible"
-                          >
-                            <motion.path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M5 13l4 4L19 7"
-                              variants={draw}
-                            />
-                          </motion.svg>
-                        </motion.div>
-                      )}
-                    </motion.div>
-                    <label className="cursor-pointer text-sm">
-                      Show reported presets
-                    </label>
-                  </button>
-                )}
+                    {showReportedPresets && (
+                      <motion.div className="text-xs">
+                        <motion.svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-6 w-6 p-0.5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          initial="hidden"
+                          animate="visible"
+                        >
+                          <motion.path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M5 13l4 4L19 7"
+                            variants={draw}
+                          />
+                        </motion.svg>
+                      </motion.div>
+                    )}
+                  </motion.div>
+                  <label className="cursor-pointer text-sm">
+                    Show reported presets
+                  </label>
+                </button>
+              )}
             </div>
           </AuthenticatedTemplate>
         </div>

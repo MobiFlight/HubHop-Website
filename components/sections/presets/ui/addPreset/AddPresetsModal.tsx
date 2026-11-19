@@ -19,6 +19,7 @@ import { CODE_TYPES } from "../../../../../lib/codeTypes"
 import { presetTypesFor } from "../../../../../lib/presetTypes"
 import { sortedUnique } from "../../../../../lib/presetFacets"
 import type { Preset } from "../../../../../interfaces/preset"
+import { isModerator } from "../../../../../services/roles"
 
 type AddPresetsModalProps = {
   onClose: () => void
@@ -281,6 +282,12 @@ const AddPresetsModal = ({ onClose, presets }: AddPresetsModalProps) => {
                         </select>
                       )}
                       <button
+                        aria-label={
+                          addVendor
+                            ? "Choose an existing vendor"
+                            : "Enter a new vendor"
+                        }
+
                         onClick={() => (
                           setAddVendor((prev) => !prev),
                           resetField("addVendors", { defaultValue: "" }),
@@ -347,6 +354,12 @@ const AddPresetsModal = ({ onClose, presets }: AddPresetsModalProps) => {
                       </select>
                     )}
                     <button
+                      aria-label={
+                        addAircraft
+                          ? "Choose an existing aircraft"
+                          : "Enter a new aircraft"
+                      }
+
                       onClick={() => (
                         setAddAircraft((prev) => !prev),
                         resetField("addAircrafts", { defaultValue: "" }),
@@ -403,8 +416,14 @@ const AddPresetsModal = ({ onClose, presets }: AddPresetsModalProps) => {
                       </select>
                     )}
                     <AuthenticatedTemplate>
-                      {localStorage.getItem("roles")?.includes("moderator") && (
+                      {isModerator() && (
                         <button
+                          aria-label={
+                            addSystem
+                              ? "Choose an existing system"
+                              : "Enter a new system"
+                          }
+
                           onClick={() => (
                             setAddSystem((prev) => !prev),
                             resetField("addSystems", { defaultValue: "" }),

@@ -35,6 +35,7 @@ services/
   presetSync.ts          # Keeps the IndexedDB copy of each sim's presets current
   msal.js                # MSAL instance/config
   msalFunctions.js       # Access token + user settings (roles) helpers
+  roles.ts               # isModerator() for UI permission checks
 lib/
   Constants.tsx          # Navbar links
   presetSearch.ts        # Search, relevance and default order; shared with MobiFlight Connector
@@ -65,7 +66,7 @@ public/                  # Static assets
   so users have to log in again after a browser restart.
 - The access token is stored in `localStorage.accessToken`.
 - `getUserSettings()` loads the user's roles from the API into `localStorage.roles`; logged-out users get `"Guest"`.
-- UI permissions are checked with `localStorage.getItem("roles")`. The API enforces permissions; UI checks are convenience only.
+- UI permissions are checked with `isModerator()` from `services/roles.ts`, which reads `localStorage.roles`. The API enforces permissions; UI checks are convenience only.
 - Who may create new values: vendor and aircraft everyone; system moderators only (moderators are admins);
   Input/Output and Code Type nobody. These are fixed lists in `lib/presetTypes.ts` and `lib/codeTypes.ts`.
 
