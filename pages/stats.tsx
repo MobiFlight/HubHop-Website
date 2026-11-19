@@ -1,9 +1,8 @@
 import Head from "next/head"
 import { useEffect, useState } from "react"
 import Layout from "../components/Layout"
-import { Card } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+import SimSwitch from "../components/sections/Shared/SimSwitch"
 import GeneralStats from "../components/sections/stats/GeneralStats"
 import TableStats from "../components/sections/stats/TableStats"
 import { presetTable, syncSim } from "../services/presetSync"
@@ -54,7 +53,6 @@ const Stats = () => {
   }, [simType])
 
   const changeSimType = (newSimType: string) => {
-    if (!newSimType) return
     setSimType(newSimType)
     localStorage.setItem("simType", newSimType)
   }
@@ -86,27 +84,11 @@ const Stats = () => {
       </Head>
       <div className="mb-5 min-h-screen p-3">
         <div className="container mx-auto mb-3">
-          <Card className="w-fit p-2">
-            <ToggleGroup
-              type="single"
-              value={simType ?? ""}
-              onValueChange={changeSimType}
-              aria-label="Simulator"
-            >
-              <ToggleGroupItem
-                value="msfs2020"
-                className="px-4 text-lg data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
-              >
-                MSFS 2020
-              </ToggleGroupItem>
-              <ToggleGroupItem
-                value="xplane"
-                className="px-4 text-lg data-[state=on]:bg-[#0fb5e8] data-[state=on]:text-primary-foreground"
-              >
-                X-Plane
-              </ToggleGroupItem>
-            </ToggleGroup>
-          </Card>
+          <SimSwitch
+            value={simType}
+            onValueChange={changeSimType}
+            className="w-fit"
+          />
         </div>
         <GeneralStats presets={presets} stats={stats} />
         {presets.length ? (

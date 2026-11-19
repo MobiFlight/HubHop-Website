@@ -295,7 +295,7 @@ test.describe("Preset list", () => {
     await presetsPage.gotoPage()
     await expect(presetsPage.codeTypeFilter).toHaveCount(0)
 
-    await presetsPage.simToggle.click()
+    await presetsPage.xplaneSwitch.click()
 
     await expect(presetsPage.rows).toHaveCount(5)
     await expect(presetsPage.row("Beacon toggle")).toHaveCount(1)
