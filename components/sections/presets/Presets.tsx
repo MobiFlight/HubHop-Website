@@ -355,8 +355,7 @@ const Presets = () => {
                 <PresetFilter
                   filterOpen={filterOpen}
                   setFilterOpen={() => setFilterOpen((prev) => !prev)}
-                  search={(e) => {
-                    const value = e.target.value
+                  search={(value) => {
                     setSearchText(value)
                     clearTimeout(searchTimer.current)
                     searchTimer.current = setTimeout(() => {
@@ -366,32 +365,27 @@ const Presets = () => {
                       updateQueryParam("search", value, { replace: true })
                     }, SEARCH_DELAY_MS)
                   }}
-                  filterVendor={(e) => {
-                    const value = e.target.value
+                  filterVendor={(value) => {
                     setFilteredVendors(value)
                     localStorage.setItem("vendorFilter", value)
                     updateQueryParam("vendor", value)
                   }}
-                  filterAircraft={(e) => {
-                    const value = e.target.value
+                  filterAircraft={(value) => {
                     setFilteredAircrafts(value)
                     localStorage.setItem("aircraftFilter", value)
                     updateQueryParam("aircraft", value)
                   }}
-                  filterSystem={(e) => {
-                    const value = e.target.value
+                  filterSystem={(value) => {
                     setFilteredSystems(value)
                     localStorage.setItem("systemFilter", value)
                     updateQueryParam("system", value)
                   }}
-                  filterPresetType={(e) => {
-                    const value = e.target.value
+                  filterPresetType={(value) => {
                     setFilteredPresetTypes(value)
                     localStorage.setItem("presetTypeFilter", value)
                     updateQueryParam("presetType", value)
                   }}
-                  filterCodeType={(e) => {
-                    const value = e.target.value
+                  filterCodeType={(value) => {
                     setFilteredCodeTypes(value)
                     localStorage.setItem("codeTypeFilter", value)
                     updateQueryParam("codeType", value)

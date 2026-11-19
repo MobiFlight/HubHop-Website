@@ -105,7 +105,7 @@ public/                  # Static assets
   Declare `children: React.ReactNode` in the props type.
   Props types use `type`, not `interface`.
 - Callback props pass values, not React events (e.g. `onLabelChange: (label: string) => void`); only the input
-  component itself handles the event. Existing code is being converted (#121).
+  component itself handles the event.
 - Prefer `const` and immutable data over mutable variables (`let`, reassignment, in-place mutation).
   Keep values that must persist across renders in `useRef`/`useState`, not in reassigned locals.
 - Use Tailwind for new styling; do not add new `styled-components`.

@@ -15,9 +15,7 @@ import { AuthenticatedTemplate } from "@azure/msal-react"
 import { CODE_TYPES } from "../../../../lib/codeTypes"
 import { REPORTING_ENABLED } from "../../../../lib/features"
 
-type ChangeHandler = (
-  e: React.ChangeEvent<HTMLTextAreaElement | HTMLSelectElement>,
-) => void
+type ChangeHandler = (value: string) => void
 
 type PresetFilterProps = {
   search: ChangeHandler
@@ -147,7 +145,7 @@ const PresetFilter = ({
                 id="filter-search"
                 className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 px-3 py-1 text-hhText"
                 value={filteredPresets}
-                onChange={search}
+                onChange={(e) => search(e.target.value)}
               />
             </div>
             <div>
@@ -158,7 +156,7 @@ const PresetFilter = ({
               <select
                 id="filter-vendor"
                 className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 px-3 py-1 text-hhText"
-                onChange={filterVendor}
+                onChange={(e) => filterVendor(e.target.value)}
                 value={filteredVendors}
               >
                 <option value="">All Vendors</option>
@@ -177,7 +175,7 @@ const PresetFilter = ({
               <select
                 id="filter-aircraft"
                 className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 px-3 py-1 text-hhText"
-                onChange={filterAircraft}
+                onChange={(e) => filterAircraft(e.target.value)}
                 value={filteredAircrafts}
               >
                 <option value="">All Aircraft</option>
@@ -196,7 +194,7 @@ const PresetFilter = ({
               <select
                 id="filter-system"
                 className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 px-3 py-1 text-hhText"
-                onChange={filterSystem}
+                onChange={(e) => filterSystem(e.target.value)}
                 value={filteredSystems}
               >
                 <option value="">All Systems</option>
@@ -218,7 +216,7 @@ const PresetFilter = ({
               <select
                 id="filter-preset-type"
                 className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 px-3 py-1 text-hhText"
-                onChange={filterPresetType}
+                onChange={(e) => filterPresetType(e.target.value)}
                 value={filteredPresetTypes}
               >
                 <option value="">All Inputs/Outputs</option>
@@ -248,7 +246,7 @@ const PresetFilter = ({
                   <select
                     id="filter-code-type"
                     className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 px-3 py-1 text-hhText"
-                    onChange={filterCodeType}
+                    onChange={(e) => filterCodeType(e.target.value)}
                     value={filteredCodeTypes}
                   >
                     <option value="">All Code Types</option>

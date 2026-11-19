@@ -32,11 +32,16 @@ test.describe("Edit preset - author", () => {
       ).toHaveCount(0)
     })
 
-    await test.step("Change name and code", async () => {
+    await test.step("Change vendor, aircraft, name, code and description", async () => {
+      await page.getByRole("textbox", { name: "Vendor" }).fill("FlyByWire")
+      await page.getByRole("textbox", { name: "Aircraft" }).fill("A32NX")
       await page
         .getByRole("textbox", { name: "Preset name" })
         .fill("Landing lights all on")
       await page.getByRole("textbox", { name: "Code" }).fill("(>K:LANDING_ON)")
+      await page
+        .getByRole("textbox", { name: "Description" })
+        .fill("Turns on all landing lights")
       await page.getByRole("button", { name: "Save" }).click()
     })
 
@@ -49,9 +54,11 @@ test.describe("Edit preset - author", () => {
     expect(request.body).toMatchObject({
       label: "Landing lights all on",
       code: "(>K:LANDING_ON)",
-      vendor: "Asobo",
+      description: "Turns on all landing lights",
+      vendor: "FlyByWire",
+      aircraft: "A32NX",
       system: "Lights",
-      path: "Asobo.A320neo.Lights.Input.Landing lights all on",
+      path: "FlyByWire.A32NX.Lights.Input.Landing lights all on",
       status: "Updated",
       updatedBy: "Test User",
     })
@@ -129,6 +136,46 @@ test.describe("Edit preset - moderator", () => {
 
 test.describe("Edit preset - preset list", () => {
   test.use({ storageState: authFile.moderator })
+
+  test("Edit preset - all fields can be changed in an expanded row", async ({
+    presetsPage,
+  }) => {
+    await presetsPage.gotoPage()
+
+    const details = await presetsPage.expand("Battery master on")
+    await details.getByRole("button", { name: "View" }).click()
+
+    await test.step("Change every field", async () => {
+      await details.getByRole("textbox", { name: "Vendor" }).fill("Carenado")
+      await details.getByRole("textbox", { name: "Aircraft" }).fill("C182")
+      await details.getByRole("textbox", { name: "System" }).fill("Power")
+      await details
+        .getByRole("combobox", { name: "Input / Output" })
+        .selectOption("Output")
+      await details
+        .getByRole("textbox", { name: "Preset name" })
+        .fill("Battery master switch on")
+      await details.getByRole("textbox", { name: "Code" }).fill("(>K:BAT_ON)")
+      await details
+        .getByRole("textbox", { name: "Description" })
+        .fill("Turns on the battery")
+      await details.getByRole("button", { name: "Save" }).click()
+    })
+
+    await expect
+      .poll(() => presetsPage.hubHopPage.writeRequests("PUT"))
+      .toHaveLength(1)
+    expect(presetsPage.hubHopPage.writeRequests("PUT")[0].body).toMatchObject({
+      vendor: "Carenado",
+      aircraft: "C182",
+      system: "Power",
+      presetType: "Output",
+      label: "Battery master switch on",
+      code: "(>K:BAT_ON)",
+      description: "Turns on the battery",
+      path: "Carenado.C182.Power.Output.Battery master switch on",
+    })
+  })
 
   test("Edit preset - a failed save keeps the preset unchanged", async ({
     presetsPage,

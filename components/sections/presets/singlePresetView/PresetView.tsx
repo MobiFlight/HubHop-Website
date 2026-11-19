@@ -4,7 +4,6 @@ import { useEffect, useState } from "react"
 
 import PresetCard, { type PresetToasts } from "../ui/PresetCard"
 import type { Preset } from "../../../../interfaces/preset"
-import type { InputChangeEvent } from "../ui/PresetInputLabel"
 import { BiSad } from "react-icons/bi"
 import { AiOutlineLoading } from "react-icons/ai"
 
@@ -113,20 +112,14 @@ const PresetView = ({
           showingHistory={true}
           text=""
           card
-          setVendor={(e: InputChangeEvent) => setVendor(e.target.value)}
-          setAircraft={(e: InputChangeEvent) => setAircraft(e.target.value)}
-          setSystem={(e: InputChangeEvent) => setSystem(e.target.value)}
-          setPresetType={(e: InputChangeEvent) =>
-            setPresetType(e.target.value as Preset["presetType"])
-          }
-          setCodeType={(e: InputChangeEvent) =>
-            setCodeType(e.target.value as Preset["codeType"])
-          }
-          setLabel={(e: InputChangeEvent) => setLabel(e.target.value)}
-          setCode={(e: InputChangeEvent) => setCode(e.target.value)}
-          setDescription={(e: InputChangeEvent) =>
-            setDescription(e.target.value)
-          }
+          setVendor={setVendor}
+          setAircraft={setAircraft}
+          setSystem={setSystem}
+          setPresetType={setPresetType}
+          setCodeType={setCodeType}
+          setLabel={setLabel}
+          setCode={setCode}
+          setDescription={setDescription}
           deletedToast={deletedToast}
           reportedToast={reportedToast}
           fixedToast={fixedToast}

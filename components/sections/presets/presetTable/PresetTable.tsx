@@ -11,7 +11,6 @@ import { compareText } from "../../../../lib/presetSearch"
 import AddPresetButton from "../ui/addPreset/AddPresetButton"
 import ExportPresetsButton from "../ui/exportPresets/ExportPresetsButton"
 import PresetCard, { type PresetToasts } from "../ui/PresetCard"
-import type { InputChangeEvent } from "../ui/PresetInputLabel"
 import type { Preset } from "../../../../interfaces/preset"
 import RelevanceGauge from "./RelevanceGauge"
 import { msalInstance, msalReady } from "../../../../services/msal"
@@ -75,18 +74,14 @@ const PresetRowDetails = ({
         showingHistory={false}
         text={"sm"}
         card={false}
-        setVendor={(e: InputChangeEvent) => setVendor(e.target.value)}
-        setAircraft={(e: InputChangeEvent) => setAircraft(e.target.value)}
-        setSystem={(e: InputChangeEvent) => setSystem(e.target.value)}
-        setPresetType={(e: InputChangeEvent) =>
-          setPresetType(e.target.value as Preset["presetType"])
-        }
-        setCodeType={(e: InputChangeEvent) =>
-          setCodeType(e.target.value as Preset["codeType"])
-        }
-        setLabel={(e: InputChangeEvent) => setLabel(e.target.value)}
-        setCode={(e: InputChangeEvent) => setCode(e.target.value)}
-        setDescription={(e: InputChangeEvent) => setDescription(e.target.value)}
+        setVendor={setVendor}
+        setAircraft={setAircraft}
+        setSystem={setSystem}
+        setPresetType={setPresetType}
+        setCodeType={setCodeType}
+        setLabel={setLabel}
+        setCode={setCode}
+        setDescription={setDescription}
         deletedToast={deletedToast}
         reportedToast={reportedToast}
         fixedToast={fixedToast}

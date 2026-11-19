@@ -6,7 +6,7 @@ import PresetHistoryList from "../singlePresetView/PresetHistoryList"
 import PromoSlot from "../../Shared/PromoSlot"
 import DeleteButton from "./deletePreset/DeleteButton"
 import EditToggle from "./editPreset/EditToggle"
-import PresetPreviewLabel, { type InputChangeEvent } from "./PresetInputLabel"
+import PresetPreviewLabel from "./PresetInputLabel"
 import SavePresetButton from "./editPreset/SavePresetButton"
 import ReportPresetModal from "./reportPreset/ReportPresetModal"
 import DeleteConfirmationModal from "./deletePreset/DeleteConfirmationModal"
@@ -39,7 +39,7 @@ type PresetFields = Pick<
   | "description"
 >
 
-type ChangeHandler = (e: InputChangeEvent) => void
+type ChangeHandler<T = string> = (value: T) => void
 
 export type PresetToasts = {
   deletedToast: () => void
@@ -55,9 +55,9 @@ type PresetCardProps = PresetFields &
     setVendor: ChangeHandler
     setAircraft: ChangeHandler
     setSystem: ChangeHandler
-    setPresetType: ChangeHandler
+    setPresetType: ChangeHandler<Preset["presetType"]>
     setLabel: ChangeHandler
-    setCodeType: ChangeHandler
+    setCodeType: ChangeHandler<Preset["codeType"]>
     setCode: ChangeHandler
     setDescription: ChangeHandler
     showingHistory: boolean
@@ -269,13 +269,13 @@ const PresetCard = ({
                 title={"Vendor"}
                 editData={vendor}
                 edit={edit}
-                inputHandler={setVendor}
+                onValueChange={setVendor}
               />
               <PresetPreviewLabel
                 title={"Aircraft"}
                 editData={aircraft}
                 edit={edit}
-                inputHandler={setAircraft}
+                onValueChange={setAircraft}
               />
               <PresetPreviewLabel
                 title={"System"}
@@ -288,7 +288,7 @@ const PresetCard = ({
                     .includes("moderator") &&
                   edit
                 }
-                inputHandler={setSystem}
+                onValueChange={setSystem}
               />
               <PresetPreviewLabel
                 title={"Input / Output"}
@@ -301,7 +301,9 @@ const PresetCard = ({
                     .includes("moderator") &&
                   edit
                 }
-                inputHandler={setPresetType}
+                onValueChange={(value) =>
+                  setPresetType(value as Preset["presetType"])
+                }
                 options={presetTypesFor(simType)}
               />
               {typeof window !== "undefined" &&
@@ -317,7 +319,9 @@ const PresetCard = ({
                         .includes("moderator") &&
                       edit
                     }
-                    inputHandler={setCodeType}
+                    onValueChange={(value) =>
+                      setCodeType(value as Preset["codeType"])
+                    }
                     options={CODE_TYPES}
                   />
                 )}
@@ -327,13 +331,13 @@ const PresetCard = ({
                 title={"Preset name"}
                 editData={label}
                 edit={edit}
-                inputHandler={setLabel}
+                onValueChange={setLabel}
               />
               <PresetPreviewLabel
                 title={"Code"}
                 editData={code}
                 edit={edit}
-                inputHandler={setCode}
+                onValueChange={setCode}
                 codeOrDescriptionBox={true}
               />
               <PresetPreviewLabel
@@ -342,7 +346,7 @@ const PresetCard = ({
                 editData={
                   description ? description : "No description available"
                 }
-                inputHandler={setDescription}
+                onValueChange={setDescription}
                 codeOrDescriptionBox={true}
               />
             </div>
