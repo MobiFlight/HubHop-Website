@@ -62,6 +62,9 @@ export default defineConfig({
       NEXT_PUBLIC_HUBHOP_OAUTH_REDIRECT_URI_DEV: "http://localhost:3000/",
       // test container, requests to Google Tag Manager are mocked
       NEXT_PUBLIC_GTM_ID: "GTM-TEST",
+      // the same footer ("Build dev") locally and on CI, for screenshot tests
+      GITHUB_RUN_NUMBER: "",
+      GITHUB_SHA: "",
     },
     url: "http://localhost:3000/",
     reuseExistingServer: !process.env.CI,
