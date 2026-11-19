@@ -77,9 +77,9 @@ for (const theme of themes) {
       page,
     }) => {
       await hubHopPage.goto("/tools/")
-      await expect(page.getByRole("textbox").last()).toHaveValue(
-        "RPN Code will be displayed here",
-      )
+      await expect(
+        page.getByRole("textbox", { name: "Generated RPN Code" }),
+      ).toHaveValue("RPN Code will be displayed here")
       await expect(page).toHaveScreenshot(
         `tools-${theme}.png`,
         screenshotOptions,

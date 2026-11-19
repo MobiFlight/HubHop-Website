@@ -53,11 +53,11 @@ const pages: PageCheck[] = [
     name: "tools page",
     open: async ({ hubHopPage, page }) => {
       await hubHopPage.goto("/tools/")
-      await expect(page.getByRole("textbox").last()).toHaveValue(
-        "RPN Code will be displayed here",
-      )
+      await expect(
+        page.getByRole("textbox", { name: "Generated RPN Code" }),
+      ).toHaveValue("RPN Code will be displayed here")
     },
-    known: { label: 1, "select-name": 2 },
+    known: {},
   },
 ]
 

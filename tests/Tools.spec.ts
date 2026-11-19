@@ -1,4 +1,11 @@
 import { test, expect } from "./fixtures"
+import type { Page } from "@playwright/test"
+
+/** Picks an option of a shadcn Select */
+const choose = async (page: Page, select: string, option: string) => {
+  await page.getByRole("combobox", { name: select }).click()
+  await page.getByRole("option", { name: option, exact: true }).click()
+}
 
 test.describe("Tools", () => {
   test.beforeEach(async ({ hubHopPage }) => {
@@ -8,22 +15,20 @@ test.describe("Tools", () => {
   test("Tools - RPN tool shows a placeholder until a range is set", async ({
     page,
   }) => {
-    await expect(page.getByRole("textbox").last()).toHaveValue(
-      "RPN Code will be displayed here",
-    )
+    await expect(
+      page.getByRole("textbox", { name: "Generated RPN Code" }),
+    ).toHaveValue("RPN Code will be displayed here")
   })
 
   test("Tools - RPN tool generates code for Arduino and aileron", async ({
     page,
   }) => {
-    const selects = page.getByRole("combobox")
-
     await test.step("Choose device and event presets", async () => {
-      await selects.nth(0).selectOption({ label: "Arduino" })
-      await selects.nth(1).selectOption({ label: "Aileron" })
+      await choose(page, "Device preset", "Arduino")
+      await choose(page, "Event preset", "Aileron")
     })
 
-    const code = page.getByRole("textbox").last()
+    const code = page.getByRole("textbox", { name: "Generated RPN Code" })
     await expect(code).toHaveValue(/^@ /)
     await expect(code).toHaveValue(/\(>K:AILERON_SET\)$/)
   })
@@ -31,14 +36,13 @@ test.describe("Tools", () => {
   test("Tools - RPN tool uses typed ranges and can invert the event range", async ({
     page,
   }) => {
-    const fields = page.getByRole("textbox")
-    const code = fields.last()
+    const code = page.getByRole("textbox", { name: "Generated RPN Code" })
 
     await test.step("Type a device range and choose flaps", async () => {
-      await page.getByRole("combobox").nth(0).selectOption({ label: "Custom" })
-      await fields.nth(0).fill("100")
-      await fields.nth(1).fill("900")
-      await page.getByRole("combobox").nth(1).selectOption({ label: "Flaps" })
+      await choose(page, "Device preset", "Custom")
+      await page.getByLabel("Min device output range").fill("100")
+      await page.getByLabel("Max device output range").fill("900")
+      await choose(page, "Event preset", "Flaps")
       await expect(code).toHaveValue(
         "@ 100 - 20.4788 * 0 max 16383 min (>K:FLAPS_SET)",
       )

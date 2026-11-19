@@ -1,8 +1,8 @@
-import { AnimatePresence, motion } from "motion/react"
 import Head from "next/head"
 import { useState } from "react"
 import Layout from "../components/Layout"
-import ButtonOrange from "../components/sections/Shared/ButtonOrange"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import Potti from "../components/sections/tools/Potti"
 
 const Tools = () => {
@@ -34,44 +34,21 @@ const Tools = () => {
         <meta property="twitter:image" content="@/assets/logo-big.png" />
       </Head>
       <div className="min-h-screen p-3">
-        <div className="flex w-full flex-col space-y-3 xl:flex-row xl:space-y-0 xl:space-x-3">
-          <div className="flex h-fit w-full flex-col space-y-3 rounded-lg bg-hhCard/40 p-3 xl:w-1/6">
-            <h2 className="text-xl">Tools</h2>
-            <button onClick={() => setTool("potti")} className="w-full">
-              <ButtonOrange>Potentiometer RPN-Tool</ButtonOrange>
-            </button>
-            <button
-              disabled
-              onClick={() => setTool("more")}
-              className="w-full cursor-not-allowed"
-            >
-              <ButtonOrange>More tools will follow</ButtonOrange>
-            </button>
-          </div>
-          <div className="w-full rounded-lg bg-hhCard/40 p-3 xl:w-5/6">
-            {tool === "potti" && (
-              <AnimatePresence>
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                >
-                  <Potti />
-                </motion.div>
-              </AnimatePresence>
-            )}
-            {tool === "more" && (
-              <AnimatePresence>
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                >
-                  <div>More</div>
-                </motion.div>
-              </AnimatePresence>
-            )}
-          </div>
+        <div className="flex w-full flex-col gap-3 xl:flex-row">
+          <Card className="h-fit w-full xl:w-1/6">
+            <CardHeader>
+              <CardTitle className="text-xl">Tools</CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-col gap-3">
+              <Button onClick={() => setTool("potti")}>
+                Potentiometer RPN-Tool
+              </Button>
+              <Button disabled>More tools will follow</Button>
+            </CardContent>
+          </Card>
+          <Card className="w-full xl:w-5/6">
+            <CardContent>{tool === "potti" && <Potti />}</CardContent>
+          </Card>
         </div>
       </div>
     </Layout>

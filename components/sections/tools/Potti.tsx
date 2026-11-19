@@ -1,7 +1,41 @@
-import Link from "next/link"
 import { useState } from "react"
-import { MdSwapHoriz } from "react-icons/md"
-import ButtonOrange from "../Shared/ButtonOrange"
+import { IconArrowsExchange } from "@tabler/icons-react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
+
+type RangeInputProps = {
+  id: string
+  label: string
+  value: number | string
+  onValueChange: (value: number | string) => void
+}
+
+// text while typing ("-", "12."), a number after leaving the field
+const RangeInput = ({ id, label, value, onValueChange }: RangeInputProps) => (
+  <div className="flex w-full flex-col gap-2">
+    <Label htmlFor={id}>{label}</Label>
+    <Input
+      id={id}
+      placeholder="0"
+      type="text"
+      value={value}
+      onChange={(e) => {
+        const text = e.target.value
+        if (text === "-" || !isNaN(parseFloat(text))) onValueChange(text)
+      }}
+      onBlur={() => onValueChange(parseFloat(String(value)) || 0)}
+    />
+  </div>
+)
 
 const Potti = () => {
   const presets = [
@@ -127,7 +161,6 @@ const Potti = () => {
     },
   ]
 
-  // text while typing ("-", "12."), a number after leaving the field
   const [Mindo, setMindo] = useState<number | string>(0)
   const [Maxdo, setMaxdo] = useState<number | string>(0)
   const [Mineir, setMineir] = useState<number | string>(0)
@@ -211,6 +244,21 @@ const Potti = () => {
     return ""
   }
 
+  function selectDevice(name: string) {
+    const preset = presets.find((p) => p.name === name)
+    if (!preset) return
+    setMindo(preset.min)
+    setMaxdo(preset.max)
+  }
+
+  function selectEvent(name: string) {
+    const preset = eir_preset.find((p) => p.name === name)
+    if (!preset) return
+    setMineir(parseFloat(preset.min))
+    setMaxeir(parseFloat(preset.max))
+    setNameEir(preset.event)
+  }
+
   return (
     <div>
       <div>
@@ -221,183 +269,98 @@ const Potti = () => {
         </p>
         <p>
           If you want to learn more about potentiometers and how to use this
-          tool, please visit the
-          <Link
-            legacyBehavior
+          tool, please visit the{" "}
+          <a
             href="https://github.com/MobiFlight/MobiFlight-Connector/wiki"
+            target="_blank"
+            className="text-primary underline underline-offset-4"
           >
-            <a
-              className="mx-1 rounded-lg bg-hhOrange px-1 py-0.5 text-sm font-semibold text-hhBG transition-all hover:bg-hhOrangeShade-600"
-              target={"_blank"}
-            >
-              Mobiflight&nbsp;Community
-            </a>
-          </Link>
-          Wiki.
+            Mobiflight Community Wiki
+          </a>
+          .
         </p>
       </div>
       <div className="mt-5 grid grid-cols-1 justify-items-center gap-5 xl:grid-cols-2">
-        <div className="flex w-full flex-col items-center space-y-5">
+        <div className="flex w-full flex-col items-center gap-5">
           <h4 className="text-xl font-semibold">Device output range</h4>
-          <select
-            onChange={(e) => {
-              setMindo(
-                presets
-                  .filter((preset) => preset.name === e.target.value)
-                  .map((pres) => pres.min)[0],
-              )
-              setMaxdo(
-                presets
-                  .filter((preset) => preset.name === e.target.value)
-                  .map((pres) => pres.max)[0],
-              )
-            }}
-            id="selectedPreset"
-            defaultValue={""}
-            className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 p-3"
-          >
-            <option value={""} disabled>
-              Select preset
-            </option>
-            {presets.map((preset) => (
-              <option className="bg-hhBG" key={preset.name}>
-                {preset.name}
-              </option>
-            ))}
-          </select>
-          <div className="flex w-full flex-col items-center sm:flex-row sm:space-x-5">
-            <div className="flex w-full flex-col">
-              <label>Min device output range</label>
-              <input
-                className="rounded-lg border border-hhOrange/50 bg-hhBG/50 p-3"
-                placeholder="0"
-                type="text"
-                onChange={(e) => {
-                  const value = e.target.value
-                  if (value === "-" || !isNaN(parseFloat(value))) {
-                    setMindo(value)
-                  }
-                }}
-                onBlur={() => setMindo((prev) => parseFloat(String(prev)) || 0)}
-                value={Mindo}
-              />
-            </div>
-            <div className="flex w-full flex-col">
-              <label>Max device output range</label>
-              <input
-                className="rounded-lg border border-hhOrange/50 bg-hhBG/50 p-3"
-                placeholder="0"
-                type="text"
-                onChange={(e) => {
-                  const value = e.target.value
-                  if (value === "-" || !isNaN(parseFloat(value))) {
-                    setMaxdo(value)
-                  }
-                }}
-                onBlur={() => setMaxdo((prev) => parseFloat(String(prev)) || 0)}
-                value={Maxdo}
-              />
-            </div>
+          <Select onValueChange={selectDevice}>
+            <SelectTrigger className="w-full" aria-label="Device preset">
+              <SelectValue placeholder="Select preset" />
+            </SelectTrigger>
+            <SelectContent>
+              {presets.map((preset) => (
+                <SelectItem key={preset.name} value={preset.name}>
+                  {preset.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <div className="flex w-full flex-col gap-5 sm:flex-row">
+            <RangeInput
+              id="device-min"
+              label="Min device output range"
+              value={Mindo}
+              onValueChange={setMindo}
+            />
+            <RangeInput
+              id="device-max"
+              label="Max device output range"
+              value={Maxdo}
+              onValueChange={setMaxdo}
+            />
           </div>
         </div>
-        <div className="flex w-full flex-col items-center space-y-5">
+        <div className="flex w-full flex-col items-center gap-5">
           <h4 className="text-xl font-semibold">MSFS2020 event input range</h4>
-          <select
-            onChange={(e) => {
-              setMineir(
-                parseFloat(
-                  eir_preset
-                    .filter((preset) => preset.name === e.target.value)
-                    .map((pres) => pres.min)[0],
-                ),
-              )
-              setMaxeir(
-                parseFloat(
-                  eir_preset
-                    .filter((preset) => preset.name === e.target.value)
-                    .map((pres) => pres.max)[0],
-                ),
-              )
-              setNameEir(
-                eir_preset
-                  .filter((preset) => preset.name === e.target.value)
-                  .map((pres) => pres.event)
-                  .toString(),
-              )
-            }}
-            defaultValue={""}
-            className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 p-3"
-          >
-            <option value={""} disabled>
-              Select preset
-            </option>
-            {eir_preset.map((preset) => (
-              <option className="bg-hhBG" key={preset.name}>
-                {preset.name}
-              </option>
-            ))}
-          </select>
-          <div className="flex w-full flex-col items-center sm:flex-row sm:space-x-5">
-            <div className="flex w-full flex-col">
-              <label>Min event input range</label>
-              <input
-                className="rounded-lg border border-hhOrange/50 bg-hhBG/50 p-3"
-                placeholder="0"
-                type="text"
-                value={Mineir}
-                onChange={(e) => {
-                  const value = e.target.value
-                  if (value === "-" || !isNaN(parseFloat(value))) {
-                    setMineir(value)
-                  }
-                }}
-                onBlur={() =>
-                  setMineir((prev) => parseFloat(String(prev)) || 0)
-                }
-              />
-            </div>
-            <div className="flex w-full flex-col">
-              <label>Max event input range</label>
-              <input
-                className="rounded-lg border border-hhOrange/50 bg-hhBG/50 p-3"
-                placeholder="0"
-                type="text"
-                value={Maxeir}
-                onChange={(e) => {
-                  const value = e.target.value
-                  if (value === "-" || !isNaN(parseFloat(value))) {
-                    setMaxeir(value)
-                  }
-                }}
-                onBlur={() =>
-                  setMaxeir((prev) => parseFloat(String(prev)) || 0)
-                }
-              />
-            </div>
+          <Select onValueChange={selectEvent}>
+            <SelectTrigger className="w-full" aria-label="Event preset">
+              <SelectValue placeholder="Select preset" />
+            </SelectTrigger>
+            <SelectContent>
+              {eir_preset.map((preset) => (
+                <SelectItem key={preset.name} value={preset.name}>
+                  {preset.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <div className="flex w-full flex-col gap-5 sm:flex-row">
+            <RangeInput
+              id="event-min"
+              label="Min event input range"
+              value={Mineir}
+              onValueChange={setMineir}
+            />
+            <RangeInput
+              id="event-max"
+              label="Max event input range"
+              value={Maxeir}
+              onValueChange={setMaxeir}
+            />
           </div>
-          <div className="flex w-full flex-col items-center justify-center">
-            <p className="text-xs">
+          <div className="flex w-full flex-col items-center gap-2">
+            <p className="text-xs text-muted-foreground">
               Note: The scale can be inverted by inverting the Min and Max
               values.
             </p>
-            <button onClick={invertMinMax} className="w-fit">
-              <ButtonOrange>
-                <div className="text-xl">
-                  <MdSwapHoriz />
-                </div>
-                <p>Invert Values</p>
-              </ButtonOrange>
-            </button>
+            <Button onClick={invertMinMax}>
+              <IconArrowsExchange />
+              Invert Values
+            </Button>
           </div>
         </div>
       </div>
-      <h2 className="mt-5 mb-5 text-center text-xl font-semibold">
+      <Label
+        htmlFor="rpn-code"
+        className="mt-5 mb-5 block text-center text-xl font-semibold"
+      >
         Generated RPN Code
-      </h2>
-      <textarea
-        cols={30}
+      </Label>
+      <Textarea
+        id="rpn-code"
         rows={5}
-        className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 p-3"
+        readOnly
+        className="font-mono"
         value={
           Maxdo
             ? "@ " +
@@ -417,8 +380,7 @@ const Potti = () => {
               ")"
             : "RPN Code will be displayed here"
         }
-        onChange={() => {}}
-      ></textarea>
+      />
     </div>
   )
 }
