@@ -3,16 +3,14 @@ import Image, { type ImageLoaderProps } from "next/image"
 import hhLogo from "../../../public/images/logo-big.png"
 import Link from "next/link"
 import {
-  HiOutlineHome,
-  HiOutlineViewList,
-  HiOutlineLightningBolt,
-  HiOutlineTrendingUp,
-  HiOutlineUserCircle,
-} from "react-icons/hi"
-import { useRef, useState } from "react"
-import { AnimatePresence, motion } from "motion/react"
-import { AiOutlineMenu } from "react-icons/ai"
-import { MdOutlineClose } from "react-icons/md"
+  IconBolt,
+  IconHome,
+  IconList,
+  IconLogout,
+  IconMenu2,
+  IconTrendingUp,
+  IconUserCircle,
+} from "@tabler/icons-react"
 import {
   AuthenticatedTemplate,
   UnauthenticatedTemplate,
@@ -20,12 +18,35 @@ import {
 } from "@azure/msal-react"
 import type { IPublicClientApplication } from "@azure/msal-browser"
 import { msalInstance, msalReady } from "../../../services/msal"
-import UserDropdown from "../Shared/UserDropdown"
-import ButtonOrange from "../Shared/ButtonOrange"
+import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import {
+  Sheet,
+  SheetContent,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
 import {
   getUserSettings,
   getAccessToken,
 } from "../../../services/msalFunctions"
+
+const icons: Record<string, typeof IconHome> = {
+  Home: IconHome,
+  Presets: IconList,
+  Tools: IconBolt,
+  Stats: IconTrendingUp,
+}
 
 const Navbar = () => {
   if (
@@ -59,58 +80,7 @@ const Navbar = () => {
     localStorage.setItem("presetTypeFilter", "")
   }
 
-  const [mobileMenu, setMobileMenu] = useState(false)
-  const [showDropdown, setShowDropdown] = useState(false)
-
-  function openMobileMenu() {
-    setMobileMenu((setMobileMenu) => !setMobileMenu)
-  }
-
-  const itemVariants = {
-    closed: {
-      transition: {
-        duration: 0.2,
-      },
-      opacity: 0,
-    },
-    open: {
-      transition: {
-        duration: 0.3,
-      },
-      opacity: 1,
-    },
-  }
-
-  const sideVariants = {
-    closed: {
-      transition: {
-        staggerChildren: 0.3,
-        staggerDirection: -1,
-      },
-    },
-    open: {
-      transition: {
-        staggerChildren: 0.3,
-        staggerDirection: 1,
-      },
-    },
-  }
-
   const { accounts } = useMsal()
-
-  // kept in a ref so the pending timer survives re-renders
-  const timeout = useRef<ReturnType<typeof setTimeout>>(undefined)
-
-  const showTip = () => {
-    timeout.current = setTimeout(() => {
-      setShowDropdown(true)
-    }, 400)
-  }
-
-  const hideTip = () => {
-    clearTimeout(timeout.current)
-    setShowDropdown(false)
-  }
 
   async function login() {
     await msalReady
@@ -152,196 +122,114 @@ const Navbar = () => {
     return src
   }
 
+  const navLinks = NavbarLinks.map((link) => {
+    const Icon = icons[link.title]
+    return (
+      <Link
+        key={link.href}
+        href={link.href}
+        className="flex items-center gap-1 transition-colors hover:text-primary"
+      >
+        <Icon className="size-5" />
+        {link.title}
+      </Link>
+    )
+  })
+
+  const user = accounts[0]
+
   return (
-    <div>
-      <header className="container mx-auto">
-        <nav className="container mx-auto flex items-center justify-between px-3 text-xl md:p-2">
-          <AnimatePresence>
-            {mobileMenu && (
-              <motion.div
-                className="fixed top-0 left-0 z-50 h-screen bg-black/50 backdrop-blur-sm"
-                onClick={openMobileMenu}
-                initial={{ opacity: 0 }}
-                animate={{
-                  opacity: 1,
-                  width: "100%",
-                  transition: {
-                    duration: 0,
-                    damping: 100,
-                  },
-                }}
-                exit={{
-                  width: 1,
-                  transition: { duration: 0 },
-                }}
-              >
-                <motion.div
-                  className="relative top-0 left-0 z-50"
-                  initial={{ width: 0 }}
-                  animate={{
-                    width: 300,
-                  }}
-                  exit={{
-                    width: 1,
-                    transition: { duration: 0.3 },
-                  }}
-                  onClick={openMobileMenu}
-                >
-                  <motion.div
-                    className="h-screen bg-hhOrange text-hhBG"
-                    initial="closed"
-                    animate="open"
-                    exit="closed"
-                    variants={sideVariants}
-                    onClick={openMobileMenu}
-                  >
-                    <motion.div
-                      className="flex h-full flex-col items-center justify-between space-y-5 py-10"
-                      variants={itemVariants}
-                    >
-                      <div className="flex flex-col items-center space-y-5">
-                        {NavbarLinks.map((link) => (
-                          <Link legacyBehavior key={link.href} href={link.href}>
-                            <a className="flex items-center space-x-1 transition-all hover:text-hhOrange">
-                              {link.title === "Home" ? (
-                                <HiOutlineHome />
-                              ) : link.title === "Presets" ? (
-                                <HiOutlineViewList />
-                              ) : link.title === "Tools" ? (
-                                <HiOutlineLightningBolt />
-                              ) : (
-                                <HiOutlineTrendingUp />
-                              )}
-                              <div>{link.title}</div>
-                            </a>
-                          </Link>
-                        ))}
-                      </div>
-                      <div className="flex items-center space-x-1 text-xl whitespace-nowrap">
-                        <AuthenticatedTemplate>
-                          {accounts.length && (
-                            <div className="flex flex-col space-y-5 font-medium">
-                              <div className="flex flex-col items-center space-y-1">
-                                <p>Hey, {accounts[0].name}</p>
-                                <p className="text-sm">
-                                  {accounts[0].username}
-                                </p>
-                              </div>
-                              <hr className="border-hhBG" />
-                              <div
-                                className="w-full text-center"
-                                onClick={() => logout(msalInstance)}
-                              >
-                                <button>Log-out</button>
-                              </div>
-                            </div>
-                          )}
-                        </AuthenticatedTemplate>
-                        <UnauthenticatedTemplate>
-                          <button
-                            className="flex items-center space-x-1"
-                            onClick={() => login()}
-                          >
-                            <HiOutlineUserCircle /> <p>Log-in</p>
-                          </button>
-                        </UnauthenticatedTemplate>
-                      </div>
-                    </motion.div>
-                  </motion.div>
-                </motion.div>
-              </motion.div>
+    <header className="container mx-auto">
+      <nav className="mt-2 flex items-center justify-between gap-4 px-3 text-xl md:mt-0 md:p-2">
+        <Link href="/" className="flex max-w-32 p-1">
+          <Image
+            alt="HubHop"
+            loader={customLoader}
+            priority
+            src={hhLogo}
+            unoptimized
+          />
+        </Link>
+        <div className="hidden w-full justify-center gap-10 xl:flex">
+          {navLinks}
+        </div>
+        <div className="hidden whitespace-nowrap xl:flex">
+          <AuthenticatedTemplate>
+            {user && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="text-xl">
+                    <IconUserCircle className="size-5" />
+                    {user.name}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-auto">
+                  <DropdownMenuGroup>
+                    <DropdownMenuLabel>
+                      <p>Hey, {user.name}</p>
+                      <p className="text-xs font-normal text-muted-foreground">
+                        {user.username}
+                      </p>
+                    </DropdownMenuLabel>
+                  </DropdownMenuGroup>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onSelect={() => logout(msalInstance)}>
+                    <IconLogout />
+                    Log-out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             )}
-          </AnimatePresence>
-          <div className="mt-2 flex w-full items-center justify-between md:mt-0">
-            <Link legacyBehavior href={"/"}>
-              <a className="flex max-w-32 p-1">
-                <Image
-                  alt=""
-                  loader={customLoader}
-                  priority
-                  src={hhLogo}
-                  unoptimized
-                />
-              </a>
-            </Link>
-            <div className="hidden w-full justify-center space-x-10 xl:flex">
-              {NavbarLinks.map((link) => (
-                <Link legacyBehavior key={link.href} href={link.href}>
-                  <a className="flex items-center space-x-1 transition-all hover:text-hhOrange">
-                    {link.title === "Home" ? (
-                      <HiOutlineHome />
-                    ) : link.title === "Presets" ? (
-                      <HiOutlineViewList />
-                    ) : link.title === "Tools" ? (
-                      <HiOutlineLightningBolt />
-                    ) : (
-                      <HiOutlineTrendingUp />
-                    )}
-                    <div>{link.title}</div>
-                  </a>
-                </Link>
-              ))}
-            </div>
-            <div className="hidden items-center space-x-1 text-xl whitespace-nowrap xl:flex">
+          </AuthenticatedTemplate>
+          <UnauthenticatedTemplate>
+            <Button variant="ghost" className="text-xl" onClick={login}>
+              <IconUserCircle className="size-5" />
+              Log-in
+            </Button>
+          </UnauthenticatedTemplate>
+        </div>
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon-lg"
+              className="xl:hidden"
+              aria-label="Open menu"
+            >
+              <IconMenu2 className="size-8" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="w-72 text-xl">
+            <SheetHeader>
+              <SheetTitle>Menu</SheetTitle>
+            </SheetHeader>
+            <div className="flex flex-col gap-5 px-4">{navLinks}</div>
+            <SheetFooter>
               <AuthenticatedTemplate>
-                {accounts.length && (
-                  <div
-                    onMouseEnter={showTip}
-                    onMouseLeave={hideTip}
-                    className="flex items-start justify-end"
-                  >
-                    <button className="relative flex w-full items-center space-x-1">
-                      <HiOutlineUserCircle />
-                      <p>{accounts[0].name}</p>
-                    </button>
-                    <AnimatePresence>
-                      {showDropdown && (
-                        <motion.div
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          transition={{ duration: 0.1 }}
-                          className="flex cursor-pointer items-start justify-end"
-                        >
-                          <UserDropdown>
-                            <div className="flex flex-col space-y-5">
-                              <div className="flex flex-col items-center space-y-1">
-                                <p>Hey, {accounts[0].name}</p>
-                                <p className="text-sm">
-                                  {accounts[0].username}
-                                </p>
-                              </div>
-                              <hr />
-                              <button onClick={() => logout(msalInstance)}>
-                                <ButtonOrange>Log-out</ButtonOrange>
-                              </button>
-                            </div>
-                          </UserDropdown>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
+                {user && (
+                  <>
+                    <p>Hey, {user.name}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {user.username}
+                    </p>
+                    <Button onClick={() => logout(msalInstance)}>
+                      <IconLogout />
+                      Log-out
+                    </Button>
+                  </>
                 )}
               </AuthenticatedTemplate>
               <UnauthenticatedTemplate>
-                <button
-                  className="flex items-center space-x-1"
-                  onClick={() => login()}
-                >
-                  <HiOutlineUserCircle /> <p>Log-in</p>
-                </button>
+                <Button onClick={login}>
+                  <IconUserCircle />
+                  Log-in
+                </Button>
               </UnauthenticatedTemplate>
-            </div>
-            <button
-              onClick={openMobileMenu}
-              className="flex items-center justify-center text-4xl xl:hidden"
-            >
-              <div>{mobileMenu ? <MdOutlineClose /> : <AiOutlineMenu />}</div>
-            </button>
-          </div>
-        </nav>
-      </header>
-    </div>
+            </SheetFooter>
+          </SheetContent>
+        </Sheet>
+      </nav>
+    </header>
   )
 }
 

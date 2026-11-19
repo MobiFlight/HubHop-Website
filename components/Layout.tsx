@@ -2,7 +2,8 @@ import React, { ReactNode, useState, useEffect } from "react"
 import Head from "next/head"
 import Navbar from "./sections/Navbar/Navbar"
 import Footer from "./sections/footer/Footer"
-import { FiArrowUpCircle } from "react-icons/fi"
+import { IconArrowUp } from "@tabler/icons-react"
+import { Button } from "@/components/ui/button"
 import { AnimatePresence, motion } from "motion/react"
 
 type Props = {
@@ -66,12 +67,14 @@ const Layout = ({ children, title = "Hubhop" }: Props) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <button
+            <Button
+              size="icon-lg"
               onClick={() => toTop()}
-              className="fixed right-5 bottom-5 rounded-xl bg-hhOrange p-1.5 text-2xl font-bold text-hhBG"
+              className="fixed right-5 bottom-5"
+              aria-label="Back to top"
             >
-              <FiArrowUpCircle />
-            </button>
+              <IconArrowUp className="size-6" />
+            </Button>
           </motion.div>
         )}
       </AnimatePresence>

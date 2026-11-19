@@ -11,12 +11,6 @@ import type { PresetsPage } from "./fixtures/PresetsPage"
 
 type KnownViolations = Record<string, number>
 
-const sharedViolations: KnownViolations = {
-  "html-has-lang": 1,
-  "link-name": 1,
-  "nested-interactive": 2,
-}
-
 type PageCheck = {
   name: string
   open: (fixtures: {
@@ -36,7 +30,7 @@ const pages: PageCheck[] = [
         page.getByRole("heading", { name: "Create, Share, Improve" }),
       ).toBeVisible()
     },
-    known: sharedViolations,
+    known: {},
   },
   {
     name: "preset list with an expanded row",
@@ -45,7 +39,7 @@ const pages: PageCheck[] = [
       const details = await presetsPage.expand("Battery master on")
       await expect(details.getByRole("button", { name: "View" })).toBeVisible()
     },
-    known: { ...sharedViolations, "aria-required-children": 2 },
+    known: { "aria-required-children": 2 },
   },
   {
     name: "stats page",
@@ -53,7 +47,7 @@ const pages: PageCheck[] = [
       await hubHopPage.goto("/stats/")
       await expect(page.getByText("Asobo - A320neo")).toBeVisible()
     },
-    known: sharedViolations,
+    known: {},
   },
   {
     name: "tools page",
@@ -63,7 +57,7 @@ const pages: PageCheck[] = [
         "RPN Code will be displayed here",
       )
     },
-    known: { ...sharedViolations, label: 1, "select-name": 2 },
+    known: { label: 1, "select-name": 2 },
   },
 ]
 

@@ -1,20 +1,22 @@
 import Link from "next/link"
 import {
-  FaCookieBite,
-  FaDiscord,
-  FaFingerprint,
-  FaGithub,
-  FaReadme,
-} from "react-icons/fa"
+  IconBrandDiscord,
+  IconBrandGithub,
+  IconCookie,
+  IconFileText,
+  IconFingerprint,
+} from "@tabler/icons-react"
 import { useCookieConsent } from "../Shared/CookieConsent"
+
+const linkClass = "flex items-center gap-1 transition-colors hover:text-primary"
 
 const Footer = () => {
   const cookieConsent = useCookieConsent()
   return (
-    <footer className="grid grid-cols-3 items-center justify-between bg-hhBG/50 px-5 py-5 text-hhText">
+    <footer className="grid grid-cols-3 items-center justify-between bg-background/50 p-5">
       <div>
         <span>&#169;</span> HubHop and its contributors 2024 - Version 2.9.5
-        <p className="text-xs text-hhText/50">
+        <p className="text-xs text-muted-foreground">
           Build {process.env.NEXT_PUBLIC_BUILD_NUMBER}
           {process.env.NEXT_PUBLIC_BUILD_COMMIT && (
             <>
@@ -22,7 +24,7 @@ const Footer = () => {
               <a
                 href={process.env.NEXT_PUBLIC_BUILD_COMMIT_URL}
                 target="_blank"
-                className="hover:text-hhOrange"
+                className="hover:text-primary"
               >
                 {process.env.NEXT_PUBLIC_BUILD_COMMIT}
               </a>
@@ -30,65 +32,44 @@ const Footer = () => {
           )}
         </p>
       </div>
-      <div className="flex items-center justify-center">
-        <div className="flex">
-          <Link legacyBehavior href="https://discord.gg/YMExvWp8eX">
-            <a
-              className="flex items-center space-x-1 transition-all hover:text-hhOrange"
-              target="_blank"
-            >
-              <FaDiscord />
-              <p className="hidden md:block">Join us on Discord</p>
-            </a>
-          </Link>
-        </div>
+      <div className="flex justify-center">
+        <a
+          href="https://discord.gg/YMExvWp8eX"
+          target="_blank"
+          className={linkClass}
+          aria-label="Join us on Discord"
+        >
+          <IconBrandDiscord className="size-4" />
+          <span className="hidden md:block">Join us on Discord</span>
+        </a>
       </div>
-      <div className="flex flex-col items-end space-y-2">
-        <div>
-          <Link
-            legacyBehavior
-            href="https://github.com/HubHopAPI/HubHop-Website"
-          >
-            <a
-              className="flex items-center justify-around space-x-1 transition-all hover:text-hhOrange"
-              target="_blank"
-            >
-              <FaGithub />
-              <p className="hidden md:block">Hubhop Source Code</p>
-            </a>
-          </Link>
-        </div>
-        <div>
-          <button className="flex items-center justify-around">
-            <Link legacyBehavior href="/terms">
-              <a className="flex items-center justify-around space-x-1 transition-all hover:text-hhOrange">
-                <FaReadme />
-                <p className="hidden md:block">Terms of Service</p>
-              </a>
-            </Link>
-          </button>
-        </div>
-        <div>
-          <button className="flex items-center justify-around">
-            <Link legacyBehavior href="/privacy">
-              <a className="flex items-center justify-around space-x-1 transition-all hover:text-hhOrange">
-                <FaFingerprint />
-                <p className="hidden md:block">Privacy Policy</p>
-              </a>
-            </Link>
-          </button>
-        </div>
+      <div className="flex flex-col items-end gap-2">
+        <a
+          href="https://github.com/HubHopAPI/HubHop-Website"
+          target="_blank"
+          className={linkClass}
+          aria-label="Hubhop Source Code"
+        >
+          <IconBrandGithub className="size-4" />
+          <span className="hidden md:block">Hubhop Source Code</span>
+        </a>
+        <Link href="/terms" className={linkClass} aria-label="Terms of Service">
+          <IconFileText className="size-4" />
+          <span className="hidden md:block">Terms of Service</span>
+        </Link>
+        <Link href="/privacy" className={linkClass} aria-label="Privacy Policy">
+          <IconFingerprint className="size-4" />
+          <span className="hidden md:block">Privacy Policy</span>
+        </Link>
         {cookieConsent.enabled && (
-          <div>
-            <button
-              className="flex items-center justify-around space-x-1 transition-all hover:text-hhOrange"
-              aria-label="Cookie settings"
-              onClick={cookieConsent.openSettings}
-            >
-              <FaCookieBite />
-              <p className="hidden md:block">Cookie settings</p>
-            </button>
-          </div>
+          <button
+            className={linkClass}
+            aria-label="Cookie settings"
+            onClick={cookieConsent.openSettings}
+          >
+            <IconCookie className="size-4" />
+            <span className="hidden md:block">Cookie settings</span>
+          </button>
         )}
       </div>
     </footer>
