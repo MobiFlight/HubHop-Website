@@ -64,7 +64,6 @@
 
 @theme inline {
   --font-sans: var(--font-assistant), Helvetica, Arial, sans-serif;
-  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);

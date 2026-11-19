@@ -6,10 +6,12 @@ import { AppProps } from "next/app"
 import { MsalProvider } from "@azure/msal-react"
 import { msalInstance } from "../services/msal"
 import { CookieConsentProvider } from "../components/sections/Shared/CookieConsent"
-import { Assistant, JetBrains_Mono } from "next/font/google"
+import localFont from "next/font/local"
 
-const assistant = Assistant({ subsets: ["latin"] })
-const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"] })
+// local file instead of next/font/google: renders the same locally and on CI (screenshot tests)
+const assistant = localFont({
+  src: "../public/fonts/Assistant-VariableFont_wght.ttf",
+})
 
 type SafeHydrateProps = {
   children: React.ReactNode
@@ -26,7 +28,6 @@ function App({ Component, pageProps }: AppProps) {
       <style jsx global>{`
         :root {
           --font-assistant: ${assistant.style.fontFamily};
-          --font-jetbrains-mono: ${jetbrainsMono.style.fontFamily};
         }
       `}</style>
       <CookieConsentProvider>
