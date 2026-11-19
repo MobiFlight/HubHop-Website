@@ -3,12 +3,10 @@ import Modal from "../../../Shared/Modal"
 import ExportButton from "./ExportButton"
 
 type ExportPresetsModalProps = {
-  setExportModalOpen: Function
+  onClose: () => void
 }
 
-const ExportPresetsModal = ({
-  setExportModalOpen,
-}: ExportPresetsModalProps) => {
+const ExportPresetsModal = ({ onClose }: ExportPresetsModalProps) => {
   const [downloadTxt, setDownloadTxt] = useState(false)
 
   function downloadEventsTxt() {
@@ -29,12 +27,7 @@ const ExportPresetsModal = ({
       .then(() => setDownloadTxt(false))
   }
   return (
-    <Modal
-      position="fixed"
-      title="Export Presets"
-      closeModal={setExportModalOpen}
-      closeModalX={setExportModalOpen}
-    >
+    <Modal position="fixed" title="Export Presets" closeModal={onClose}>
       <div className="mt-3 grid grid-cols-5 items-start gap-5">
         <div className="flex flex-col items-center justify-center align-top">
           <h2 className="border-b-2 border-hhCard text-xl font-semibold">
@@ -124,7 +117,7 @@ const ExportPresetsModal = ({
       </div>
       <div className="mt-5 flex w-full items-center justify-end">
         <button
-          onClick={(e) => setExportModalOpen(e)}
+          onClick={onClose}
           className="flex items-center space-x-1 rounded-lg bg-hhBG px-4 py-1.5 text-sm font-semibold transition-all hover:bg-hhBG/70"
         >
           Cancel

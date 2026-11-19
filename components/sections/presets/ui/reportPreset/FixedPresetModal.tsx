@@ -4,20 +4,13 @@ import FixedPresetButton from "./FixedPresetButton"
 type FixedPresetModalProps = {
   label: string
   presetId: string
-  setFixedModalOpen: Function
-  fixedToast: Function
+  onClose: () => void
+  fixedToast: () => void
 }
 
-const FixedPresetModal = ({
-  setFixedModalOpen,
-  fixedToast,
-}: FixedPresetModalProps) => {
+const FixedPresetModal = ({ onClose, fixedToast }: FixedPresetModalProps) => {
   return (
-    <Modal
-      position={"absolute"}
-      closeModal={setFixedModalOpen}
-      title={"Fixed Preset"}
-    >
+    <Modal position={"absolute"} closeModal={onClose} title={"Fixed Preset"}>
       <div className="flex flex-col items-center justify-center space-y-3">
         <form className="flex space-x-10">
           <div className="flex flex-col">
@@ -38,7 +31,7 @@ const FixedPresetModal = ({
         </form>
         <div className="flex w-full items-center justify-between">
           <button
-            onClick={(e) => setFixedModalOpen(e)}
+            onClick={onClose}
             className="flex items-center space-x-1 rounded-lg bg-hhBG px-4 py-1.5 text-sm font-semibold transition-all hover:bg-hhBG/70"
           >
             Cancel

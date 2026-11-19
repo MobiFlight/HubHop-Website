@@ -24,7 +24,7 @@ const Layout = ({ children, title = "Hubhop" }: Props) => {
   }
 
   useEffect(() => {
-    localStorage.getItem("simType") === null &&
+    if (localStorage.getItem("simType") === null)
       localStorage.setItem("simType", "msfs2020")
   }, [])
 

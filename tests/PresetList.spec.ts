@@ -354,7 +354,7 @@ test.describe("Preset list - local cache", () => {
 
     await test.step("Server gets a new preset", async () => {
       const api = presetsPage.hubHopPage.api
-      ;(api.presets.msfs2020 as any[]).push({
+      api.presets.msfs2020.push({
         ...(api.presets.msfs2020[1] as object),
         id: "msfs-new",
         label: "Brand new preset",

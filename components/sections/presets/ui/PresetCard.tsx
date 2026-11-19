@@ -406,7 +406,7 @@ const PresetCard = ({
                     )}
                   </AnimatePresence>
                   <EditToggle
-                    setEdit={() => {
+                    onToggle={() => {
                       if (
                         localStorage.getItem("username") === author ||
                         (typeof window !== "undefined" &&
@@ -488,7 +488,7 @@ const PresetCard = ({
           >
             <DeleteConfirmationModal
               deletedToast={deletedToast}
-              setDeleteModalOpen={() => setDeleteModalOpen(false)}
+              onClose={() => setDeleteModalOpen(false)}
               presetId={id}
               label={label}
             />
@@ -517,7 +517,7 @@ const PresetCard = ({
           >
             <ReportPresetModal
               reportedToast={reportedToast}
-              setReportModalOpen={() => setReportModalOpen(false)}
+              onClose={() => setReportModalOpen(false)}
               presetId={id}
               label={label}
             />
@@ -532,7 +532,7 @@ const PresetCard = ({
             transition={{ duration: 0.05 }}
           >
             <FixedPresetModal
-              setFixedModalOpen={() => setFixedModalOpen(false)}
+              onClose={() => setFixedModalOpen(false)}
               presetId={id}
               label={label}
               fixedToast={fixedToast}
