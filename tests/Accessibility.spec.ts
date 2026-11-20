@@ -42,6 +42,24 @@ const pages: PageCheck[] = [
     known: {},
   },
   {
+    name: "aircraft index",
+    open: async ({ hubHopPage, page }) => {
+      await hubHopPage.goto("/aircraft/msfs/")
+      await expect(page.getByRole("link", { name: "A32NX 4" })).toBeVisible()
+    },
+    known: {},
+  },
+  {
+    name: "aircraft cheat sheet",
+    open: async ({ hubHopPage, page }) => {
+      await hubHopPage.goto("/aircraft/msfs/asobo/a320neo/")
+      await expect(
+        page.getByRole("heading", { name: "Lights 3 presets" }),
+      ).toBeVisible()
+    },
+    known: {},
+  },
+  {
     name: "stats page",
     open: async ({ hubHopPage, page }) => {
       await hubHopPage.goto("/stats/")

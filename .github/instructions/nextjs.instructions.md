@@ -13,6 +13,10 @@ applyTo: "**/*.jsx, **/*.tsx, **/*.js, **/*.ts, **/*.css"
   `/presets/<sim>/<vendor>/<aircraft>/<label>-<id>/` for one preset; search and other filters are query parameters.
   `pages/presets/[[...slug]].tsx` is exported once and served for every `/presets/*` path by a rewrite in
   `staticwebapp.config.json`. Pages pass context (sim, filters) to each other through these URLs, not `localStorage`.
+- Aircraft cheat sheets (`lib/aircraftPages.ts`) are real static pages for search engines, generated at build time
+  from the full preset list (`services/libraryStats.ts#loadPresets`): `/aircraft/<sim>/` (index), `/aircraft/<sim>/<vendor>/<aircraft>/`
+  (up to 30 presets per system) and `/aircraft/<sim>/<vendor>/<aircraft>/<system>/` for larger systems. Cheat sheets with fewer
+  than 10 presets are `noindex`. The site is rebuilt to pick up new presets.
 - React with functional components and hooks
 - TypeScript in strict mode (legacy code uses `any` liberally; new code should be properly typed)
 - Tailwind CSS v4 with shadcn/ui (Radix, style `radix-vega`, see `components.json`) and Tabler icons (`@tabler/icons-react`)
@@ -23,12 +27,12 @@ applyTo: "**/*.jsx, **/*.tsx, **/*.js, **/*.ts, **/*.css"
 ## Directory Map
 
 ```
-pages/                   # Routes: index, presets/[[...slug]] (list and single preset), preset (old links), stats, tools, privacy, terms
+pages/                   # Routes: index, presets/[[...slug]] (list and single preset), preset (old links), aircraft/[sim]/… (cheat sheets), stats, tools, privacy, terms
 components/
   ui/                    # shadcn/ui components (added with the shadcn CLI, adapted to HubHop's look)
   Layout.tsx             # Page shell (navbar + footer)
   sections/
-    Navbar/, footer/, home/, stats/, tools/
+    Navbar/, footer/, home/, aircraft/, stats/, tools/
     presets/
       presetTable/       # List view, filters
       singlePresetView/  # Preset detail + history
@@ -44,6 +48,7 @@ lib/
   Constants.tsx          # Navbar links
   presetSearch.ts        # Search, relevance and default order; shared with MobiFlight Connector
   presetUrls.ts          # Preset list and preset URLs, slugs
+  aircraftPages.ts       # Aircraft cheat sheets: grouping, limits, URLs
   presetFacets.ts        # Faceted filter options
   presetTypes.ts         # Fixed Input/Output values per sim
   codeTypes.ts           # Fixed X-Plane code types

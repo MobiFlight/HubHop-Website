@@ -72,6 +72,20 @@ for (const theme of themes) {
       )
     })
 
+    test(`Visual - aircraft cheat sheet in ${theme} theme`, async ({
+      hubHopPage,
+      page,
+    }) => {
+      await hubHopPage.goto("/aircraft/msfs/asobo/a320neo/")
+      await expect(
+        page.getByRole("heading", { name: "Lights 3 presets" }),
+      ).toBeVisible()
+      await expect(page).toHaveScreenshot(
+        `aircraft-${theme}.png`,
+        screenshotOptions,
+      )
+    })
+
     test(`Visual - tools page in ${theme} theme`, async ({
       hubHopPage,
       page,

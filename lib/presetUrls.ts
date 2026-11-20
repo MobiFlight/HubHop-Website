@@ -21,7 +21,8 @@ const SIM_SEGMENTS: Record<Sim, string> = { msfs2020: "msfs", xplane: "xplane" }
 /** The sim's part of a URL: "msfs" or "xplane" */
 export const simSegment = (sim: Sim): string => SIM_SEGMENTS[sim]
 
-const simFromSegment = (segment: string): Sim | undefined =>
+/** "msfs" → "msfs2020"; undefined for anything else */
+export const simFromSegment = (segment: string): Sim | undefined =>
   SIMS.find((sim) => SIM_SEGMENTS[sim] === segment)
 
 const slugs = new Map<string, string>()

@@ -8,6 +8,11 @@
       }
     },
     {
+      "route": "/aircraft/",
+      "redirect": "/aircraft/msfs/",
+      "statusCode": 302
+    },
+    {
       "route": "/presets/*",
       "rewrite": "/presets/[[...slug]]/index.html"
     }
