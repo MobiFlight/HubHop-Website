@@ -1,3 +1,4 @@
+import { toast } from "sonner"
 import Modal from "../../../Shared/Modal"
 import FixedPresetButton from "./FixedPresetButton"
 
@@ -5,12 +6,11 @@ type FixedPresetModalProps = {
   label: string
   presetId: string
   onClose: () => void
-  fixedToast: () => void
 }
 
-const FixedPresetModal = ({ onClose, fixedToast }: FixedPresetModalProps) => {
+const FixedPresetModal = ({ onClose }: FixedPresetModalProps) => {
   return (
-    <Modal position={"absolute"} closeModal={onClose} title={"Fixed Preset"}>
+    <Modal onClose={onClose} title={"Fixed Preset"}>
       <div className="flex flex-col items-center justify-center space-y-3">
         <form className="flex space-x-10">
           <div className="flex flex-col">
@@ -36,7 +36,7 @@ const FixedPresetModal = ({ onClose, fixedToast }: FixedPresetModalProps) => {
           >
             Cancel
           </button>
-          <div onClick={() => fixedToast()}>
+          <div onClick={() => toast.success("Preset successfully fixed!")}>
             <FixedPresetButton />
           </div>
         </div>

@@ -27,7 +27,7 @@ const ExportPresetsModal = ({ onClose }: ExportPresetsModalProps) => {
       .then(() => setDownloadTxt(false))
   }
   return (
-    <Modal position="fixed" title="Export Presets" closeModal={onClose}>
+    <Modal title="Export Presets" onClose={onClose}>
       <div className="mt-3 grid grid-cols-5 items-start gap-5">
         <div className="flex flex-col items-center justify-center align-top">
           <h2 className="border-b-2 border-hhCard text-xl font-semibold">

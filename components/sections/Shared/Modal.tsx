@@ -1,55 +1,44 @@
-import { FiX } from "react-icons/fi"
+import { cn } from "cn"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 
 type ModalProps = {
   children: React.ReactNode
   title: string
-  closeModal: () => void
-  position: string
-  /** close button; defaults to closeModal */
-  closeModalX?: () => void
-  height?: boolean
+  onClose: () => void
+  /** false: only the close button closes the dialog (no outside click or Escape) */
+  dismissible?: boolean
+  className?: string
 }
 
+/** shadcn Dialog with HubHop defaults; rendered while open */
 const Modal = ({
   children,
   title,
-  closeModal,
-  position,
-  closeModalX,
-  height,
+  onClose,
+  dismissible = true,
+  className,
 }: ModalProps) => {
+  const keepOpen = (event: Event) => {
+    if (!dismissible) event.preventDefault()
+  }
   return (
-    <div>
-      <div
-        onClick={() => closeModal()}
-        className={`${
-          position === "absolute" ? "absolute" : "fixed"
-        } top-0 left-0 z-50 flex h-full w-full items-center justify-center bg-black/60 backdrop-blur-xs`}
+    <Dialog open onOpenChange={(open) => !open && onClose()}>
+      <DialogContent
+        className={cn("max-h-[90vh] overflow-y-auto sm:max-w-fit", className)}
+        onInteractOutside={keepOpen}
+        onEscapeKeyDown={keepOpen}
       >
-        <div
-          className={`mx-auto flex flex-col rounded-lg ${
-            localStorage.getItem("simType") === "msfs2020"
-              ? "bg-hhCard"
-              : "bg-[#103c49]"
-          } ${height ? "min-h-[50vh]" : "h-fit"}`}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div className="flex items-center justify-between rounded-t-lg bg-hhBG/50 px-5 py-2">
-            <h3 className="text-2xl">{title}</h3>
-            <button
-              aria-label="Close dialog"
-              onClick={() => (closeModalX ?? closeModal)()}
-              className="flex items-center space-x-1 rounded-lg py-1.5 text-sm font-semibold"
-            >
-              <div className="text-lg">
-                <FiX />
-              </div>
-            </button>
-          </div>
-          <div className="p-5">{children}</div>
-        </div>
-      </div>
-    </div>
+        <DialogHeader>
+          <DialogTitle>{title}</DialogTitle>
+        </DialogHeader>
+        {children}
+      </DialogContent>
+    </Dialog>
   )
 }
 

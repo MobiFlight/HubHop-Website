@@ -2,27 +2,19 @@ import Head from "next/head"
 import Layout from "../../../Layout"
 import { useEffect, useState } from "react"
 
-import PresetCard, { type PresetToasts } from "../ui/PresetCard"
+import PresetCard from "../ui/PresetCard"
 import type { Preset } from "../../../../interfaces/preset"
 import { BiSad } from "react-icons/bi"
 import { AiOutlineLoading } from "react-icons/ai"
 
-type PresetViewProps = PresetToasts & {
+type PresetViewProps = {
   // undefined while loading, empty if the preset doesn't exist
   preset: Preset[] | undefined
   history: Preset[]
   loading: boolean
 }
 
-const PresetView = ({
-  preset,
-  history,
-  loading,
-  deletedToast,
-  reportedToast,
-  fixedToast,
-  savedToast,
-}: PresetViewProps) => {
+const PresetView = ({ preset, history, loading }: PresetViewProps) => {
   const [id, setId] = useState("")
   const [updatedBy, setUpdatedBy] = useState<string>()
   const [createdDate, setCreatedDate] = useState<string>()
@@ -120,10 +112,6 @@ const PresetView = ({
           setLabel={setLabel}
           setCode={setCode}
           setDescription={setDescription}
-          deletedToast={deletedToast}
-          reportedToast={reportedToast}
-          fixedToast={fixedToast}
-          savedToast={savedToast}
         />
       )}
     </Layout>

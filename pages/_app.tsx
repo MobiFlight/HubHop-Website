@@ -7,6 +7,7 @@ import { MsalProvider } from "@azure/msal-react"
 import { msalInstance } from "../services/msal"
 import { CookieConsentProvider } from "../components/sections/Shared/CookieConsent"
 import localFont from "next/font/local"
+import { Toaster } from "@/components/ui/sonner"
 
 // local file instead of next/font/google: renders the same locally and on CI (screenshot tests)
 const assistant = localFont({
@@ -33,6 +34,7 @@ function App({ Component, pageProps }: AppProps) {
       <CookieConsentProvider>
         <SafeHydrate>
           <Component {...pageProps} suppressHydrationWarning />
+          <Toaster />
         </SafeHydrate>
       </CookieConsentProvider>
     </MsalProvider>

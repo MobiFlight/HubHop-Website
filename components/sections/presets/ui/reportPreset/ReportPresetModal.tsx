@@ -1,3 +1,4 @@
+import { toast } from "sonner"
 import Modal from "../../../Shared/Modal"
 import ReportPresetButton from "./ReportPresetButton"
 
@@ -5,15 +6,11 @@ type ReportPresetModalProps = {
   label: string
   presetId: string
   onClose: () => void
-  reportedToast: () => void
 }
 
-const ReportPresetModal = ({
-  onClose,
-  reportedToast,
-}: ReportPresetModalProps) => {
+const ReportPresetModal = ({ onClose }: ReportPresetModalProps) => {
   return (
-    <Modal position={"absolute"} closeModal={onClose} title={"Report Preset"}>
+    <Modal onClose={onClose} title={"Report Preset"}>
       <div className="flex flex-col items-center justify-center space-y-3">
         <form className="flex space-x-10">
           <div className="flex flex-col">
@@ -54,7 +51,7 @@ const ReportPresetModal = ({
           >
             Cancel
           </button>
-          <div onClick={() => reportedToast()}>
+          <div onClick={() => toast.success("Preset successfully reported!")}>
             <ReportPresetButton />
           </div>
         </div>

@@ -184,7 +184,6 @@ test.describe("Edit preset - preset list", () => {
     page,
   }) => {
     presetsPage.hubHopPage.api.writeStatus.PUT = 500
-    page.on("dialog", (dialog) => dialog.accept())
     await presetsPage.gotoPage()
 
     const details = await presetsPage.expand("Battery master on")

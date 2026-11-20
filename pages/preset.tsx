@@ -1,15 +1,9 @@
 import { useLiveQuery } from "dexie-react-hooks"
-import { AnimatePresence, motion } from "motion/react"
 import { useRouter } from "next/router"
 import { useEffect, useMemo, useState } from "react"
-import { BsCheck2Square } from "react-icons/bs"
 import PresetView from "../components/sections/presets/singlePresetView/PresetView"
-import Toast from "../components/sections/Shared/Toast"
 import { presetTable } from "../services/presetSync"
 import type { Preset } from "../interfaces/preset"
-import { ToastContainer, toast } from "react-toastify"
-
-import { IoSaveOutline } from "react-icons/io5"
 
 const Preset = () => {
   useEffect(() => {
@@ -23,10 +17,6 @@ const Preset = () => {
   const { id, simType } = router.query
   const [loading, setLoading] = useState(false)
   const [history, setHistory] = useState<Preset[]>([])
-  const [deletedToast, setDeletedToast] = useState(false)
-  const [reportedToast, setReportedToast] = useState(false)
-  const [savedToast, setSavedToast] = useState(false)
-  const [fixedToast, setFixedToast] = useState(false)
 
   if (typeof window !== "undefined") {
     localStorage.setItem(
@@ -34,10 +24,6 @@ const Preset = () => {
       window.location.href.includes("msfs2020") ? "msfs2020" : "xplane",
     )
   }
-
-  useEffect(() => {
-    if (savedToast) toast("Saved")
-  }, [savedToast])
 
   const sim = simType === "xplane" ? "xplane" : "msfs2020"
   const [fetchDone, setFetchDone] = useState(false)
@@ -103,125 +89,10 @@ const Preset = () => {
     () => (cachedPreset ? [cachedPreset] : fetchDone ? [] : undefined),
     [cachedPreset, fetchDone],
   )
-  function deleteToast() {
-    setDeletedToast(true)
-    setTimeout(() => {
-      setDeletedToast(false)
-    }, 5000)
-  }
-  function reportToast() {
-    setReportedToast(true)
-    setTimeout(() => {
-      setReportedToast(false)
-    }, 5000)
-  }
-  function fixToast() {
-    setFixedToast(true)
-    setTimeout(() => {
-      setFixedToast(false)
-    }, 5000)
-  }
-  function saveToast() {
-    setSavedToast(true)
-    setTimeout(() => {
-      setSavedToast(false)
-    }, 5000)
-  }
-
-  setTimeout(() => {}, 5000)
 
   return (
     <>
-      <PresetView
-        preset={filterPreset}
-        history={history}
-        loading={loading}
-        deletedToast={deleteToast}
-        reportedToast={reportToast}
-        fixedToast={fixToast}
-        savedToast={saveToast}
-      />
-      <AnimatePresence>
-        {deletedToast && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <Toast variant="success">
-              <div className="mr-1 bg-green-800 text-xl">
-                <BsCheck2Square />
-              </div>
-              <p>Preset successfully deleted!</p>
-            </Toast>
-          </motion.div>
-        )}
-      </AnimatePresence>
-      <AnimatePresence>
-        {reportedToast && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <Toast variant="success">
-              <div className="mr-1 bg-green-800 text-xl">
-                <BsCheck2Square />
-              </div>
-              <p>Preset successfully reported!</p>
-            </Toast>
-          </motion.div>
-        )}
-      </AnimatePresence>
-      <AnimatePresence>
-        {fixedToast && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <Toast variant="success">
-              <div className="mr-1 bg-green-800 text-xl">
-                <BsCheck2Square />
-              </div>
-              <p>Preset successfully fixed!</p>
-            </Toast>
-          </motion.div>
-        )}
-      </AnimatePresence>
-      <ToastContainer
-        position="bottom-right"
-        autoClose={5000}
-        hideProgressBar={true}
-        newestOnTop
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-        toastClassName={() =>
-          "relative w-80 bg-hhOrange text-black font-bold rounded-lg p-1 flex"
-        }
-        icon={<IoSaveOutline size={"2rem"} />}
-      />
-
-      {/* <AnimatePresence>
-        {savedToast && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <Toast variant="success">
-              <div className="mr-1 bg-green-800 text-xl">
-                <BsCheck2Square />
-              </div>
-              <p>Preset successfully saved!</p>
-            </Toast>
-          </motion.div>
-        )}
-      </AnimatePresence> */}
+      <PresetView preset={filterPreset} history={history} loading={loading} />
     </>
   )
 }

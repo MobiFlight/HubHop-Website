@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { BiAddToQueue, BiCog, BiJoystickButton, BiRename } from "react-icons/bi"
-import { BsCardText, BsCheck2Square, BsList } from "react-icons/bs"
+import { BsCardText, BsList } from "react-icons/bs"
 import { GiCommercialAirplane } from "react-icons/gi"
 import { HiOutlineLightBulb, HiOutlineSearchCircle } from "react-icons/hi"
 import { MdBusiness } from "react-icons/md"
@@ -11,8 +11,7 @@ import { useForm } from "react-hook-form"
 import { FiExternalLink, FiRepeat } from "react-icons/fi"
 import Link from "next/link"
 import { AiOutlineLoading } from "react-icons/ai"
-import { AnimatePresence, motion } from "motion/react"
-import Toast from "../../../Shared/Toast"
+import { toast } from "sonner"
 import { AuthenticatedTemplate } from "@azure/msal-react"
 import { RiListSettingsLine } from "react-icons/ri"
 import { CODE_TYPES } from "../../../../../lib/codeTypes"
@@ -74,8 +73,6 @@ const AddPresetsModal = ({ onClose, presets }: AddPresetsModalProps) => {
   const [addSystem, setAddSystem] = useState(false)
   const [buttonSubmit, setButtonSubmit] = useState(false)
   const [bulkUpload, setBulkUpload] = useState(false)
-  const [presetToast, setPresetToast] = useState(false)
-  const [presetToastError, setPresetToastError] = useState(false)
 
   const includesText = (text: string, search: string) =>
     text.toLowerCase().includes(search.toLowerCase())
@@ -137,26 +134,11 @@ const AddPresetsModal = ({ onClose, presets }: AddPresetsModalProps) => {
     return () => subscription.unsubscribe()
   }, [watch])
 
-  function presetAdded() {
-    setPresetToast(true)
-    setTimeout(() => {
-      setPresetToast(false)
-    }, 5000)
-  }
-  function presetAddedError() {
-    setPresetToastError(true)
-    setTimeout(() => {
-      setPresetToastError(false)
-    }, 5000)
-  }
+  const presetAdded = () => toast.success("Preset successfully added!")
+  const presetAddedError = () => toast.error("Error - Preset not added!")
 
   return (
-    <Modal
-      position={"fixed"}
-      title="Add Preset"
-      closeModalX={onClose}
-      closeModal={() => {}}
-    >
+    <Modal title="Add Preset" onClose={onClose} dismissible={false}>
       <div className="w-[70vw]">
         <form
           onSubmit={handleSubmit(async (data) => {
@@ -623,11 +605,7 @@ const AddPresetsModal = ({ onClose, presets }: AddPresetsModalProps) => {
         </form>
       </div>
       {bulkUpload && (
-        <Modal
-          title={"Bulk Upload"}
-          closeModal={() => setBulkUpload(false)}
-          position={"fixed"}
-        >
+        <Modal title={"Bulk Upload"} onClose={() => setBulkUpload(false)}>
           <p className="max-w-lg">
             If you want to upload many presets at once, you can download or open
             the import-file and post it on the{" "}
@@ -666,36 +644,6 @@ const AddPresetsModal = ({ onClose, presets }: AddPresetsModalProps) => {
           </div>
         </Modal>
       )}
-      <AnimatePresence>
-        {presetToast && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <Toast variant="success">
-              <div className="mr-1 bg-green-800 text-xl">
-                <BsCheck2Square />
-              </div>
-              <p>Preset successfully added!</p>
-            </Toast>
-          </motion.div>
-        )}
-        {presetToastError && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <Toast variant="error">
-              <div className="mr-1 bg-red-900 text-xl">
-                <BsCheck2Square />
-              </div>
-              <p>Error - Preset not added!</p>
-            </Toast>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </Modal>
   )
 }

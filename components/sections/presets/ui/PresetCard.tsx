@@ -4,7 +4,6 @@ import { useEffect, useState } from "react"
 import { AnimatePresence, motion } from "motion/react"
 import PresetHistoryList from "../singlePresetView/PresetHistoryList"
 import PromoSlot from "../../Shared/PromoSlot"
-import DeleteButton from "./deletePreset/DeleteButton"
 import EditToggle from "./editPreset/EditToggle"
 import PresetPreviewLabel from "./PresetInputLabel"
 import SavePresetButton from "./editPreset/SavePresetButton"
@@ -13,14 +12,24 @@ import DeleteConfirmationModal from "./deletePreset/DeleteConfirmationModal"
 import OpenPresetButton from "./OpenPresetButton"
 import FixedPresetModal from "./reportPreset/FixedPresetModal"
 import { presetTable, type SimType } from "../../../../services/presetSync"
-import Modal from "../../Shared/Modal"
-import ButtonOrange from "../../Shared/ButtonOrange"
-import ButtonDark from "../../Shared/ButtonDark"
 import { CODE_TYPES } from "../../../../lib/codeTypes"
 import { presetTypesFor } from "../../../../lib/presetTypes"
 import type { Preset } from "../../../../interfaces/preset"
 import { REPORTING_ENABLED } from "../../../../lib/features"
 import { isModerator } from "../../../../services/roles"
+import { toast } from "sonner"
+import { IconTrash } from "@tabler/icons-react"
+import { Button } from "@/components/ui/button"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 
 type PresetFields = Pick<
   Preset,
@@ -42,29 +51,21 @@ type PresetFields = Pick<
 
 type ChangeHandler<T = string> = (value: T) => void
 
-export type PresetToasts = {
-  deletedToast: () => void
-  reportedToast: () => void
-  fixedToast: () => void
-  savedToast: () => void
+type PresetCardProps = PresetFields & {
+  loading?: boolean
+  history?: Preset[]
+  setVendor: ChangeHandler
+  setAircraft: ChangeHandler
+  setSystem: ChangeHandler
+  setPresetType: ChangeHandler<Preset["presetType"]>
+  setLabel: ChangeHandler
+  setCodeType: ChangeHandler<Preset["codeType"]>
+  setCode: ChangeHandler
+  setDescription: ChangeHandler
+  showingHistory: boolean
+  text: string
+  card: boolean
 }
-
-type PresetCardProps = PresetFields &
-  PresetToasts & {
-    loading?: boolean
-    history?: Preset[]
-    setVendor: ChangeHandler
-    setAircraft: ChangeHandler
-    setSystem: ChangeHandler
-    setPresetType: ChangeHandler<Preset["presetType"]>
-    setLabel: ChangeHandler
-    setCodeType: ChangeHandler<Preset["codeType"]>
-    setCode: ChangeHandler
-    setDescription: ChangeHandler
-    showingHistory: boolean
-    text: string
-    card: boolean
-  }
 
 const PresetCard = ({
   id,
@@ -94,10 +95,6 @@ const PresetCard = ({
   showingHistory,
   text,
   card,
-  deletedToast,
-  reportedToast,
-  savedToast,
-  fixedToast,
 }: PresetCardProps) => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
   const [reportModalOpen, setReportModalOpen] = useState(false)
@@ -105,7 +102,6 @@ const PresetCard = ({
   const [edit, setEdit] = useState(false)
   const [editButton, setEditButton] = useState(false)
   const [editTooltip, seteditTooltip] = useState(false)
-  const [deleteTooltip, setDeleteTooltip] = useState(false)
   const [revertObject, setRevertObject] = useState<Partial<Preset>>({})
   const [revertModal, setRevertModal] = useState(false)
   const [simType, setSimType] = useState("")
@@ -189,14 +185,14 @@ const PresetCard = ({
       .then((res) => res.status === 201)
       .catch(() => false)
     setEditButton(false)
-    if (!saved) return alert("Error occured")
+    if (!saved) return toast.error("Error - Preset not saved!")
 
     // update only this preset in the local cache
     await presetTable(simType as SimType).update(id, {
       ...preset,
       version: version + 1,
     })
-    savedToast()
+    toast.success("Saved")
   }
 
   async function revertPreset() {
@@ -224,10 +220,10 @@ const PresetCard = ({
     const saved = await fetch(url, options)
       .then((res) => res.status === 201)
       .catch(() => false)
-    if (!saved) return alert("Error occured")
+    if (!saved) return toast.error("Error - Preset not reverted!")
 
     await presetTable(simType as SimType).update(id, revertObject)
-    savedToast()
+    toast.success("Saved")
     setRevertModal(false)
   }
 
@@ -333,20 +329,15 @@ const PresetCard = ({
           </div>
           <div className="flex w-full justify-between px-5 pt-2 pb-5">
             <div className="flex flex-col space-y-2 xl:flex-row xl:items-center xl:space-y-0 xl:space-x-5">
-              <div
-                onClick={() => {
-                  if (isModerator()) {
-                    setDeleteModalOpen(true)
-                  } else {
-                    setDeleteTooltip(true)
-                    setTimeout(() => {
-                      setDeleteTooltip(false)
-                    }, 5000)
-                  }
-                }}
-              >
-                <DeleteButton />
-              </div>
+              {isModerator() && (
+                <Button
+                  variant="destructive"
+                  onClick={() => setDeleteModalOpen(true)}
+                >
+                  <IconTrash />
+                  Delete
+                </Button>
+              )}
             </div>
             <div className="flex flex-col-reverse justify-between space-y-2 space-y-reverse xl:flex-row xl:items-center xl:space-y-0 xl:space-x-5">
               <AnimatePresence>
@@ -457,26 +448,12 @@ const PresetCard = ({
             transition={{ duration: 0.05 }}
           >
             <DeleteConfirmationModal
-              deletedToast={deletedToast}
               onClose={() => setDeleteModalOpen(false)}
               presetId={id}
               label={label}
             />
           </motion.div>
         )}
-        <AnimatePresence>
-          {deleteTooltip && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed right-0 bottom-5 z-50 mx-3 rounded-lg bg-red-800 p-5 px-5 py-2 text-sm font-semibold text-hhText md:right-5"
-            >
-              No permission to delete a preset. You have to be a moderator to
-              perform this action.
-            </motion.div>
-          )}
-        </AnimatePresence>
         {reportModalOpen && (
           <motion.div
             key="ReportModal"
@@ -486,7 +463,6 @@ const PresetCard = ({
             transition={{ duration: 0.05 }}
           >
             <ReportPresetModal
-              reportedToast={reportedToast}
               onClose={() => setReportModalOpen(false)}
               presetId={id}
               label={label}
@@ -505,7 +481,6 @@ const PresetCard = ({
               onClose={() => setFixedModalOpen(false)}
               presetId={id}
               label={label}
-              fixedToast={fixedToast}
             />
           </motion.div>
         )}
@@ -517,22 +492,25 @@ const PresetCard = ({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.05 }}
           >
-            <Modal
-              title="Revert Preset"
-              closeModal={() => setRevertModal(false)}
-              position={"fixed"}
-              height={true}
+            <AlertDialog
+              open
+              onOpenChange={(open) => !open && setRevertModal(false)}
             >
-              <p>Are you sure you want to rever this preset?</p>
-              <div className="mt-5 flex justify-between">
-                <button onClick={() => setRevertModal(false)}>
-                  <ButtonDark>No</ButtonDark>
-                </button>
-                <button onClick={revertPreset}>
-                  <ButtonOrange>Yes</ButtonOrange>
-                </button>
-              </div>
-            </Modal>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Revert Preset</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Are you sure you want to revert this preset?
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>No</AlertDialogCancel>
+                  <AlertDialogAction onClick={revertPreset}>
+                    Yes
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </motion.div>
         )}
       </AnimatePresence>

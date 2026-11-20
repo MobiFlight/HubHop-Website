@@ -39,7 +39,7 @@ test.describe("Export presets", () => {
     await test.step("Close button", async () => {
       await page.getByRole("button", { name: "Export presets" }).click()
       await expect(heading).toBeVisible()
-      await page.getByRole("button", { name: "Close dialog" }).click()
+      await page.getByRole("button", { name: "Close" }).click()
       await expect(heading).toHaveCount(0)
     })
   })

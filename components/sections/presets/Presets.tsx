@@ -5,16 +5,13 @@ import { AiOutlineLoading } from "react-icons/ai"
 import ExportPresetsModal from "./ui/exportPresets/ExportPresetsModal"
 import { AnimatePresence, motion } from "motion/react"
 import AddPresetsModal from "./ui/addPreset/AddPresetsModal"
-import Toast from "../Shared/Toast"
 import PromoSlot from "../Shared/PromoSlot"
 import SimSwitch from "../Shared/SimSwitch"
-import { BsCheck2Square } from "react-icons/bs"
 import { getAccessToken } from "../../../services/msalFunctions"
 import { msalInstance, msalReady } from "../../../services/msal"
 import { db } from "../../../services/db"
 import { syncSim } from "../../../services/presetSync"
 import { useLiveQuery } from "dexie-react-hooks"
-import { ToastContainer, toast } from "react-toastify"
 
 import { useRouter } from "next/router"
 import type { Preset } from "../../../interfaces/preset"
@@ -75,10 +72,6 @@ const Presets = () => {
 
   const [exportModalOpen, setExportModalOpen] = useState(false)
   const [addModalOpen, setAddModalOpen] = useState(false)
-  const [deletedToast, setDeletedToast] = useState(false)
-  const [reportedToast, setReportedToast] = useState(false)
-  const [savedToast, setSavedToast] = useState(false)
-  const [fixedToast, setFixedToast] = useState(false)
   const [showMyPresets, setShowMyPresets] = useState(false)
   const [showReportedPresets, setShowReportedPresets] = useState(false)
   const [simType, setSimType] = useState(
@@ -105,10 +98,6 @@ const Presets = () => {
       ),
     )
   }, [simType, presetsMsfs, presetsXplane, xplanePresets, msfsPresets])
-
-  useEffect(() => {
-    if (savedToast) toast("Saved")
-  }, [savedToast])
 
   useEffect(() => {
     if (addModalOpen) return
@@ -206,31 +195,6 @@ const Presets = () => {
     aircraft: facetOptions("aircraft", filteredAircrafts),
     system: facetOptions("system", filteredSystems),
     presetType: facetOptions("presetType", filteredPresetTypes),
-  }
-
-  function deleteToast() {
-    setDeletedToast(true)
-    setTimeout(() => {
-      setDeletedToast(false)
-    }, 5000)
-  }
-  function reportToast() {
-    setReportedToast(true)
-    setTimeout(() => {
-      setReportedToast(false)
-    }, 5000)
-  }
-  function fixToast() {
-    setFixedToast(true)
-    setTimeout(() => {
-      setFixedToast(false)
-    }, 5000)
-  }
-  function saveToast() {
-    setSavedToast(true)
-    setTimeout(() => {
-      setSavedToast(false)
-    }, 5000)
   }
 
   const storedSimType =
@@ -399,10 +363,6 @@ const Presets = () => {
                 setExportModalOpen={() => setExportModalOpen(true)}
                 data={filteredItems}
                 relevance={terms.length > 0 ? relevance : undefined}
-                deletedToast={deleteToast}
-                reportedToast={reportToast}
-                fixedToast={fixToast}
-                savedToast={saveToast}
               />
               {/* three next to each other: one promotion alone leaves most of the width empty */}
               <div className="mt-3 grid gap-3 lg:grid-cols-3">
@@ -458,72 +418,6 @@ const Presets = () => {
           </motion.div>
         )}
       </AnimatePresence>
-      <AnimatePresence>
-        {deletedToast && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <Toast variant="success">
-              <div className="mr-1 bg-green-800 text-xl">
-                <BsCheck2Square />
-              </div>
-              <p>Preset successfully deleted!</p>
-            </Toast>
-          </motion.div>
-        )}
-      </AnimatePresence>
-      <AnimatePresence>
-        {reportedToast && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <Toast variant="success">
-              <div className="mr-1 bg-green-800 text-xl">
-                <BsCheck2Square />
-              </div>
-              <p>Preset successfully reported!</p>
-            </Toast>
-          </motion.div>
-        )}
-      </AnimatePresence>
-      <AnimatePresence>
-        {fixedToast && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <Toast variant="success">
-              <div className="mr-1 bg-green-800 text-xl">
-                <BsCheck2Square />
-              </div>
-              <p>Preset successfully fixed!</p>
-            </Toast>
-          </motion.div>
-        )}
-      </AnimatePresence>
-      <ToastContainer />
-
-      {/* <AnimatePresence>
-        {savedToast && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <Toast variant="success">
-              <div className="mr-1 bg-green-800 text-xl">
-                <BsCheck2Square />
-              </div>
-              <p>Preset successfully saved!</p>
-            </Toast>
-          </motion.div>
-        )}
-      </AnimatePresence> */}
     </div>
   )
 }
