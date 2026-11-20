@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react"
 import PresetFilter from "./presetTable/PresetFilter"
 import PresetTable from "./presetTable/PresetTable"
-import { AiOutlineLoading } from "react-icons/ai"
 import ExportPresetsModal from "./ui/exportPresets/ExportPresetsModal"
 import { AnimatePresence, motion } from "motion/react"
 import AddPresetsModal from "./ui/addPreset/AddPresetsModal"
 import PromoSlot from "../Shared/PromoSlot"
 import SimSwitch from "../Shared/SimSwitch"
+import { Skeleton } from "@/components/ui/skeleton"
 import { getAccessToken } from "../../../services/msalFunctions"
 import { msalInstance, msalReady } from "../../../services/msal"
 import { db } from "../../../services/db"
@@ -25,6 +25,32 @@ import {
 
 // wait this long after the last keystroke before searching
 const SEARCH_DELAY_MS = 250
+
+type PresetListSkeletonProps = {
+  status: string
+  children: React.ReactNode
+}
+
+/** Placeholder of the preset list while presets download */
+const PresetListSkeleton = ({ status, children }: PresetListSkeletonProps) => (
+  <div className="min-h-screen p-3" aria-busy="true">
+    <p role="status" className="mb-3 font-semibold">
+      {status}
+    </p>
+    <div className="flex flex-col gap-3 md:flex-row">
+      <div className="flex w-full flex-col gap-3 md:w-96">
+        <Skeleton className="h-14 w-full" />
+        <Skeleton className="h-96 w-full" />
+        {children}
+      </div>
+      <div className="flex flex-1 flex-col gap-2">
+        {Array.from({ length: 12 }, (_, i) => (
+          <Skeleton key={i} className="h-10 w-full" />
+        ))}
+      </div>
+    </div>
+  </div>
+)
 
 const Presets = () => {
   const [loading, setLoading] = useState(false)
@@ -257,19 +283,9 @@ const Presets = () => {
   return (
     <div>
       {loading ? (
-        <div className="flex min-h-screen flex-col items-center justify-center">
-          <div className="animate-spin text-6xl text-hhOrange">
-            <AiOutlineLoading />
-          </div>
-          <p className="mt-5 font-semibold">
-            {loadingStatus != "" ? loadingStatus : "Loading Presets"}
-          </p>
-          <PromoSlot
-            slot="loading"
-            context={promotionContext}
-            className="mx-3 mt-10 max-w-md"
-          />
-        </div>
+        <PresetListSkeleton status={loadingStatus || "Loading Presets"}>
+          <PromoSlot slot="loading" context={promotionContext} />
+        </PresetListSkeleton>
       ) : presets.length ? (
         <div className="min-h-screen">
           <div className="flex flex-col p-3 md:flex-row md:space-x-3">
@@ -379,17 +395,9 @@ const Presets = () => {
           </div>
         </div>
       ) : (
-        <div className="flex min-h-screen flex-col items-center justify-center">
-          <div className="animate-spin text-6xl text-hhOrange">
-            <AiOutlineLoading />
-          </div>
-          <p className="mt-5">Loading Presets</p>
-          <PromoSlot
-            slot="loading"
-            context={promotionContext}
-            className="mx-3 mt-10 max-w-md"
-          />
-        </div>
+        <PresetListSkeleton status="Loading Presets">
+          <PromoSlot slot="loading" context={promotionContext} />
+        </PresetListSkeleton>
       )}
       <AnimatePresence>
         {exportModalOpen && (
