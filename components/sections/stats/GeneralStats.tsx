@@ -1,9 +1,6 @@
 import { useMemo, useState } from "react"
-import DataTable, {
-  createTheme,
-  Media,
-  type TableColumn,
-} from "react-data-table-component"
+import type { ColumnDef } from "@tanstack/react-table"
+import DataTable from "../Shared/DataTable"
 import {
   Dialog,
   DialogContent,
@@ -50,123 +47,52 @@ const GeneralStats = ({ presets, stats }: GeneralStatsProps) => {
   const [contPresetSearch, setContPresetSearch] = useState("")
   const cont = useMemo(() => contributorsOf(presets), [presets])
 
-  const columns: TableColumn<Contributor>[] = [
+  const columns: ColumnDef<Contributor>[] = [
+    { header: "Name", accessorKey: "name", enableSorting: true },
     {
-      name: "Name",
-      selector: (row) => row.name,
-      maxWidth: "60%",
-      sortable: true,
-    },
-    {
-      name: "Submissions or updates",
-      selector: (row) => row.presets,
-      maxWidth: "40%",
-      sortable: true,
+      header: "Submissions or updates",
+      accessorKey: "presets",
+      enableSorting: true,
     },
   ]
-  const columnSingle: TableColumn<Preset>[] = [
+  // hidden on small screens, as before
+  const wide = { className: "hidden md:table-cell" }
+  const columnSingle: ColumnDef<Preset>[] = [
     {
-      name: "Last modification",
-      selector: (row) => new Date(row.createdDate ?? "").toLocaleString(),
-      sortable: true,
-      maxWidth: "15%",
-      hide: Media.MD,
+      id: "date",
+      header: "Last modification",
+      accessorFn: (row) => new Date(row.createdDate ?? "").toLocaleString(),
+      enableSorting: true,
+      meta: wide,
     },
     {
-      name: "Author / Updated",
-      selector: (row) => (row.author ? "Author" : "Updated"),
-      sortable: true,
-      maxWidth: "10%",
-      hide: Media.MD,
+      id: "role",
+      header: "Author / Updated",
+      accessorFn: (row) => (row.author ? "Author" : "Updated"),
+      enableSorting: true,
+      meta: wide,
     },
     {
-      name: "Vendor",
-      selector: (row) => row.vendor,
-      sortable: true,
-      maxWidth: "10%",
-      hide: Media.MD,
+      header: "Vendor",
+      accessorKey: "vendor",
+      enableSorting: true,
+      meta: wide,
+    },
+    { header: "Aircraft", accessorKey: "aircraft", enableSorting: true },
+    {
+      header: "System",
+      accessorKey: "system",
+      enableSorting: true,
+      meta: wide,
     },
     {
-      name: "Aircraft",
-      selector: (row) => row.aircraft,
-      sortable: true,
-      maxWidth: "10%",
+      header: "Input/Output",
+      accessorKey: "presetType",
+      enableSorting: true,
+      meta: wide,
     },
-    {
-      name: "System",
-      selector: (row) => row.system,
-      sortable: true,
-      maxWidth: "10%",
-      hide: Media.MD,
-    },
-    {
-      name: "Input/Output",
-      selector: (row) => row.presetType,
-      sortable: true,
-      maxWidth: "10%",
-      hide: Media.MD,
-    },
-    {
-      name: "Preset name",
-      selector: (row) => row.label,
-      sortable: true,
-      maxWidth: "50%",
-    },
+    { header: "Preset name", accessorKey: "label", enableSorting: true },
   ]
-
-  createTheme("hubhop", {
-    // v8 draws lines between header columns by default; v7 did not
-    headerSeparator: false,
-    text: {
-      primary: "#D2D0D2",
-      secondary: "#D2D0D2",
-      disabled: "rgba(0, 0, 0, .38)",
-    },
-    background: {
-      default: "transparent",
-    },
-    context: {
-      background: "transparent",
-      text: "#D2D0D2",
-    },
-    divider: {
-      default: "#33353e",
-    },
-    highlightOnHover: {
-      default: "#ffa047",
-      text: "#33353e",
-    },
-    button: {
-      default: "#D2D0D2",
-      focus: "rgba(0,0,0,.12)",
-      hover: "rgba(0,0,0,.12)",
-      disabled: "rgba(0, 0, 0, .18)",
-    },
-  })
-
-  const customStyles = {
-    noData: {
-      style: {
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        color: "#D2D0D2",
-        backgroundColor: "transparent",
-      },
-    },
-    rows: {
-      highlightOnHoverStyle: {
-        fontWeight: 700,
-      },
-    },
-    headRow: {
-      style: {
-        fontWeight: 700,
-        fontSize: "0.9rem",
-      },
-    },
-  }
-
   const topAircraft = stats?.aircrafts[0]
   const topContributor = stats?.contributors[0]
 
@@ -251,16 +177,8 @@ const GeneralStats = ({ presets, stats }: GeneralStatsProps) => {
               data={cont.filter((contributor) =>
                 contributor.name.toLowerCase().includes(contSearch),
               )}
-              customStyles={customStyles}
-              pagination
-              highlightOnHover
-              responsive={true}
-              theme="hubhop"
-              paginationPerPage={5}
-              paginationRowsPerPageOptions={[5, 10, 20, 30, 50, 100]}
-              defaultSortFieldId={2}
-              defaultSortAsc={false}
-              onRowClicked={(row) => {
+              initialSorting={[{ id: "presets", desc: true }]}
+              onRowClick={(row) => {
                 setSingleCont(row.name)
                 setContModal(true)
               }}
@@ -302,14 +220,7 @@ const GeneralStats = ({ presets, stats }: GeneralStatsProps) => {
                           new Date(b.createdDate ?? "").valueOf() -
                           new Date(a.createdDate ?? "").valueOf(),
                       )}
-                    customStyles={customStyles}
-                    pagination
-                    highlightOnHover
-                    responsive={true}
-                    theme="hubhop"
-                    paginationPerPage={5}
-                    paginationRowsPerPageOptions={[5, 10, 20, 30, 50, 100]}
-                    onRowClicked={(row) =>
+                    onRowClick={(row) =>
                       window.open(
                         "https://hubhop.mobiflight.com/preset/?id=" + row.id,
                         "_blank",

@@ -1,18 +1,11 @@
-import DataTable, {
-  createTheme,
-  type ExpanderComponentProps,
-  Media,
-  type TableColumn,
-} from "react-data-table-component"
+import type { ColumnDef } from "@tanstack/react-table"
+import DataTable from "../Shared/DataTable"
 import OpenPresetButton from "../presets/ui/OpenPresetButton"
 import PresetPreviewLabel from "../presets/ui/PresetInputLabel"
 import { REPORTING_ENABLED } from "../../../lib/features"
 import type { StatisticsPreset } from "../../../interfaces/preset"
 
-// Defined outside TableStats, so a render doesn't remount open rows
-const PresetRowDetails = ({
-  data,
-}: ExpanderComponentProps<StatisticsPreset>) => {
+const PresetRowDetails = ({ data }: { data: StatisticsPreset }) => {
   const { vendor, aircraft, system, presetType, label, code, description } =
     data
 
@@ -83,118 +76,33 @@ type TableStatsProps = {
 }
 
 const TableStats = ({ data, added }: TableStatsProps) => {
-  const columns: TableColumn<StatisticsPreset>[] = [
+  // hidden on small screens, as before
+  const wide = { className: "hidden md:table-cell" }
+  const columns: ColumnDef<StatisticsPreset>[] = [
     {
-      name: added ? "Added" : "Updated",
-      selector: (row) => new Date(row.createdDate ?? "").toLocaleString(),
-      maxWidth: "10%",
+      id: "date",
+      header: added ? "Added" : "Updated",
+      accessorFn: (row) => new Date(row.createdDate ?? "").toLocaleString(),
     },
     {
-      name: added ? "Added by" : "Updated by",
-      selector: (row) => (added ? row.author : (row.updatedBy ?? "")),
-      maxWidth: "10%",
-      hide: Media.MD,
+      id: "by",
+      header: added ? "Added by" : "Updated by",
+      accessorFn: (row) => (added ? row.author : (row.updatedBy ?? "")),
+      meta: wide,
     },
-    {
-      name: "Vendor",
-      selector: (row) => row.vendor,
-      maxWidth: "10%",
-      hide: Media.MD,
-    },
-    {
-      name: "Aircraft",
-      selector: (row) => row.aircraft,
-      maxWidth: "10%",
-      hide: Media.MD,
-    },
-    {
-      name: "System",
-      selector: (row) => row.system,
-      maxWidth: "10%",
-      hide: Media.MD,
-    },
-    {
-      name: "Input/Output",
-      selector: (row) => row.presetType,
-      maxWidth: "10%",
-      hide: Media.MD,
-    },
-    {
-      name: "Preset name",
-      selector: (row) => row.label,
-      maxWidth: "50%",
-    },
+    { header: "Vendor", accessorKey: "vendor", meta: wide },
+    { header: "Aircraft", accessorKey: "aircraft", meta: wide },
+    { header: "System", accessorKey: "system", meta: wide },
+    { header: "Input/Output", accessorKey: "presetType", meta: wide },
+    { header: "Preset name", accessorKey: "label" },
   ]
 
-  createTheme("hubhop", {
-    // v8 draws lines between header columns by default; v7 did not
-    headerSeparator: false,
-    text: {
-      primary: "#D2D0D2",
-      secondary: "#D2D0D2",
-      disabled: "rgba(0, 0, 0, .38)",
-    },
-    background: {
-      default: "transparent",
-    },
-    context: {
-      background: "transparent",
-      text: "#D2D0D2",
-    },
-    divider: {
-      default: "#33353e",
-    },
-    highlightOnHover: {
-      default: "#ffa047",
-      text: "#33353e",
-    },
-    button: {
-      default: "#D2D0D2",
-      focus: "rgba(0,0,0,.12)",
-      hover: "rgba(0,0,0,.12)",
-      disabled: "rgba(0, 0, 0, .18)",
-    },
-  })
-
-  const customStyles = {
-    noData: {
-      style: {
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        color: "#D2D0D2",
-        backgroundColor: "transparent",
-      },
-    },
-    rows: {
-      highlightOnHoverStyle: {
-        fontWeight: 700,
-      },
-    },
-    headRow: {
-      style: {
-        fontWeight: 700,
-        fontSize: "0.9rem",
-      },
-    },
-  }
-
   return (
-    <div className="relative flex w-full flex-col rounded-lg bg-hhCard/40">
+    <div className="rounded-lg bg-hhCard/40">
       <DataTable
         columns={columns}
         data={data}
-        customStyles={customStyles}
-        pagination
-        expandOnRowClicked
-        expandableRows
-        expandableRowsComponent={PresetRowDetails}
-        highlightOnHover
-        responsive={true}
-        theme="hubhop"
-        paginationPerPage={5}
-        paginationRowsPerPageOptions={[5, 15, 20, 30, 50, 100]}
-        dense
+        renderExpanded={(row) => <PresetRowDetails data={row} />}
       />
     </div>
   )
