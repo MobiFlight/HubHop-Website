@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useRef, useState, type ReactNode } from "react"
-import { useWindowVirtualizer } from "@tanstack/react-virtual"
+import { useMemo, useRef, useState, type ReactNode } from "react"
+import { useVirtualizer } from "@tanstack/react-virtual"
 import { cn } from "cn"
 import {
   IconArrowDown,
@@ -32,8 +32,11 @@ type DataTableProps<T> = {
   renderExpanded?: (row: T) => ReactNode
   onRowClick?: (row: T) => void
   emptyText?: string
-  /** renders only the rows in view (long lists); the list scrolls with the page */
-  virtualize?: boolean
+  /**
+   * long lists: the rows scroll inside the table up to this height (CSS value)
+   * and only the rows in view are rendered
+   */
+  maxHeight?: string
   className?: string
 }
 
@@ -55,7 +58,7 @@ const DataTable = <T,>({
   renderExpanded,
   onRowClick,
   emptyText = "There are no records to display",
-  virtualize = false,
+  maxHeight,
   className,
 }: DataTableProps<T>) => {
   const [sorting, setSorting] = useState(initialSorting)
@@ -95,41 +98,42 @@ const DataTable = <T,>({
     "grid grid-cols-(--cols-sm) md:grid-cols-(--cols-md) items-center"
   const wideClass = (c: Column<T>) => (c.wide ? "hidden md:block" : "")
 
-  // the window scrolls; the virtualizer needs the list's distance from the page top
+  // long lists scroll inside the table; only the rows in view are rendered
   // (TanStack Virtual's instance is mutable: with the React Compiler this component needs "use no memo")
-  const listRef = useRef<HTMLDivElement>(null)
-  const [scrollMargin, setScrollMargin] = useState(0)
-  useEffect(() => {
-    const top = listRef.current?.getBoundingClientRect().top ?? 0
-    setScrollMargin(top + window.scrollY)
-  }, [])
-  const virtualizer = useWindowVirtualizer({
+  const virtualize = !!maxHeight
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const virtualizer = useVirtualizer({
     count: rows.length,
+    getScrollElement: () => scrollRef.current,
     estimateSize: () => 41,
     overscan: 10,
-    scrollMargin,
     enabled: virtualize,
   })
   const items = virtualize
     ? virtualizer.getVirtualItems()
     : rows.map((_, index) => ({ index, start: 0, end: 0 }))
-  const paddingTop =
-    virtualize && items.length ? items[0].start - scrollMargin : 0
+  const paddingTop = virtualize && items.length ? items[0].start : 0
   const paddingBottom =
     virtualize && items.length
-      ? virtualizer.getTotalSize() -
-        (items[items.length - 1].end - scrollMargin)
+      ? virtualizer.getTotalSize() - items[items.length - 1].end
       : 0
   const clickable = !!renderExpanded || !!onRowClick
 
   return (
     <div
       role="table"
-      ref={listRef}
       style={gridStyle}
       className={cn("w-full text-sm", className)}
     >
-      <div role="row" className={cn(grid, "border-b font-bold")}>
+      <div
+        role="row"
+        className={cn(
+          grid,
+          "border-b font-bold",
+          // as wide as the scrolling rows below (scrollbar)
+          virtualize && "[scrollbar-gutter:stable] overflow-y-hidden",
+        )}
+      >
         {renderExpanded && <div role="columnheader" aria-label="Details" />}
         {columns.map((column) => {
           const sorted = sorting?.id === column.id ? sorting : undefined
@@ -170,85 +174,100 @@ const DataTable = <T,>({
           </div>
         </div>
       ) : (
-        <>
-          {paddingTop > 0 && <div aria-hidden style={{ height: paddingTop }} />}
-          {items.map(({ index }) => {
-            const row = rows[index]
-            const id = rowId(row)
-            const isExpanded = expanded.has(id)
-            const activate = () =>
-              renderExpanded ? toggleExpanded(id) : onRowClick?.(row)
-            return (
-              // row and details are measured together
-              <div
-                key={id}
-                data-index={index}
-                ref={virtualize ? virtualizer.measureElement : undefined}
-                className="border-b"
-              >
-                <div
-                  role="row"
-                  // expandable rows are reached by keyboard through their Details button
-                  tabIndex={onRowClick && !renderExpanded ? 0 : undefined}
-                  onClick={activate}
-                  onKeyDown={(e) => {
-                    if (renderExpanded || e.target !== e.currentTarget) return
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault()
-                      activate()
-                    }
-                  }}
-                  className={cn(
-                    grid,
-                    "min-h-10",
-                    clickable &&
-                      "cursor-pointer outline-none hover:bg-primary hover:text-primary-foreground focus-visible:ring-3 focus-visible:ring-ring/50",
-                    isExpanded && "bg-primary text-primary-foreground",
-                  )}
-                >
-                  {renderExpanded && (
-                    <div role="cell" className="flex justify-center">
-                      <button
-                        type="button"
-                        aria-label="Details"
-                        aria-expanded={isExpanded}
-                        className="rounded-sm outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          activate()
-                        }}
-                      >
-                        <IconChevronRight
-                          className={cn(
-                            "size-4 transition-transform",
-                            isExpanded && "rotate-90",
-                          )}
-                        />
-                      </button>
-                    </div>
-                  )}
-                  {columns.map((column) => (
-                    <div
-                      key={column.id}
-                      role="cell"
-                      className={cn("truncate px-2 py-2", wideClass(column))}
-                    >
-                      {column.cell ? column.cell(row) : column.value(row)}
-                    </div>
-                  ))}
-                </div>
-                {renderExpanded && isExpanded && (
-                  <div role="row">
-                    <div role="cell">{renderExpanded(row)}</div>
-                  </div>
-                )}
-              </div>
-            )
-          })}
-          {paddingBottom > 0 && (
-            <div aria-hidden style={{ height: paddingBottom }} />
+        <div
+          ref={scrollRef}
+          style={{ maxHeight }}
+          className={cn(
+            virtualize && "[scrollbar-gutter:stable] overflow-y-auto",
           )}
-        </>
+        >
+          {/* full height of all rows, so the scroll area isn't empty before the first measurement */}
+          <div
+            style={{
+              minHeight: virtualize ? virtualizer.getTotalSize() : undefined,
+            }}
+          >
+            {paddingTop > 0 && (
+              <div aria-hidden style={{ height: paddingTop }} />
+            )}
+            {items.map(({ index }) => {
+              const row = rows[index]
+              const id = rowId(row)
+              const isExpanded = expanded.has(id)
+              const activate = () =>
+                renderExpanded ? toggleExpanded(id) : onRowClick?.(row)
+              return (
+                // row and details are measured together
+                <div
+                  key={id}
+                  data-index={index}
+                  ref={virtualize ? virtualizer.measureElement : undefined}
+                  className="border-b"
+                >
+                  <div
+                    role="row"
+                    // expandable rows are reached by keyboard through their Details button
+                    tabIndex={onRowClick && !renderExpanded ? 0 : undefined}
+                    onClick={activate}
+                    onKeyDown={(e) => {
+                      if (renderExpanded || e.target !== e.currentTarget) return
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault()
+                        activate()
+                      }
+                    }}
+                    className={cn(
+                      grid,
+                      "min-h-10",
+                      clickable &&
+                        "cursor-pointer outline-none hover:bg-primary hover:text-primary-foreground focus-visible:ring-3 focus-visible:ring-ring/50",
+                      isExpanded && "bg-primary text-primary-foreground",
+                    )}
+                  >
+                    {renderExpanded && (
+                      <div role="cell" className="flex justify-center">
+                        <button
+                          type="button"
+                          aria-label="Details"
+                          aria-expanded={isExpanded}
+                          className="rounded-sm outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            activate()
+                          }}
+                        >
+                          <IconChevronRight
+                            className={cn(
+                              "size-4 transition-transform",
+                              isExpanded && "rotate-90",
+                            )}
+                          />
+                        </button>
+                      </div>
+                    )}
+                    {columns.map((column) => (
+                      <div
+                        key={column.id}
+                        role="cell"
+                        className={cn("truncate px-2 py-2", wideClass(column))}
+                      >
+                        {column.cell ? column.cell(row) : column.value(row)}
+                      </div>
+                    ))}
+                  </div>
+                  {renderExpanded && isExpanded && (
+                    <div role="row">
+                      <div role="cell">{renderExpanded(row)}</div>
+                    </div>
+                  )}
+                </div>
+              )
+            })}
+            {paddingBottom > 0 && (
+              <div aria-hidden style={{ height: paddingBottom }} />
+            )}
+          </div>
+        </div>
       )}
     </div>
   )

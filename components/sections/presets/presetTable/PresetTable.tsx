@@ -193,7 +193,8 @@ const PresetTable = ({
             : { id: "vendor", desc: false }
         }
         renderExpanded={(row) => <PresetRowDetails data={row} />}
-        virtualize
+        // about 10 rows; the list scrolls inside itself
+        maxHeight="26rem"
       />
       <div className="flex items-center justify-between p-3">
         <Button
