@@ -161,21 +161,22 @@ test.describe("Preset list", () => {
     await presetsPage.gotoPage()
 
     await test.step("Vendor", async () => {
-      await presetsPage.vendorFilter.selectOption("FlyByWire")
+      await presetsPage.choose(presetsPage.vendorFilter, "FlyByWire")
       await expect(page).toHaveURL(/vendor=FlyByWire/)
       await expect(presetsPage.rows).toHaveCount(4)
     })
     await test.step("System", async () => {
-      await presetsPage.systemFilter.selectOption("Autopilot")
+      await presetsPage.choose(presetsPage.systemFilter, "Autopilot")
       await expect(presetsPage.rows).toHaveCount(2)
       // filter changes are synced via the URL; wait before the next change
       await expect(page).toHaveURL(/system=Autopilot/)
     })
     await test.step("Options only list values of the filtered presets", async () => {
-      await expect(presetsPage.presetTypeFilter.getByRole("option")).toHaveText(
-        ["All Inputs/Outputs", "Input"],
-      )
-      await presetsPage.presetTypeFilter.selectOption("Input")
+      await presetsPage.expectOptions(presetsPage.presetTypeFilter, [
+        "All Inputs/Outputs",
+        "Input",
+      ])
+      await presetsPage.choose(presetsPage.presetTypeFilter, "Input")
       await expect(page).toHaveURL(/presetType=Input/)
       await expect(presetsPage.rows).toHaveCount(2)
     })
@@ -190,10 +191,10 @@ test.describe("Preset list", () => {
     await test.step("Reset", async () => {
       await page.getByRole("button", { name: "Reset Filters" }).click()
       await expect(presetsPage.rows).toHaveCount(15)
-      await expect(presetsPage.vendorFilter).toHaveValue("")
+      await expect(presetsPage.vendorFilter).toHaveText("All Vendors")
     })
     await test.step("Aircraft", async () => {
-      await presetsPage.aircraftFilter.selectOption("C172")
+      await presetsPage.choose(presetsPage.aircraftFilter, "C172")
       await expect(presetsPage.rows).toHaveCount(5)
     })
   })
@@ -205,23 +206,23 @@ test.describe("Preset list", () => {
     await presetsPage.gotoPage()
 
     await test.step("Selecting a vendor narrows the other filters only", async () => {
-      await presetsPage.vendorFilter.selectOption("FlyByWire")
+      await presetsPage.choose(presetsPage.vendorFilter, "FlyByWire")
       await expect(page).toHaveURL(/vendor=FlyByWire/)
-      await expect(presetsPage.vendorFilter.getByRole("option")).toHaveText([
+      await presetsPage.expectOptions(presetsPage.vendorFilter, [
         "All Vendors",
         "Asobo",
         "FlyByWire",
       ])
-      await expect(presetsPage.aircraftFilter.getByRole("option")).toHaveText([
+      await presetsPage.expectOptions(presetsPage.aircraftFilter, [
         "All Aircraft",
         "A32NX",
       ])
     })
 
     await test.step("Selecting a system keeps the other systems of the vendor", async () => {
-      await presetsPage.systemFilter.selectOption("Autopilot")
+      await presetsPage.choose(presetsPage.systemFilter, "Autopilot")
       await expect(page).toHaveURL(/system=Autopilot/)
-      await expect(presetsPage.systemFilter.getByRole("option")).toHaveText([
+      await presetsPage.expectOptions(presetsPage.systemFilter, [
         "All Systems",
         "Autopilot",
         "Overhead",
@@ -229,10 +230,10 @@ test.describe("Preset list", () => {
     })
 
     await test.step("The vendor can be switched directly", async () => {
-      await presetsPage.vendorFilter.selectOption("Asobo")
+      await presetsPage.choose(presetsPage.vendorFilter, "Asobo")
       await expect(page).toHaveURL(/vendor=Asobo/)
       await expect(presetsPage.rows).toHaveCount(5)
-      await expect(presetsPage.systemFilter.getByRole("option")).toHaveText([
+      await presetsPage.expectOptions(presetsPage.systemFilter, [
         "All Systems",
         "Autopilot",
         "Electrical",
@@ -247,8 +248,8 @@ test.describe("Preset list", () => {
   }) => {
     await presetsPage.gotoPage("?vendor=Asobo&aircraft=C172&system=Engine")
 
-    await expect(presetsPage.vendorFilter).toHaveValue("Asobo")
-    await expect(presetsPage.aircraftFilter).toHaveValue("C172")
+    await expect(presetsPage.vendorFilter).toHaveText("Asobo")
+    await expect(presetsPage.aircraftFilter).toHaveText("C172")
     await expect(presetsPage.rows).toHaveCount(2)
     await expect(presetsPage.row("Oil temperature")).toHaveCount(1)
   })
@@ -302,12 +303,12 @@ test.describe("Preset list", () => {
     expect(presetsPage.hubHopPage.downloads.xplane).toBe(1)
 
     await test.step("Code type filter is available for X-Plane", async () => {
-      await expect(presetsPage.codeTypeFilter.getByRole("option")).toHaveText([
+      await presetsPage.expectOptions(presetsPage.codeTypeFilter, [
         "All Code Types",
         "DataRef",
         "Command",
       ])
-      await presetsPage.codeTypeFilter.selectOption("DataRef")
+      await presetsPage.choose(presetsPage.codeTypeFilter, "DataRef")
       await expect(presetsPage.rows).toHaveCount(2)
     })
     await expect(page.locator("body")).toHaveClass(/xplane/)
