@@ -28,7 +28,7 @@ const ExportPresetsModal = ({ onClose }: ExportPresetsModalProps) => {
   }
   return (
     <Modal title="Export Presets" onClose={onClose}>
-      <div className="mt-3 grid grid-cols-5 items-start gap-5">
+      <div className="mt-3 grid grid-cols-[repeat(5,auto)] items-start gap-5">
         <div className="flex flex-col items-center justify-center align-top">
           <h2 className="border-b-2 border-hhCard text-xl font-semibold">
             Mobiflight

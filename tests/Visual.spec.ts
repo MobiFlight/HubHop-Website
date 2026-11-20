@@ -102,10 +102,11 @@ test.describe("Visual - preset dialogs", () => {
     await expect(
       dialog.getByRole("heading", { name: "Add Preset" }),
     ).toBeVisible()
-    await expect(dialog).toHaveScreenshot(
-      "dialog-add-preset.png",
-      screenshotOptions,
-    )
+    await expect(page).toHaveScreenshot("dialog-add-preset.png", {
+      ...screenshotOptions,
+      // the visible window with the dialog and the backdrop
+      fullPage: false,
+    })
   })
 
   test("Visual - export presets dialog", async ({ page }) => {
@@ -114,10 +115,11 @@ test.describe("Visual - preset dialogs", () => {
     await expect(
       dialog.getByRole("heading", { name: "Export Presets" }),
     ).toBeVisible()
-    await expect(dialog).toHaveScreenshot(
-      "dialog-export-presets.png",
-      screenshotOptions,
-    )
+    await expect(page).toHaveScreenshot("dialog-export-presets.png", {
+      ...screenshotOptions,
+      // the visible window with the dialog and the backdrop
+      fullPage: false,
+    })
   })
 
   test("Visual - delete confirmation", async ({ page, presetsPage }) => {
@@ -127,9 +129,10 @@ test.describe("Visual - preset dialogs", () => {
     await expect(
       dialog.getByRole("heading", { name: "Delete Preset" }),
     ).toBeVisible()
-    await expect(dialog).toHaveScreenshot(
-      "dialog-delete-preset.png",
-      screenshotOptions,
-    )
+    await expect(page).toHaveScreenshot("dialog-delete-preset.png", {
+      ...screenshotOptions,
+      // the visible window with the dialog and the backdrop
+      fullPage: false,
+    })
   })
 })
