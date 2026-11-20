@@ -167,7 +167,7 @@ test.describe("Preset list", () => {
 
     await test.step("Vendor", async () => {
       await presetsPage.choose(presetsPage.vendorFilter, "FlyByWire")
-      await expect(page).toHaveURL(/\/presets\/msfs2020\/flybywire\/$/)
+      await expect(page).toHaveURL(/\/presets\/msfs\/flybywire\/$/)
       await expect(presetsPage.rows).toHaveCount(4)
     })
     await test.step("System", async () => {
@@ -201,7 +201,7 @@ test.describe("Preset list", () => {
     await test.step("Aircraft", async () => {
       await presetsPage.choose(presetsPage.aircraftFilter, "C172")
       // without a vendor, the aircraft is a query parameter
-      await expect(page).toHaveURL(/\/presets\/msfs2020\/\?aircraft=c172$/)
+      await expect(page).toHaveURL(/\/presets\/msfs\/\?aircraft=c172$/)
       await expect(presetsPage.rows).toHaveCount(5)
     })
   })
@@ -239,7 +239,7 @@ test.describe("Preset list", () => {
     await test.step("The vendor can be switched directly", async () => {
       await presetsPage.choose(presetsPage.vendorFilter, "Asobo")
       await expect(page).toHaveURL(
-        /\/presets\/msfs2020\/asobo\/\?system=Autopilot$/,
+        /\/presets\/msfs\/asobo\/\?system=Autopilot$/,
       )
       await expect(presetsPage.rows).toHaveCount(5)
       await presetsPage.expectOptions(presetsPage.systemFilter, [
@@ -255,7 +255,7 @@ test.describe("Preset list", () => {
   test("Preset list - filters are prefilled from the URL", async ({
     presetsPage,
   }) => {
-    await presetsPage.gotoPage("msfs2020/asobo/c172/?system=Engine")
+    await presetsPage.gotoPage("msfs/asobo/c172/?system=Engine")
 
     await expect(presetsPage.vendorFilter).toHaveText("Asobo")
     await expect(presetsPage.aircraftFilter).toHaveText("C172")
@@ -341,7 +341,7 @@ test.describe("Preset list", () => {
       page.getByRole("link", { name: "View Details" }),
     ).toHaveAttribute(
       "href",
-      "/presets/msfs2020/asobo/c172/battery-master-on-00000000-0000-4000-8000-000000000009/",
+      "/presets/msfs/asobo/c172/battery-master-on-00000000-0000-4000-8000-000000000009/",
     )
   })
 })

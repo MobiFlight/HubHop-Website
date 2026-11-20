@@ -311,7 +311,7 @@ const Potti = () => {
           </div>
         </div>
         <div className="flex w-full flex-col items-center gap-5">
-          <h4 className="text-xl font-semibold">MSFS2020 event input range</h4>
+          <h4 className="text-xl font-semibold">MSFS event input range</h4>
           <Select onValueChange={selectEvent}>
             <SelectTrigger className="w-full" aria-label="Event preset">
               <SelectValue placeholder="Select preset" />

@@ -1,4 +1,5 @@
 import type { Sim, HubHopPage } from "./HubHopPage"
+import { simSegment } from "../../lib/presetUrls"
 
 export class PresetViewPage {
   constructor(public readonly hubHopPage: HubHopPage) {}
@@ -9,7 +10,7 @@ export class PresetViewPage {
 
   /** Opens a preset by its id; the page adds vendor, aircraft and label to the URL */
   async gotoPage(id: string, sim: Sim = "msfs2020") {
-    await this.hubHopPage.goto(`/presets/${sim}/-/-/${id}/`)
+    await this.hubHopPage.goto(`/presets/${simSegment(sim)}/-/-/${id}/`)
   }
 
   get title() {

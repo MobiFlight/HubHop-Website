@@ -7,7 +7,7 @@ import {
 } from "../lib/presetUrls"
 
 const BATTERY_ID = "00000000-0000-4000-8000-000000000009"
-const BATTERY_URL = `/presets/msfs2020/asobo/c172/battery-master-on-${BATTERY_ID}/`
+const BATTERY_URL = `/presets/msfs/asobo/c172/battery-master-on-${BATTERY_ID}/`
 
 test.describe("Preset URLs", () => {
   test("Preset URLs - names become lowercase slugs", () => {
@@ -19,7 +19,7 @@ test.describe("Preset URLs", () => {
   })
 
   test("Preset URLs - vendor and aircraft are path segments, other filters query parameters", () => {
-    expect(presetListUrl({ sim: "msfs2020" })).toBe("/presets/msfs2020/")
+    expect(presetListUrl({ sim: "msfs2020" })).toBe("/presets/msfs/")
     expect(
       presetListUrl({
         sim: "msfs2020",
@@ -28,7 +28,7 @@ test.describe("Preset URLs", () => {
         search: "apu",
         system: "Lights",
       }),
-    ).toBe("/presets/msfs2020/fenixsim/a320/?search=apu&system=Lights")
+    ).toBe("/presets/msfs/fenixsim/a320/?search=apu&system=Lights")
     // the path needs the vendor before the aircraft
     expect(presetListUrl({ sim: "xplane", aircraft: "c172" })).toBe(
       "/presets/xplane/?aircraft=c172",
@@ -48,15 +48,15 @@ test.describe("Preset URLs", () => {
 
   test("Preset URLs - paths are parsed into list, preset or not found", () => {
     expect(parsePresetsPath([])).toEqual({ kind: "default" })
-    expect(parsePresetsPath(["msfs2020", "asobo"])).toEqual({
+    expect(parsePresetsPath(["msfs", "asobo"])).toEqual({
       kind: "list",
       sim: "msfs2020",
       vendor: "asobo",
       aircraft: undefined,
     })
-    expect(
-      parsePresetsPath(["msfs2020", "a", "b", `label-${BATTERY_ID}`]),
-    ).toEqual({ kind: "preset", sim: "msfs2020", id: BATTERY_ID })
+    expect(parsePresetsPath(["msfs", "a", "b", `label-${BATTERY_ID}`])).toEqual(
+      { kind: "preset", sim: "msfs2020", id: BATTERY_ID },
+    )
     // older presets have MongoDB ids
     expect(
       parsePresetsPath([
@@ -66,11 +66,16 @@ test.describe("Preset URLs", () => {
         "ap-engage-650000000000000000000001",
       ]),
     ).toEqual({ kind: "preset", sim: "xplane", id: "650000000000000000000001" })
+    // links from before the sim was called "msfs" in URLs
+    expect(parsePresetsPath(["msfs2020", "asobo", "c172"])).toEqual({
+      kind: "moved",
+      path: "/presets/msfs/asobo/c172/",
+    })
     expect(parsePresetsPath(["msfs2024"])).toEqual({
       kind: "unknownSim",
       sim: "msfs2024",
     })
-    expect(parsePresetsPath(["msfs2020", "a", "b", "no-id"])).toEqual({
+    expect(parsePresetsPath(["msfs", "a", "b", "no-id"])).toEqual({
       kind: "notFound",
     })
   })
@@ -90,7 +95,7 @@ test.describe("Preset URLs", () => {
     presetsPage,
     page,
   }) => {
-    await presetsPage.gotoPage("msfs2020/?search=toggle")
+    await presetsPage.gotoPage("msfs/?search=toggle")
 
     await presetsPage.xplaneSwitch.click()
 
@@ -105,7 +110,7 @@ test.describe("Preset URLs", () => {
     await presetsPage.gotoPage("?vendor=Asobo&aircraft=C172&system=Engine")
 
     await expect(page).toHaveURL(
-      /\/presets\/msfs2020\/asobo\/c172\/\?system=Engine$/,
+      /\/presets\/msfs\/asobo\/c172\/\?system=Engine$/,
     )
     await expect(presetsPage.rows).toHaveCount(2)
   })
@@ -127,10 +132,22 @@ test.describe("Preset URLs", () => {
     page,
   }) => {
     await hubHopPage.goto(
-      `/presets/msfs2020/old-vendor/old-aircraft/old-name-${BATTERY_ID}/`,
+      `/presets/msfs/old-vendor/old-aircraft/old-name-${BATTERY_ID}/`,
     )
 
     await expect(page).toHaveURL(new RegExp(`${BATTERY_URL}$`))
+  })
+
+  test("Preset URLs - msfs2020 links open the msfs URL with their filters", async ({
+    presetsPage,
+    page,
+  }) => {
+    await presetsPage.gotoPage("msfs2020/asobo/c172/?system=Engine")
+
+    await expect(page).toHaveURL(
+      /\/presets\/msfs\/asobo\/c172\/\?system=Engine$/,
+    )
+    await expect(presetsPage.rows).toHaveCount(2)
   })
 
   test("Preset URLs - an unknown sim shows page not found", async ({

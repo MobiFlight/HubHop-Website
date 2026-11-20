@@ -1,7 +1,7 @@
 import { useRouter } from "next/router"
 import { useEffect } from "react"
 import Layout from "../components/Layout"
-import { isSim } from "../lib/presetUrls"
+import { isSim, simSegment } from "../lib/presetUrls"
 
 /**
  * Old preset links (/preset/?simType=…&id=…, used by MobiFlight Connector and
@@ -20,7 +20,7 @@ const OldPresetLink = () => {
     }
     const stored = localStorage.getItem("simType")
     const sim = isSim(simType) ? simType : isSim(stored) ? stored : "msfs2020"
-    router.replace(`/presets/${sim}/-/-/${encodeURIComponent(id)}/`)
+    router.replace(`/presets/${simSegment(sim)}/-/-/${encodeURIComponent(id)}/`)
   }, [router])
 
   return (
