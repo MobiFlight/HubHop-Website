@@ -55,7 +55,7 @@ const PresetRowDetails = ({
               </div>
               <div className="flex w-full flex-col space-y-2 md:w-4/6">
                 <PresetPreviewLabel title={"Preset name"} editData={label} />
-                <PresetPreviewLabel title={"Code"} editData={code} />
+                <PresetPreviewLabel title={"Code"} editData={code} mono />
                 <PresetPreviewLabel
                   title={"Description"}
                   editData={

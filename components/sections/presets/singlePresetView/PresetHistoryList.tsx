@@ -150,6 +150,7 @@ const PresetHistoryList = ({
                         />
                         <PresetPreviewLabel
                           title={"Code"}
+                          mono
                           editData={history.code}
                         />
                         <PresetPreviewLabel

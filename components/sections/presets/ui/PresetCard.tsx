@@ -311,6 +311,7 @@ const PresetCard = ({
               />
               <PresetPreviewLabel
                 title={"Code"}
+                mono
                 editData={code}
                 edit={edit}
                 onValueChange={setCode}

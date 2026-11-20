@@ -1,3 +1,16 @@
+import { useId } from "react"
+import { cn } from "cn"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
+
 type PresetPreviewLabelProps = {
   title: string
   edit?: boolean
@@ -6,8 +19,11 @@ type PresetPreviewLabelProps = {
   codeOrDescriptionBox?: boolean
   /** In edit mode, offer only these values (select) instead of free text */
   options?: readonly string[]
+  /** monospace, for preset code */
+  mono?: boolean
 }
 
+/** A preset field: read-only while viewing, editable in edit mode */
 const PresetPreviewLabel = ({
   title,
   edit,
@@ -15,52 +31,46 @@ const PresetPreviewLabel = ({
   editData,
   codeOrDescriptionBox,
   options,
+  mono,
 }: PresetPreviewLabelProps) => {
+  const id = useId()
+  const value = String(editData ?? "")
+
   return (
-    <div>
-      <div>{title}</div>
-      {edit ? (
-        options ? (
-          <select
-            aria-label={title}
-            className="w-full rounded-lg border border-hhOrange/50 bg-hhCard/50 px-3 py-1"
-            value={editData ?? ""}
-            onChange={(e) => onValueChange?.(e.target.value)}
-          >
+    <div className="flex flex-col gap-1.5">
+      <Label htmlFor={id}>{title}</Label>
+      {edit && options ? (
+        <Select value={value} onValueChange={(v) => onValueChange?.(v)}>
+          <SelectTrigger id={id} className="w-full" aria-label={title}>
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
             {options.map((option) => (
-              <option key={option} className="bg-hhBG">
+              <SelectItem key={option} value={option}>
                 {option}
-              </option>
+              </SelectItem>
             ))}
-          </select>
-        ) : codeOrDescriptionBox ? (
-          <textarea
-            aria-label={title}
-            className="w-full rounded-lg border border-hhOrange/50 bg-hhCard/50 px-3 py-1 wrap-break-word"
-            value={editData ?? ""}
-            onChange={(e) => onValueChange?.(e.target.value)}
-            rows={5}
-          />
-        ) : (
-          <input
-            aria-label={title}
-            className="w-full rounded-lg border border-hhOrange/50 bg-hhCard/50 px-3 py-1 wrap-break-word"
-            value={editData ?? ""}
-            onChange={(e) => onValueChange?.(e.target.value)}
-          />
-        )
+          </SelectContent>
+        </Select>
       ) : codeOrDescriptionBox ? (
-        <textarea
+        <Textarea
+          id={id}
           aria-label={title}
-          className="w-full rounded-lg border border-hhOrange/50 bg-hhBG/50 px-3 py-1 wrap-break-word"
-          value={editData ?? ""}
           rows={5}
-          disabled
+          readOnly={!edit}
+          className={cn("wrap-break-word", mono && "font-mono")}
+          value={value}
+          onChange={(e) => onValueChange?.(e.target.value)}
         />
       ) : (
-        <div className="rounded-lg border border-hhOrange/50 bg-hhBG/50 px-3 py-1">
-          {editData}
-        </div>
+        <Input
+          id={id}
+          aria-label={title}
+          readOnly={!edit}
+          className={cn(mono && "font-mono")}
+          value={value}
+          onChange={(e) => onValueChange?.(e.target.value)}
+        />
       )}
     </div>
   )
