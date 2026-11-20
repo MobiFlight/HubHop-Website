@@ -9,7 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { getAccessToken } from "../../../services/msalFunctions"
 import { msalInstance, msalReady } from "../../../services/msal"
 import { db } from "../../../services/db"
-import { syncSim, type SimType } from "../../../services/presetSync"
+import { syncSim } from "../../../services/presetSync"
 import { useLiveQuery } from "dexie-react-hooks"
 
 import { useRouter } from "next/router"
@@ -24,24 +24,6 @@ import {
 
 // wait this long after the last keystroke before searching
 const SEARCH_DELAY_MS = 250
-
-const isSim = (value: string | null): value is SimType =>
-  value === "msfs2020" || value === "xplane"
-
-/**
- * The sim from the URL (`?sim=xplane`), otherwise the last one used.
- * Stored before the first render: other components read the sim from localStorage.
- */
-const initialSim = (): SimType => {
-  if (typeof window === "undefined") return "msfs2020"
-  const fromUrl = new URLSearchParams(window.location.search).get("sim")
-  if (isSim(fromUrl)) {
-    localStorage.setItem("simType", fromUrl)
-    return fromUrl
-  }
-  const stored = localStorage.getItem("simType")
-  return isSim(stored) ? stored : "msfs2020"
-}
 
 type PresetListSkeletonProps = {
   status: string
@@ -117,7 +99,11 @@ const Presets = () => {
   const [addModalOpen, setAddModalOpen] = useState(false)
   const [showMyPresets, setShowMyPresets] = useState(false)
   const [showReportedPresets, setShowReportedPresets] = useState(false)
-  const [simType, setSimType] = useState(initialSim)
+  const [simType, setSimType] = useState(
+    typeof localStorage !== "undefined" && localStorage.getItem("simType")
+      ? localStorage.getItem("simType")
+      : "msfs2020",
+  )
   const [presets, setPresets] = useState<Preset[]>([])
   const [filterOpen, setFilterOpen] = useState(true)
   const [loadingStatus, setLoadingStatus] = useState("")
@@ -140,7 +126,7 @@ const Presets = () => {
 
   useEffect(() => {
     if (addModalOpen) return
-    const sim = simType
+    const sim = simType === "xplane" ? "xplane" : "msfs2020"
     syncSim(sim, () => {
       setLoading(true)
       setLoadingStatus(
@@ -282,21 +268,12 @@ const Presets = () => {
   }, [router.query])
 
   const changeSimType = (newSimType: string) => {
-    if (!isSim(newSimType)) return
     setSimType(newSimType)
     localStorage.setItem("simType", newSimType)
-    updateQueryParam("sim", newSimType, { replace: true })
   }
 
-  // the URL always names the sim, so a copied link shows the same presets
-  useEffect(() => {
-    if (!new URLSearchParams(window.location.search).has("sim"))
-      updateQueryParam("sim", simType, { replace: true })
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- once on mount
-  }, [])
-
   const promotionContext: PromotionContext = {
-    sim: simType,
+    sim: simType === "xplane" ? "xplane" : "msfs2020",
     vendor: filteredVendors || undefined,
     aircraft: filteredAircrafts || undefined,
     search: filteredPresets || undefined,
