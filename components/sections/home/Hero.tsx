@@ -5,8 +5,8 @@ import { IconSearch } from "@tabler/icons-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Skeleton } from "@/components/ui/skeleton"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import HubGraphic from "./HubGraphic"
+import SimSwitch from "../Shared/SimSwitch"
 import {
   isSim,
   presetListUrl,
@@ -70,27 +70,11 @@ const Hero = ({ sim, onSimChange, presetCount, stats }: HeroProps) => {
         </p>
 
         <form role="search" onSubmit={submit} className="flex flex-col gap-3">
-          <ToggleGroup
-            type="single"
+          <SimSwitch
+            size="compact"
             value={sim}
             onValueChange={(value) => isSim(value) && onSimChange(value)}
-            aria-label="Simulator"
-            variant="outline"
-            className="self-start"
-          >
-            <ToggleGroupItem
-              value="msfs2020"
-              className="px-4 font-semibold data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
-            >
-              MSFS
-            </ToggleGroupItem>
-            <ToggleGroupItem
-              value="xplane"
-              className="px-4 font-semibold data-[state=on]:bg-xplane data-[state=on]:text-primary-foreground"
-            >
-              X-Plane
-            </ToggleGroupItem>
-          </ToggleGroup>
+          />
           <div className="flex items-center gap-3 rounded-2xl border bg-card py-2 pr-2 pl-5 shadow-lg ring-4 ring-primary/10 focus-within:ring-primary/30">
             <IconSearch aria-hidden="true" className="size-6 text-primary" />
             <label htmlFor="home-search" className="sr-only">

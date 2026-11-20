@@ -63,7 +63,7 @@ export class PresetsPage {
     await this.page.keyboard.press("Escape")
   }
 
-  /** The X-Plane option of the MSFS 2020 / X-Plane switch */
+  /** The X-Plane option of the MSFS / X-Plane switch */
   get xplaneSwitch() {
     return this.page.getByRole("radio", { name: "X-Plane" })
   }
