@@ -1,6 +1,11 @@
 name: Azure Static Web Apps CI/CD
 
 on:
+  # every night, so pages built from the presets (aircraft cheat sheets,
+  # homepage numbers) pick up new presets; "Run workflow" for a rebuild now
+  schedule:
+    - cron: "0 3 * * *"
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -24,7 +29,7 @@ on:
 
 jobs:
   build_and_deploy_job:
-    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+    if: github.event_name != 'pull_request' || github.event.action != 'closed'
     runs-on: ubuntu-latest
     name: Build and Deploy Job
     steps:
@@ -37,8 +42,8 @@ jobs:
         uses: Azure/static-web-apps-deploy@v1
         env:
           IS_STATIC_EXPORT: true
-          # Google Tag Manager only on production, not in PR previews (repository variable PUBLIC_GTM_ID)
-          NEXT_PUBLIC_GTM_ID: ${{ github.event_name == 'push' && vars.PUBLIC_GTM_ID || '' }}
+          # Google Tag Manager only on production (push, nightly, manual), not in PR previews (repository variable PUBLIC_GTM_ID)
+          NEXT_PUBLIC_GTM_ID: ${{ github.event_name != 'pull_request' && vars.PUBLIC_GTM_ID || '' }}
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_GREEN_GRASS_06127B803 }}
           repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)

@@ -166,4 +166,7 @@ public/                  # Static assets
 
 - `.github/workflows/azure-static-web-apps-*.yml` builds and deploys `out/` to Azure Static Web Apps on push to `main`,
   and creates a preview environment per PR.
+- The same workflow rebuilds and deploys `main` every night (03:00 UTC) and on demand ("Run workflow" in the Actions tab),
+  so pages generated from the presets stay current. GitHub pauses scheduled workflows after 60 days without
+  repository activity; re-enable it in the Actions tab if that happens.
 - `staticwebapp.config.json` controls headers, caching and the 404 rewrite.
