@@ -1,5 +1,4 @@
 import Link from "next/link"
-import AircraftSearch from "@/components/sections/aircraft/AircraftSearch"
 import AircraftBreadcrumb from "@/components/sections/aircraft/AircraftBreadcrumb"
 import {
   formatDate,
@@ -28,7 +27,6 @@ const SheetHeader = ({ sim, sheet }: SheetHeaderProps) => (
       {sheetIntro(sheet)} Copy a code from here, or get them all in MobiFlight
       with Extras › HubHop › Download Latest Presets.
     </p>
-    <AircraftSearch sim={sim} aircraft={sheet} />
     <div className="flex flex-wrap items-baseline gap-x-6 gap-y-2">
       <dl className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-muted-foreground">
         <div className="flex gap-1">

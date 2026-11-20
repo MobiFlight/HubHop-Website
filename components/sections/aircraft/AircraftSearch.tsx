@@ -25,7 +25,7 @@ const AircraftSearch = ({ sim, aircraft }: AircraftSearchProps) => {
         vendor: aircraft.vendorSlug,
         aircraft: aircraft.aircraftSlug,
       })}
-      className="flex max-w-3xl items-center gap-3 rounded-2xl border bg-card py-2 pr-2 pl-5 focus-within:ring-4 focus-within:ring-primary/30"
+      className="flex items-center gap-3 rounded-2xl border bg-card py-2 pr-2 pl-5 focus-within:ring-4 focus-within:ring-primary/30"
     >
       <IconSearch aria-hidden="true" className="size-5 shrink-0 text-primary" />
       <label htmlFor={id} className="sr-only">

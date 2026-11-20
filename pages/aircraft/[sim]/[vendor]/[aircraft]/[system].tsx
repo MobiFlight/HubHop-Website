@@ -121,7 +121,6 @@ const SystemPage = ({ sim, aircraft, system }: SystemPageProps) => {
           <p className="max-w-3xl text-lg text-muted-foreground">
             All {system.total} {system.name} presets of the {name} in {simName}.
           </p>
-          <AircraftSearch sim={sim} aircraft={aircraft} />
           <div className="flex flex-wrap gap-x-6 gap-y-1">
             <Link
               href={sheetUrl}
@@ -142,7 +141,10 @@ const SystemPage = ({ sim, aircraft, system }: SystemPageProps) => {
             </Link>
           </div>
         </header>
-        <SystemSection system={system} heading={false} />
+        <div className="flex flex-col gap-4">
+          <AircraftSearch sim={sim} aircraft={aircraft} />
+          <SystemSection system={system} heading={false} />
+        </div>
         <NewToMobiFlight aircraft={`the ${name}`} />
       </main>
     </Layout>
