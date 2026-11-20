@@ -71,7 +71,6 @@ const Hero = ({ sim, onSimChange, presetCount, stats }: HeroProps) => {
 
         <form role="search" onSubmit={submit} className="flex flex-col gap-3">
           <SimSwitch
-            size="compact"
             value={sim}
             onValueChange={(value) => isSim(value) && onSimChange(value)}
           />

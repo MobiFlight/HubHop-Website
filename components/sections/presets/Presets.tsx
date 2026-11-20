@@ -268,7 +268,7 @@ const Presets = ({ sim: simType, vendor, aircraft }: PresetsProps) => {
               <SimSwitch
                 value={simType}
                 onValueChange={changeSimType}
-                className="mb-3"
+                className="mb-3 w-full"
               />
               {/* sticky together, so the filter doesn't slide over the promotion */}
               <div className="flex flex-col md:sticky md:top-3">
