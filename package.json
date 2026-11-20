@@ -14,8 +14,10 @@
   "dependencies": {
     "@azure/msal-browser": "^4.30.0",
     "@azure/msal-react": "^3.0.29",
+    "@hookform/resolvers": "^7.0.7",
     "@tabler/icons-react": "^3.52.0",
     "class-variance-authority": "^0.7.1",
+    "cmdk": "^1.1.1",
     "cn": "^0.5.2",
     "dexie": "^4.4.7",
     "dexie-react-hooks": "^4.4.0",
@@ -29,7 +31,8 @@
     "react-hook-form": "^7.92.0",
     "react-icons": "^5.7.0",
     "sonner": "^2.0.8",
-    "vanilla-cookieconsent": "3.3.0"
+    "vanilla-cookieconsent": "3.3.0",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",

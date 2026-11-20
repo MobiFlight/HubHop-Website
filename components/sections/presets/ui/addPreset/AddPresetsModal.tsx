@@ -1,19 +1,36 @@
-import { useEffect, useState } from "react"
-import { BiAddToQueue, BiCog, BiJoystickButton, BiRename } from "react-icons/bi"
-import { BsCardText, BsList } from "react-icons/bs"
-import { GiCommercialAirplane } from "react-icons/gi"
-import { HiOutlineLightBulb, HiOutlineSearchCircle } from "react-icons/hi"
-import { MdBusiness } from "react-icons/md"
-import ButtonDark from "../../../Shared/ButtonDark"
-import ButtonOrange from "../../../Shared/ButtonOrange"
-import Modal from "../../../Shared/Modal"
-import { useForm } from "react-hook-form"
-import { FiExternalLink, FiRepeat } from "react-icons/fi"
+import { useState } from "react"
 import Link from "next/link"
-import { AiOutlineLoading } from "react-icons/ai"
+import { Controller, useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { z } from "zod"
 import { toast } from "sonner"
-import { AuthenticatedTemplate } from "@azure/msal-react"
-import { RiListSettingsLine } from "react-icons/ri"
+import {
+  IconBuildingStore,
+  IconBulb,
+  IconCode,
+  IconCursorText,
+  IconExternalLink,
+  IconFileText,
+  IconDeviceGamepad2,
+  IconListDetails,
+  IconLoader2,
+  IconPlane,
+  IconRepeat,
+  IconSettings,
+} from "@tabler/icons-react"
+import { Button } from "@/components/ui/button"
+import { Field, FieldError, FieldLabel } from "@/components/ui/field"
+import { Input } from "@/components/ui/input"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
+import ComboBox from "../../../Shared/ComboBox"
+import Modal from "../../../Shared/Modal"
 import { CODE_TYPES } from "../../../../../lib/codeTypes"
 import { presetTypesFor } from "../../../../../lib/presetTypes"
 import { sortedUnique } from "../../../../../lib/presetFacets"
@@ -25,54 +42,54 @@ type AddPresetsModalProps = {
   presets: Preset[]
 }
 
-interface AddPresetForm {
-  addVendors: string
-  vendors: string
-  addAircrafts: string
-  aircrafts: string
-  addSystems: string
-  systems: string
-  presetTypes: string
-  codeTypes: string
-  label: string
-  code: string
-  description: string
-}
+const required = (message: string) => z.string().trim().min(1, message)
+
+/** X-Plane presets also need a code type */
+const schemaFor = (sim: string | null) =>
+  z.object({
+    vendor: required("Select Vendor"),
+    aircraft: required("Select Aircraft"),
+    system: required("Select System"),
+    presetType: required("Select preset type"),
+    codeType: sim === "xplane" ? required("Select code type") : z.string(),
+    label: required("Name required"),
+    code: required("Code required"),
+    description: z.string(),
+  })
+
+type AddPresetForm = z.infer<ReturnType<typeof schemaFor>>
+
+// the preset list's filters preselect the form
+const storedFilter = (key: string) => localStorage.getItem(key) || ""
 
 const AddPresetsModal = ({ onClose, presets }: AddPresetsModalProps) => {
-  const [filteredVendors, setFilteredVendors] = useState(
-    localStorage.getItem("vendorFilter") === ""
-      ? ""
-      : localStorage.getItem("vendorFilter") || "",
-  )
-  const [filteredAircrafts, setFilteredAircrafts] = useState(
-    localStorage.getItem("aircraftFilter") === ""
-      ? ""
-      : localStorage.getItem("aircraftFilter") || "",
-  )
-  const [filteredSystems, setFilteredSystems] = useState(
-    localStorage.getItem("systemFilter") === ""
-      ? ""
-      : localStorage.getItem("systemFilter") || "",
-  )
-  const [filteredPresetTypes, setFilteredPresetTypes] = useState(
-    localStorage.getItem("presetTypeFilter") === ""
-      ? ""
-      : localStorage.getItem("presetTypeFilter") || "",
-  )
-  const [filteredCodeTypes, setFilteredCodeTypes] = useState(
-    localStorage.getItem("codeTypeFilter") === ""
-      ? ""
-      : localStorage.getItem("codeTypeFilter") || "",
-  )
-  const [label, setLabel] = useState("")
-  const [code, setCode] = useState("")
-  const [description, setDescription] = useState("")
-  const [addVendor, setAddVendor] = useState(false)
-  const [addAircraft, setAddAircraft] = useState(false)
-  const [addSystem, setAddSystem] = useState(false)
+  const sim = localStorage.getItem("simType")
   const [buttonSubmit, setButtonSubmit] = useState(false)
   const [bulkUpload, setBulkUpload] = useState(false)
+
+  const {
+    control,
+    register,
+    handleSubmit,
+    watch,
+    resetField,
+    setValue,
+    formState: { errors },
+  } = useForm<AddPresetForm>({
+    resolver: zodResolver(schemaFor(sim)),
+    defaultValues: {
+      vendor: storedFilter("vendorFilter"),
+      aircraft: storedFilter("aircraftFilter"),
+      system: storedFilter("systemFilter"),
+      presetType: storedFilter("presetTypeFilter"),
+      codeType: storedFilter("codeTypeFilter"),
+      label: "",
+      code: "",
+      description: "",
+    },
+  })
+  const { vendor, aircraft, system, presetType, label, code, description } =
+    watch()
 
   const includesText = (text: string, search: string) =>
     text.toLowerCase().includes(search.toLowerCase())
@@ -83,11 +100,10 @@ const AddPresetsModal = ({ onClose, presets }: AddPresetsModalProps) => {
   // presets similar to the input, shown next to the form
   const filteredItems = presets.filter(
     (preset) =>
-      includesText(preset.vendor, filteredVendors) &&
-      matchesSelection(preset.aircraft, filteredAircrafts) &&
-      matchesSelection(preset.system, filteredSystems) &&
-      (!preset.presetType ||
-        matchesSelection(preset.presetType, filteredPresetTypes)) &&
+      includesText(preset.vendor, vendor) &&
+      matchesSelection(preset.aircraft, aircraft) &&
+      matchesSelection(preset.system, system) &&
+      (!preset.presetType || matchesSelection(preset.presetType, presetType)) &&
       includesText(preset.label, label) &&
       includesText(preset.code, code) &&
       (!preset.description || includesText(preset.description, description)),
@@ -100,547 +116,318 @@ const AddPresetsModal = ({ onClose, presets }: AddPresetsModalProps) => {
         .filter((preset) => !aircraft || preset.aircraft === aircraft)
         .map((preset) => preset.vendor),
     )
-  const vendorOptions = sortedUnique([
-    ...vendorsOf(filteredAircrafts),
-    filteredVendors,
-  ])
-  const aircraftOptions = sortedUnique([
-    ...presets
-      .filter((preset) => !filteredVendors || preset.vendor === filteredVendors)
+  const vendorOptions = vendorsOf(aircraft)
+  const aircraftOptions = sortedUnique(
+    presets
+      .filter((preset) => !vendor || preset.vendor === vendor)
       .map((preset) => preset.aircraft),
-    filteredAircrafts,
-  ])
+  )
+  const systemOptions = sortedUnique(presets.map((preset) => preset.system))
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    resetField,
-    setValue,
-    formState: { errors },
-  } = useForm<AddPresetForm>()
+  // picking an aircraft first fills in its vendor
+  const chooseAircraft = (value: string) => {
+    setValue("aircraft", value, { shouldValidate: true })
+    const [onlyVendor, ...others] = vendorsOf(value)
+    if (!vendor && onlyVendor && !others.length)
+      setValue("vendor", onlyVendor, { shouldValidate: true })
+  }
 
-  useEffect(() => {
-    const subscription = watch((value) => {
-      setFilteredVendors(value.vendors ?? "")
-      setFilteredAircrafts(value.aircrafts ?? "")
-      setFilteredSystems(value.systems ?? "")
-      setFilteredPresetTypes(value.presetTypes ?? "")
-      setFilteredCodeTypes(value.codeTypes ?? "")
-      setCode(value.code ?? "")
-      setLabel(value.label ?? "")
-      setDescription(value.description ?? "")
+  async function addPreset(data: AddPresetForm) {
+    setButtonSubmit(true)
+    const url =
+      process.env.NEXT_PUBLIC_HUBHOP_API_BASEURL + "/" + sim + "/presets"
+    const common = {
+      vendor: data.vendor,
+      aircraft: data.aircraft,
+      system: data.system,
+      code: data.code,
+      label: data.label,
+      presetType: data.presetType,
+      status: "Submitted",
+      createdDate: new Date().toUTCString(),
+      author: localStorage.getItem("username"),
+      description: data.description,
+    }
+    const preset =
+      sim === "msfs2020"
+        ? {
+            path: [
+              data.vendor,
+              data.aircraft,
+              data.system,
+              data.presetType,
+              data.label,
+            ].join("."),
+            ...common,
+          }
+        : { ...common, codeType: data.codeType }
+
+    const added = await fetch(url, {
+      method: "POST",
+      body: JSON.stringify(preset),
+      redirect: "follow",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("accessToken"),
+      },
     })
-    return () => subscription.unsubscribe()
-  }, [watch])
+      .then((res) => res.ok)
+      .catch(() => false)
+    setButtonSubmit(false)
+    // on error keep the input, so the user can try again
+    if (!added) return toast.error("Error - Preset not added!")
 
-  const presetAdded = () => toast.success("Preset successfully added!")
-  const presetAddedError = () => toast.error("Error - Preset not added!")
+    resetField("label", { defaultValue: "" })
+    resetField("code", { defaultValue: "" })
+    resetField("description", { defaultValue: "" })
+    toast.success("Preset successfully added!")
+  }
 
   return (
     <Modal title="Add Preset" onClose={onClose} dismissible={false}>
-      <div className="w-[70vw]">
-        <form
-          onSubmit={handleSubmit(async (data) => {
-            setButtonSubmit(true)
-            const url =
-              process.env.NEXT_PUBLIC_HUBHOP_API_BASEURL +
-              "/" +
-              localStorage.getItem("simType") +
-              "/presets"
-
-            // post body data
-            const preset =
-              localStorage.getItem("simType") === "msfs2020"
-                ? {
-                    path:
-                      (data.vendors == "" ? data.addVendors : data.vendors) +
-                      "." +
-                      (data.aircrafts == ""
-                        ? data.addAircrafts
-                        : data.aircrafts) +
-                      "." +
-                      (data.systems == "" ? data.addSystems : data.systems) +
-                      "." +
-                      data.presetTypes +
-                      "." +
-                      data.label,
-                    vendor: data.vendors == "" ? data.addVendors : data.vendors,
-                    aircraft:
-                      data.aircrafts == "" ? data.addAircrafts : data.aircrafts,
-                    system: data.systems == "" ? data.addSystems : data.systems,
-                    code: data.code,
-                    label: data.label,
-                    presetType: data.presetTypes,
-                    status: "Submitted",
-                    createdDate: new Date().toUTCString(),
-                    author: localStorage.getItem("username"),
-                    description: data.description,
-                  }
-                : {
-                    vendor: data.vendors == "" ? data.addVendors : data.vendors,
-                    aircraft:
-                      data.aircrafts == "" ? data.addAircrafts : data.aircrafts,
-                    system: data.systems == "" ? data.addSystems : data.systems,
-                    code: data.code,
-                    label: data.label,
-                    presetType: data.presetTypes,
-                    codeType: data.codeTypes,
-                    status: "Submitted",
-                    createdDate: new Date().toUTCString(),
-                    author: localStorage.getItem("username"),
-                    description: data.description,
-                  }
-
-            // request options
-            const options: RequestInit = {
-              method: "POST",
-              body: JSON.stringify(preset),
-              redirect: "follow",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: "Bearer " + localStorage.getItem("accessToken"),
-              },
-            }
-
-            // send POST request
-            const added = await fetch(url, options)
-              .then((res) => res.ok)
-              .catch(() => false)
-            setButtonSubmit(false)
-            // on error keep the input, so the user can try again
-            if (!added) return presetAddedError()
-
-            resetField("label", { defaultValue: "" })
-            resetField("code", { defaultValue: "" })
-            resetField("description", { defaultValue: "" })
-            presetAdded()
-          })}
-        >
-          <div
-            className={`flex w-full flex-col space-y-3 self-start rounded-lg p-3 transition-all`}
-          >
-            <div className={`flex space-x-5 text-sm`}>
-              <div className="flex w-2/6 flex-col space-y-3">
-                <div className="flex items-center space-x-2">
-                  <div className="w-full">
-                    <div className="flex items-center space-x-1">
-                      <MdBusiness />
-                      <label htmlFor="searchfield">
-                        {addVendor ? "Name" : "Select"} Vendor
-                      </label>
-                    </div>
-                    <div className="flex space-x-2">
-                      {addVendor ? (
-                        <input
-                          placeholder="Provide a vendor name"
-                          type="text"
-                          className={`w-full rounded-lg border bg-hhBG/75 px-3 py-1 text-hhText ${
-                            errors.addVendors
-                              ? "border-red-500"
-                              : "border-hhOrange/75"
-                          }`}
-                          onInput={(e) => e}
-                          {...register("addVendors", {
-                            required: "Provide a vendor name",
-                          })}
-                        />
-                      ) : (
-                        <select
-                          className={`w-full rounded-lg border bg-hhBG/75 px-3 py-1 text-hhText ${
-                            errors.vendors
-                              ? "border-red-500"
-                              : "border-hhOrange/75"
-                          }`}
-                          value={filteredVendors}
-                          {...register("vendors", {
-                            required: "Select Vendor",
-                          })}
-                        >
-                          <option value="">All Vendors</option>
-                          {vendorOptions.map((vendor) => (
-                            <option key={vendor}>{vendor}</option>
-                          ))}
-                        </select>
-                      )}
-                      <button
-                        aria-label={
-                          addVendor
-                            ? "Choose an existing vendor"
-                            : "Enter a new vendor"
-                        }
-
-                        onClick={() => (
-                          setAddVendor((prev) => !prev),
-                          resetField("addVendors", { defaultValue: "" }),
-                          resetField("vendors", { defaultValue: "" })
-                        )}
-                        type={"button"}
-                        className="rounded-lg bg-hhOrange p-2 text-hhBG transition-all hover:bg-hhOrangeShade-600"
-                      >
-                        {addVendor ? <BsList /> : <BiAddToQueue />}
-                      </button>
-                    </div>
-                    <p className="font-semibold text-red-500">
-                      {addVendor
-                        ? errors.addVendors?.message
-                        : errors.vendors?.message}
-                    </p>
-                  </div>
-                </div>
-                <div className="w-full">
-                  <div className="flex items-center space-x-1">
-                    <GiCommercialAirplane />
-                    <label htmlFor="searchfield">
-                      {addAircraft ? "Name" : "Search"} Aircraft
-                    </label>
-                  </div>
-                  <div className="flex space-x-2">
-                    {addAircraft ? (
-                      <input
-                        placeholder="Provide an aircraft name"
-                        className={`w-full rounded-lg border bg-hhBG/75 px-3 py-1 text-hhText ${
-                          errors.addAircrafts
-                            ? "border-red-500"
-                            : "border-hhOrange/75"
-                        }`}
-                        onInput={(e) => e}
-                        {...register("addAircrafts", {
-                          required: "Provide an aircraft name",
-                        })}
-                      />
-                    ) : (
-                      <select
-                        className={`w-full rounded-lg border bg-hhBG/75 px-3 py-1 text-hhText ${
-                          errors.aircrafts
-                            ? "border-red-500"
-                            : "border-hhOrange/75"
-                        }`}
-                        value={filteredAircrafts}
-                        {...register("aircrafts", {
-                          required: "Select Aircraft",
-                          // picking an aircraft first fills in its vendor
-                          onChange: (e) => {
-                            const [vendor, ...others] = vendorsOf(
-                              e.target.value,
-                            )
-                            if (!filteredVendors && vendor && !others.length)
-                              setValue("vendors", vendor)
-                          },
-                        })}
-                      >
-                        <option value="">All Aircraft</option>
-                        {aircraftOptions.map((aircraft) => (
-                          <option key={aircraft}>{aircraft}</option>
-                        ))}
-                      </select>
-                    )}
-                    <button
-                      aria-label={
-                        addAircraft
-                          ? "Choose an existing aircraft"
-                          : "Enter a new aircraft"
-                      }
-
-                      onClick={() => (
-                        setAddAircraft((prev) => !prev),
-                        resetField("addAircrafts", { defaultValue: "" }),
-                        resetField("aircrafts", { defaultValue: "" })
-                      )}
-                      type={"button"}
-                      className="rounded-lg bg-hhOrange p-2 text-hhBG transition-all hover:bg-hhOrangeShade-600"
+      <form
+        onSubmit={handleSubmit(addPreset)}
+        className="flex w-[70vw] flex-col gap-6"
+      >
+        <div className="grid grid-cols-[2fr_3fr_1fr] gap-5">
+          <div className="flex flex-col gap-4">
+            <Controller
+              name="vendor"
+              control={control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="add-vendor">
+                    <IconBuildingStore className="size-4" /> Vendor
+                  </FieldLabel>
+                  <ComboBox
+                    id="add-vendor"
+                    options={vendorOptions}
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    placeholder="Select vendor"
+                    allowCreate
+                    invalid={fieldState.invalid}
+                  />
+                  <FieldError errors={[fieldState.error]} />
+                </Field>
+              )}
+            />
+            <Controller
+              name="aircraft"
+              control={control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="add-aircraft">
+                    <IconPlane className="size-4" /> Aircraft
+                  </FieldLabel>
+                  <ComboBox
+                    id="add-aircraft"
+                    options={aircraftOptions}
+                    value={field.value}
+                    onValueChange={chooseAircraft}
+                    placeholder="Select aircraft"
+                    allowCreate
+                    invalid={fieldState.invalid}
+                  />
+                  <FieldError errors={[fieldState.error]} />
+                </Field>
+              )}
+            />
+            <Controller
+              name="system"
+              control={control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="add-system">
+                    <IconSettings className="size-4" /> System
+                  </FieldLabel>
+                  <ComboBox
+                    id="add-system"
+                    options={systemOptions}
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    placeholder="Select system"
+                    allowCreate={isModerator()}
+                    invalid={fieldState.invalid}
+                  />
+                  <FieldError errors={[fieldState.error]} />
+                </Field>
+              )}
+            />
+            <Controller
+              name="presetType"
+              control={control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="add-preset-type">
+                    <IconDeviceGamepad2 className="size-4" />{" "}
+                    <IconBulb className="size-4" /> Input/Output
+                  </FieldLabel>
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger
+                      id="add-preset-type"
+                      className="w-full"
+                      aria-invalid={fieldState.invalid}
                     >
-                      {addAircraft ? <BsList /> : <BiAddToQueue />}
-                    </button>
-                  </div>
-                  <p className="font-semibold text-red-500">
-                    {addAircraft
-                      ? errors.addAircrafts?.message
-                      : errors.aircrafts?.message}
-                  </p>
-                </div>
-                <div className="w-full">
-                  <div className="flex items-center space-x-1">
-                    <BiCog />
-                    <label htmlFor="searchfield">
-                      {addSystem ? "Name" : "Select"} System
-                    </label>
-                  </div>
-                  <div className="flex space-x-2">
-                    {addSystem ? (
-                      <input
-                        placeholder="Provide a system name"
-                        className={`w-full rounded-lg border bg-hhBG/75 px-3 py-1 text-hhText ${
-                          errors.addSystems
-                            ? "border-red-500"
-                            : "border-hhOrange/75"
-                        }`}
-                        {...register("addSystems", {
-                          required: "Provide a system name",
-                        })}
-                      />
-                    ) : (
-                      <select
-                        className={`w-full rounded-lg border bg-hhBG/75 px-3 py-1 text-hhText ${
-                          errors.systems
-                            ? "border-red-500"
-                            : "border-hhOrange/75"
-                        }`}
-                        value={filteredSystems}
-                        {...register("systems", { required: "Select System" })}
+                      <SelectValue placeholder="Select Input/Output" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {presetTypesFor(sim).map((type) => (
+                        <SelectItem key={type} value={type}>
+                          {type}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FieldError errors={[fieldState.error]} />
+                </Field>
+              )}
+            />
+            {sim === "xplane" && (
+              <Controller
+                name="codeType"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="add-code-type">
+                      <IconListDetails className="size-4" /> Code Type
+                    </FieldLabel>
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger
+                        id="add-code-type"
+                        className="w-full"
+                        aria-invalid={fieldState.invalid}
                       >
-                        <option value="">All Systems</option>
-                        {sortedUnique(
-                          presets.map((preset) => preset.system),
-                        ).map((system) => (
-                          <option key={system}>{system}</option>
+                        <SelectValue placeholder="Select Code Type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {CODE_TYPES.map((type) => (
+                          <SelectItem key={type} value={type}>
+                            {type}
+                          </SelectItem>
                         ))}
-                      </select>
-                    )}
-                    <AuthenticatedTemplate>
-                      {isModerator() && (
-                        <button
-                          aria-label={
-                            addSystem
-                              ? "Choose an existing system"
-                              : "Enter a new system"
-                          }
-
-                          onClick={() => (
-                            setAddSystem((prev) => !prev),
-                            resetField("addSystems", { defaultValue: "" }),
-                            resetField("systems", { defaultValue: "" })
-                          )}
-                          type={"button"}
-                          className="rounded-lg bg-hhOrange p-2 text-hhBG transition-all hover:bg-hhOrangeShade-600"
-                        >
-                          {addSystem ? <BsList /> : <BiAddToQueue />}
-                        </button>
-                      )}
-                    </AuthenticatedTemplate>
-                  </div>
-                  <p className="font-semibold text-red-500">
-                    {addSystem
-                      ? errors.addSystems?.message
-                      : errors.systems?.message}
-                  </p>
-                </div>
-                <div className="w-full">
-                  <div className="flex items-center space-x-1">
-                    <div className="flex space-x-1">
-                      <BiJoystickButton />
-                      <HiOutlineLightBulb />
-                    </div>
-                    <label htmlFor="searchfield">Select Input/Output</label>
-                  </div>
-                  <div className="flex space-x-2">
-                    <select
-                      className={`w-full rounded-lg border bg-hhBG/75 px-3 py-1 text-hhText ${
-                        errors.presetTypes
-                          ? "border-red-500"
-                          : "border-hhOrange/75"
-                      }`}
-                      value={filteredPresetTypes}
-                      {...register("presetTypes", {
-                        required: "Select preset type",
-                      })}
-                    >
-                      <option value="">All Inputs/Outputs</option>
-                      {presetTypesFor(localStorage.getItem("simType")).map(
-                        (presetType) => (
-                          <option key={presetType}>{presetType}</option>
-                        ),
-                      )}
-                    </select>
-                  </div>
-                  {localStorage.getItem("simType") === "xplane" && (
-                    <div>
-                      <div className="mt-3 flex items-center space-x-1">
-                        <div className="flex space-x-1">
-                          <RiListSettingsLine />
-                        </div>
-                        <label htmlFor="searchfield">Select Code Type</label>
-                      </div>
-                      <div className="flex space-x-2">
-                        <select
-                          className={`w-full rounded-lg border bg-hhBG/75 px-3 py-1 text-hhText ${
-                            errors.codeTypes
-                              ? "border-red-500"
-                              : "border-hhOrange/75"
-                          }`}
-                          value={filteredCodeTypes}
-                          {...register("codeTypes", {
-                            required: "Select code type",
-                          })}
-                        >
-                          <option value="">All Code Types</option>
-                          {CODE_TYPES.map((codeType) => (
-                            <option key={codeType}>{codeType}</option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-                  )}
-                  <p className="font-semibold text-red-500">
-                    {errors.presetTypes?.message}
-                  </p>
-                </div>
-              </div>
-              <div className="flex w-3/6 flex-col space-y-3">
-                <div>
-                  <div className="flex items-center space-x-1">
-                    <BiRename />
-                    <label htmlFor="searchfield">Name</label>
-                  </div>
-                  <input
-                    className={`w-full rounded-lg border bg-hhBG/75 px-3 py-1 text-hhText ${
-                      errors.label ? "border-red-500" : "border-hhOrange/75"
-                    }`}
-                    placeholder="Alternator 1 On"
-                    onInput={(e) => e}
-                    {...register("label", { required: "Name required" })}
-                  />
-                  <p className="font-semibold text-red-500">
-                    {errors.label?.message}
-                  </p>
-                </div>
-                <div>
-                  <div className="flex items-center space-x-1">
-                    <HiOutlineSearchCircle />
-                    <label htmlFor="searchfield">Code</label>
-                  </div>
-                  <textarea
-                    className={`w-full rounded-lg border bg-hhBG/75 px-3 py-1 text-hhText ${
-                      errors.code ? "border-red-500" : "border-hhOrange/75"
-                    }`}
-                    onInput={(e) => e}
-                    cols={100}
-                    rows={5}
-                    placeholder={"(>L:somecode) (>K:somecodeToo) * near"}
-                    {...register("code", { required: "Code required" })}
-                  />
-                  <p className="font-semibold text-red-500">
-                    {errors.code?.message}
-                  </p>
-                </div>
-                <div>
-                  <div className="flex items-center space-x-1">
-                    <BsCardText />
-                    <label htmlFor="searchfield">Description</label>
-                  </div>
-                  <textarea
-                    className="w-full rounded-lg border border-hhOrange/75 bg-hhBG/75 px-3 py-1 text-hhText"
-                    cols={100}
-                    rows={5}
-                    placeholder={"This is your space for a nice description"}
-                    {...register("description")}
-                  />
-                </div>
-              </div>
-              <div className="flex w-1/6 flex-col">
-                <div className="flex items-center space-x-1">
-                  <FiRepeat />
-                  <label htmlFor="searchfield">Similar Presets</label>
-                </div>
-                <div
-                  className={`flex w-full flex-col space-y-1 rounded-lg border border-hhOrange/75 bg-hhBG/75 px-3 py-1 text-hhText`}
-                >
-                  <p>{filteredItems.length} presets found.</p>
-                  {filteredItems.length === 0 ? (
-                    <div>No matches</div>
-                  ) : filteredItems.length <= 10 ? (
-                    filteredItems.map((preset) => (
-                      <Link
-                        legacyBehavior
-                        href={{
-                          pathname: `/preset`,
-                          query: { id: preset.id },
-                        }}
-                        key={preset.id}
-                      >
-                        <a
-                          target={"_blank"}
-                          className="flex items-center justify-between space-x-1 rounded-lg bg-hhCard/75 px-3 py-0.5 transition-all hover:bg-hhOrange hover:text-hhBG"
-                        >
-                          <p className="w-11/12 truncate hover:text-clip">
-                            {preset.label}
-                          </p>
-                          <FiExternalLink />
-                        </a>
-                      </Link>
-                    ))
-                  ) : (
-                    <p>Maximum 10 will be displayed here.</p>
-                  )}
-                </div>
-              </div>
+                      </SelectContent>
+                    </Select>
+                    <FieldError errors={[fieldState.error]} />
+                  </Field>
+                )}
+              />
+            )}
+          </div>
+          <div className="flex flex-col gap-4">
+            <Field data-invalid={!!errors.label}>
+              <FieldLabel htmlFor="add-label">
+                <IconCursorText className="size-4" /> Name
+              </FieldLabel>
+              <Input
+                id="add-label"
+                placeholder="Alternator 1 On"
+                aria-invalid={!!errors.label}
+                {...register("label")}
+              />
+              <FieldError errors={[errors.label]} />
+            </Field>
+            <Field data-invalid={!!errors.code}>
+              <FieldLabel htmlFor="add-code">
+                <IconCode className="size-4" /> Code
+              </FieldLabel>
+              <Textarea
+                id="add-code"
+                rows={5}
+                className="font-mono"
+                placeholder="(>L:somecode) (>K:somecodeToo) * near"
+                aria-invalid={!!errors.code}
+                {...register("code")}
+              />
+              <FieldError errors={[errors.code]} />
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="add-description">
+                <IconFileText className="size-4" /> Description
+              </FieldLabel>
+              <Textarea
+                id="add-description"
+                rows={5}
+                placeholder="This is your space for a nice description"
+                {...register("description")}
+              />
+            </Field>
+          </div>
+          <div className="flex flex-col gap-2">
+            <p className="flex items-center gap-2 text-sm font-medium">
+              <IconRepeat className="size-4" /> Similar Presets
+            </p>
+            <div className="flex flex-col gap-1 rounded-md border border-primary/50 p-2 text-sm">
+              <p>{filteredItems.length} presets found.</p>
+              {filteredItems.length === 0 ? (
+                <p className="text-muted-foreground">No matches</p>
+              ) : filteredItems.length <= 10 ? (
+                filteredItems.map((preset) => (
+                  <Link
+                    key={preset.id}
+                    href={{ pathname: "/preset", query: { id: preset.id } }}
+                    target="_blank"
+                    className="flex items-center justify-between gap-1 rounded-sm px-2 py-0.5 hover:bg-muted"
+                  >
+                    <span className="truncate">{preset.label}</span>
+                    <IconExternalLink className="size-4 shrink-0" />
+                  </Link>
+                ))
+              ) : (
+                <p className="text-muted-foreground">
+                  Maximum 10 will be displayed here.
+                </p>
+              )}
             </div>
           </div>
-          <div className="mt-5 flex justify-between px-3">
-            <button type={"button"} onClick={onClose}>
-              <ButtonDark>
-                <p>Close</p>
-              </ButtonDark>
-            </button>
-            <div className="flex space-x-3">
-              <button onClick={() => setBulkUpload(true)} type={"button"}>
-                <ButtonOrange>
-                  <p>Bulk upload</p>
-                </ButtonOrange>
-              </button>
-              <button disabled={buttonSubmit} type="submit">
-                <ButtonOrange>
-                  {buttonSubmit && (
-                    <div className="mr-2 animate-spin text-hhCard">
-                      <AiOutlineLoading />
-                    </div>
-                  )}
-                  <p className={buttonSubmit ? "text-hhCard" : "text-hhBG"}>
-                    Add preset
-                  </p>
-                </ButtonOrange>
-              </button>
-            </div>
+        </div>
+        <div className="flex justify-between">
+          <Button type="button" variant="secondary" onClick={onClose}>
+            Close
+          </Button>
+          <div className="flex gap-3">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setBulkUpload(true)}
+            >
+              Bulk upload
+            </Button>
+            <Button type="submit" disabled={buttonSubmit}>
+              {buttonSubmit && <IconLoader2 className="animate-spin" />}
+              Add preset
+            </Button>
           </div>
-        </form>
-      </div>
+        </div>
+      </form>
       {bulkUpload && (
         <Modal title={"Bulk Upload"} onClose={() => setBulkUpload(false)}>
           <p className="max-w-lg">
             If you want to upload many presets at once, you can download or open
             the import-file and post it on the{" "}
             <a
-              className="rounded-sm bg-hhOrange px-2 font-semibold text-hhBG transition-all hover:bg-hhOrangeShade-600"
+              className="text-primary underline underline-offset-4"
               href="https://discord.gg/weZwE4sD"
-              target={"_blank"}
+              target="_blank"
             >
               Discord
             </a>{" "}
             bulk-upload channel.
           </p>
-          <div className="mt-2 flex flex-col items-start space-y-2">
-            <Link
-              legacyBehavior
-              href={"../../../../../../import_events_yourName.xlsx"}
-            >
-              <a>
-                <ButtonOrange>
-                  Download import-file (MS Excel Required)
-                </ButtonOrange>
+          <div className="flex flex-col items-start gap-2">
+            <Button asChild>
+              <a href="/import_events_yourName.xlsx">
+                Download import-file (MS Excel Required)
               </a>
-            </Link>
-            <Link
-              legacyBehavior
-              href={
-                "https://docs.google.com/spreadsheets/d/1HHDvuA1rgdLZvdy0MTXB3QNIxba4iZZUcit8TQysD_k/edit#gid=664333323"
-              }
-            >
-              <a target={"_blank"}>
-                <ButtonOrange>
-                  Open import-file (Google-Account required)
-                </ButtonOrange>
+            </Button>
+            <Button asChild>
+              <a
+                href="https://docs.google.com/spreadsheets/d/1HHDvuA1rgdLZvdy0MTXB3QNIxba4iZZUcit8TQysD_k/edit#gid=664333323"
+                target="_blank"
+              >
+                Open import-file (Google-Account required)
               </a>
-            </Link>
+            </Button>
           </div>
         </Modal>
       )}
