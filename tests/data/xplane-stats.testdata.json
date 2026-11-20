@@ -21,7 +21,7 @@
   "votes": [],
   "presetsAdded": [
     {
-      "id": "xplane-0001",
+      "id": "650000000000000000000001",
       "vendor": "Laminar Research",
       "aircraft": "C172",
       "system": "Autopilot",
@@ -34,10 +34,10 @@
       "author": "Test Author",
       "description": "X-Plane AP engage",
       "version": 1,
-      "_id": "xplane-0001"
+      "_id": "650000000000000000000001"
     },
     {
-      "id": "xplane-0002",
+      "id": "650000000000000000000002",
       "vendor": "Laminar Research",
       "aircraft": "C172",
       "system": "Autopilot",
@@ -50,10 +50,10 @@
       "author": "Test Author",
       "description": "X-Plane AP state",
       "version": 1,
-      "_id": "xplane-0002"
+      "_id": "650000000000000000000002"
     },
     {
-      "id": "xplane-0003",
+      "id": "650000000000000000000003",
       "vendor": "Laminar Research",
       "aircraft": "C172",
       "system": "Electrical",
@@ -66,10 +66,10 @@
       "author": "Test Author",
       "description": "X-Plane Battery on",
       "version": 1,
-      "_id": "xplane-0003"
+      "_id": "650000000000000000000003"
     },
     {
-      "id": "xplane-0004",
+      "id": "650000000000000000000004",
       "vendor": "Laminar Research",
       "aircraft": "B738",
       "system": "Electrical",
@@ -82,10 +82,10 @@
       "author": "Test Author",
       "description": "X-Plane Bus volts",
       "version": 1,
-      "_id": "xplane-0004"
+      "_id": "650000000000000000000004"
     },
     {
-      "id": "xplane-0005",
+      "id": "650000000000000000000005",
       "vendor": "Laminar Research",
       "aircraft": "B738",
       "system": "Lights",
@@ -98,12 +98,12 @@
       "author": "Test Author",
       "description": "X-Plane Beacon toggle",
       "version": 1,
-      "_id": "xplane-0005"
+      "_id": "650000000000000000000005"
     }
   ],
   "presetsUpdated": [
     {
-      "id": "xplane-0001",
+      "id": "650000000000000000000001",
       "vendor": "Laminar Research",
       "aircraft": "C172",
       "system": "Autopilot",
@@ -116,7 +116,7 @@
       "author": "Test Author",
       "description": "X-Plane AP engage",
       "version": 1,
-      "_id": "xplane-0001"
+      "_id": "650000000000000000000001"
     }
   ]
 }

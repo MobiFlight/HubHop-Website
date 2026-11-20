@@ -10,6 +10,13 @@ import { getAccessToken } from "../../../services/msalFunctions"
 import { msalInstance, msalReady } from "../../../services/msal"
 import { db } from "../../../services/db"
 import { syncSim } from "../../../services/presetSync"
+import {
+  isSim,
+  presetListUrl,
+  slugify,
+  type PresetListFilters,
+  type Sim,
+} from "../../../lib/presetUrls"
 import { useLiveQuery } from "dexie-react-hooks"
 
 import { useRouter } from "next/router"
@@ -51,59 +58,58 @@ const PresetListSkeleton = ({ status, children }: PresetListSkeletonProps) => (
   </div>
 )
 
-const Presets = () => {
+type PresetsProps = {
+  sim: Sim
+  // slugs from the path
+  vendor?: string
+  aircraft?: string
+}
+
+const queryValue = (value: string | string[] | undefined) =>
+  typeof value === "string" ? value : ""
+
+/** The preset list; sim and filters come from the URL (see lib/presetUrls.ts) */
+const Presets = ({ sim: simType, vendor, aircraft }: PresetsProps) => {
+  const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [presetsMsfs, setPresetsMsfs] = useState<Preset[]>([])
   const [presetsXplane, setPresetsXplane] = useState<Preset[]>([])
-  const [filteredPresets, setFilteredPresets] = useState(
-    typeof localStorage !== "undefined" &&
-      localStorage.getItem("searchFilter") !== null
-      ? localStorage.getItem("searchFilter") || ""
-      : "",
-  )
-  // what is typed in the search box; filteredPresets follows it after a delay
+
+  const filters: PresetListFilters = {
+    sim: simType,
+    vendor,
+    // an aircraft without a vendor is a query parameter
+    aircraft: aircraft ?? (queryValue(router.query.aircraft) || undefined),
+    search: queryValue(router.query.search),
+    system: queryValue(router.query.system),
+    presetType: queryValue(router.query.presetType),
+    codeType: queryValue(router.query.codeType),
+  }
+  const filteredPresets = filters.search ?? ""
+  const filteredSystems = filters.system ?? ""
+  const filteredPresetTypes = filters.presetType ?? ""
+  const filteredCodeTypes = filters.codeType ?? ""
+
+  /** Shows the list with changed filters; the URL is the only place they are kept */
+  const navigate = (
+    changes: Partial<PresetListFilters>,
+    { replace = false } = {},
+  ) =>
+    router[replace ? "replace" : "push"](
+      presetListUrl({ ...filters, ...changes }),
+      undefined,
+      { shallow: true },
+    )
+
+  // what is typed in the search box; the URL follows it after a delay
   const [searchText, setSearchText] = useState(filteredPresets)
   const searchTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
-  const [filteredVendors, setFilteredVendors] = useState(
-    typeof localStorage !== "undefined" &&
-      localStorage.getItem("vendorFilter") !== null
-      ? localStorage.getItem("vendorFilter") || ""
-      : "",
-  )
-  const [filteredAircrafts, setFilteredAircrafts] = useState(
-    typeof localStorage !== "undefined" &&
-      localStorage.getItem("aircraftFilter") !== null
-      ? localStorage.getItem("aircraftFilter") || ""
-      : "",
-  )
-  const [filteredSystems, setFilteredSystems] = useState(
-    typeof localStorage !== "undefined" &&
-      localStorage.getItem("systemFilter") !== null
-      ? localStorage.getItem("systemFilter") || ""
-      : "",
-  )
-  const [filteredPresetTypes, setFilteredPresetTypes] = useState(
-    typeof localStorage !== "undefined" &&
-      localStorage.getItem("presetTypeFilter") !== null
-      ? localStorage.getItem("presetTypeFilter") || ""
-      : "",
-  )
-  const [filteredCodeTypes, setFilteredCodeTypes] = useState(
-    typeof localStorage !== "undefined" &&
-      localStorage.getItem("codeTypeFilter") !== null
-      ? localStorage.getItem("codeTypeFilter") || ""
-      : "",
-  )
+  useEffect(() => setSearchText(filteredPresets), [filteredPresets])
 
   const [exportModalOpen, setExportModalOpen] = useState(false)
   const [addModalOpen, setAddModalOpen] = useState(false)
   const [showMyPresets, setShowMyPresets] = useState(false)
   const [showReportedPresets, setShowReportedPresets] = useState(false)
-  const [simType, setSimType] = useState(
-    typeof localStorage !== "undefined" && localStorage.getItem("simType")
-      ? localStorage.getItem("simType")
-      : "msfs2020",
-  )
   const [presets, setPresets] = useState<Preset[]>([])
   const [filterOpen, setFilterOpen] = useState(true)
   const [loadingStatus, setLoadingStatus] = useState("")
@@ -126,7 +132,7 @@ const Presets = () => {
 
   useEffect(() => {
     if (addModalOpen) return
-    const sim = simType === "xplane" ? "xplane" : "msfs2020"
+    const sim = simType
     syncSim(sim, () => {
       setLoading(true)
       setLoadingStatus(
@@ -184,10 +190,11 @@ const Presets = () => {
   const matchesSearch = (preset: Preset) =>
     terms.length === 0 || (relevance.get(preset) ?? 0) > 0
 
+  // vendor and aircraft are compared as slugs, like in the URL
   const facetFilters: Record<Facet, (preset: Preset) => boolean> = {
-    vendor: (preset) =>
-      preset.vendor.toLowerCase().includes(filteredVendors.toLowerCase()),
-    aircraft: (preset) => isFilteredBy(preset.aircraft, filteredAircrafts),
+    vendor: (preset) => !vendor || slugify(preset.vendor) === vendor,
+    aircraft: (preset) =>
+      !filters.aircraft || slugify(preset.aircraft) === filters.aircraft,
     system: (preset) => isFilteredBy(preset.system, filteredSystems),
     presetType: (preset) =>
       isFilteredBy(preset.presetType, filteredPresetTypes),
@@ -206,6 +213,15 @@ const Presets = () => {
     matchesFilters(preset),
   )
 
+  // the names behind the slugs, for the filter dropdowns
+  const nameOf = (facet: "vendor" | "aircraft", slug: string | undefined) =>
+    slug
+      ? (presets.find((preset) => slugify(preset[facet]) === slug)?.[facet] ??
+        slug)
+      : ""
+  const filteredVendors = nameOf("vendor", vendor)
+  const filteredAircrafts = nameOf("aircraft", filters.aircraft)
+
   // Faceted search as in MobiFlight Connector: each dropdown lists the values
   // that match all other filters, so its siblings stay selectable
   const facetOptions = (facet: Facet, selected: string) =>
@@ -222,58 +238,18 @@ const Presets = () => {
     presetType: facetOptions("presetType", filteredPresetTypes),
   }
 
-  const storedSimType =
-    typeof localStorage !== "undefined" && localStorage.getItem("simType")
-  useEffect(() => {
-    document.body.classList.toggle("xplane", storedSimType !== "msfs2020")
-  }, [storedSimType])
-
-  const router = useRouter()
-
-  const updateQueryParam = (
-    key: string,
-    value: string,
-    { replace = false } = {},
-  ) => {
-    // Start from the current URL: router.query can still be stale when
-    // filters change in quick succession, which would drop other filters.
-    const params = new URLSearchParams(window.location.search)
-    if (value) params.set(key, value)
-    else params.delete(key) // Remove the key if value is empty
-    router[replace ? "replace" : "push"](
-      {
-        pathname: router.pathname,
-        query: Object.fromEntries(params),
-      },
-      undefined,
-      { shallow: true },
-    )
-  }
-
   // a pending search must not change the URL after leaving the page
   useEffect(() => {
     const timer = searchTimer
     return () => clearTimeout(timer.current)
   }, [])
 
-  // Populate filters from query parameters on mount
-  useEffect(() => {
-    setFilteredPresets((router.query.search as string) || "")
-    setSearchText((router.query.search as string) || "")
-    setFilteredVendors((router.query.vendor as string) || "")
-    setFilteredAircrafts((router.query.aircraft as string) || "")
-    setFilteredSystems((router.query.system as string) || "")
-    setFilteredPresetTypes((router.query.presetType as string) || "")
-    setFilteredCodeTypes((router.query.codeType as string) || "")
-  }, [router.query])
-
   const changeSimType = (newSimType: string) => {
-    setSimType(newSimType)
-    localStorage.setItem("simType", newSimType)
+    if (isSim(newSimType)) navigate({ sim: newSimType })
   }
 
   const promotionContext: PromotionContext = {
-    sim: simType === "xplane" ? "xplane" : "msfs2020",
+    sim: simType,
     vendor: filteredVendors || undefined,
     aircraft: filteredAircrafts || undefined,
     search: filteredPresets || undefined,
@@ -302,53 +278,32 @@ const Presets = () => {
                   search={(value) => {
                     setSearchText(value)
                     clearTimeout(searchTimer.current)
-                    searchTimer.current = setTimeout(() => {
-                      setFilteredPresets(value)
-                      localStorage.setItem("searchFilter", value)
+                    searchTimer.current = setTimeout(
                       // replace: typing must not add a history entry per search
-                      updateQueryParam("search", value, { replace: true })
-                    }, SEARCH_DELAY_MS)
+                      () => navigate({ search: value }, { replace: true }),
+                      SEARCH_DELAY_MS,
+                    )
                   }}
-                  filterVendor={(value) => {
-                    setFilteredVendors(value)
-                    localStorage.setItem("vendorFilter", value)
-                    updateQueryParam("vendor", value)
-                  }}
-                  filterAircraft={(value) => {
-                    setFilteredAircrafts(value)
-                    localStorage.setItem("aircraftFilter", value)
-                    updateQueryParam("aircraft", value)
-                  }}
-                  filterSystem={(value) => {
-                    setFilteredSystems(value)
-                    localStorage.setItem("systemFilter", value)
-                    updateQueryParam("system", value)
-                  }}
-                  filterPresetType={(value) => {
-                    setFilteredPresetTypes(value)
-                    localStorage.setItem("presetTypeFilter", value)
-                    updateQueryParam("presetType", value)
-                  }}
-                  filterCodeType={(value) => {
-                    setFilteredCodeTypes(value)
-                    localStorage.setItem("codeTypeFilter", value)
-                    updateQueryParam("codeType", value)
-                  }}
+                  filterVendor={(value) =>
+                    navigate({ vendor: value ? slugify(value) : undefined })
+                  }
+                  filterAircraft={(value) =>
+                    navigate({ aircraft: value ? slugify(value) : undefined })
+                  }
+                  filterSystem={(value) => navigate({ system: value })}
+                  filterPresetType={(value) => navigate({ presetType: value })}
+                  filterCodeType={(value) => navigate({ codeType: value })}
                   resetFilter={() => {
                     clearTimeout(searchTimer.current)
                     setSearchText("")
-                    setFilteredPresets("")
-                    setFilteredVendors("")
-                    setFilteredAircrafts("")
-                    setFilteredSystems("")
-                    setFilteredPresetTypes("")
-                    setFilteredCodeTypes("")
-                    localStorage.setItem("searchFilter", "")
-                    localStorage.setItem("vendorFilter", "")
-                    localStorage.setItem("aircraftFilter", "")
-                    localStorage.setItem("systemFilter", "")
-                    localStorage.setItem("presetTypeFilter", "")
-                    router.push(router.pathname, undefined, { shallow: true }) // reset URL
+                    navigate({
+                      vendor: undefined,
+                      aircraft: undefined,
+                      search: "",
+                      system: "",
+                      presetType: "",
+                      codeType: "",
+                    })
                   }}
                   filteredPresets={searchText}
                   filteredVendors={filteredVendors}
@@ -407,6 +362,13 @@ const Presets = () => {
         <div key="addPresetModal" className="animate-in fade-in-0">
           <AddPresetsModal
             presets={presets}
+            defaults={{
+              vendor: filteredVendors,
+              aircraft: filteredAircrafts,
+              system: filteredSystems,
+              presetType: filteredPresetTypes,
+              codeType: filteredCodeTypes,
+            }}
             onClose={() => setAddModalOpen(false)}
           />
         </div>

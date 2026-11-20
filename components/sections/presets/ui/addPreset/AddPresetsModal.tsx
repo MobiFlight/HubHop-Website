@@ -35,10 +35,21 @@ import { presetTypesFor } from "../../../../../lib/presetTypes"
 import { sortedUnique } from "../../../../../lib/presetFacets"
 import type { Preset } from "../../../../../interfaces/preset"
 import { isModerator } from "../../../../../services/roles"
+import { isSim, presetUrl } from "../../../../../lib/presetUrls"
+
+/** Values the form starts with: the preset list's current filters */
+export type AddPresetDefaults = {
+  vendor: string
+  aircraft: string
+  system: string
+  presetType: string
+  codeType: string
+}
 
 type AddPresetsModalProps = {
   onClose: () => void
   presets: Preset[]
+  defaults: AddPresetDefaults
 }
 
 const required = (message: string) => z.string().trim().min(1, message)
@@ -58,10 +69,11 @@ const schemaFor = (sim: string | null) =>
 
 type AddPresetForm = z.infer<ReturnType<typeof schemaFor>>
 
-// the preset list's filters preselect the form
-const storedFilter = (key: string) => localStorage.getItem(key) || ""
-
-const AddPresetsModal = ({ onClose, presets }: AddPresetsModalProps) => {
+const AddPresetsModal = ({
+  onClose,
+  presets,
+  defaults,
+}: AddPresetsModalProps) => {
   const sim = localStorage.getItem("simType")
   const [buttonSubmit, setButtonSubmit] = useState(false)
   const [bulkUpload, setBulkUpload] = useState(false)
@@ -77,11 +89,7 @@ const AddPresetsModal = ({ onClose, presets }: AddPresetsModalProps) => {
   } = useForm<AddPresetForm>({
     resolver: zodResolver(schemaFor(sim)),
     defaultValues: {
-      vendor: storedFilter("vendorFilter"),
-      aircraft: storedFilter("aircraftFilter"),
-      system: storedFilter("systemFilter"),
-      presetType: storedFilter("presetTypeFilter"),
-      codeType: storedFilter("codeTypeFilter"),
+      ...defaults,
       label: "",
       code: "",
       description: "",
@@ -363,7 +371,7 @@ const AddPresetsModal = ({ onClose, presets }: AddPresetsModalProps) => {
                 filteredItems.map((preset) => (
                   <Link
                     key={preset.id}
-                    href={{ pathname: "/preset", query: { id: preset.id } }}
+                    href={presetUrl(isSim(sim) ? sim : "msfs2020", preset)}
                     target="_blank"
                     className="flex items-center justify-between gap-1 rounded-sm px-2 py-0.5 hover:bg-muted"
                   >

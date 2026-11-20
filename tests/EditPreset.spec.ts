@@ -9,7 +9,7 @@ const choose = async (page: Page, select: Locator, option: string) => {
 
 test.describe("Edit preset - anonymous", () => {
   test("Edit preset - requires login", async ({ presetViewPage, page }) => {
-    await presetViewPage.gotoPage("msfs-0006")
+    await presetViewPage.gotoPage("00000000-0000-4000-8000-000000000006")
 
     await page.getByRole("button", { name: "View" }).click()
 
@@ -27,8 +27,8 @@ test.describe("Edit preset - author", () => {
     presetViewPage,
     page,
   }) => {
-    // msfs-0006 "Landing lights on" is authored by the test user
-    await presetViewPage.gotoPage("msfs-0006")
+    // 00000000-0000-4000-8000-000000000006 "Landing lights on" is authored by the test user
+    await presetViewPage.gotoPage("00000000-0000-4000-8000-000000000006")
 
     await page.getByRole("button", { name: "View" }).click()
 
@@ -56,7 +56,9 @@ test.describe("Edit preset - author", () => {
       .poll(() => presetViewPage.hubHopPage.writeRequests("PUT"))
       .toHaveLength(1)
     const [request] = presetViewPage.hubHopPage.writeRequests("PUT")
-    expect(request.path).toBe("/msfs2020/presets/msfs-0006")
+    expect(request.path).toBe(
+      "/msfs2020/presets/00000000-0000-4000-8000-000000000006",
+    )
     expect(request.headers["authorization"]).toBe("Bearer fake-access-token")
     expect(request.body).toMatchObject({
       label: "Landing lights all on",
@@ -76,7 +78,7 @@ test.describe("Edit preset - author", () => {
     presetViewPage,
     page,
   }) => {
-    await presetViewPage.gotoPage("msfs-0009")
+    await presetViewPage.gotoPage("00000000-0000-4000-8000-000000000009")
 
     await page.getByRole("button", { name: "View" }).click()
 
@@ -93,7 +95,7 @@ test.describe("Edit preset - moderator", () => {
     presetViewPage,
     page,
   }) => {
-    await presetViewPage.gotoPage("msfs-0009")
+    await presetViewPage.gotoPage("00000000-0000-4000-8000-000000000009")
 
     await page.getByRole("button", { name: "View" }).click()
     await page.getByRole("textbox", { name: "System" }).fill("Power")
@@ -122,7 +124,7 @@ test.describe("Edit preset - moderator", () => {
     presetViewPage,
     page,
   }) => {
-    await presetViewPage.gotoPage("xplane-0001", "xplane")
+    await presetViewPage.gotoPage("650000000000000000000001", "xplane")
 
     await page.getByRole("button", { name: "View" }).click()
 

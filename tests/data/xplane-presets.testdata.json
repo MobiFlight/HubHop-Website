@@ -1,6 +1,6 @@
 [
   {
-    "id": "xplane-0001",
+    "id": "650000000000000000000001",
     "vendor": "Laminar Research",
     "aircraft": "C172",
     "system": "Autopilot",
@@ -15,7 +15,7 @@
     "version": 1
   },
   {
-    "id": "xplane-0002",
+    "id": "650000000000000000000002",
     "vendor": "Laminar Research",
     "aircraft": "C172",
     "system": "Autopilot",
@@ -30,7 +30,7 @@
     "version": 1
   },
   {
-    "id": "xplane-0003",
+    "id": "650000000000000000000003",
     "vendor": "Laminar Research",
     "aircraft": "C172",
     "system": "Electrical",
@@ -45,7 +45,7 @@
     "version": 1
   },
   {
-    "id": "xplane-0004",
+    "id": "650000000000000000000004",
     "vendor": "Laminar Research",
     "aircraft": "B738",
     "system": "Electrical",
@@ -60,7 +60,7 @@
     "version": 1
   },
   {
-    "id": "xplane-0005",
+    "id": "650000000000000000000005",
     "vendor": "Laminar Research",
     "aircraft": "B738",
     "system": "Lights",

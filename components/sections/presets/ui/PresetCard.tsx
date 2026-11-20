@@ -9,6 +9,7 @@ import SavePresetButton from "./editPreset/SavePresetButton"
 import ReportPresetModal from "./reportPreset/ReportPresetModal"
 import DeleteConfirmationModal from "./deletePreset/DeleteConfirmationModal"
 import OpenPresetButton from "./OpenPresetButton"
+import { isSim } from "../../../../lib/presetUrls"
 import FixedPresetModal from "./reportPreset/FixedPresetModal"
 import { presetTable, type SimType } from "../../../../services/presetSync"
 import { CODE_TYPES } from "../../../../lib/codeTypes"
@@ -372,7 +373,12 @@ const PresetCard = ({
                   </div>
                 </div>
               )}
-              {!card && <OpenPresetButton id={id} />}
+              {!card && (
+                <OpenPresetButton
+                  sim={isSim(simType) ? simType : "msfs2020"}
+                  preset={{ id, vendor, aircraft, label }}
+                />
+              )}
             </div>
           </div>
         </div>

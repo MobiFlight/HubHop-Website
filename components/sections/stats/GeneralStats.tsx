@@ -11,10 +11,12 @@ import { Skeleton } from "@/components/ui/skeleton"
 import StatsCard from "./ui/StatsCard"
 import { compareText } from "../../../lib/presetSearch"
 import type { Preset, Statistics } from "../../../interfaces/preset"
+import { presetUrl, type Sim } from "../../../lib/presetUrls"
 
 type GeneralStatsProps = {
   presets: Preset[]
   stats: Statistics | null
+  sim: Sim
 }
 
 type Contributor = {
@@ -38,7 +40,7 @@ const contributorsOf = (presets: Preset[]): Contributor[] => {
   )
 }
 
-const GeneralStats = ({ presets, stats }: GeneralStatsProps) => {
+const GeneralStats = ({ presets, stats, sim }: GeneralStatsProps) => {
   const [modal, setModal] = useState(false)
   const [contModal, setContModal] = useState(false)
   const [singleCont, setSingleCont] = useState("")
@@ -237,10 +239,7 @@ const GeneralStats = ({ presets, stats }: GeneralStatsProps) => {
                           new Date(a.createdDate ?? "").valueOf(),
                       )}
                     onRowClick={(row) =>
-                      window.open(
-                        "https://hubhop.mobiflight.com/preset/?id=" + row.id,
-                        "_blank",
-                      )
+                      window.open(presetUrl(sim, row), "_blank")
                     }
                   />
                 </div>

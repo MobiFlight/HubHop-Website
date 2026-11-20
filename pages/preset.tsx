@@ -1,100 +1,35 @@
-import { useLiveQuery } from "dexie-react-hooks"
 import { useRouter } from "next/router"
-import { useEffect, useMemo, useState } from "react"
-import PresetView from "../components/sections/presets/singlePresetView/PresetView"
-import { presetTable } from "../services/presetSync"
-import type { Preset } from "../interfaces/preset"
+import { useEffect } from "react"
+import Layout from "../components/Layout"
+import { isSim } from "../lib/presetUrls"
 
-const Preset = () => {
-  useEffect(() => {
-    document.body.classList.toggle(
-      "xplane",
-      localStorage.getItem("simType") !== "msfs2020",
-    )
-  }, [])
-
+/**
+ * Old preset links (/preset/?simType=…&id=…, used by MobiFlight Connector and
+ * in Discord) forward to /presets/<sim>/…/<id>/. Vendor, aircraft and label
+ * aren't known here; the preset page corrects them once the preset is loaded.
+ */
+const OldPresetLink = () => {
   const router = useRouter()
-  const { id, simType } = router.query
-  const [loading, setLoading] = useState(false)
-  const [history, setHistory] = useState<Preset[]>([])
-
-  if (typeof window !== "undefined") {
-    localStorage.setItem(
-      "simType",
-      window.location.href.includes("msfs2020") ? "msfs2020" : "xplane",
-    )
-  }
-
-  const sim = simType === "xplane" ? "xplane" : "msfs2020"
-  const [fetchDone, setFetchDone] = useState(false)
-
-  const cachedPreset = useLiveQuery(
-    () => (id ? presetTable(sim).get(id as string) : undefined),
-    [id, sim],
-  )
 
   useEffect(() => {
-    // fetch the newest version of this one preset and store it in the local cache
-    const fetchPreset = async () => {
-      setFetchDone(false)
-      try {
-        const res = await fetch(
-          process.env.NEXT_PUBLIC_HUBHOP_API_BASEURL +
-            "/" +
-            sim +
-            "/presets/" +
-            id,
-          { redirect: "follow" },
-        )
-        if (res.ok) {
-          const fetchedPreset = await res.json()
-          await presetTable(sim).put({ ...fetchedPreset, id })
-        } else if (res.status === 404) {
-          await presetTable(sim).delete(id as string)
-        } else {
-          throw new Error(`Loading preset ${id} failed: ${res.status}`)
-        }
-        // only a real answer from the server may turn into "does not exist"
-        setFetchDone(true)
-      } catch (error) {
-        console.error(error)
-      }
+    if (!router.isReady) return
+    const { simType, id } = router.query
+    if (typeof id !== "string" || !id) {
+      router.replace("/presets/")
+      return
     }
-
-    const fetchHistory = async () => {
-      const res = await fetch(
-        `https://hubhop-api-mgtm.azure-api.net/api/v1/msfs2020/history/presets/${id}`,
-        { redirect: "follow" },
-      )
-      const fetchedHistory = await res.json()
-      return setHistory(fetchedHistory[0]?.history || [])
-    }
-
-    async function fetchHistoryRoutine() {
-      if (!id || !simType) {
-        return
-      }
-      fetchPreset()
-      if (simType === "msfs2020") {
-        setLoading(true)
-        await fetchHistory().catch((error) => console.error(error))
-        setLoading(false)
-      }
-    }
-    fetchHistoryRoutine()
-  }, [id, simType, sim])
-
-  // undefined keeps PresetView in its loading state until we know the answer
-  const filterPreset = useMemo(
-    () => (cachedPreset ? [cachedPreset] : fetchDone ? [] : undefined),
-    [cachedPreset, fetchDone],
-  )
+    const stored = localStorage.getItem("simType")
+    const sim = isSim(simType) ? simType : isSim(stored) ? stored : "msfs2020"
+    router.replace(`/presets/${sim}/-/-/${encodeURIComponent(id)}/`)
+  }, [router])
 
   return (
-    <>
-      <PresetView preset={filterPreset} history={history} loading={loading} />
-    </>
+    <Layout title="Preset | Hubhop by Mobiflight">
+      <p role="status" className="min-h-screen p-3">
+        Opening preset…
+      </p>
+    </Layout>
   )
 }
 
-export default Preset
+export default OldPresetLink

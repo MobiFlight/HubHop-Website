@@ -52,6 +52,8 @@ const Stats = () => {
     }
   }, [simType])
 
+  const sim = simType === "xplane" ? "xplane" : "msfs2020"
+
   const changeSimType = (newSimType: string) => {
     setSimType(newSimType)
     localStorage.setItem("simType", newSimType)
@@ -90,11 +92,15 @@ const Stats = () => {
             className="w-fit"
           />
         </div>
-        <GeneralStats presets={presets} stats={stats} />
+        <GeneralStats presets={presets} stats={stats} sim={sim} />
         {presets.length ? (
           <div className="container mx-auto mt-5">
             <h2 className="text-2xl font-semibold">Latest added presets</h2>
-            <TableStats data={stats?.presetsAdded ?? []} added={true} />
+            <TableStats
+              data={stats?.presetsAdded ?? []}
+              added={true}
+              sim={sim}
+            />
           </div>
         ) : (
           <div className="container mx-auto mt-5">
@@ -105,7 +111,11 @@ const Stats = () => {
         {presets.length ? (
           <div className="container mx-auto mt-5">
             <h2 className="text-2xl font-semibold">Latest updated presets</h2>
-            <TableStats data={stats?.presetsUpdated ?? []} added={false} />
+            <TableStats
+              data={stats?.presetsUpdated ?? []}
+              added={false}
+              sim={sim}
+            />
           </div>
         ) : (
           <div className="container mx-auto mt-5">

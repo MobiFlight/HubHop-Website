@@ -5,7 +5,7 @@ test.describe("Preset view", () => {
     presetViewPage,
     page,
   }) => {
-    await presetViewPage.gotoPage("msfs-0009")
+    await presetViewPage.gotoPage("00000000-0000-4000-8000-000000000009")
 
     await expect(
       page.getByRole("heading", { name: "Battery master on" }),
@@ -21,7 +21,7 @@ test.describe("Preset view", () => {
     presetViewPage,
     page,
   }) => {
-    await presetViewPage.gotoPage("does-not-exist")
+    await presetViewPage.gotoPage("00000000-0000-4000-8000-999999999999")
 
     await expect(
       page.getByRole("heading", {
@@ -34,7 +34,7 @@ test.describe("Preset view", () => {
     presetViewPage,
     page,
   }) => {
-    await presetViewPage.gotoPage("msfs-0001")
+    await presetViewPage.gotoPage("00000000-0000-4000-8000-000000000001")
 
     await expect(presetViewPage.historyToggle).toContainText(
       "Preset history with 3 versions",
@@ -52,7 +52,7 @@ test.describe("Preset view", () => {
     presetViewPage,
     page,
   }) => {
-    await presetViewPage.gotoPage("xplane-0002", "xplane")
+    await presetViewPage.gotoPage("650000000000000000000002", "xplane")
 
     await expect(page.getByRole("heading", { name: "AP state" })).toBeVisible()
     await expect(page.getByText("DataRef", { exact: true })).toBeVisible()
@@ -67,7 +67,7 @@ test.describe("Preset view - moderator", () => {
     presetViewPage,
     page,
   }) => {
-    await presetViewPage.gotoPage("msfs-0001")
+    await presetViewPage.gotoPage("00000000-0000-4000-8000-000000000001")
     await presetViewPage.historyToggle.click()
 
     // the revert action is a clickable element, not a button
@@ -87,7 +87,9 @@ test.describe("Preset view - moderator", () => {
       .poll(() => presetViewPage.hubHopPage.writeRequests("PUT"))
       .toHaveLength(1)
     const [request] = presetViewPage.hubHopPage.writeRequests("PUT")
-    expect(request.path).toBe("/msfs2020/presets/msfs-0001")
+    expect(request.path).toBe(
+      "/msfs2020/presets/00000000-0000-4000-8000-000000000001",
+    )
     expect(request.body).toMatchObject({ label: "AP master", version: 1 })
     await expect(presetViewPage.title).toHaveText("AP master")
   })

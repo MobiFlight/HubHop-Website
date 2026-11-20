@@ -49,37 +49,6 @@ const icons: Record<string, typeof IconHome> = {
 }
 
 const Navbar = () => {
-  if (
-    typeof window !== "undefined" &&
-    localStorage.getItem("searchFilter") === null
-  ) {
-    localStorage.setItem("searchFilter", "")
-  }
-  if (
-    typeof window !== "undefined" &&
-    localStorage.getItem("vendorFilter") === null
-  ) {
-    localStorage.setItem("vendorFilter", "")
-  }
-  if (
-    typeof window !== "undefined" &&
-    localStorage.getItem("aircraftFilter") === null
-  ) {
-    localStorage.setItem("aircraftFilter", "")
-  }
-  if (
-    typeof window !== "undefined" &&
-    localStorage.getItem("systemFilter") === null
-  ) {
-    localStorage.setItem("systemFilter", "")
-  }
-  if (
-    typeof window !== "undefined" &&
-    localStorage.getItem("presetTypeFilter") === null
-  ) {
-    localStorage.setItem("presetTypeFilter", "")
-  }
-
   const { accounts } = useMsal()
 
   async function login() {

@@ -400,7 +400,7 @@ test.describe("Promotion slots", () => {
     presetViewPage,
     page,
   }) => {
-    await presetViewPage.gotoPage("msfs-0009")
+    await presetViewPage.gotoPage("00000000-0000-4000-8000-000000000009")
 
     await expect(
       page.getByRole("heading", { name: "Battery master on" }),

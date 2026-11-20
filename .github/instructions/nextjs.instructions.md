@@ -9,7 +9,10 @@ applyTo: "**/*.jsx, **/*.tsx, **/*.js, **/*.ts, **/*.css"
 
 - Next.js (pages router) with `output: "export"`: the site is a fully **static export** served by
   Azure Static Web Apps. There is no server: no API routes, no `getServerSideProps`, no middleware.
-- `trailingSlash: true`; dynamic data is addressed via query params (e.g. `/preset/?id=<id>&simType=<sim>`), not dynamic routes.
+- `trailingSlash: true`. Presets have path URLs (`lib/presetUrls.ts`): `/presets/<sim>/<vendor>/<aircraft>/` for the list,
+  `/presets/<sim>/<vendor>/<aircraft>/<label>-<id>/` for one preset; search and other filters are query parameters.
+  `pages/presets/[[...slug]].tsx` is exported once and served for every `/presets/*` path by a rewrite in
+  `staticwebapp.config.json`. Pages pass context (sim, filters) to each other through these URLs, not `localStorage`.
 - React with functional components and hooks
 - TypeScript in strict mode (legacy code uses `any` liberally; new code should be properly typed)
 - Tailwind CSS v4 with shadcn/ui (Radix, style `radix-vega`, see `components.json`) and Tabler icons (`@tabler/icons-react`)
@@ -20,7 +23,7 @@ applyTo: "**/*.jsx, **/*.tsx, **/*.js, **/*.ts, **/*.css"
 ## Directory Map
 
 ```
-pages/                   # Routes: index, presets, preset (single view), stats, tools, privacy, terms
+pages/                   # Routes: index, presets/[[...slug]] (list and single preset), preset (old links), stats, tools, privacy, terms
 components/
   ui/                    # shadcn/ui components (added with the shadcn CLI, adapted to HubHop's look)
   Layout.tsx             # Page shell (navbar + footer)
@@ -40,6 +43,7 @@ services/
 lib/
   Constants.tsx          # Navbar links
   presetSearch.ts        # Search, relevance and default order; shared with MobiFlight Connector
+  presetUrls.ts          # Preset list and preset URLs, slugs
   presetFacets.ts        # Faceted filter options
   presetTypes.ts         # Fixed Input/Output values per sim
   codeTypes.ts           # Fixed X-Plane code types

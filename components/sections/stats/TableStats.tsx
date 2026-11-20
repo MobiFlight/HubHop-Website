@@ -3,8 +3,14 @@ import OpenPresetButton from "../presets/ui/OpenPresetButton"
 import PresetPreviewLabel from "../presets/ui/PresetInputLabel"
 import { REPORTING_ENABLED } from "../../../lib/features"
 import type { StatisticsPreset } from "../../../interfaces/preset"
+import type { Sim } from "../../../lib/presetUrls"
 
-const PresetRowDetails = ({ data }: { data: StatisticsPreset }) => {
+type PresetRowDetailsProps = {
+  data: StatisticsPreset
+  sim: Sim
+}
+
+const PresetRowDetails = ({ data, sim }: PresetRowDetailsProps) => {
   const { vendor, aircraft, system, presetType, label, code, description } =
     data
 
@@ -58,7 +64,10 @@ const PresetRowDetails = ({ data }: { data: StatisticsPreset }) => {
             </div>
             <div className="flex w-full justify-end px-5 pt-2 pb-5">
               <div className="flex flex-col-reverse justify-between space-y-reverse md:flex-row md:items-center md:space-y-0 md:space-x-5">
-                {<OpenPresetButton id={data._id ?? data.id} />}
+                <OpenPresetButton
+                  sim={sim}
+                  preset={{ ...data, id: data._id ?? data.id }}
+                />
               </div>
             </div>
           </div>
@@ -72,9 +81,10 @@ const PresetRowDetails = ({ data }: { data: StatisticsPreset }) => {
 type TableStatsProps = {
   data: StatisticsPreset[]
   added: boolean
+  sim: Sim
 }
 
-const TableStats = ({ data, added }: TableStatsProps) => {
+const TableStats = ({ data, added, sim }: TableStatsProps) => {
   const columns: Column<StatisticsPreset>[] = [
     {
       id: "date",
@@ -116,7 +126,7 @@ const TableStats = ({ data, added }: TableStatsProps) => {
         data={data}
         rowId={(row) => row._id ?? row.id}
         pageSizes={[5, 15, 20, 30, 50, 100]}
-        renderExpanded={(row) => <PresetRowDetails data={row} />}
+        renderExpanded={(row) => <PresetRowDetails data={row} sim={sim} />}
       />
     </div>
   )
