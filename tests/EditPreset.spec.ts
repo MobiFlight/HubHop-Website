@@ -184,7 +184,6 @@ test.describe("Edit preset - preset list", () => {
     page,
   }) => {
     presetsPage.hubHopPage.api.writeStatus.PUT = 500
-    page.on("dialog", (dialog) => dialog.accept())
     await presetsPage.gotoPage()
 
     const details = await presetsPage.expand("Battery master on")
@@ -193,6 +192,7 @@ test.describe("Edit preset - preset list", () => {
       .getByRole("textbox", { name: "Preset name" })
       .fill("Battery master switch on")
     await details.getByRole("button", { name: "Save" }).click()
+    await expect(page.getByText("Error - Preset not saved!")).toBeVisible()
     await expect
       .poll(() => presetsPage.hubHopPage.writeRequests("PUT"))
       .toHaveLength(1)

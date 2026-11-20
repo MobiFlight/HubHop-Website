@@ -3,18 +3,14 @@ import { test, expect, authFile } from "./fixtures"
 test.describe("Delete preset - user", () => {
   test.use({ storageState: authFile.user })
 
-  test("Delete preset - only moderators may delete", async ({
+  test("Delete preset - users without moderator role don't see Delete", async ({
     presetViewPage,
     page,
   }) => {
     await presetViewPage.gotoPage("msfs-0006")
 
-    await page.getByRole("button", { name: "Delete" }).click()
-
-    await expect(
-      page.getByText("No permission to delete a preset."),
-    ).toBeVisible()
-    expect(presetViewPage.hubHopPage.writeRequests()).toHaveLength(0)
+    await expect(page.getByText("Version", { exact: true })).toBeVisible()
+    await expect(page.getByRole("button", { name: "Delete" })).toHaveCount(0)
   })
 })
 
@@ -40,14 +36,14 @@ test.describe("Delete preset - moderator", () => {
     expect(presetViewPage.hubHopPage.writeRequests()).toHaveLength(0)
   })
 
-  test("Delete preset - the close button hides the dialog", async ({
+  test("Delete preset - Escape closes the dialog", async ({
     presetViewPage,
     page,
   }) => {
     await presetViewPage.gotoPage("msfs-0009")
 
     await page.getByRole("button", { name: "Delete" }).click()
-    await page.getByRole("button", { name: "Close dialog" }).click()
+    await page.keyboard.press("Escape")
 
     await expect(
       page.getByRole("heading", { name: "Delete Preset" }),
@@ -67,11 +63,7 @@ test.describe("Delete preset - moderator", () => {
     ).toContainText("Battery master on")
     await page.getByRole("button", { name: "Delete" }).last().click()
 
-    await expect(
-      page
-        .getByRole("status")
-        .filter({ hasText: "Preset successfully deleted!" }),
-    ).toHaveClass(/bg-green-800/)
+    await expect(page.getByText("Preset successfully deleted!")).toBeVisible()
     const requests = presetViewPage.hubHopPage.writeRequests("DELETE")
     expect(requests).toHaveLength(1)
     expect(requests[0].path).toBe("/msfs2020/presets/msfs-0009")
@@ -89,12 +81,12 @@ test.describe("Delete preset - preset list", () => {
     page,
   }) => {
     presetsPage.hubHopPage.api.writeStatus.DELETE = 500
-    page.on("dialog", (dialog) => dialog.accept())
     await presetsPage.gotoPage()
 
     const details = await presetsPage.expand("Battery master on")
     await details.getByRole("button", { name: "Delete" }).click()
     await page.getByRole("button", { name: "Delete" }).last().click()
+    await expect(page.getByText("Error - Preset not deleted!")).toBeVisible()
     await expect
       .poll(() => presetsPage.hubHopPage.writeRequests("DELETE"))
       .toHaveLength(1)

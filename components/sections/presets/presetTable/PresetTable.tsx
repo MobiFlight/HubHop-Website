@@ -1,7 +1,6 @@
 import DataTable, {
   createTheme,
   SortOrder,
-  type ExpanderComponentProps,
   Media,
   type SortFunction,
   type TableColumn,
@@ -10,7 +9,7 @@ import { useRef, useState } from "react"
 import { compareText } from "../../../../lib/presetSearch"
 import AddPresetButton from "../ui/addPreset/AddPresetButton"
 import ExportPresetsButton from "../ui/exportPresets/ExportPresetsButton"
-import PresetCard, { type PresetToasts } from "../ui/PresetCard"
+import PresetCard from "../ui/PresetCard"
 import type { Preset } from "../../../../interfaces/preset"
 import RelevanceGauge from "./RelevanceGauge"
 import { msalInstance, msalReady } from "../../../../services/msal"
@@ -19,7 +18,7 @@ import {
   getAccessToken,
 } from "../../../../services/msalFunctions"
 
-type PresetTableProps = PresetToasts & {
+type PresetTableProps = {
   data: Preset[]
   setExportModalOpen: (open: boolean) => void
   setAddModalOpen: (open: boolean) => void
@@ -38,13 +37,7 @@ const sortIgnoringCase: SortFunction<Preset> = (rows, selector, direction) => {
 
 // Defined outside PresetTable: a component created during render gets a new
 // identity on every render, which remounted open rows and reset their edit mode.
-const PresetRowDetails = ({
-  data,
-  deletedToast,
-  reportedToast,
-  fixedToast,
-  savedToast,
-}: { data: Preset } & PresetToasts) => {
+const PresetRowDetails = ({ data }: { data: Preset }) => {
   const [vendor, setVendor] = useState(data.vendor)
   const [aircraft, setAircraft] = useState(data.aircraft)
   const [system, setSystem] = useState(data.system)
@@ -82,10 +75,6 @@ const PresetRowDetails = ({
         setLabel={setLabel}
         setCode={setCode}
         setDescription={setDescription}
-        deletedToast={deletedToast}
-        reportedToast={reportedToast}
-        fixedToast={fixedToast}
-        savedToast={savedToast}
       />
       <hr className="border-hhBG" />
     </div>
@@ -96,10 +85,6 @@ const PresetTable = ({
   data,
   setExportModalOpen,
   setAddModalOpen,
-  deletedToast,
-  reportedToast,
-  fixedToast,
-  savedToast,
   relevance,
 }: PresetTableProps) => {
   // The table keeps the column object from when the sort was selected, so its
@@ -296,18 +281,7 @@ const PresetTable = ({
         expandOnRowClicked
         sortFunction={sortIgnoringCase}
         expandableRows
-        // the library passes expandableRowsComponentProps, but only types { data }
-        expandableRowsComponent={
-          PresetRowDetails as unknown as React.ComponentType<
-            ExpanderComponentProps<Preset>
-          >
-        }
-        expandableRowsComponentProps={{
-          deletedToast,
-          reportedToast,
-          fixedToast,
-          savedToast,
-        }}
+        expandableRowsComponent={PresetRowDetails}
         highlightOnHover
         responsive={true}
         theme="hubhop"

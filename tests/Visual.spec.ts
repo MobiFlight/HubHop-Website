@@ -1,4 +1,4 @@
-import { test, expect } from "./fixtures"
+import { test, expect, authFile } from "./fixtures"
 import type { Page } from "@playwright/test"
 
 // Screenshots of the main pages, to review every visual change of the
@@ -87,3 +87,52 @@ for (const theme of themes) {
     })
   })
 }
+
+test.describe("Visual - preset dialogs", () => {
+  test.use({ storageState: authFile.moderator })
+
+  test.beforeEach(async ({ page, presetsPage }) => {
+    await freeze(page)
+    await presetsPage.gotoPage()
+  })
+
+  test("Visual - add preset dialog", async ({ page }) => {
+    await page.getByRole("button", { name: "Add preset" }).click()
+    const dialog = page.getByRole("dialog")
+    await expect(
+      dialog.getByRole("heading", { name: "Add Preset" }),
+    ).toBeVisible()
+    await expect(page).toHaveScreenshot("dialog-add-preset.png", {
+      ...screenshotOptions,
+      // the visible window with the dialog and the backdrop
+      fullPage: false,
+    })
+  })
+
+  test("Visual - export presets dialog", async ({ page }) => {
+    await page.getByRole("button", { name: "Export presets" }).click()
+    const dialog = page.getByRole("dialog")
+    await expect(
+      dialog.getByRole("heading", { name: "Export Presets" }),
+    ).toBeVisible()
+    await expect(page).toHaveScreenshot("dialog-export-presets.png", {
+      ...screenshotOptions,
+      // the visible window with the dialog and the backdrop
+      fullPage: false,
+    })
+  })
+
+  test("Visual - delete confirmation", async ({ page, presetsPage }) => {
+    const details = await presetsPage.expand("Battery master on")
+    await details.getByRole("button", { name: "Delete" }).click()
+    const dialog = page.getByRole("alertdialog")
+    await expect(
+      dialog.getByRole("heading", { name: "Delete Preset" }),
+    ).toBeVisible()
+    await expect(page).toHaveScreenshot("dialog-delete-preset.png", {
+      ...screenshotOptions,
+      // the visible window with the dialog and the backdrop
+      fullPage: false,
+    })
+  })
+})
