@@ -383,4 +383,26 @@ test.describe("Aircraft pages", () => {
       "noindex",
     )
   })
+
+  test("Aircraft pages - the search opens the preset search with the aircraft selected", async ({
+    hubHopPage,
+    page,
+  }) => {
+    await hubHopPage.goto("/aircraft/msfs/asobo/a320neo/")
+
+    await page
+      .getByRole("searchbox", { name: "Search the Asobo A320neo presets" })
+      .fill("AP master")
+    await page.keyboard.press("Enter")
+
+    await expect(page).toHaveURL(
+      /\/presets\/msfs\/asobo\/a320neo\/\?search=AP\+master$/,
+    )
+    await expect(
+      page.getByRole("row", { name: /AP master toggle/ }),
+    ).toHaveCount(1)
+    await expect(
+      page.getByRole("row", { name: /AP heading hold/ }),
+    ).toHaveCount(0)
+  })
 })

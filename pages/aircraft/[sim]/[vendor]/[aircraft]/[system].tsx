@@ -2,6 +2,7 @@ import type { GetStaticPaths, GetStaticProps } from "next"
 import Link from "next/link"
 import { useEffect } from "react"
 import Layout from "@/components/Layout"
+import AircraftSearch from "@/components/sections/aircraft/AircraftSearch"
 import AircraftBreadcrumb from "@/components/sections/aircraft/AircraftBreadcrumb"
 import BreadcrumbJsonLd from "@/components/sections/aircraft/BreadcrumbJsonLd"
 import NewToMobiFlight from "@/components/sections/aircraft/NewToMobiFlight"
@@ -120,6 +121,7 @@ const SystemPage = ({ sim, aircraft, system }: SystemPageProps) => {
           <p className="max-w-3xl text-lg text-muted-foreground">
             All {system.total} {system.name} presets of the {name} in {simName}.
           </p>
+          <AircraftSearch sim={sim} aircraft={aircraft} />
           <div className="flex flex-wrap gap-x-6 gap-y-1">
             <Link
               href={sheetUrl}
