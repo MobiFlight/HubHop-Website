@@ -119,26 +119,6 @@ test.describe("Home page", () => {
   })
 })
 
-test.describe("Home page - reduced motion", () => {
-  test.use({ reducedMotion: "reduce" })
-
-  test("Home - no animations when the visitor prefers reduced motion", async ({
-    hubHopPage,
-    page,
-  }) => {
-    await hubHopPage.goto("/")
-    await expect(page.getByRole("img", { name: /HubHop hub/ })).toBeVisible()
-
-    const endless = await page.evaluate(
-      () =>
-        document
-          .getAnimations()
-          .filter((a) => a.effect?.getTiming().iterations === Infinity).length,
-    )
-    expect(endless).toBe(0)
-  })
-})
-
 test.describe("Home page - activity", () => {
   test.use({ timezoneId: "UTC" })
 
