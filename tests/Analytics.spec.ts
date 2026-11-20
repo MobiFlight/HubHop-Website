@@ -41,6 +41,29 @@ test.describe("Analytics", () => {
 
       await expect.poll(() => trackedEvents(page)).toEqual(["discord_click"])
     })
+
+    test("Analytics - a homepage search is tracked with its sim, without the search text", async ({
+      hubHopPage,
+      page,
+    }) => {
+      await hubHopPage.goto("/")
+
+      await page
+        .getByRole("searchbox", { name: "Search presets" })
+        .fill("my secret")
+      await page.getByRole("button", { name: "Search" }).click()
+
+      await expect(page).toHaveURL(/\/presets\/msfs2020\//)
+      const entries = await page.evaluate(() =>
+        (window.dataLayer ?? []).filter(
+          (entry) =>
+            (entry as { event?: string }).event === "home_search_submit",
+        ),
+      )
+      expect(entries).toEqual([
+        { event: "home_search_submit", sim: "msfs2020", has_query: true },
+      ])
+    })
   })
 
   test.describe("with analytics rejected", () => {

@@ -62,6 +62,8 @@ export default defineConfig({
       NEXT_PUBLIC_HUBHOP_OAUTH_REDIRECT_URI_DEV: "http://localhost:3000/",
       // test container, requests to Google Tag Manager are mocked
       NEXT_PUBLIC_GTM_ID: "GTM-TEST",
+      // the homepage's build-time numbers (getStaticProps) come from the test data
+      HUBHOP_TEST_DATA_DIR: "tests/data",
       // the same footer ("Build dev") locally and on CI, for screenshot tests
       GITHUB_RUN_NUMBER: "",
       GITHUB_SHA: "",

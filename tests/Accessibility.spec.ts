@@ -69,9 +69,16 @@ test.describe("Accessibility", () => {
       presetsPage,
     }) => {
       await open({ page, hubHopPage, presetsPage })
-      // fade-ins would make axe measure the colour contrast of half-transparent text
+      // fade-ins would make axe measure the colour contrast of half-transparent text;
+      // endless animations (the homepage's hub arrows) never finish
       await page.waitForFunction(() =>
-        document.getAnimations().every((a) => a.playState !== "running"),
+        document
+          .getAnimations()
+          .every(
+            (a) =>
+              a.playState !== "running" ||
+              a.effect?.getTiming().iterations === Infinity,
+          ),
       )
 
       const results = await new AxeBuilder({ page })

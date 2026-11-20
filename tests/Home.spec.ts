@@ -1,6 +1,16 @@
 import { test, expect } from "./fixtures"
+import { recentChanges, todaysActivity } from "../lib/recentActivity"
+import msfsStatsData from "./data/msfs-stats.testdata.json"
+import type { Statistics } from "../interfaces/preset"
+
+const msfsStats = msfsStatsData as unknown as Statistics
+
+// the day the newest test preset was added
+const NEWEST_ADDED_DAY = new Date("2024-03-01T12:00:00Z")
 
 test.describe("Home page", () => {
+  test.use({ timezoneId: "UTC" })
+
   test.beforeEach(async ({ hubHopPage }) => {
     await hubHopPage.goto("/")
   })
@@ -15,9 +25,169 @@ test.describe("Home page", () => {
     ).toHaveAttribute("href", "https://www.mobiflight.com/en/index.html")
   })
 
-  test("Home - View contributions opens the preset list", async ({ page }) => {
-    await page.getByRole("button", { name: "View contributions" }).click()
-    await expect(page).toHaveURL(/\/presets\/msfs2020\/$/)
+  test("Home - search opens the preset list of the selected sim", async ({
+    page,
+  }) => {
+    const search = page.getByRole("searchbox", { name: "Search presets" })
+    await expect(search).toHaveAttribute(
+      "placeholder",
+      "Search 17 presets — try “Fenix A320 APU”",
+    )
+
+    await search.fill("apu")
+    await page.getByRole("button", { name: "Search" }).click()
+
+    await expect(page).toHaveURL(/\/presets\/msfs2020\/\?search=apu$/)
     await expect(page.getByRole("table")).toBeVisible()
+  })
+
+  test("Home - search for X-Plane", async ({ page }) => {
+    await page.getByRole("radio", { name: "X-Plane" }).click()
+    const search = page.getByRole("searchbox", { name: "Search presets" })
+    await expect(search).toHaveAttribute(
+      "placeholder",
+      "Search 5 presets — try “C172 beacon”",
+    )
+
+    await search.fill("beacon")
+    await search.press("Enter")
+
+    await expect(page).toHaveURL(/\/presets\/xplane\/\?search=beacon$/)
+  })
+
+  test("Home - an empty search opens all presets", async ({ page }) => {
+    await page.getByRole("button", { name: "Search" }).click()
+
+    await expect(page).toHaveURL(/\/presets\/msfs2020\/$/)
+  })
+
+  test("Home - popular aircraft link to their presets", async ({ page }) => {
+    await expect(
+      page.getByRole("link", { name: "Asobo A320neo" }),
+    ).toHaveAttribute("href", "/presets/msfs2020/asobo/a320neo/")
+
+    await test.step("X-Plane shows its own popular aircraft", async () => {
+      await page.getByRole("radio", { name: "X-Plane" }).click()
+      await expect(
+        page.getByRole("link", { name: "Laminar Research C172" }),
+      ).toHaveAttribute("href", "/presets/xplane/laminar-research/c172/")
+    })
+  })
+
+  test("Home - stats strip shows library size and leaders", async ({
+    page,
+  }) => {
+    const numbers = page.getByRole("region", { name: "HubHop in numbers" })
+    await expect(numbers).toMatchAriaSnapshot(`
+      - term: presets in the library
+      - definition: "17"
+      - term: community contributors
+      - definition: "2"
+      - term: presets for the Asobo A320neo — the most covered aircraft
+      - definition: "8"
+      - term: presets by Test Author, top contributor
+      - definition: "120"
+    `)
+  })
+
+  test("Home - recent changes list the newest presets first", async ({
+    page,
+  }) => {
+    const list = page
+      .getByRole("region", { name: "Fresh from the community" })
+      .getByRole("listitem")
+    await expect(list).toHaveCount(5)
+    await expect(list.first()).toContainText("AddedAP master toggle")
+    await expect(list.nth(1)).toContainText("UpdatedAP master toggle")
+    await expect(list.nth(1)).toContainText("by Test User")
+    await expect(list.nth(2)).toContainText("AP NAV mode")
+    await expect(
+      list.first().getByRole("link", { name: "AP master toggle" }),
+    ).toHaveAttribute(
+      "href",
+      "/presets/msfs2020/asobo/a320neo/ap-master-toggle-00000000-0000-4000-8000-000000000001/",
+    )
+    await expect(
+      page.getByRole("link", { name: "All recent changes" }),
+    ).toHaveAttribute("href", "/stats/")
+  })
+
+  test("Home - no activity note without presets added today", async ({
+    page,
+  }) => {
+    await expect(page.getByText(/new presets? for the/)).toHaveCount(0)
+  })
+})
+
+test.describe("Home page - reduced motion", () => {
+  test.use({ reducedMotion: "reduce" })
+
+  test("Home - no animations when the visitor prefers reduced motion", async ({
+    hubHopPage,
+    page,
+  }) => {
+    await hubHopPage.goto("/")
+    await expect(page.getByRole("img", { name: /HubHop hub/ })).toBeVisible()
+
+    const endless = await page.evaluate(
+      () =>
+        document
+          .getAnimations()
+          .filter((a) => a.effect?.getTiming().iterations === Infinity).length,
+    )
+    expect(endless).toBe(0)
+  })
+})
+
+test.describe("Home page - activity", () => {
+  test.use({ timezoneId: "UTC" })
+
+  test("Home - presets added today are announced", async ({
+    hubHopPage,
+    page,
+  }) => {
+    await page.clock.setFixedTime(NEWEST_ADDED_DAY)
+    await hubHopPage.goto("/")
+
+    await expect(
+      page.getByText("1 new preset for the Asobo A320neo today"),
+    ).toBeVisible()
+  })
+})
+
+test.describe("Home page - recent activity", () => {
+  test("Recent activity - added and updated presets are merged by date", () => {
+    const changes = recentChanges(msfsStats, 3)
+    expect(changes.map(({ kind, preset }) => [kind, preset.label])).toEqual([
+      ["added", "AP master toggle"],
+      ["updated", "AP master toggle"],
+      ["added", "AP NAV mode"],
+    ])
+    expect(changes[1].by).toBe("Test User")
+  })
+
+  test("Recent activity - the aircraft with the most presets today wins", () => {
+    const preset = (aircraft: string, createdDate: string) => ({
+      ...msfsStats.presetsAdded[0],
+      aircraft,
+      createdDate,
+    })
+    const today = new Date("2024-03-01T15:00:00")
+    expect(
+      todaysActivity(
+        [
+          preset("A", "2024-03-01T09:00:00"),
+          preset("B", "2024-03-01T10:00:00"),
+          preset("B", "2024-03-01T11:00:00"),
+          preset("C", "2024-02-29T23:00:00"),
+          preset("C", "2024-02-29T22:00:00"),
+          preset("C", "2024-02-29T21:00:00"),
+        ],
+        today,
+      ),
+    ).toEqual({ count: 2, vendor: "Asobo", aircraft: "B" })
+    expect(todaysActivity([preset("C", "2024-02-29T23:00:00")], today)).toBe(
+      undefined,
+    )
   })
 })
