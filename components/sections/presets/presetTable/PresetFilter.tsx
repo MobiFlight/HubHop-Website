@@ -2,7 +2,6 @@ import type { ReactNode } from "react"
 import {
   IconAdjustmentsHorizontal,
   IconBuildingStore,
-  IconBulb,
   IconChevronLeft,
   IconChevronRight,
   IconDeviceGamepad2,
@@ -221,12 +220,7 @@ const PresetFilter = ({
         <FilterField
           id="filter-preset-type"
           label="Select Input/Output"
-          icon={
-            <>
-              <IconDeviceGamepad2 />
-              <IconBulb />
-            </>
-          }
+          icon={<IconDeviceGamepad2 />}
         >
           <FilterSelect
             id="filter-preset-type"

@@ -6,7 +6,6 @@ import { z } from "zod"
 import { toast } from "sonner"
 import {
   IconBuildingStore,
-  IconBulb,
   IconCode,
   IconCursorText,
   IconExternalLink,
@@ -260,8 +259,7 @@ const AddPresetsModal = ({ onClose, presets }: AddPresetsModalProps) => {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="add-preset-type">
-                    <IconDeviceGamepad2 className="size-4" />{" "}
-                    <IconBulb className="size-4" /> Input/Output
+                    <IconDeviceGamepad2 className="size-4" /> Input/Output
                   </FieldLabel>
                   <Select value={field.value} onValueChange={field.onChange}>
                     <SelectTrigger
