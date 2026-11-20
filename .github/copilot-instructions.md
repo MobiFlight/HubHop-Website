@@ -13,6 +13,8 @@ report and export presets. Data comes from the HubHop API; this repo contains no
 - Do not add `Co-Authored-By` or other attribution trailers to commit messages, and no "Generated with ..." footers in PR descriptions.
 - Keep PRs focused: one concern per PR. Fill in `.github/pull_request_template.md`.
 - PRs are squash-merged.
+- Merging into `main` deploys to production. Label PRs that don't change the site for users (refactorings, tooling) `no-deploy`;
+  their changes go live with the next deployment. PR previews are built either way.
 - CI only runs on PRs into `main`. To re-run it without a new commit, close and reopen the PR (don't open a new one).
 
 ## Working agreements

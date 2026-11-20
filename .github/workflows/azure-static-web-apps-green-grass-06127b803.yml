@@ -23,8 +23,40 @@ on:
       - ".github/CODEOWNERS"
 
 jobs:
+  # A merged pull request with the label "no-deploy" (e.g. a refactoring) is not
+  # deployed to production; its changes go live with the next deployment.
+  check_deploy_job:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    name: Check for the no-deploy label
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      skip: ${{ steps.labels.outputs.skip }}
+    steps:
+      - name: Labels of the merged pull request
+        id: labels
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          labels=$(gh api "repos/${{ github.repository }}/commits/${{ github.sha }}/pulls" --jq '[.[].labels[].name] | join(",")')
+          echo "Labels: ${labels:-none}"
+          if [[ ",$labels," == *",no-deploy,"* ]]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "::notice::Deployment skipped: the pull request has the label no-deploy"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
   build_and_deploy_job:
-    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+    needs: check_deploy_job
+    # PR previews always; production unless the check says skip
+    if: >-
+      !cancelled() && (
+        (github.event_name == 'push' && needs.check_deploy_job.result == 'success' && needs.check_deploy_job.outputs.skip != 'true') ||
+        (github.event_name == 'pull_request' && github.event.action != 'closed')
+      )
     runs-on: ubuntu-latest
     name: Build and Deploy Job
     steps:
