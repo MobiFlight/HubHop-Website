@@ -3,6 +3,7 @@ import { useEffect } from "react"
 import Layout from "@/components/Layout"
 import MoreFromVendor from "@/components/sections/aircraft/MoreFromVendor"
 import NewToMobiFlight from "@/components/sections/aircraft/NewToMobiFlight"
+import AircraftSearch from "@/components/sections/aircraft/AircraftSearch"
 import BreadcrumbJsonLd from "@/components/sections/aircraft/BreadcrumbJsonLd"
 import SheetHeader from "@/components/sections/aircraft/SheetHeader"
 import SystemSection from "@/components/sections/aircraft/SystemSection"
@@ -108,6 +109,7 @@ const CheatSheet = ({ sim, sheet, related }: CheatSheetProps) => {
             </ul>
           </nav>
           <div className="flex min-w-0 flex-col gap-10">
+            <AircraftSearch sim={sim} aircraft={sheet} />
             {sheet.systems.map((system) => (
               <SystemSection
                 key={system.slug}

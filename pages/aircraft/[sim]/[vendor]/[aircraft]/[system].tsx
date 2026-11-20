@@ -2,6 +2,7 @@ import type { GetStaticPaths, GetStaticProps } from "next"
 import Link from "next/link"
 import { useEffect } from "react"
 import Layout from "@/components/Layout"
+import AircraftSearch from "@/components/sections/aircraft/AircraftSearch"
 import AircraftBreadcrumb from "@/components/sections/aircraft/AircraftBreadcrumb"
 import BreadcrumbJsonLd from "@/components/sections/aircraft/BreadcrumbJsonLd"
 import NewToMobiFlight from "@/components/sections/aircraft/NewToMobiFlight"
@@ -140,7 +141,10 @@ const SystemPage = ({ sim, aircraft, system }: SystemPageProps) => {
             </Link>
           </div>
         </header>
-        <SystemSection system={system} heading={false} />
+        <div className="flex flex-col gap-4">
+          <AircraftSearch sim={sim} aircraft={aircraft} />
+          <SystemSection system={system} heading={false} />
+        </div>
         <NewToMobiFlight aircraft={`the ${name}`} />
       </main>
     </Layout>
