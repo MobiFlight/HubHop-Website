@@ -1,63 +1,150 @@
-import Image, { type ImageLoaderProps } from "next/image"
-import hubhopLogo from "../../../public/images/logo.png"
-import mfLogo from "../../../public/images/mf_logo.jpg"
 import Link from "next/link"
+import { useRouter } from "next/router"
+import { useState } from "react"
+import { IconSearch } from "@tabler/icons-react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Skeleton } from "@/components/ui/skeleton"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+import HubGraphic from "./HubGraphic"
+import {
+  isSim,
+  presetListUrl,
+  slugify,
+  type Sim,
+} from "../../../lib/presetUrls"
+import { todaysActivity } from "../../../lib/recentActivity"
+import { track } from "../../../services/analytics"
+import type { Statistics } from "../../../interfaces/preset"
 
-const Hero = () => {
-  const customLoader = ({ src }: ImageLoaderProps) => {
-    return src
+const searchExample: Record<Sim, string> = {
+  msfs2020: "Fenix A320 APU",
+  xplane: "C172 beacon",
+}
+
+type HeroProps = {
+  sim: Sim
+  onSimChange: (sim: Sim) => void
+  // number of presets of the sim, from the build
+  presetCount: number
+  // live statistics of the sim; null while loading
+  stats: Statistics | null
+}
+
+const Hero = ({ sim, onSimChange, presetCount, stats }: HeroProps) => {
+  const router = useRouter()
+  const [query, setQuery] = useState("")
+  const activity = stats ? todaysActivity(stats.presetsAdded) : undefined
+  const popular = stats?.aircrafts.slice(0, 4)
+
+  const submit = (event: React.FormEvent) => {
+    event.preventDefault()
+    const search = query.trim()
+    track("home_search_submit", { sim, has_query: search !== "" })
+    router.push(presetListUrl({ sim, search }))
   }
+
   return (
-    <div className="container mx-auto flex min-h-screen p-3 md:p-0">
-      <div className="mt-10 flex w-full flex-col justify-between md:mt-52 md:flex-row">
-        <div className="w-full space-y-10 md:w-2/5 md:space-y-3">
-          <h1 className="text-5xl font-bold text-primary">
-            Create, Share, Improve
-          </h1>
-          <p className="text-justify text-lg">
-            HubHop is an API which consolidates Microsoft Flight Simulator 2020
-            variables and events and provides unique, understandable and
-            standardized events and variables.
+    <section className="container mx-auto flex flex-wrap items-center gap-12 px-6 pt-16 pb-16 md:pt-24">
+      <div className="flex min-w-0 flex-[999_1_560px] flex-col gap-6">
+        {activity && (
+          <p className="flex items-center gap-2 self-start rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-sm font-semibold text-primary">
+            <span
+              aria-hidden="true"
+              className="size-2 rounded-full bg-primary motion-safe:animate-pulse-dot"
+            />
+            {activity.count} new preset{activity.count > 1 ? "s" : ""} for the{" "}
+            {activity.vendor} {activity.aircraft} today
           </p>
-          <Link legacyBehavior href={"/presets"}>
-            <button className="upper w-full rounded-lg bg-primary px-5 py-3 text-xl font-semibold text-primary-foreground transition-all hover:bg-primary/80 md:w-fit">
-              View contributions
-            </button>
-          </Link>
-          <Link
-            legacyBehavior
-            href={"https://www.mobiflight.com/en/index.html"}
+        )}
+        <h1 className="text-5xl leading-none font-extrabold tracking-tight text-primary md:text-6xl">
+          Create, Share, Improve
+        </h1>
+        <p className="max-w-xl text-xl text-muted-foreground">
+          The community library of events and variables that connects your
+          cockpit hardware to the sim. Find the preset for any switch, in any
+          aircraft — then use it straight from MobiFlight.
+        </p>
+
+        <form role="search" onSubmit={submit} className="flex flex-col gap-3">
+          <ToggleGroup
+            type="single"
+            value={sim}
+            onValueChange={(value) => isSim(value) && onSimChange(value)}
+            aria-label="Simulator"
+            variant="outline"
+            className="self-start"
           >
-            <a
-              target="_blank"
-              className="flex items-center space-x-2 transition-all hover:text-primary"
+            <ToggleGroupItem
+              value="msfs2020"
+              className="px-4 font-semibold data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
             >
-              <p className="-mt-1 text-left">
-                Created and sponsored by Mobiflight and the Mobiflight community
-              </p>
-              <div className="w-8">
-                <Image
-                  alt=""
-                  loader={customLoader}
-                  priority
-                  src={mfLogo}
-                  unoptimized
-                />
+              MSFS
+            </ToggleGroupItem>
+            <ToggleGroupItem
+              value="xplane"
+              className="px-4 font-semibold data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
+            >
+              X-Plane
+            </ToggleGroupItem>
+          </ToggleGroup>
+          <div className="flex items-center gap-3 rounded-2xl border bg-card py-2 pr-2 pl-5 shadow-lg ring-4 ring-primary/10 focus-within:ring-primary/30">
+            <IconSearch aria-hidden="true" className="size-6 text-primary" />
+            <label htmlFor="home-search" className="sr-only">
+              Search presets
+            </label>
+            <Input
+              id="home-search"
+              type="search"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder={`Search ${presetCount.toLocaleString("en-US")} presets — try “${searchExample[sim]}”`}
+              className="h-12 min-w-0 flex-1 border-0 bg-transparent text-lg shadow-none focus-visible:ring-0 md:text-lg dark:bg-transparent"
+            />
+            <Button type="submit" size="lg" className="h-12 px-6 text-base">
+              Search
+            </Button>
+          </div>
+          {popular === undefined ? (
+            <Skeleton className="h-8 w-3/4" />
+          ) : (
+            popular.length > 0 && (
+              <div className="flex flex-wrap items-center gap-2 text-sm">
+                <span className="mr-1 text-muted-foreground">Popular:</span>
+                {popular.map(({ _id: { vendor, aircraft } }) => (
+                  <Link
+                    key={`${vendor} ${aircraft}`}
+                    href={presetListUrl({
+                      sim,
+                      vendor: slugify(vendor),
+                      aircraft: slugify(aircraft),
+                    })}
+                    onClick={() =>
+                      track("popular_aircraft_click", {
+                        aircraft: `${vendor} ${aircraft}`,
+                      })
+                    }
+                    className="flex min-h-11 items-center rounded-full border bg-card px-3 transition-colors hover:border-primary hover:text-primary"
+                  >
+                    {vendor} {aircraft}
+                  </Link>
+                ))}
               </div>
-            </a>
-          </Link>
-        </div>
-        <div className="hidden h-max w-full justify-center md:flex md:w-2/5">
-          <Image
-            alt=""
-            loader={customLoader}
-            priority
-            src={hubhopLogo}
-            unoptimized
-          />
-        </div>
+            )
+          )}
+        </form>
+        <a
+          href="https://www.mobiflight.com/en/index.html"
+          target="_blank"
+          className="self-start text-sm text-muted-foreground transition-colors hover:text-primary"
+        >
+          Created and sponsored by Mobiflight and the Mobiflight community
+        </a>
       </div>
-    </div>
+      <div className="flex min-w-0 flex-[1_1_360px] justify-center">
+        <HubGraphic />
+      </div>
+    </section>
   )
 }
 

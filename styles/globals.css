@@ -90,6 +90,27 @@
   --color-ring: var(--ring);
 }
 
+/* homepage: arrows flow into the hub, the activity dot pulses (use with motion-safe:) */
+@theme {
+  --animate-flow: flow 1.6s linear infinite;
+  --animate-pulse-dot: pulse-dot 2.4s ease-in-out infinite;
+
+  @keyframes flow {
+    to {
+      stroke-dashoffset: -24;
+    }
+  }
+  @keyframes pulse-dot {
+    0%,
+    100% {
+      opacity: 0.35;
+    }
+    50% {
+      opacity: 0.9;
+    }
+  }
+}
+
 /* shadcn/ui base styles */
 @layer base {
   * {
