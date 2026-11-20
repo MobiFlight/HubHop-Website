@@ -1,6 +1,6 @@
-// Numbers about the whole preset library, computed at build time in
-// getStaticProps (the statistics endpoint doesn't have them yet, #183).
-// Server only: the homepage itself never downloads the full preset list.
+// The full preset list at build time (getStaticProps): numbers about the
+// whole library for the homepage (the statistics endpoint lacks them, #183)
+// and the aircraft cheat sheets. Server only: browsers never load this.
 
 import type { Preset } from "../interfaces/preset"
 import { SIMS, slugify, type Sim } from "../lib/presetUrls"
@@ -64,7 +64,7 @@ const testDataFile: Record<Sim, string> = {
   xplane: "xplane-presets.testdata.json",
 }
 
-const loadPresets = async (sim: Sim): Promise<Contribution[]> => {
+const download = async (sim: Sim): Promise<Preset[]> => {
   if (TEST_DATA_DIR) {
     const { readFile } = await import("node:fs/promises")
     const { join } = await import("node:path")
@@ -77,6 +77,20 @@ const loadPresets = async (sim: Sim): Promise<Contribution[]> => {
   // no fallback: without the numbers the build fails and nothing is deployed
   if (!res.ok) throw new Error(`Loading ${url} failed: ${res.status}`)
   return res.json()
+}
+
+// every page of the build needs the presets: download them once per build process
+const downloads = new Map<Sim, Promise<Preset[]>>()
+
+/** All presets of a sim, at build time */
+export const loadPresets = (sim: Sim): Promise<Preset[]> => {
+  const cached = downloads.get(sim)
+  if (cached) return cached
+  const pending = download(sim)
+  // a failed download is tried again by the next page
+  pending.catch(() => downloads.delete(sim))
+  downloads.set(sim, pending)
+  return pending
 }
 
 export const loadLibraryStats = async (): Promise<LibraryStats> => {
