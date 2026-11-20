@@ -20,6 +20,8 @@ report and export presets. Data comes from the HubHop API; this repo contains no
 - Discuss changes to architecture or UX before implementing them; prefer minimal solutions.
 - Ask before removing code or features, even if they look unused.
 - Every follow-up, to-do or deferred finding becomes a GitHub issue (check for duplicates first), not only a note in a plan.
+- Stay within the area of the current task. If it needs new behaviour elsewhere (another page, login, the API),
+  use what exists today and file an issue instead of building it in the same PR.
 - Issues are short and use the target repository's issue template.
 - In PR checklists, tick what was verified; leave manual steps (e.g. screenshots) unticked and mark them as manual.
 - HubHop and MobiFlight Connector must behave the same for preset search, order and preset types.

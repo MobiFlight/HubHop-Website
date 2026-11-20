@@ -94,6 +94,8 @@ public/                  # Static assets
 - `interfaces/preset.ts` follows the HubHop API (`PresetDbSchema` in HubHopApi's `model/Preset.ts`, the interface
   next to it is incomplete) and uses the same names and values as MobiFlight Connector's `types/preset.d.ts`.
 - `lib/presetSearch.ts` is copied into MobiFlight Connector as is: keep it free of project imports.
+- Show preset data as the API returns it: don't merge spellings, trim or deduplicate vendors, aircraft or systems in
+  the frontend. Visible duplicates get fixed in the database (issues labelled `data cleanup`).
 
 ### Configuration
 

@@ -13,6 +13,8 @@ applyTo: "**"
 - **Clarity**: Use descriptive test and step titles that clearly state the intent. Add comments only to explain complex logic or non-obvious interactions.
 - **Prove the fix**: A test for a bug or feature must fail without the change. Check it by stashing the change and running the test.
 - **No style values**: Don't assert colours or other computed styles; checking class names is fine.
+- **No animation tests**: Don't test animations or `prefers-reduced-motion`. Only make sure animations don't break
+  other tests (e.g. waits that ignore endless animations).
 - **Time and typing**: Use `page.clock` for timers and debounces. Use `pressSequentially` when typing letter by letter matters (`fill` sets the value at once).
 
 ### Test Structure
