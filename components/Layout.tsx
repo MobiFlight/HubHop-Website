@@ -5,12 +5,29 @@ import Footer from "@/components/sections/footer/Footer"
 import { IconArrowUp } from "@tabler/icons-react"
 import { Button } from "@/components/ui/button"
 
-type Props = {
+type LayoutProps = {
   children?: ReactNode
   title?: string
+  // for search results and link previews
+  description?: string
+  // the page's own path, e.g. "/aircraft/msfs/": canonical URL and og:url
+  path?: string
+  // keep the page out of search engines
+  noindex?: boolean
 }
 
-const Layout = ({ children, title = "Hubhop" }: Props) => {
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL
+const IMAGE = `${SITE_URL}/images/og-hubhop.png`
+const DEFAULT_DESCRIPTION =
+  "HubHop is the community library of events and variables for MSFS and X-Plane that connects your home cockpit hardware to the sim through MobiFlight."
+
+const Layout = ({
+  children,
+  title = "Hubhop",
+  description = DEFAULT_DESCRIPTION,
+  path,
+  noindex = false,
+}: LayoutProps) => {
   const [clientWindowHeight, setClientWindowHeight] = useState(0)
 
   useEffect(() => {
@@ -28,33 +45,24 @@ const Layout = ({ children, title = "Hubhop" }: Props) => {
       localStorage.setItem("simType", "msfs2020")
   }, [])
 
-  const banner = "../../public/images/logo-big-banner.png"
+  const url = path && `${SITE_URL}${path}`
 
   return (
     <>
       <Head>
         <title>{title}</title>
-        <meta name="title" content={title} />
-        <meta
-          name="description"
-          content="HubHop is the community library of events and variables for MSFS and X-Plane that connects your cockpit hardware to the sim through MobiFlight."
-        />
+        <meta name="description" content={description} />
+        {noindex && <meta name="robots" content="noindex" />}
+        {url && <link rel="canonical" href={url} />}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://hubhop.mobiflight.com/" />
-        <meta property="og:title" content="Hubhop" />
-        <meta
-          property="og:description"
-          content="HubHop is the community library of events and variables for MSFS and X-Plane that connects your cockpit hardware to the sim through MobiFlight."
-        />
-        <meta property="og:image" content={banner} />
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://hubhop.mobiflight.com/" />
-        <meta property="twitter:title" content="Hubhop" />
-        <meta
-          property="twitter:description"
-          content="HubHop is the community library of events and variables for MSFS and X-Plane that connects your cockpit hardware to the sim through MobiFlight."
-        />
-        <meta property="twitter:image" content={banner} />
+        <meta property="og:site_name" content="HubHop" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        {url && <meta property="og:url" content={url} />}
+        <meta property="og:image" content={IMAGE} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta name="twitter:card" content="summary_large_image" />
       </Head>
       <Navbar />
       {children}

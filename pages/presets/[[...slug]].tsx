@@ -1,4 +1,3 @@
-import Head from "next/head"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useEffect } from "react"
@@ -13,7 +12,7 @@ import {
 } from "@/lib/presetUrls"
 
 const description =
-  "Get the preset for your favorite aircraft from Hubhop. The database is a community driven project. If you find events/variables of your favorite aircraft, please share them on Hubhop too."
+  "Search the community presets for MSFS and X-Plane by aircraft, system and code, and connect your home cockpit hardware with MobiFlight."
 
 const queryValue = (value: string | string[] | undefined) =>
   typeof value === "string" && value ? value : undefined
@@ -66,24 +65,7 @@ const Presets = () => {
     return <PresetDetail key={route.id} sim={route.sim} id={route.id} />
 
   return (
-    <Layout title="Presets | Hubhop by Mobiflight">
-      <Head>
-        <meta name="title" content="Presets | Hubhop by Mobiflight" />
-        <meta name="description" content={description} />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://hubhop.mobiflight.com/" />
-        <meta property="og:title" content="Presets | Hubhop by Mobiflight" />
-        <meta property="og:description" content={description} />
-        <meta property="og:image" content="@/assets/logo-big.png" />
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://hubhop.mobiflight.com/" />
-        <meta
-          property="twitter:title"
-          content="Presets | Hubhop by Mobiflight"
-        />
-        <meta property="twitter:description" content={description} />
-        <meta property="twitter:image" content="@/assets/logo-big.png" />
-      </Head>
+    <Layout title="Presets | Hubhop by Mobiflight" description={description}>
       {route?.kind === "list" ? (
         <PresetList
           sim={route.sim}

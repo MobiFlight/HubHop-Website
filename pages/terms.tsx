@@ -1,7 +1,7 @@
 import Layout from "@/components/Layout"
 
 const Terms = () => (
-  <Layout title="Terms of Service | Hubhop by Mobiflight">
+  <Layout title="Terms of Service | Hubhop by Mobiflight" path="/terms/">
     <div className="container mx-auto mb-3 min-h-screen px-2 text-justify md:mt-10">
       <h1 className="mb-3 text-4xl">Impressum / Terms</h1>
       <h2>Angaben gemäß § 5 TMG:</h2>

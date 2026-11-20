@@ -8,6 +8,10 @@ const NavbarLinks = [
     href: "/presets",
   },
   {
+    title: "Aircraft",
+    href: "/aircraft/msfs/",
+  },
+  {
     title: "Tools",
     href: "/tools",
   },

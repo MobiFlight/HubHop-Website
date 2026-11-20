@@ -1,5 +1,4 @@
 import type { GetStaticPaths, GetStaticProps } from "next"
-import Head from "next/head"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useEffect } from "react"
@@ -7,6 +6,8 @@ import Layout from "@/components/Layout"
 import SimSwitch from "@/components/sections/Shared/SimSwitch"
 import {
   aircraftIndexUrl,
+  indexDescription,
+  indexTitle,
   aircraftList,
   aircraftUrl,
   byMaker,
@@ -47,20 +48,17 @@ const AircraftIndex = ({ sim, aircraft }: AircraftIndexProps) => {
   const router = useRouter()
   const simName = SIM_NAMES[sim]
   const makers = byMaker(aircraft)
-  const title = `${simName} aircraft with MobiFlight presets | HubHop`
 
   useEffect(() => {
     document.body.classList.toggle("xplane", sim === "xplane")
   }, [sim])
 
   return (
-    <Layout title={title}>
-      <Head>
-        <meta
-          name="description"
-          content={`Preset cheat sheets for ${format(aircraft.length)} ${simName} aircraft: every MobiFlight event and variable, by system.`}
-        />
-      </Head>
+    <Layout
+      title={indexTitle(sim)}
+      description={indexDescription(sim, aircraft.length)}
+      path={aircraftIndexUrl(sim)}
+    >
       <main className="container mx-auto flex flex-col gap-8 px-6 py-10">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div className="flex flex-col gap-2">

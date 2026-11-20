@@ -240,3 +240,54 @@ export const formatDate = (iso: string) =>
     year: "numeric",
     timeZone: "UTC",
   })
+
+// Texts for titles, search results and link previews. Written for home cockpit
+// builders, who search for their aircraft and hardware rather than for MobiFlight.
+
+const count = (value: number, one: string, many: string) =>
+  `${value.toLocaleString("en-US")} ${value === 1 ? one : many}`
+
+/** "A", "A and B", "A, B and C" */
+const listOf = (names: string[]) =>
+  names.length > 1
+    ? `${names.slice(0, -1).join(", ")} and ${names.at(-1)}`
+    : (names[0] ?? "")
+
+export const indexTitle = (sim: Sim) =>
+  `${SIM_NAMES[sim]} aircraft presets for your home cockpit | HubHop`
+
+export const indexDescription = (sim: Sim, aircraft: number) =>
+  `Preset cheat sheets for ${count(aircraft, "aircraft", "aircraft")} in ${SIM_NAMES[sim]}: every switch, knob and light by system, ready for your home cockpit hardware with MobiFlight.`
+
+export const sheetTitle = (sim: Sim, sheet: AircraftSummary) =>
+  `${sheet.vendor} ${sheet.aircraft} home cockpit presets for MobiFlight (${SIM_NAMES[sim]})`
+
+/** Mentions the three systems with the most presets */
+export const sheetDescription = (sheet: AircraftSheet) => {
+  const top = [...sheet.systems]
+    .sort((a, b) => b.total - a.total)
+    .slice(0, 3)
+    .map((system) => system.name)
+  const systems =
+    sheet.systems.length === 1
+      ? `in the ${top[0]} system`
+      : `in ${count(sheet.systems.length, "system", "systems")}, including ${listOf(top)}`
+  return `Build your ${sheet.vendor} ${sheet.aircraft} home cockpit: ${count(sheet.presets, "preset", "presets")} for every switch, knob and light ${systems}. Copy the code and connect your hardware with MobiFlight.`
+}
+
+export const sheetIntro = (sheet: AircraftSheet) =>
+  `Everything you need to connect your home cockpit hardware to the ${sheet.vendor} ${sheet.aircraft}: ${count(sheet.presets, "MobiFlight preset", "MobiFlight presets")} in ${count(sheet.systems.length, "system", "systems")}.`
+
+export const systemTitle = (
+  sim: Sim,
+  aircraft: AircraftSummary,
+  system: SystemSheet,
+) =>
+  `${aircraft.vendor} ${aircraft.aircraft} ${system.name} presets for your home cockpit (${SIM_NAMES[sim]})`
+
+export const systemDescription = (
+  sim: Sim,
+  aircraft: AircraftSummary,
+  system: SystemSheet,
+) =>
+  `All ${count(system.total, `${system.name} preset`, `${system.name} presets`)} of the ${aircraft.vendor} ${aircraft.aircraft} in ${SIM_NAMES[sim]}: ${count(system.inputCount, "input", "inputs")} and ${count(system.outputCount, "output", "outputs")} to connect your home cockpit hardware with MobiFlight.`

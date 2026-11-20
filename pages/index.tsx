@@ -75,7 +75,7 @@ const Home = ({ library }: HomeProps) => {
   }
 
   return (
-    <Layout title="Home | Hubhop by Mobiflight">
+    <Layout title="Home | Hubhop by Mobiflight" path="/">
       <main className="flex flex-col gap-20 pb-24">
         <Hero
           sim={sim}

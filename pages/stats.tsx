@@ -1,4 +1,3 @@
-import Head from "next/head"
 import { useEffect, useState } from "react"
 import Layout from "@/components/Layout"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -60,30 +59,11 @@ const Stats = () => {
   }
 
   return (
-    <Layout title="Stats | Hubhop by Mobiflight">
-      <Head>
-        <meta name="title" content="Stats | Hubhop by Mobiflight" />
-        <meta
-          name="description"
-          content="Get the preset for your favorite aircraft from Hubhop. The database is a community driven project. If you find events/variables of your favorite aircraft, please share them on Hubhop too."
-        />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://hubhop.mobiflight.com/" />
-        <meta property="og:title" content="Stats | Hubhop by Mobiflight" />
-        <meta
-          property="og:description"
-          content="Get the preset for your favorite aircraft from Hubhop. The database is a community driven project. If you find events/variables of your favorite aircraft, please share them on Hubhop too."
-        />
-        <meta property="og:image" content="@/assets/logo-big.png" />
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://hubhop.mobiflight.com/" />
-        <meta property="twitter:title" content="Stats | Hubhop by Mobiflight" />
-        <meta
-          property="twitter:description"
-          content="Get the preset for your favorite aircraft from Hubhop. The database is a community driven project. If you find events/variables of your favorite aircraft, please share them on Hubhop too."
-        />
-        <meta property="twitter:image" content="@/assets/logo-big.png" />
-      </Head>
+    <Layout
+      title="Stats | Hubhop by Mobiflight"
+      description="How the HubHop preset library grows: top contributors, the aircraft with the most presets and the latest presets for MSFS and X-Plane."
+      path="/stats/"
+    >
       <div className="mb-5 min-h-screen p-3">
         <div className="container mx-auto mb-3">
           <SimSwitch value={simType} onValueChange={changeSimType} />

@@ -1,5 +1,8 @@
 import Head from "next/head"
+import Link from "next/link"
 import Layout from "@/components/Layout"
+import { aircraftUrl } from "@/lib/aircraftPages"
+import { slugify, type Sim } from "@/lib/presetUrls"
 import { useEffect, useState } from "react"
 
 import PresetCard from "@/components/sections/presets/ui/PresetCard"
@@ -7,13 +10,14 @@ import type { Preset } from "@/interfaces/preset"
 import { IconLoader2, IconMoodSad } from "@tabler/icons-react"
 
 type PresetViewProps = {
+  sim: Sim
   // undefined while loading, empty if the preset doesn't exist
   preset: Preset[] | undefined
   history: Preset[]
   loading: boolean
 }
 
-const PresetView = ({ preset, history, loading }: PresetViewProps) => {
+const PresetView = ({ sim, preset, history, loading }: PresetViewProps) => {
   const [id, setId] = useState("")
   const [updatedBy, setUpdatedBy] = useState<string>()
   const [createdDate, setCreatedDate] = useState<string>()
@@ -60,7 +64,8 @@ const PresetView = ({ preset, history, loading }: PresetViewProps) => {
   }, [preset])
 
   return (
-    <Layout title="Preset | Hubhop by Mobiflight">
+    // single presets stay out of search engines; the aircraft cheat sheets are indexed instead
+    <Layout title="Preset | Hubhop by Mobiflight" noindex>
       <Head>
         <title>{label || "Preset View"}</title>
       </Head>
@@ -79,35 +84,45 @@ const PresetView = ({ preset, history, loading }: PresetViewProps) => {
           </div>
         </div>
       ) : (
-        <PresetCard
-          id={id}
-          label={label}
-          updatedBy={updatedBy}
-          author={author}
-          createdDate={createdDate}
-          version={version}
-          reported={reported}
-          vendor={vendor}
-          aircraft={aircraft}
-          system={system}
-          presetType={presetType}
-          codeType={codeType}
-          code={code}
-          description={description}
-          loading={loading}
-          history={history}
-          showingHistory={true}
-          text=""
-          card
-          setVendor={setVendor}
-          setAircraft={setAircraft}
-          setSystem={setSystem}
-          setPresetType={setPresetType}
-          setCodeType={setCodeType}
-          setLabel={setLabel}
-          setCode={setCode}
-          setDescription={setDescription}
-        />
+        <>
+          <div className="container mx-auto mt-5 px-3 xl:px-0">
+            <Link
+              href={aircraftUrl(sim, slugify(vendor), slugify(aircraft))}
+              className="font-semibold text-primary hover:underline"
+            >
+              All presets of the {vendor} {aircraft}: cheat sheet →
+            </Link>
+          </div>
+          <PresetCard
+            id={id}
+            label={label}
+            updatedBy={updatedBy}
+            author={author}
+            createdDate={createdDate}
+            version={version}
+            reported={reported}
+            vendor={vendor}
+            aircraft={aircraft}
+            system={system}
+            presetType={presetType}
+            codeType={codeType}
+            code={code}
+            description={description}
+            loading={loading}
+            history={history}
+            showingHistory={true}
+            text=""
+            card
+            setVendor={setVendor}
+            setAircraft={setAircraft}
+            setSystem={setSystem}
+            setPresetType={setPresetType}
+            setCodeType={setCodeType}
+            setLabel={setLabel}
+            setCode={setCode}
+            setDescription={setDescription}
+          />
+        </>
       )}
     </Layout>
   )

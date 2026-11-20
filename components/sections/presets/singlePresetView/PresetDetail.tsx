@@ -86,7 +86,12 @@ const PresetDetail = ({ sim, id }: PresetDetailProps) => {
   )
 
   return (
-    <PresetView preset={filterPreset} history={history} loading={loading} />
+    <PresetView
+      sim={sim}
+      preset={filterPreset}
+      history={history}
+      loading={loading}
+    />
   )
 }
 
