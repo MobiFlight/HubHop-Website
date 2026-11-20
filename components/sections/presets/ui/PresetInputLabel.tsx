@@ -37,7 +37,7 @@ const PresetPreviewLabel = ({
   const value = String(editData ?? "")
 
   return (
-    <div className="flex flex-col gap-1.5">
+    <div className="flex flex-col gap-1">
       <Label htmlFor={edit || codeOrDescriptionBox ? id : undefined}>
         {title}
       </Label>
@@ -76,7 +76,7 @@ const PresetPreviewLabel = ({
         // a value to read, not a form field
         <div
           className={cn(
-            "flex min-h-9 items-center rounded-md border border-input bg-input/30 px-3 py-1 text-sm break-words",
+            "flex min-h-9 items-center rounded-md border border-primary/50 bg-input/30 px-3 py-1 text-sm break-words",
             mono && "font-mono",
           )}
         >

@@ -68,7 +68,10 @@ const ComboBox = ({
           role="combobox"
           aria-expanded={open}
           aria-invalid={invalid || undefined}
-          className={cn("w-full justify-between font-normal", className)}
+          className={cn(
+            "w-full justify-between border-primary/50 font-normal dark:border-primary/50",
+            className,
+          )}
         >
           <span className={cn("truncate", !value && "text-muted-foreground")}>
             {value || placeholder}

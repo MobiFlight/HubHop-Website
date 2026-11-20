@@ -4,7 +4,20 @@ import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { toast } from "sonner"
-import { IconExternalLink, IconLoader2 } from "@tabler/icons-react"
+import {
+  IconBuildingStore,
+  IconBulb,
+  IconCode,
+  IconCursorText,
+  IconExternalLink,
+  IconFileText,
+  IconDeviceGamepad2,
+  IconListDetails,
+  IconLoader2,
+  IconPlane,
+  IconRepeat,
+  IconSettings,
+} from "@tabler/icons-react"
 import { Button } from "@/components/ui/button"
 import { Field, FieldError, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
@@ -183,7 +196,9 @@ const AddPresetsModal = ({ onClose, presets }: AddPresetsModalProps) => {
               control={control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="add-vendor">Vendor</FieldLabel>
+                  <FieldLabel htmlFor="add-vendor">
+                    <IconBuildingStore className="size-4" /> Vendor
+                  </FieldLabel>
                   <ComboBox
                     id="add-vendor"
                     options={vendorOptions}
@@ -202,7 +217,9 @@ const AddPresetsModal = ({ onClose, presets }: AddPresetsModalProps) => {
               control={control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="add-aircraft">Aircraft</FieldLabel>
+                  <FieldLabel htmlFor="add-aircraft">
+                    <IconPlane className="size-4" /> Aircraft
+                  </FieldLabel>
                   <ComboBox
                     id="add-aircraft"
                     options={aircraftOptions}
@@ -221,7 +238,9 @@ const AddPresetsModal = ({ onClose, presets }: AddPresetsModalProps) => {
               control={control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="add-system">System</FieldLabel>
+                  <FieldLabel htmlFor="add-system">
+                    <IconSettings className="size-4" /> System
+                  </FieldLabel>
                   <ComboBox
                     id="add-system"
                     options={systemOptions}
@@ -241,7 +260,8 @@ const AddPresetsModal = ({ onClose, presets }: AddPresetsModalProps) => {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="add-preset-type">
-                    Input/Output
+                    <IconDeviceGamepad2 className="size-4" />{" "}
+                    <IconBulb className="size-4" /> Input/Output
                   </FieldLabel>
                   <Select value={field.value} onValueChange={field.onChange}>
                     <SelectTrigger
@@ -269,7 +289,9 @@ const AddPresetsModal = ({ onClose, presets }: AddPresetsModalProps) => {
                 control={control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="add-code-type">Code Type</FieldLabel>
+                    <FieldLabel htmlFor="add-code-type">
+                      <IconListDetails className="size-4" /> Code Type
+                    </FieldLabel>
                     <Select value={field.value} onValueChange={field.onChange}>
                       <SelectTrigger
                         id="add-code-type"
@@ -294,7 +316,9 @@ const AddPresetsModal = ({ onClose, presets }: AddPresetsModalProps) => {
           </div>
           <div className="flex flex-col gap-4">
             <Field data-invalid={!!errors.label}>
-              <FieldLabel htmlFor="add-label">Name</FieldLabel>
+              <FieldLabel htmlFor="add-label">
+                <IconCursorText className="size-4" /> Name
+              </FieldLabel>
               <Input
                 id="add-label"
                 placeholder="Alternator 1 On"
@@ -304,7 +328,9 @@ const AddPresetsModal = ({ onClose, presets }: AddPresetsModalProps) => {
               <FieldError errors={[errors.label]} />
             </Field>
             <Field data-invalid={!!errors.code}>
-              <FieldLabel htmlFor="add-code">Code</FieldLabel>
+              <FieldLabel htmlFor="add-code">
+                <IconCode className="size-4" /> Code
+              </FieldLabel>
               <Textarea
                 id="add-code"
                 rows={5}
@@ -316,7 +342,9 @@ const AddPresetsModal = ({ onClose, presets }: AddPresetsModalProps) => {
               <FieldError errors={[errors.code]} />
             </Field>
             <Field>
-              <FieldLabel htmlFor="add-description">Description</FieldLabel>
+              <FieldLabel htmlFor="add-description">
+                <IconFileText className="size-4" /> Description
+              </FieldLabel>
               <Textarea
                 id="add-description"
                 rows={5}
@@ -326,8 +354,10 @@ const AddPresetsModal = ({ onClose, presets }: AddPresetsModalProps) => {
             </Field>
           </div>
           <div className="flex flex-col gap-2">
-            <p className="text-sm font-medium">Similar Presets</p>
-            <div className="flex flex-col gap-1 rounded-md border p-2 text-sm">
+            <p className="flex items-center gap-2 text-sm font-medium">
+              <IconRepeat className="size-4" /> Similar Presets
+            </p>
+            <div className="flex flex-col gap-1 rounded-md border border-primary/50 p-2 text-sm">
               <p>{filteredItems.length} presets found.</p>
               {filteredItems.length === 0 ? (
                 <p className="text-muted-foreground">No matches</p>
