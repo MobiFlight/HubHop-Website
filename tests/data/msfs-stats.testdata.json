@@ -21,7 +21,7 @@
   "votes": [],
   "presetsAdded": [
     {
-      "id": "msfs-0001",
+      "id": "00000000-0000-4000-8000-000000000001",
       "path": "Asobo.A320neo.Autopilot.Input.AP master toggle",
       "vendor": "Asobo",
       "aircraft": "A320neo",
@@ -35,10 +35,10 @@
       "createdDate": "2024-03-01T10:00:00.000Z",
       "description": "Test description for AP master toggle",
       "updatedBy": "Test User",
-      "_id": "msfs-0001"
+      "_id": "00000000-0000-4000-8000-000000000001"
     },
     {
-      "id": "msfs-0002",
+      "id": "00000000-0000-4000-8000-000000000002",
       "path": "Asobo.A320neo.Autopilot.Input.AP heading hold",
       "vendor": "Asobo",
       "aircraft": "A320neo",
@@ -51,10 +51,10 @@
       "author": "Test Author",
       "createdDate": "2024-01-02T10:00:00.000Z",
       "description": "Test description for AP heading hold",
-      "_id": "msfs-0002"
+      "_id": "00000000-0000-4000-8000-000000000002"
     },
     {
-      "id": "msfs-0003",
+      "id": "00000000-0000-4000-8000-000000000003",
       "path": "Asobo.A320neo.Autopilot.Input.AP altitude hold",
       "vendor": "Asobo",
       "aircraft": "A320neo",
@@ -67,10 +67,10 @@
       "author": "Test Author",
       "createdDate": "2024-01-03T10:00:00.000Z",
       "description": "Test description for AP altitude hold",
-      "_id": "msfs-0003"
+      "_id": "00000000-0000-4000-8000-000000000003"
     },
     {
-      "id": "msfs-0004",
+      "id": "00000000-0000-4000-8000-000000000004",
       "path": "Asobo.A320neo.Autopilot.Input.AP speed hold",
       "vendor": "Asobo",
       "aircraft": "A320neo",
@@ -83,10 +83,10 @@
       "author": "Test Author",
       "createdDate": "2024-01-04T10:00:00.000Z",
       "description": "Test description for AP speed hold",
-      "_id": "msfs-0004"
+      "_id": "00000000-0000-4000-8000-000000000004"
     },
     {
-      "id": "msfs-0005",
+      "id": "00000000-0000-4000-8000-000000000005",
       "path": "Asobo.A320neo.Autopilot.Input.AP NAV mode",
       "vendor": "Asobo",
       "aircraft": "A320neo",
@@ -99,12 +99,12 @@
       "author": "Test Author",
       "createdDate": "2024-01-05T10:00:00.000Z",
       "description": "Test description for AP NAV mode",
-      "_id": "msfs-0005"
+      "_id": "00000000-0000-4000-8000-000000000005"
     }
   ],
   "presetsUpdated": [
     {
-      "id": "msfs-0001",
+      "id": "00000000-0000-4000-8000-000000000001",
       "path": "Asobo.A320neo.Autopilot.Input.AP master toggle",
       "vendor": "Asobo",
       "aircraft": "A320neo",
@@ -118,7 +118,7 @@
       "createdDate": "2024-03-01T10:00:00.000Z",
       "description": "Test description for AP master toggle",
       "updatedBy": "Test User",
-      "_id": "msfs-0001"
+      "_id": "00000000-0000-4000-8000-000000000001"
     }
   ]
 }

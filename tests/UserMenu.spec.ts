@@ -82,7 +82,7 @@ test.describe("User menu - moderator", () => {
     ).toHaveCount(0)
 
     await test.step("Preset details show no reported count", async () => {
-      await presetViewPage.gotoPage("msfs-0009")
+      await presetViewPage.gotoPage("00000000-0000-4000-8000-000000000009")
       await expect(page.getByText("Version", { exact: true })).toBeVisible()
       await expect(page.getByText("Reported", { exact: true })).toHaveCount(0)
     })

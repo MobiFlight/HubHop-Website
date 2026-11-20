@@ -7,7 +7,7 @@ test.describe("Delete preset - user", () => {
     presetViewPage,
     page,
   }) => {
-    await presetViewPage.gotoPage("msfs-0006")
+    await presetViewPage.gotoPage("00000000-0000-4000-8000-000000000006")
 
     await expect(page.getByText("Version", { exact: true })).toBeVisible()
     await expect(page.getByRole("button", { name: "Delete" })).toHaveCount(0)
@@ -21,7 +21,7 @@ test.describe("Delete preset - moderator", () => {
     presetViewPage,
     page,
   }) => {
-    await presetViewPage.gotoPage("msfs-0009")
+    await presetViewPage.gotoPage("00000000-0000-4000-8000-000000000009")
 
     await page.getByRole("button", { name: "Delete" }).click()
     await expect(
@@ -40,7 +40,7 @@ test.describe("Delete preset - moderator", () => {
     presetViewPage,
     page,
   }) => {
-    await presetViewPage.gotoPage("msfs-0009")
+    await presetViewPage.gotoPage("00000000-0000-4000-8000-000000000009")
 
     await page.getByRole("button", { name: "Delete" }).click()
     await page.keyboard.press("Escape")
@@ -55,7 +55,7 @@ test.describe("Delete preset - moderator", () => {
     presetViewPage,
     page,
   }) => {
-    await presetViewPage.gotoPage("msfs-0009")
+    await presetViewPage.gotoPage("00000000-0000-4000-8000-000000000009")
 
     await page.getByRole("button", { name: "Delete" }).click()
     await expect(
@@ -66,7 +66,9 @@ test.describe("Delete preset - moderator", () => {
     await expect(page.getByText("Preset successfully deleted!")).toBeVisible()
     const requests = presetViewPage.hubHopPage.writeRequests("DELETE")
     expect(requests).toHaveLength(1)
-    expect(requests[0].path).toBe("/msfs2020/presets/msfs-0009")
+    expect(requests[0].path).toBe(
+      "/msfs2020/presets/00000000-0000-4000-8000-000000000009",
+    )
     expect(requests[0].headers["authorization"]).toBe(
       "Bearer fake-access-token",
     )

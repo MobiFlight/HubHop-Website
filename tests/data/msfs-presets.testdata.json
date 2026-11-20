@@ -1,6 +1,6 @@
 [
   {
-    "id": "msfs-0001",
+    "id": "00000000-0000-4000-8000-000000000001",
     "path": "Asobo.A320neo.Autopilot.Input.AP master toggle",
     "vendor": "Asobo",
     "aircraft": "A320neo",
@@ -16,7 +16,7 @@
     "updatedBy": "Test User"
   },
   {
-    "id": "msfs-0002",
+    "id": "00000000-0000-4000-8000-000000000002",
     "path": "Asobo.A320neo.Autopilot.Input.AP heading hold",
     "vendor": "Asobo",
     "aircraft": "A320neo",
@@ -31,7 +31,7 @@
     "description": "Test description for AP heading hold"
   },
   {
-    "id": "msfs-0003",
+    "id": "00000000-0000-4000-8000-000000000003",
     "path": "Asobo.A320neo.Autopilot.Input.AP altitude hold",
     "vendor": "Asobo",
     "aircraft": "A320neo",
@@ -46,7 +46,7 @@
     "description": "Test description for AP altitude hold"
   },
   {
-    "id": "msfs-0004",
+    "id": "00000000-0000-4000-8000-000000000004",
     "path": "Asobo.A320neo.Autopilot.Input.AP speed hold",
     "vendor": "Asobo",
     "aircraft": "A320neo",
@@ -61,7 +61,7 @@
     "description": "Test description for AP speed hold"
   },
   {
-    "id": "msfs-0005",
+    "id": "00000000-0000-4000-8000-000000000005",
     "path": "Asobo.A320neo.Autopilot.Input.AP NAV mode",
     "vendor": "Asobo",
     "aircraft": "A320neo",
@@ -76,7 +76,7 @@
     "description": "Test description for AP NAV mode"
   },
   {
-    "id": "msfs-0006",
+    "id": "00000000-0000-4000-8000-000000000006",
     "path": "Asobo.A320neo.Lights.Input.Landing lights on",
     "vendor": "Asobo",
     "aircraft": "A320neo",
@@ -91,7 +91,7 @@
     "description": "Test description for Landing lights on"
   },
   {
-    "id": "msfs-0007",
+    "id": "00000000-0000-4000-8000-000000000007",
     "path": "Asobo.A320neo.Lights.Input.Landing lights off",
     "vendor": "Asobo",
     "aircraft": "A320neo",
@@ -106,7 +106,7 @@
     "description": "Test description for Landing lights off"
   },
   {
-    "id": "msfs-0008",
+    "id": "00000000-0000-4000-8000-000000000008",
     "path": "Asobo.A320neo.Lights.Input.Strobe toggle",
     "vendor": "Asobo",
     "aircraft": "A320neo",
@@ -121,7 +121,7 @@
     "description": "Test description for Strobe toggle"
   },
   {
-    "id": "msfs-0009",
+    "id": "00000000-0000-4000-8000-000000000009",
     "path": "Asobo.C172.Electrical.Input.Battery master on",
     "vendor": "Asobo",
     "aircraft": "C172",
@@ -137,7 +137,7 @@
     "reported": 2
   },
   {
-    "id": "msfs-0010",
+    "id": "00000000-0000-4000-8000-000000000010",
     "path": "Asobo.C172.Electrical.Input.Alternator 1 on",
     "vendor": "Asobo",
     "aircraft": "C172",
@@ -152,7 +152,7 @@
     "description": "Test description for Alternator 1 on"
   },
   {
-    "id": "msfs-0011",
+    "id": "00000000-0000-4000-8000-000000000011",
     "path": "Asobo.C172.Electrical.Input.Avionics master toggle",
     "vendor": "Asobo",
     "aircraft": "C172",
@@ -167,7 +167,7 @@
     "description": "Test description for Avionics master toggle"
   },
   {
-    "id": "msfs-0012",
+    "id": "00000000-0000-4000-8000-000000000012",
     "path": "Asobo.C172.Engine.Output.RPM indicator",
     "vendor": "Asobo",
     "aircraft": "C172",
@@ -182,7 +182,7 @@
     "description": "Test description for RPM indicator"
   },
   {
-    "id": "msfs-0013",
+    "id": "00000000-0000-4000-8000-000000000013",
     "path": "Asobo.C172.Engine.Output.Oil temperature",
     "vendor": "Asobo",
     "aircraft": "C172",
@@ -197,7 +197,7 @@
     "description": "Test description for Oil temperature"
   },
   {
-    "id": "msfs-0014",
+    "id": "00000000-0000-4000-8000-000000000014",
     "path": "FlyByWire.A32NX.Autopilot.Input.FCU HDG push",
     "vendor": "FlyByWire",
     "aircraft": "A32NX",
@@ -212,7 +212,7 @@
     "description": "Test description for FCU HDG push"
   },
   {
-    "id": "msfs-0015",
+    "id": "00000000-0000-4000-8000-000000000015",
     "path": "FlyByWire.A32NX.Autopilot.Input.FCU ALT pull",
     "vendor": "FlyByWire",
     "aircraft": "A32NX",
@@ -227,7 +227,7 @@
     "description": "Test description for FCU ALT pull"
   },
   {
-    "id": "msfs-0016",
+    "id": "00000000-0000-4000-8000-000000000016",
     "path": "FlyByWire.A32NX.Overhead.Output.APU master status",
     "vendor": "FlyByWire",
     "aircraft": "A32NX",
@@ -242,7 +242,7 @@
     "description": "Test description for APU master status"
   },
   {
-    "id": "msfs-0017",
+    "id": "00000000-0000-4000-8000-000000000017",
     "path": "FlyByWire.A32NX.Overhead.Output.Seatbelt sign",
     "vendor": "FlyByWire",
     "aircraft": "A32NX",

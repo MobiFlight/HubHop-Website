@@ -7,8 +7,9 @@ export class PresetViewPage {
     return this.hubHopPage.page
   }
 
-  async gotoPage(id: string, simType: Sim = "msfs2020") {
-    await this.hubHopPage.goto(`/preset/?simType=${simType}&id=${id}`)
+  /** Opens a preset by its id; the page adds vendor, aircraft and label to the URL */
+  async gotoPage(id: string, sim: Sim = "msfs2020") {
+    await this.hubHopPage.goto(`/presets/${sim}/-/-/${id}/`)
   }
 
   get title() {
