@@ -3,26 +3,60 @@
 // Server only: the homepage itself never downloads the full preset list.
 
 import type { Preset } from "../interfaces/preset"
-import { SIMS, type Sim } from "../lib/presetUrls"
+import { SIMS, slugify, type Sim } from "../lib/presetUrls"
+
+export type VendorCount = {
+  name: string
+  slug: string
+  presets: number
+}
 
 export type SimLibraryStats = {
   presets: number
   // authors and those who updated a preset
   contributors: number
+  // the vendors with the most presets
+  topVendors: VendorCount[]
+  vendorCount: number
 }
+
+const TOP_VENDORS = 7
 
 export type LibraryStats = Record<Sim, SimLibraryStats>
 
-type Contribution = Pick<Preset, "author" | "updatedBy">
+type Contribution = Pick<Preset, "author" | "updatedBy" | "vendor">
 
-export const libraryStatsOf = (presets: Contribution[]): SimLibraryStats => ({
-  presets: presets.length,
-  contributors: new Set(
-    presets
-      .flatMap(({ author, updatedBy }) => [author, updatedBy])
-      .filter(Boolean),
-  ).size,
-})
+// Spellings of one vendor (e.g. "VSkyLabs" and "vskylabs") share a slug and a
+// page, so they are counted together under the most used spelling.
+const vendorCounts = (presets: Contribution[]): VendorCount[] => {
+  const bySlug = new Map<string, Map<string, number>>()
+  for (const { vendor } of presets) {
+    const spellings = bySlug.get(slugify(vendor)) ?? new Map<string, number>()
+    spellings.set(vendor, (spellings.get(vendor) ?? 0) + 1)
+    bySlug.set(slugify(vendor), spellings)
+  }
+  return [...bySlug].map(([slug, spellings]) => {
+    const [name] = [...spellings].sort((a, b) => b[1] - a[1])[0]
+    const count = [...spellings.values()].reduce((sum, n) => sum + n, 0)
+    return { name, slug, presets: count }
+  })
+}
+
+export const libraryStatsOf = (presets: Contribution[]): SimLibraryStats => {
+  const vendors = vendorCounts(presets)
+  return {
+    presets: presets.length,
+    contributors: new Set(
+      presets
+        .flatMap(({ author, updatedBy }) => [author, updatedBy])
+        .filter(Boolean),
+    ).size,
+    topVendors: vendors
+      .sort((a, b) => b.presets - a.presets)
+      .slice(0, TOP_VENDORS),
+    vendorCount: vendors.length,
+  }
+}
 
 // Playwright sets this: getStaticProps runs in the dev server, where the
 // browser's request mocks can't reach, so tests read the test data instead.

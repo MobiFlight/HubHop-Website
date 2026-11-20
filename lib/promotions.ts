@@ -22,8 +22,10 @@ export type SlotId =
   | "loading"
   | "preset-detail"
   | "list-inline"
-  | "home-featured"
-  | "home-sponsors"
+  // the homepage's "MobiFlight news & partners": one card of each kind
+  | "home-news"
+  | "home-sponsor"
+  | "home-club"
 
 export type PromotionSim = "msfs2020" | "xplane"
 
@@ -210,6 +212,13 @@ export const matchScore = (
   return checks.every(Boolean) ? checks.length : -1
 }
 
+// Slots that only show promotions of these kinds
+const SLOT_KINDS: Partial<Record<SlotId, readonly PromotionKind[]>> = {
+  "home-news": ["news"],
+  "home-sponsor": ["sponsor"],
+  "home-club": ["club"],
+}
+
 // Slots that prefer feed items by tag, in this order; other promotions come after them.
 const SLOT_TAG_ORDER: Partial<Record<SlotId, readonly FeedTag[]>> = {
   "filter-sidebar": FEED_TAGS,
@@ -231,6 +240,10 @@ export const bestPromotions = (
 ): Promotion[] => {
   const ranked = promotions
     .filter((promotion) => !promotion.slots || promotion.slots.includes(slot))
+    .filter(
+      (promotion) =>
+        !SLOT_KINDS[slot] || SLOT_KINDS[slot].includes(promotion.kind),
+    )
     .filter((promotion) => !excludeIds.includes(promotion.id))
     .map((promotion) => ({
       promotion,

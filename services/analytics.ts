@@ -14,10 +14,11 @@ export type AnalyticsEvents = {
   vendor_click: { vendor: string }
   add_preset_click: Record<string, never>
   discord_click: Record<string, never>
-  news_click: Record<string, never>
-  sponsor_click: Record<string, never>
-  club_click: Record<string, never>
-  donate_click: Record<string, never>
+  // slot: where the promotion or link was shown (e.g. "home-news")
+  news_click: { slot: string }
+  sponsor_click: { slot: string }
+  club_click: { slot: string }
+  donate_click: { slot: string }
 }
 
 type EventName = keyof AnalyticsEvents

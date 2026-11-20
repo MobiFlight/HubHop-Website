@@ -81,6 +81,19 @@ test.describe("Promotion selection", () => {
     ).toEqual(["generic"])
   })
 
+  test("Promotion selection - the homepage slots show one kind each", () => {
+    const promotions = [
+      promotion("club"),
+      promotion("news", { kind: "news" }),
+      promotion("sponsor", { kind: "sponsor" }),
+    ]
+    const ids = (slot: Parameters<typeof bestPromotions>[0]) =>
+      bestPromotions(slot, {}, promotions).map((p) => p.id)
+    expect(ids("home-news")).toEqual(["news"])
+    expect(ids("home-sponsor")).toEqual(["sponsor"])
+    expect(ids("home-club")).toEqual(["club"])
+  })
+
   test("Promotion selection - excluded promotions are skipped", () => {
     const promotions = [promotion("a"), promotion("b")]
 

@@ -42,6 +42,26 @@ test.describe("Analytics", () => {
       await expect.poll(() => trackedEvents(page)).toEqual(["discord_click"])
     })
 
+    test("Analytics - a click on an aircraft maker is tracked with its name", async ({
+      hubHopPage,
+      page,
+    }) => {
+      await hubHopPage.goto("/")
+
+      await page
+        .getByRole("region", { name: "Browse by aircraft maker" })
+        .getByRole("link", { name: /Asobo/ })
+        .click()
+
+      await expect(page).toHaveURL(/\/presets\/msfs2020\/asobo\//)
+      const entries = await page.evaluate(() =>
+        (window.dataLayer ?? []).filter(
+          (entry) => (entry as { event?: string }).event === "vendor_click",
+        ),
+      )
+      expect(entries).toEqual([{ event: "vendor_click", vendor: "Asobo" }])
+    })
+
     test("Analytics - a homepage search is tracked with its sim, without the search text", async ({
       hubHopPage,
       page,
