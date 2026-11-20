@@ -145,7 +145,7 @@ const DataTable = <T,>({
               {column.sortable ? (
                 <button
                   type="button"
-                  className="flex max-w-full items-center gap-1"
+                  className="flex w-full items-center gap-1 text-left"
                   onClick={() => toggleSorting(column.id)}
                 >
                   <span className="truncate">{column.header}</span>
