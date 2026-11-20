@@ -7,6 +7,7 @@ import {
   IconFingerprint,
 } from "@tabler/icons-react"
 import { useCookieConsent } from "../Shared/CookieConsent"
+import { track } from "../../../services/analytics"
 
 const linkClass = "flex items-center gap-1 transition-colors hover:text-primary"
 
@@ -37,6 +38,7 @@ const Footer = () => {
           href="https://discord.gg/YMExvWp8eX"
           target="_blank"
           className={linkClass}
+          onClick={() => track("discord_click")}
           aria-label="Join us on Discord"
         >
           <IconBrandDiscord className="size-4" />
