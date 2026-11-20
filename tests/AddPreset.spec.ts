@@ -230,7 +230,10 @@ test.describe("Add preset - user", () => {
   })
 
   test("Add preset - close hides the dialog", async ({ page }) => {
-    await page.getByRole("button", { name: "Close", exact: true }).click()
+    await page
+      .locator("form")
+      .getByRole("button", { name: "Close", exact: true })
+      .click()
 
     await expect(page.getByRole("heading", { name: "Add Preset" })).toHaveCount(
       0,

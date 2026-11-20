@@ -78,7 +78,7 @@ test.describe("Preset view - moderator", () => {
       // history is sorted newest first
       await revertButtons.last().click()
       await expect(
-        page.getByText("Are you sure you want to rever this preset?"),
+        page.getByText("Are you sure you want to revert this preset?"),
       ).toBeVisible()
       await page.getByRole("button", { name: "Yes" }).click()
     })
