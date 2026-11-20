@@ -17,7 +17,7 @@ test.describe("Home page", () => {
 
   test("Home - View contributions opens the preset list", async ({ page }) => {
     await page.getByRole("button", { name: "View contributions" }).click()
-    await expect(page).toHaveURL(/\/presets\/$/)
+    await expect(page).toHaveURL(/\/presets\/\?sim=msfs2020$/)
     await expect(page.getByRole("table")).toBeVisible()
   })
 })

@@ -319,6 +319,35 @@ test.describe("Preset list", () => {
     await expect(page.locator("body")).toHaveClass(/xplane/)
   })
 
+  test("Preset list - the sim comes from the URL", async ({
+    presetsPage,
+    page,
+  }) => {
+    await presetsPage.gotoPage("?sim=xplane&search=beacon")
+
+    await expect(presetsPage.xplaneSwitch).toBeChecked()
+    await expect(presetsPage.rows).toHaveCount(1)
+    await expect(presetsPage.row("Beacon toggle")).toHaveCount(1)
+    expect(presetsPage.hubHopPage.downloads).toEqual({
+      msfs2020: 0,
+      xplane: 1,
+    })
+    await expect(page.locator("body")).toHaveClass(/xplane/)
+  })
+
+  test("Preset list - the URL names the selected sim", async ({
+    presetsPage,
+    page,
+  }) => {
+    await presetsPage.gotoPage("?vendor=Asobo")
+    await expect(page).toHaveURL(/[?&]sim=msfs2020(&|$)/)
+
+    await presetsPage.xplaneSwitch.click()
+
+    await expect(page).toHaveURL(/[?&]sim=xplane(&|$)/)
+    await expect(page).toHaveURL(/[?&]vendor=Asobo(&|$)/)
+  })
+
   test("Preset list - expanding a row shows the preset details", async ({
     presetsPage,
     page,

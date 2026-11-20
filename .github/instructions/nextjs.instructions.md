@@ -81,6 +81,7 @@ public/                  # Static assets
   `components/sections/Shared/CookieConsent.tsx` (runs it, loads GTM), colors in `styles/globals.css` (`#cc-main`).
   The choice is stored in the cookie `hubhop_cookie_consent` for a year (mobiflight.com's `mf_cookie_consent` is set for
   the whole domain, so HubHop needs its own name). "Cookie settings" in the footer opens the preferences.
+- Send events with `track(event, params)` from `services/analytics.ts` (no-op without consent); list each event in `docs/analytics.md`.
 - Google Analytics and any other tag are configured in the GTM container, not in code. Non-Google tags in GTM
   need their own consent check, and new tags or cookies need an update of the privacy page.
 

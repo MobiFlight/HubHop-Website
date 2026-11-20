@@ -10,7 +10,7 @@ test.describe("Navigation", () => {
 
     await test.step("Presets", async () => {
       await nav.getByRole("link", { name: "Presets" }).click()
-      await expect(page).toHaveURL(/\/presets\/$/)
+      await expect(page).toHaveURL(/\/presets\/\?sim=msfs2020$/)
     })
     await test.step("Tools", async () => {
       await nav.getByRole("link", { name: "Tools" }).click()
