@@ -1,7 +1,7 @@
 import { useRouter } from "next/router"
 import { useEffect } from "react"
-import Layout from "../components/Layout"
-import { isSim, simSegment } from "../lib/presetUrls"
+import Layout from "@/components/Layout"
+import { isSim, simSegment } from "@/lib/presetUrls"
 
 /**
  * Old preset links (/preset/?simType=…&id=…, used by MobiFlight Connector and

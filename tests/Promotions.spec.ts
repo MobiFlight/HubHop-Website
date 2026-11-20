@@ -1,5 +1,5 @@
 import type { Page } from "@playwright/test"
-import { test, expect } from "./fixtures"
+import { test, expect } from "@/tests/fixtures"
 import {
   bestPromotions,
   feedPromotions,
@@ -8,7 +8,7 @@ import {
   promotionUrl,
   sponsorPromotions,
   type Promotion,
-} from "../lib/promotions"
+} from "@/lib/promotions"
 
 const promotion = (id: string, extra: Partial<Promotion> = {}): Promotion => ({
   id,

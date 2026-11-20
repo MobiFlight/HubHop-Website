@@ -1,4 +1,4 @@
-import type { Statistics, StatisticsPreset } from "../interfaces/preset"
+import type { Statistics, StatisticsPreset } from "@/interfaces/preset"
 
 export type RecentChange = {
   kind: "added" | "updated"

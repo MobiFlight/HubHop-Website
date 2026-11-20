@@ -1,4 +1,4 @@
-import { test, expect } from "./fixtures"
+import { test, expect } from "@/tests/fixtures"
 import type { Page } from "@playwright/test"
 
 /** Picks an option of a shadcn Select */

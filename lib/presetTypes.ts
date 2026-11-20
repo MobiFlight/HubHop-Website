@@ -1,4 +1,4 @@
-import type { SimType } from "../services/presetSync"
+import type { SimType } from "@/services/presetSync"
 
 // Input/Output values per sim, as in MobiFlight Connector (types/preset.d.ts).
 // Defined here on purpose: nobody, not even moderators, may create new ones.

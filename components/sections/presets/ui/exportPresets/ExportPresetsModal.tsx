@@ -1,6 +1,6 @@
 import { useState } from "react"
-import Modal from "../../../Shared/Modal"
-import ExportButton from "./ExportButton"
+import Modal from "@/components/sections/Shared/Modal"
+import ExportButton from "@/components/sections/presets/ui/exportPresets/ExportButton"
 import { buttonVariants } from "@/components/ui/button"
 
 type ExportPresetsModalProps = {

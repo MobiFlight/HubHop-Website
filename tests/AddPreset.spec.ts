@@ -1,5 +1,5 @@
 import type { Locator, Page } from "@playwright/test"
-import { test, expect, authFile } from "./fixtures"
+import { test, expect, authFile } from "@/tests/fixtures"
 
 test.describe("Add preset - anonymous", () => {
   test("Add preset - anonymous users are asked to log in", async ({

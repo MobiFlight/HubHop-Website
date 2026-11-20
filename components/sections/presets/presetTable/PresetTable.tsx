@@ -1,15 +1,12 @@
 import { useMemo, useState } from "react"
 import { IconCirclePlus, IconDownload } from "@tabler/icons-react"
 import { Button } from "@/components/ui/button"
-import DataTable, { type Column } from "../../Shared/DataTable"
-import PresetCard from "../ui/PresetCard"
-import type { Preset } from "../../../../interfaces/preset"
-import RelevanceGauge from "./RelevanceGauge"
-import { msalInstance, msalReady } from "../../../../services/msal"
-import {
-  getUserSettings,
-  getAccessToken,
-} from "../../../../services/msalFunctions"
+import DataTable, { type Column } from "@/components/sections/Shared/DataTable"
+import PresetCard from "@/components/sections/presets/ui/PresetCard"
+import type { Preset } from "@/interfaces/preset"
+import RelevanceGauge from "@/components/sections/presets/presetTable/RelevanceGauge"
+import { msalInstance, msalReady } from "@/services/msal"
+import { getUserSettings, getAccessToken } from "@/services/msalFunctions"
 
 type PresetTableProps = {
   data: Preset[]

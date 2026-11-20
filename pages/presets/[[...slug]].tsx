@@ -2,15 +2,15 @@ import Head from "next/head"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useEffect } from "react"
-import Layout from "../../components/Layout"
-import PresetList from "../../components/sections/presets/Presets"
-import PresetDetail from "../../components/sections/presets/singlePresetView/PresetDetail"
+import Layout from "@/components/Layout"
+import PresetList from "@/components/sections/presets/Presets"
+import PresetDetail from "@/components/sections/presets/singlePresetView/PresetDetail"
 import {
   isSim,
   parsePresetsPath,
   presetListUrl,
   slugify,
-} from "../../lib/presetUrls"
+} from "@/lib/presetUrls"
 
 const description =
   "Get the preset for your favorite aircraft from Hubhop. The database is a community driven project. If you find events/variables of your favorite aircraft, please share them on Hubhop too."

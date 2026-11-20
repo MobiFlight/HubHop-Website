@@ -4,7 +4,7 @@ import {
   type FeedItem,
   type Promotion,
   type Sponsor,
-} from "../lib/promotions"
+} from "@/lib/promotions"
 
 const FEED_URL = process.env.NEXT_PUBLIC_MOBIFLIGHT_FEED_URL || ""
 const SPONSORS_URL = process.env.NEXT_PUBLIC_MOBIFLIGHT_SPONSORS_URL || ""

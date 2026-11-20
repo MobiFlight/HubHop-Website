@@ -1,9 +1,9 @@
-import DataTable, { type Column } from "../Shared/DataTable"
-import OpenPresetButton from "../presets/ui/OpenPresetButton"
-import PresetPreviewLabel from "../presets/ui/PresetInputLabel"
-import { REPORTING_ENABLED } from "../../../lib/features"
-import type { StatisticsPreset } from "../../../interfaces/preset"
-import type { Sim } from "../../../lib/presetUrls"
+import DataTable, { type Column } from "@/components/sections/Shared/DataTable"
+import OpenPresetButton from "@/components/sections/presets/ui/OpenPresetButton"
+import PresetPreviewLabel from "@/components/sections/presets/ui/PresetInputLabel"
+import { REPORTING_ENABLED } from "@/lib/features"
+import type { StatisticsPreset } from "@/interfaces/preset"
+import type { Sim } from "@/lib/presetUrls"
 
 type PresetRowDetailsProps = {
   data: StatisticsPreset

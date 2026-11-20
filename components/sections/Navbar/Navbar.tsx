@@ -1,6 +1,6 @@
-import NavbarLinks from "../../../lib/Constants"
+import NavbarLinks from "@/lib/Constants"
 import Image, { type ImageLoaderProps } from "next/image"
-import hhLogo from "../../../public/images/logo-big.png"
+import hhLogo from "@/public/images/logo-big.png"
 import Link from "next/link"
 import {
   IconBolt,
@@ -17,7 +17,7 @@ import {
   useMsal,
 } from "@azure/msal-react"
 import type { IPublicClientApplication } from "@azure/msal-browser"
-import { msalInstance, msalReady } from "../../../services/msal"
+import { msalInstance, msalReady } from "@/services/msal"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -36,10 +36,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import {
-  getUserSettings,
-  getAccessToken,
-} from "../../../services/msalFunctions"
+import { getUserSettings, getAccessToken } from "@/services/msalFunctions"
 
 const icons: Record<string, typeof IconHome> = {
   Home: IconHome,

@@ -1,11 +1,11 @@
 import { createContext, useContext, useEffect } from "react"
 import * as CookieConsent from "vanilla-cookieconsent"
-import { ANALYTICS, cookieConsentConfig } from "../../../lib/cookieConsent"
+import { ANALYTICS, cookieConsentConfig } from "@/lib/cookieConsent"
 import {
   GTM_ID,
   loadTagManager,
   revokeTagManager,
-} from "../../../services/googleTagManager"
+} from "@/services/googleTagManager"
 
 type CookieConsentContextValue = {
   /** false when no tag is configured, so there is nothing to consent to */

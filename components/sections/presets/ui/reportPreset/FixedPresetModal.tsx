@@ -1,6 +1,6 @@
 import { toast } from "sonner"
-import Modal from "../../../Shared/Modal"
-import FixedPresetButton from "./FixedPresetButton"
+import Modal from "@/components/sections/Shared/Modal"
+import FixedPresetButton from "@/components/sections/presets/ui/reportPreset/FixedPresetButton"
 
 type FixedPresetModalProps = {
   label: string

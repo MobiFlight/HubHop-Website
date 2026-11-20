@@ -1,4 +1,4 @@
-import { test, expect } from "./fixtures"
+import { test, expect } from "@/tests/fixtures"
 
 test.describe("Legal pages", () => {
   test("Legal - terms page shows the imprint", async ({ hubHopPage, page }) => {

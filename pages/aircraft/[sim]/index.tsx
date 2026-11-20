@@ -3,8 +3,8 @@ import Head from "next/head"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useEffect } from "react"
-import Layout from "../../../components/Layout"
-import SimSwitch from "../../../components/sections/Shared/SimSwitch"
+import Layout from "@/components/Layout"
+import SimSwitch from "@/components/sections/Shared/SimSwitch"
 import {
   aircraftIndexUrl,
   aircraftList,
@@ -12,15 +12,15 @@ import {
   byMaker,
   SIM_NAMES,
   type AircraftSummary,
-} from "../../../lib/aircraftPages"
+} from "@/lib/aircraftPages"
 import {
   isSim,
   SIMS,
   simFromSegment,
   simSegment,
   type Sim,
-} from "../../../lib/presetUrls"
-import { loadPresets } from "../../../services/libraryStats"
+} from "@/lib/presetUrls"
+import { loadPresets } from "@/services/libraryStats"
 
 type AircraftIndexProps = {
   sim: Sim

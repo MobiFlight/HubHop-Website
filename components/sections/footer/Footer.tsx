@@ -6,8 +6,8 @@ import {
   IconFileText,
   IconFingerprint,
 } from "@tabler/icons-react"
-import { useCookieConsent } from "../Shared/CookieConsent"
-import { track } from "../../../services/analytics"
+import { useCookieConsent } from "@/components/sections/Shared/CookieConsent"
+import { track } from "@/services/analytics"
 
 const linkClass = "flex items-center gap-1 transition-colors hover:text-primary"
 

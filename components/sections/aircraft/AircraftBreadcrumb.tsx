@@ -7,8 +7,8 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { aircraftIndexUrl, aircraftUrl } from "../../../lib/aircraftPages"
-import type { Sim } from "../../../lib/presetUrls"
+import { aircraftIndexUrl, aircraftUrl } from "@/lib/aircraftPages"
+import type { Sim } from "@/lib/presetUrls"
 
 type AircraftBreadcrumbProps = {
   sim: Sim

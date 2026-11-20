@@ -1,6 +1,6 @@
 // db.ts
 import Dexie, { type Table } from "dexie"
-import type { Preset } from "../interfaces/preset"
+import type { Preset } from "@/interfaces/preset"
 
 export class PresetsDb extends Dexie {
   presetsMsfs!: Table<Preset, string>

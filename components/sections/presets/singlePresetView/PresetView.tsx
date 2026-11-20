@@ -1,9 +1,9 @@
 import Head from "next/head"
-import Layout from "../../../Layout"
+import Layout from "@/components/Layout"
 import { useEffect, useState } from "react"
 
-import PresetCard from "../ui/PresetCard"
-import type { Preset } from "../../../../interfaces/preset"
+import PresetCard from "@/components/sections/presets/ui/PresetCard"
+import type { Preset } from "@/interfaces/preset"
 import { IconLoader2, IconMoodSad } from "@tabler/icons-react"
 
 type PresetViewProps = {

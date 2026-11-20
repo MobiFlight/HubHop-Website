@@ -1,12 +1,12 @@
 import Head from "next/head"
 import { useEffect, useState } from "react"
-import Layout from "../components/Layout"
+import Layout from "@/components/Layout"
 import { Skeleton } from "@/components/ui/skeleton"
-import SimSwitch from "../components/sections/Shared/SimSwitch"
-import GeneralStats from "../components/sections/stats/GeneralStats"
-import TableStats from "../components/sections/stats/TableStats"
-import { presetTable, syncSim } from "../services/presetSync"
-import type { Preset, Statistics } from "../interfaces/preset"
+import SimSwitch from "@/components/sections/Shared/SimSwitch"
+import GeneralStats from "@/components/sections/stats/GeneralStats"
+import TableStats from "@/components/sections/stats/TableStats"
+import { presetTable, syncSim } from "@/services/presetSync"
+import type { Preset, Statistics } from "@/interfaces/preset"
 
 const Stats = () => {
   const [presets, setPresets] = useState<Preset[]>([])

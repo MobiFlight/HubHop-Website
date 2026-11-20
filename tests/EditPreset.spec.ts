@@ -1,5 +1,5 @@
 import type { Locator, Page } from "@playwright/test"
-import { test, expect, authFile } from "./fixtures"
+import { test, expect, authFile } from "@/tests/fixtures"
 
 /** Picks an option of a shadcn Select (its options open in a popup) */
 const choose = async (page: Page, select: Locator, option: string) => {

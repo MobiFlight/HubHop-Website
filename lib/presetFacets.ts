@@ -1,4 +1,4 @@
-import { compareText } from "./presetSearch"
+import { compareText } from "@/lib/presetSearch"
 
 // Preset fields the preset list can be filtered by
 export type Facet = "vendor" | "aircraft" | "system" | "presetType" | "codeType"

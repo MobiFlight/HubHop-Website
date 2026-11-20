@@ -1,6 +1,6 @@
-import PromoSlot from "../Shared/PromoSlot"
-import { PROMOTIONS, type PromotionSim } from "../../../lib/promotions"
-import { track } from "../../../services/analytics"
+import PromoSlot from "@/components/sections/Shared/PromoSlot"
+import { PROMOTIONS, type PromotionSim } from "@/lib/promotions"
+import { track } from "@/services/analytics"
 
 const donation = PROMOTIONS.find((promotion) => promotion.kind === "donation")
 

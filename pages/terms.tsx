@@ -1,4 +1,4 @@
-import Layout from "../components/Layout"
+import Layout from "@/components/Layout"
 
 const Terms = () => (
   <Layout title="Terms of Service | Hubhop by Mobiflight">

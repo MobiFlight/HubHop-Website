@@ -1,4 +1,4 @@
-import { test, expect, authFile } from "./fixtures"
+import { test, expect, authFile } from "@/tests/fixtures"
 
 test.describe("Preset view", () => {
   test("Preset view - shows a single preset", async ({

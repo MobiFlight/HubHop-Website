@@ -1,4 +1,4 @@
-import { test, expect } from "./fixtures"
+import { test, expect } from "@/tests/fixtures"
 
 test.describe("Preset list", () => {
   test("Preset list - downloads the presets and shows the first page", async ({

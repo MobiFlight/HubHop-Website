@@ -1,4 +1,4 @@
-import { test, expect, authFile } from "./fixtures"
+import { test, expect, authFile } from "@/tests/fixtures"
 
 test.describe("Export presets", () => {
   test.use({ storageState: authFile.user })

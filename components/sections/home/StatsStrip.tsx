@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton"
-import type { Statistics } from "../../../interfaces/preset"
-import type { SimLibraryStats } from "../../../services/libraryStats"
+import type { Statistics } from "@/interfaces/preset"
+import type { SimLibraryStats } from "@/services/libraryStats"
 
 const format = (value: number) => value.toLocaleString("en-US")
 

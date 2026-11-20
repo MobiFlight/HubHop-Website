@@ -1,11 +1,11 @@
 import type { GetStaticPaths, GetStaticProps } from "next"
 import Head from "next/head"
 import { useEffect } from "react"
-import Layout from "../../../../../components/Layout"
-import MoreFromVendor from "../../../../../components/sections/aircraft/MoreFromVendor"
-import NewToMobiFlight from "../../../../../components/sections/aircraft/NewToMobiFlight"
-import SheetHeader from "../../../../../components/sections/aircraft/SheetHeader"
-import SystemSection from "../../../../../components/sections/aircraft/SystemSection"
+import Layout from "@/components/Layout"
+import MoreFromVendor from "@/components/sections/aircraft/MoreFromVendor"
+import NewToMobiFlight from "@/components/sections/aircraft/NewToMobiFlight"
+import SheetHeader from "@/components/sections/aircraft/SheetHeader"
+import SystemSection from "@/components/sections/aircraft/SystemSection"
 import {
   aircraftList,
   aircraftSheet,
@@ -16,14 +16,9 @@ import {
   SYSTEM_PREVIEW,
   type AircraftSheet,
   type AircraftSummary,
-} from "../../../../../lib/aircraftPages"
-import {
-  SIMS,
-  simFromSegment,
-  simSegment,
-  type Sim,
-} from "../../../../../lib/presetUrls"
-import { loadPresets } from "../../../../../services/libraryStats"
+} from "@/lib/aircraftPages"
+import { SIMS, simFromSegment, simSegment, type Sim } from "@/lib/presetUrls"
+import { loadPresets } from "@/services/libraryStats"
 
 type CheatSheetProps = {
   sim: Sim

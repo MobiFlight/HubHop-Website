@@ -1,33 +1,33 @@
 import { useEffect, useRef, useState } from "react"
-import PresetFilter from "./presetTable/PresetFilter"
-import PresetTable from "./presetTable/PresetTable"
-import ExportPresetsModal from "./ui/exportPresets/ExportPresetsModal"
-import AddPresetsModal from "./ui/addPreset/AddPresetsModal"
-import PromoSlot from "../Shared/PromoSlot"
-import SimSwitch from "../Shared/SimSwitch"
+import PresetFilter from "@/components/sections/presets/presetTable/PresetFilter"
+import PresetTable from "@/components/sections/presets/presetTable/PresetTable"
+import ExportPresetsModal from "@/components/sections/presets/ui/exportPresets/ExportPresetsModal"
+import AddPresetsModal from "@/components/sections/presets/ui/addPreset/AddPresetsModal"
+import PromoSlot from "@/components/sections/Shared/PromoSlot"
+import SimSwitch from "@/components/sections/Shared/SimSwitch"
 import { Skeleton } from "@/components/ui/skeleton"
-import { getAccessToken } from "../../../services/msalFunctions"
-import { msalInstance, msalReady } from "../../../services/msal"
-import { db } from "../../../services/db"
-import { syncSim } from "../../../services/presetSync"
+import { getAccessToken } from "@/services/msalFunctions"
+import { msalInstance, msalReady } from "@/services/msal"
+import { db } from "@/services/db"
+import { syncSim } from "@/services/presetSync"
 import {
   isSim,
   presetListUrl,
   slugify,
   type PresetListFilters,
   type Sim,
-} from "../../../lib/presetUrls"
+} from "@/lib/presetUrls"
 import { useLiveQuery } from "dexie-react-hooks"
 
 import { useRouter } from "next/router"
-import type { Preset } from "../../../interfaces/preset"
-import { type Facet, sortedUnique } from "../../../lib/presetFacets"
-import type { PromotionContext } from "../../../lib/promotions"
+import type { Preset } from "@/interfaces/preset"
+import { type Facet, sortedUnique } from "@/lib/presetFacets"
+import type { PromotionContext } from "@/lib/promotions"
 import {
   comparePresets,
   presetRelevance,
   searchTerms,
-} from "../../../lib/presetSearch"
+} from "@/lib/presetSearch"
 
 // wait this long after the last keystroke before searching
 const SEARCH_DELAY_MS = 250

@@ -28,14 +28,14 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import ComboBox from "../../../Shared/ComboBox"
-import Modal from "../../../Shared/Modal"
-import { CODE_TYPES } from "../../../../../lib/codeTypes"
-import { presetTypesFor } from "../../../../../lib/presetTypes"
-import { sortedUnique } from "../../../../../lib/presetFacets"
-import type { Preset } from "../../../../../interfaces/preset"
-import { isModerator } from "../../../../../services/roles"
-import { isSim, presetUrl } from "../../../../../lib/presetUrls"
+import ComboBox from "@/components/sections/Shared/ComboBox"
+import Modal from "@/components/sections/Shared/Modal"
+import { CODE_TYPES } from "@/lib/codeTypes"
+import { presetTypesFor } from "@/lib/presetTypes"
+import { sortedUnique } from "@/lib/presetFacets"
+import type { Preset } from "@/interfaces/preset"
+import { isModerator } from "@/services/roles"
+import { isSim, presetUrl } from "@/lib/presetUrls"
 
 /** Values the form starts with: the preset list's current filters */
 export type AddPresetDefaults = {

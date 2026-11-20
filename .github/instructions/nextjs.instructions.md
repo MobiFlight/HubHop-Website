@@ -113,6 +113,7 @@ public/                  # Static assets
 ## Development Standards
 
 - Prefer TypeScript for new and touched files; convert `.js` files when reasonable.
+- Import project files with absolute paths from the project root (`@/components/…`, `@/lib/…`), not relative ones (`../`); ESLint enforces it.
 - Use functional components and hooks; keep components small and single-purpose.
 - Write components as in MobiFlight: no `React.FC`; a props type named after the component,
   `type PresetCardProps = { … }` and `const PresetCard = ({ … }: PresetCardProps) => {`.

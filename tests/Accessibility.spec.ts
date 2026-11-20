@@ -1,8 +1,8 @@
 import AxeBuilder from "@axe-core/playwright"
-import { test, expect } from "./fixtures"
+import { test, expect } from "@/tests/fixtures"
 import type { Page } from "@playwright/test"
-import type { HubHopPage } from "./fixtures/HubHopPage"
-import type { PresetsPage } from "./fixtures/PresetsPage"
+import type { HubHopPage } from "@/tests/fixtures/HubHopPage"
+import type { PresetsPage } from "@/tests/fixtures/PresetsPage"
 
 // Automated accessibility check (axe, WCAG 2.1 A and AA) of the main pages.
 // Violations that existed before the shadcn/ui migration (#154) are listed per

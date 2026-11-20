@@ -2,10 +2,10 @@ import type { GetStaticPaths, GetStaticProps } from "next"
 import Head from "next/head"
 import Link from "next/link"
 import { useEffect } from "react"
-import Layout from "../../../../../components/Layout"
-import AircraftBreadcrumb from "../../../../../components/sections/aircraft/AircraftBreadcrumb"
-import NewToMobiFlight from "../../../../../components/sections/aircraft/NewToMobiFlight"
-import SystemSection from "../../../../../components/sections/aircraft/SystemSection"
+import Layout from "@/components/Layout"
+import AircraftBreadcrumb from "@/components/sections/aircraft/AircraftBreadcrumb"
+import NewToMobiFlight from "@/components/sections/aircraft/NewToMobiFlight"
+import SystemSection from "@/components/sections/aircraft/SystemSection"
 import {
   aircraftList,
   aircraftUrl,
@@ -15,15 +15,15 @@ import {
   systemSheets,
   type AircraftSummary,
   type SystemSheet,
-} from "../../../../../lib/aircraftPages"
+} from "@/lib/aircraftPages"
 import {
   presetListUrl,
   SIMS,
   simFromSegment,
   simSegment,
   type Sim,
-} from "../../../../../lib/presetUrls"
-import { loadPresets } from "../../../../../services/libraryStats"
+} from "@/lib/presetUrls"
+import { loadPresets } from "@/services/libraryStats"
 
 type SystemPageProps = {
   sim: Sim

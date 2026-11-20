@@ -8,9 +8,9 @@
 // spellings that share a slug share a page, named after the most used spelling.
 // The presets themselves are shown as stored (#195).
 
-import type { Preset } from "../interfaces/preset"
-import { compareText } from "./presetSearch"
-import { simSegment, slugify, type Sim } from "./presetUrls"
+import type { Preset } from "@/interfaces/preset"
+import { compareText } from "@/lib/presetSearch"
+import { simSegment, slugify, type Sim } from "@/lib/presetUrls"
 
 /** Presets per system on a cheat sheet; larger systems get a page of their own */
 export const SYSTEM_PREVIEW = 30

@@ -1,5 +1,5 @@
-import type { Sim, HubHopPage } from "./HubHopPage"
-import { simSegment } from "../../lib/presetUrls"
+import type { Sim, HubHopPage } from "@/tests/fixtures/HubHopPage"
+import { simSegment } from "@/lib/presetUrls"
 
 export class PresetViewPage {
   constructor(public readonly hubHopPage: HubHopPage) {}

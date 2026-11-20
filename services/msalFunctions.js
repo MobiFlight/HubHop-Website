@@ -1,4 +1,4 @@
-import { msalInstance, msalReady } from "./msal"
+import { msalInstance, msalReady } from "@/services/msal"
 
 export async function getUserSettings() {
   const url = process.env.NEXT_PUBLIC_HUBHOP_API_BASEURL + "/settings/user"
