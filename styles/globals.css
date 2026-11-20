@@ -54,6 +54,8 @@
   --primary: #ffa047;
   --primary-foreground: #1e1f24;
   --ring: #ffa047;
+  /* X-Plane's accent, e.g. the selected sim */
+  --xplane: #0fb5e8;
 }
 
 .dark {
@@ -88,6 +90,7 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-xplane: var(--xplane);
 }
 
 /* homepage: arrows flow into the hub, the activity dot pulses (use with motion-safe:) */

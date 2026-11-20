@@ -32,7 +32,17 @@ const RecentChanges = ({ sim, stats }: RecentChangesProps) => {
         </Link>
       </div>
       {changes === undefined ? (
-        <Skeleton className="h-80 w-full rounded-2xl" />
+        // rows of the same height as the list, so nothing moves when it loads
+        <ul
+          aria-hidden="true"
+          className="divide-y overflow-hidden rounded-2xl border bg-card"
+        >
+          {Array.from({ length: 5 }, (_, i) => (
+            <li key={i} className="px-5 py-4">
+              <Skeleton className="h-6 w-full" />
+            </li>
+          ))}
+        </ul>
       ) : changes.length === 0 ? (
         <p className="rounded-2xl border bg-card p-5 text-muted-foreground">
           No recent changes.

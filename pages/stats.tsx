@@ -86,11 +86,7 @@ const Stats = () => {
       </Head>
       <div className="mb-5 min-h-screen p-3">
         <div className="container mx-auto mb-3">
-          <SimSwitch
-            value={simType}
-            onValueChange={changeSimType}
-            className="w-fit"
-          />
+          <SimSwitch value={simType} onValueChange={changeSimType} />
         </div>
         <GeneralStats presets={presets} stats={stats} sim={sim} />
         {presets.length ? (

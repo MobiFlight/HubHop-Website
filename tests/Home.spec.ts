@@ -74,6 +74,36 @@ test.describe("Home page", () => {
     })
   })
 
+  test("Home - switching the sim shows its statistics without loading them again", async ({
+    hubHopPage,
+    page,
+  }) => {
+    await expect(
+      page.getByRole("link", { name: "Asobo A320neo" }),
+    ).toBeVisible()
+
+    await page.getByRole("radio", { name: "X-Plane" }).click()
+    await expect(
+      page.getByRole("link", { name: "Laminar Research C172" }),
+    ).toBeVisible()
+    await expect(page.locator("body")).toHaveClass(/xplane/)
+
+    await page.getByRole("radio", { name: "MSFS" }).click()
+    await expect(
+      page.getByRole("link", { name: "Asobo A320neo" }),
+    ).toBeVisible()
+    await expect(page.locator("body")).not.toHaveClass(/xplane/)
+
+    const statsRequests = hubHopPage.requests
+      .filter(({ path }) => path.endsWith("/statistics/general"))
+      .map(({ path }) => path)
+      .sort()
+    expect(statsRequests).toEqual([
+      "/msfs2020/statistics/general",
+      "/xplane/statistics/general",
+    ])
+  })
+
   test("Home - stats strip shows library size and leaders", async ({
     page,
   }) => {
