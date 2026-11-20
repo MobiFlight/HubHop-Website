@@ -39,7 +39,7 @@ const pages: PageCheck[] = [
       const details = await presetsPage.expand("Battery master on")
       await expect(details.getByRole("button", { name: "View" })).toBeVisible()
     },
-    known: { "aria-required-children": 2 },
+    known: {},
   },
   {
     name: "stats page",
