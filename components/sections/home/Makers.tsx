@@ -33,7 +33,7 @@ const Makers = ({ sim, vendors, vendorCount }: MakersProps) => {
       </div>
       <ul className="grid grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-3">
         {vendors.map((vendor) => (
-          <li key={vendor.slug}>
+          <li key={vendor.name}>
             <Link
               href={presetListUrl({ sim, vendor: vendor.slug })}
               onClick={() => track("vendor_click", { vendor: vendor.name })}

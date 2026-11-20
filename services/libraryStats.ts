@@ -26,20 +26,17 @@ export type LibraryStats = Record<Sim, SimLibraryStats>
 
 type Contribution = Pick<Preset, "author" | "updatedBy" | "vendor">
 
-// Spellings of one vendor (e.g. "VSkyLabs" and "vskylabs") share a slug and a
-// page, so they are counted together under the most used spelling.
+// counted as stored: different spellings of a vendor are separate entries,
+// so data problems stay visible (#188)
 const vendorCounts = (presets: Contribution[]): VendorCount[] => {
-  const bySlug = new Map<string, Map<string, number>>()
-  for (const { vendor } of presets) {
-    const spellings = bySlug.get(slugify(vendor)) ?? new Map<string, number>()
-    spellings.set(vendor, (spellings.get(vendor) ?? 0) + 1)
-    bySlug.set(slugify(vendor), spellings)
-  }
-  return [...bySlug].map(([slug, spellings]) => {
-    const [name] = [...spellings].sort((a, b) => b[1] - a[1])[0]
-    const count = [...spellings.values()].reduce((sum, n) => sum + n, 0)
-    return { name, slug, presets: count }
-  })
+  const counts = new Map<string, number>()
+  for (const { vendor } of presets)
+    counts.set(vendor, (counts.get(vendor) ?? 0) + 1)
+  return [...counts].map(([name, count]) => ({
+    name,
+    slug: slugify(name),
+    presets: count,
+  }))
 }
 
 export const libraryStatsOf = (presets: Contribution[]): SimLibraryStats => {
