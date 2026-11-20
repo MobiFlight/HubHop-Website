@@ -193,19 +193,18 @@ const PresetTable = ({
             : { id: "vendor", desc: false }
         }
         renderExpanded={(row) => <PresetRowDetails data={row} />}
-        // about 10 rows; the list scrolls inside itself
-        maxHeight="26rem"
+        pageSizes={[15, 20, 30, 50, 100]}
+        pageSizeStorageKey="pagination"
+        footer={
+          <Button
+            className="hidden md:inline-flex"
+            onClick={ifLoggedIn(setExportModalOpen)}
+          >
+            <IconDownload />
+            Export presets
+          </Button>
+        }
       />
-      <div className="flex items-center justify-between p-3">
-        <Button
-          className="hidden md:inline-flex"
-          onClick={ifLoggedIn(setExportModalOpen)}
-        >
-          <IconDownload />
-          Export presets
-        </Button>
-        <p className="text-muted-foreground">{data.length} presets</p>
-      </div>
     </div>
   )
 }

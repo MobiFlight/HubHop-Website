@@ -115,6 +115,7 @@ const TableStats = ({ data, added }: TableStatsProps) => {
         columns={columns}
         data={data}
         rowId={(row) => row._id ?? row.id}
+        pageSizes={[5, 15, 20, 30, 50, 100]}
         renderExpanded={(row) => <PresetRowDetails data={row} />}
       />
     </div>

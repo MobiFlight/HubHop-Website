@@ -1,15 +1,36 @@
 import { test, expect } from "./fixtures"
 
 test.describe("Preset list", () => {
-  test("Preset list - downloads the presets and shows all of them", async ({
+  test("Preset list - downloads the presets and shows the first page", async ({
     presetsPage,
     page,
   }) => {
     await presetsPage.gotoPage()
 
-    await expect(presetsPage.rows).toHaveCount(17)
-    await expect(page.getByText("17 presets")).toBeVisible()
+    await expect(presetsPage.rows).toHaveCount(15)
+    await expect(page.getByText("1–15 of 17")).toBeVisible()
     expect(presetsPage.hubHopPage.downloads.msfs2020).toBe(1)
+
+    await test.step("Go to the next page", async () => {
+      await page.getByRole("button", { name: "Next Page" }).click()
+      await expect(presetsPage.rows).toHaveCount(2)
+    })
+  })
+
+  test("Preset list - rows per page can be changed and is remembered", async ({
+    presetsPage,
+    page,
+  }) => {
+    await presetsPage.gotoPage()
+
+    await presetsPage.choose(
+      page.getByRole("combobox", { name: "Rows per page" }),
+      "20",
+    )
+    await expect(presetsPage.rows).toHaveCount(17)
+
+    await presetsPage.hubHopPage.reload()
+    await expect(presetsPage.rows).toHaveCount(17)
   })
 
   test("Preset list - search filters by name and updates the URL", async ({
@@ -38,7 +59,7 @@ test.describe("Preset list", () => {
 
     await test.step("Nothing is searched while typing", async () => {
       await expect(presetsPage.searchFilter).toHaveValue("landing lights")
-      await expect(presetsPage.rows).toHaveCount(17)
+      await expect(presetsPage.rows).toHaveCount(15)
       await expect(page).not.toHaveURL(/search=/)
     })
 
@@ -118,7 +139,7 @@ test.describe("Preset list", () => {
     await test.step("Clearing the search hides the relevance", async () => {
       await presetsPage.searchFilter.fill("")
       await expect(relevance).toHaveCount(0)
-      await expect(presetsPage.rows).toHaveCount(17)
+      await expect(presetsPage.rows).toHaveCount(15)
     })
   })
 
@@ -174,7 +195,7 @@ test.describe("Preset list", () => {
     })
     await test.step("Reset", async () => {
       await page.getByRole("button", { name: "Reset Filters" }).click()
-      await expect(presetsPage.rows).toHaveCount(17)
+      await expect(presetsPage.rows).toHaveCount(15)
       await expect(presetsPage.vendorFilter).toHaveText("All Vendors")
     })
     await test.step("Aircraft", async () => {
@@ -323,10 +344,10 @@ test.describe("Preset list - local cache", () => {
     presetsPage,
   }) => {
     await presetsPage.gotoPage()
-    await expect(presetsPage.rows).toHaveCount(17)
+    await expect(presetsPage.rows).toHaveCount(15)
 
     await presetsPage.hubHopPage.reload()
-    await expect(presetsPage.rows).toHaveCount(17)
+    await expect(presetsPage.rows).toHaveCount(15)
 
     expect(presetsPage.hubHopPage.downloads.msfs2020).toBe(1)
   })
@@ -335,7 +356,7 @@ test.describe("Preset list - local cache", () => {
     presetsPage,
   }) => {
     await presetsPage.gotoPage()
-    await expect(presetsPage.rows).toHaveCount(17)
+    await expect(presetsPage.rows).toHaveCount(15)
 
     await test.step("Server gets a new preset", async () => {
       const api = presetsPage.hubHopPage.api

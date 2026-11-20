@@ -1,11 +1,21 @@
-import { useMemo, useRef, useState, type ReactNode } from "react"
-import { useVirtualizer } from "@tanstack/react-virtual"
+import { useId, useMemo, useState, type ReactNode } from "react"
 import { cn } from "cn"
 import {
   IconArrowDown,
   IconArrowUp,
+  IconChevronLeft,
   IconChevronRight,
+  IconChevronsLeft,
+  IconChevronsRight,
 } from "@tabler/icons-react"
+import { Button } from "@/components/ui/button"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { compareText } from "../../../lib/presetSearch"
 
 export type Column<T> = {
@@ -32,11 +42,12 @@ type DataTableProps<T> = {
   renderExpanded?: (row: T) => ReactNode
   onRowClick?: (row: T) => void
   emptyText?: string
-  /**
-   * long lists: the rows scroll inside the table up to this height (CSS value)
-   * and only the rows in view are rendered
-   */
-  maxHeight?: string
+  /** "Rows per page" options; the first one is the default */
+  pageSizes: readonly number[]
+  /** localStorage key that remembers the chosen page size */
+  pageSizeStorageKey?: string
+  /** left side of the pagination bar, e.g. an action button */
+  footer?: ReactNode
   className?: string
 }
 
@@ -46,9 +57,15 @@ const compareValues = (a: string | number, b: string | number) =>
     : // text ignoring case ("Alternator" before "AP master")
       compareText(String(a), String(b))
 
+const storedPageSize = (key: string | undefined, sizes: readonly number[]) => {
+  const stored = key ? Number(localStorage.getItem(key)) : NaN
+  return sizes.includes(stored) ? stored : sizes[0]
+}
+
 /**
  * List of presets as a grid with table semantics (ARIA roles), sortable
- * columns and expandable rows. Details are regular content, not table cells.
+ * columns, expandable rows and pagination. Details are regular content, not
+ * table cells.
  */
 const DataTable = <T,>({
   columns,
@@ -58,11 +75,25 @@ const DataTable = <T,>({
   renderExpanded,
   onRowClick,
   emptyText = "There are no records to display",
-  maxHeight,
+  pageSizes,
+  pageSizeStorageKey,
+  footer,
   className,
 }: DataTableProps<T>) => {
   const [sorting, setSorting] = useState(initialSorting)
   const [expanded, setExpanded] = useState<ReadonlySet<string>>(new Set())
+  const [pageSize, setPageSize] = useState(() =>
+    storedPageSize(pageSizeStorageKey, pageSizes),
+  )
+  const [pageIndex, setPageIndex] = useState(0)
+  const pageSizeLabel = useId()
+
+  // new data (search, filters) starts on the first page
+  const [shownData, setShownData] = useState(data)
+  if (data !== shownData) {
+    setShownData(data)
+    setPageIndex(0)
+  }
 
   const rows = useMemo(() => {
     const column = columns.find((c) => c.id === sorting?.id)
@@ -72,6 +103,11 @@ const DataTable = <T,>({
       (a, b) => sign * compareValues(column.value(a), column.value(b)),
     )
   }, [data, columns, sorting])
+
+  const pageCount = Math.max(1, Math.ceil(rows.length / pageSize))
+  const page = Math.min(pageIndex, pageCount - 1)
+  const first = page * pageSize
+  const pageRows = rows.slice(first, first + pageSize)
 
   const toggleSorting = (id: string) =>
     setSorting((current) =>
@@ -83,6 +119,12 @@ const DataTable = <T,>({
       if (!next.delete(id)) next.add(id)
       return next
     })
+  const changePageSize = (size: number) => {
+    setPageSize(size)
+    setPageIndex(0)
+    if (pageSizeStorageKey)
+      localStorage.setItem(pageSizeStorageKey, String(size))
+  }
 
   // grid tracks for small screens (without wide columns) and from md up
   const chevron = renderExpanded ? ["2rem"] : []
@@ -97,178 +139,195 @@ const DataTable = <T,>({
   const grid =
     "grid grid-cols-(--cols-sm) md:grid-cols-(--cols-md) items-center"
   const wideClass = (c: Column<T>) => (c.wide ? "hidden md:block" : "")
-
-  // long lists scroll inside the table; only the rows in view are rendered
-  // (TanStack Virtual's instance is mutable: with the React Compiler this component needs "use no memo")
-  const virtualize = !!maxHeight
-  const scrollRef = useRef<HTMLDivElement>(null)
-  const virtualizer = useVirtualizer({
-    count: rows.length,
-    getScrollElement: () => scrollRef.current,
-    estimateSize: () => 41,
-    overscan: 10,
-    enabled: virtualize,
-  })
-  const items = virtualize
-    ? virtualizer.getVirtualItems()
-    : rows.map((_, index) => ({ index, start: 0, end: 0 }))
-  const paddingTop = virtualize && items.length ? items[0].start : 0
-  const paddingBottom =
-    virtualize && items.length
-      ? virtualizer.getTotalSize() - items[items.length - 1].end
-      : 0
   const clickable = !!renderExpanded || !!onRowClick
 
   return (
-    <div
-      role="table"
-      style={gridStyle}
-      className={cn("w-full text-sm", className)}
-    >
-      <div
-        role="row"
-        className={cn(
-          grid,
-          "border-b font-bold",
-          // as wide as the scrolling rows below (scrollbar)
-          virtualize && "[scrollbar-gutter:stable] overflow-y-hidden",
-        )}
-      >
-        {renderExpanded && <div role="columnheader" aria-label="Details" />}
-        {columns.map((column) => {
-          const sorted = sorting?.id === column.id ? sorting : undefined
-          return (
-            <div
-              key={column.id}
-              role="columnheader"
-              aria-sort={
-                sorted ? (sorted.desc ? "descending" : "ascending") : undefined
-              }
-              className={cn("truncate px-2 py-2", wideClass(column))}
-            >
-              {column.sortable ? (
-                <button
-                  type="button"
-                  className="flex w-full items-center gap-1 text-left"
-                  onClick={() => toggleSorting(column.id)}
-                >
-                  <span className="truncate">{column.header}</span>
-                  {sorted &&
-                    (sorted.desc ? (
-                      <IconArrowDown className="size-4 shrink-0" />
-                    ) : (
-                      <IconArrowUp className="size-4 shrink-0" />
-                    ))}
-                </button>
-              ) : (
-                column.header
-              )}
-            </div>
-          )
-        })}
-      </div>
-      {rows.length === 0 ? (
-        <div role="row">
-          <div role="cell" className="py-6 text-center">
-            <p role="status">{emptyText}</p>
-          </div>
-        </div>
-      ) : (
-        <div
-          ref={scrollRef}
-          style={{ maxHeight }}
-          className={cn(
-            virtualize && "[scrollbar-gutter:stable] overflow-y-auto",
-          )}
-        >
-          {/* full height of all rows, so the scroll area isn't empty before the first measurement */}
-          <div
-            style={{
-              minHeight: virtualize ? virtualizer.getTotalSize() : undefined,
-            }}
-          >
-            {paddingTop > 0 && (
-              <div aria-hidden style={{ height: paddingTop }} />
-            )}
-            {items.map(({ index }) => {
-              const row = rows[index]
-              const id = rowId(row)
-              const isExpanded = expanded.has(id)
-              const activate = () =>
-                renderExpanded ? toggleExpanded(id) : onRowClick?.(row)
-              return (
-                // row and details are measured together
-                <div
-                  key={id}
-                  data-index={index}
-                  ref={virtualize ? virtualizer.measureElement : undefined}
-                  className="border-b"
-                >
-                  <div
-                    role="row"
-                    // expandable rows are reached by keyboard through their Details button
-                    tabIndex={onRowClick && !renderExpanded ? 0 : undefined}
-                    onClick={activate}
-                    onKeyDown={(e) => {
-                      if (renderExpanded || e.target !== e.currentTarget) return
-                      if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault()
-                        activate()
-                      }
-                    }}
-                    className={cn(
-                      grid,
-                      "min-h-10",
-                      clickable &&
-                        "cursor-pointer outline-none hover:bg-primary hover:text-primary-foreground focus-visible:ring-3 focus-visible:ring-ring/50",
-                      isExpanded && "bg-primary text-primary-foreground",
-                    )}
+    <div className={cn("w-full text-sm", className)}>
+      <div role="table" style={gridStyle}>
+        <div role="row" className={cn(grid, "border-b font-bold")}>
+          {renderExpanded && <div role="columnheader" aria-label="Details" />}
+          {columns.map((column) => {
+            const sorted = sorting?.id === column.id ? sorting : undefined
+            return (
+              <div
+                key={column.id}
+                role="columnheader"
+                aria-sort={
+                  sorted
+                    ? sorted.desc
+                      ? "descending"
+                      : "ascending"
+                    : undefined
+                }
+                className={cn("truncate px-2 py-2", wideClass(column))}
+              >
+                {column.sortable ? (
+                  <button
+                    type="button"
+                    className="flex w-full items-center gap-1 text-left"
+                    onClick={() => toggleSorting(column.id)}
                   >
-                    {renderExpanded && (
-                      <div role="cell" className="flex justify-center">
-                        <button
-                          type="button"
-                          aria-label="Details"
-                          aria-expanded={isExpanded}
-                          className="rounded-sm outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            activate()
-                          }}
-                        >
-                          <IconChevronRight
-                            className={cn(
-                              "size-4 transition-transform",
-                              isExpanded && "rotate-90",
-                            )}
-                          />
-                        </button>
-                      </div>
-                    )}
-                    {columns.map((column) => (
-                      <div
-                        key={column.id}
-                        role="cell"
-                        className={cn("truncate px-2 py-2", wideClass(column))}
+                    <span className="truncate">{column.header}</span>
+                    {sorted &&
+                      (sorted.desc ? (
+                        <IconArrowDown className="size-4 shrink-0" />
+                      ) : (
+                        <IconArrowUp className="size-4 shrink-0" />
+                      ))}
+                  </button>
+                ) : (
+                  column.header
+                )}
+              </div>
+            )
+          })}
+        </div>
+        {rows.length === 0 ? (
+          <div role="row">
+            <div role="cell" className="py-6 text-center">
+              <p role="status">{emptyText}</p>
+            </div>
+          </div>
+        ) : (
+          pageRows.map((row) => {
+            const id = rowId(row)
+            const isExpanded = expanded.has(id)
+            const activate = () =>
+              renderExpanded ? toggleExpanded(id) : onRowClick?.(row)
+            return (
+              <div key={id} className="border-b">
+                <div
+                  role="row"
+                  // expandable rows are reached by keyboard through their Details button
+                  tabIndex={onRowClick && !renderExpanded ? 0 : undefined}
+                  onClick={activate}
+                  onKeyDown={(e) => {
+                    if (renderExpanded || e.target !== e.currentTarget) return
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault()
+                      activate()
+                    }
+                  }}
+                  className={cn(
+                    grid,
+                    "min-h-10",
+                    clickable &&
+                      "cursor-pointer outline-none hover:bg-primary hover:text-primary-foreground focus-visible:ring-3 focus-visible:ring-ring/50",
+                    isExpanded && "bg-primary text-primary-foreground",
+                  )}
+                >
+                  {renderExpanded && (
+                    <div role="cell" className="flex justify-center">
+                      <button
+                        type="button"
+                        aria-label="Details"
+                        aria-expanded={isExpanded}
+                        className="rounded-sm outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          activate()
+                        }}
                       >
-                        {column.cell ? column.cell(row) : column.value(row)}
-                      </div>
-                    ))}
-                  </div>
-                  {renderExpanded && isExpanded && (
-                    <div role="row">
-                      <div role="cell">{renderExpanded(row)}</div>
+                        <IconChevronRight
+                          className={cn(
+                            "size-4 transition-transform",
+                            isExpanded && "rotate-90",
+                          )}
+                        />
+                      </button>
                     </div>
                   )}
+                  {columns.map((column) => (
+                    <div
+                      key={column.id}
+                      role="cell"
+                      className={cn("truncate px-2 py-2", wideClass(column))}
+                    >
+                      {column.cell ? column.cell(row) : column.value(row)}
+                    </div>
+                  ))}
                 </div>
-              )
-            })}
-            {paddingBottom > 0 && (
-              <div aria-hidden style={{ height: paddingBottom }} />
-            )}
+                {renderExpanded && isExpanded && (
+                  <div role="row">
+                    <div role="cell">{renderExpanded(row)}</div>
+                  </div>
+                )}
+              </div>
+            )
+          })
+        )}
+      </div>
+      <div className="flex flex-wrap items-center justify-between gap-3 p-3">
+        <div>{footer}</div>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <span id={pageSizeLabel}>Rows per page</span>
+            <Select
+              value={String(pageSize)}
+              onValueChange={(v) => changePageSize(Number(v))}
+            >
+              <SelectTrigger
+                size="sm"
+                className="w-20"
+                aria-labelledby={pageSizeLabel}
+              >
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {pageSizes.map((size) => (
+                  <SelectItem key={size} value={String(size)}>
+                    {size}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <span>
+            {rows.length === 0
+              ? "0"
+              : `${first + 1}–${Math.min(first + pageSize, rows.length)}`}{" "}
+            of {rows.length}
+          </span>
+          <div className="flex items-center gap-1">
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              aria-label="First Page"
+              disabled={page === 0}
+              onClick={() => setPageIndex(0)}
+            >
+              <IconChevronsLeft />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              aria-label="Previous Page"
+              disabled={page === 0}
+              onClick={() => setPageIndex(page - 1)}
+            >
+              <IconChevronLeft />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              aria-label="Next Page"
+              disabled={page >= pageCount - 1}
+              onClick={() => setPageIndex(page + 1)}
+            >
+              <IconChevronRight />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              aria-label="Last Page"
+              disabled={page >= pageCount - 1}
+              onClick={() => setPageIndex(pageCount - 1)}
+            >
+              <IconChevronsRight />
+            </Button>
           </div>
         </div>
-      )}
+      </div>
     </div>
   )
 }

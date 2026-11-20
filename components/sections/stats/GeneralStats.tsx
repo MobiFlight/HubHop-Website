@@ -191,6 +191,7 @@ const GeneralStats = ({ presets, stats }: GeneralStatsProps) => {
               )}
               initialSorting={{ id: "presets", desc: true }}
               rowId={(row) => row.name}
+              pageSizes={[5, 10, 20, 30, 50, 100]}
               onRowClick={(row) => {
                 setSingleCont(row.name)
                 setContModal(true)
@@ -211,6 +212,7 @@ const GeneralStats = ({ presets, stats }: GeneralStatsProps) => {
                   <DataTable
                     columns={columnSingle}
                     rowId={(row) => row.id}
+                    pageSizes={[5, 10, 20, 30, 50, 100]}
                     data={presets
                       .filter(
                         (preset) =>
