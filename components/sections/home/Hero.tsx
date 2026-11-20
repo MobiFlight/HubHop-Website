@@ -11,7 +11,7 @@ const Hero = () => {
     <div className="container mx-auto flex min-h-screen p-3 md:p-0">
       <div className="mt-10 flex w-full flex-col justify-between md:mt-52 md:flex-row">
         <div className="w-full space-y-10 md:w-2/5 md:space-y-3">
-          <h1 className="text-5xl font-bold text-hhOrange">
+          <h1 className="text-5xl font-bold text-primary">
             Create, Share, Improve
           </h1>
           <p className="text-justify text-lg">
@@ -20,7 +20,7 @@ const Hero = () => {
             standardized events and variables.
           </p>
           <Link legacyBehavior href={"/presets"}>
-            <button className="upper w-full rounded-lg bg-hhOrange px-5 py-3 text-xl font-semibold text-hhBG transition-all hover:bg-hhOrangeShade-600 md:w-fit">
+            <button className="upper w-full rounded-lg bg-primary px-5 py-3 text-xl font-semibold text-primary-foreground transition-all hover:bg-primary/80 md:w-fit">
               View contributions
             </button>
           </Link>
@@ -30,7 +30,7 @@ const Hero = () => {
           >
             <a
               target="_blank"
-              className="flex items-center space-x-2 transition-all hover:text-hhOrange"
+              className="flex items-center space-x-2 transition-all hover:text-primary"
             >
               <p className="-mt-1 text-left">
                 Created and sponsored by Mobiflight and the Mobiflight community

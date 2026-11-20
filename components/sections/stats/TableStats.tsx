@@ -13,8 +13,8 @@ const PresetRowDetails = ({ data }: { data: StatisticsPreset }) => {
       <div>
         <div className="container mx-auto p-3 md:p-0">
           <div>
-            <h2 className={`ml-5 pt-3 font-bold text-hhText`}>{label}</h2>
-            <div className="flex w-full flex-col space-y-2 p-5 text-sm text-hhText md:flex-row md:space-y-0 md:space-x-5">
+            <h2 className={`ml-5 pt-3 font-bold text-foreground`}>{label}</h2>
+            <div className="flex w-full flex-col space-y-2 p-5 text-sm text-foreground md:flex-row md:space-y-0 md:space-x-5">
               <div className="flex w-full flex-col space-y-2 md:w-1/6">
                 {data.version > 1 ? (
                   <PresetPreviewLabel
@@ -64,7 +64,7 @@ const PresetRowDetails = ({ data }: { data: StatisticsPreset }) => {
           </div>
         </div>
       </div>
-      <hr className="border-hhBG" />
+      <hr className="border-border" />
     </div>
   )
 }
@@ -110,7 +110,7 @@ const TableStats = ({ data, added }: TableStatsProps) => {
   ]
 
   return (
-    <div className="rounded-lg bg-hhCard/40">
+    <div className="rounded-lg bg-card">
       <DataTable
         columns={columns}
         data={data}

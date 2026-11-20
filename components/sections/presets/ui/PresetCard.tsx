@@ -100,7 +100,6 @@ const PresetCard = ({
   const [fixedModalOpen, setFixedModalOpen] = useState(false)
   const [edit, setEdit] = useState(false)
   const [editButton, setEditButton] = useState(false)
-  const [editTooltip, seteditTooltip] = useState(false)
   const [revertObject, setRevertObject] = useState<Partial<Preset>>({})
   const [revertModal, setRevertModal] = useState(false)
   const [simType, setSimType] = useState("")
@@ -233,13 +232,13 @@ const PresetCard = ({
           card && "container mx-auto mt-5 min-h-screen"
         }`}
       >
-        <div className={`${card && "mb-5 rounded-lg bg-hhCard/40"}`}>
+        <div className={`${card && "mb-5 rounded-lg bg-card"}`}>
           {card && (
-            <h2 className={`ml-5 pt-3 font-bold text-hhOrange text-${text}`}>
+            <h2 className={`ml-5 pt-3 font-bold text-primary text-${text}`}>
               {label}
             </h2>
           )}
-          <div className="flex w-full flex-col space-y-2 p-5 text-hhText lg:flex-row lg:space-y-0 lg:space-x-5">
+          <div className="flex w-full flex-col space-y-2 p-5 text-foreground lg:flex-row lg:space-y-0 lg:space-x-5">
             <div className="flex w-full flex-col space-y-2 lg:w-1/6">
               {version > 1 ? (
                 <PresetPreviewLabel title={"Updated by"} editData={updatedBy} />
@@ -349,12 +348,6 @@ const PresetCard = ({
               )}
               {
                 <>
-                  {editTooltip && (
-                    <div className="fixed right-0 bottom-5 z-50 mx-3 animate-in rounded-lg bg-red-800 p-5 px-5 py-2 font-semibold text-hhText fade-in-0 md:right-5">
-                      No permission to edit this preset. You have to be logged
-                      in to perform this action.
-                    </div>
-                  )}
                   <EditToggle
                     onToggle={() => {
                       if (
@@ -363,10 +356,9 @@ const PresetCard = ({
                       ) {
                         setEdit((e) => !e)
                       } else {
-                        seteditTooltip(true)
-                        setTimeout(() => {
-                          seteditTooltip(false)
-                        }, 5000)
+                        toast.error(
+                          "No permission to edit this preset. You have to be logged in to perform this action.",
+                        )
                       }
                     }}
                     toggleEdit={edit}
@@ -408,7 +400,7 @@ const PresetCard = ({
                 )}
               />
             ) : (
-              <div className="rounded-lg bg-hhCard/40 p-3 text-xl text-hhText/50 transition-all">
+              <div className="rounded-lg bg-card p-3 text-xl text-muted-foreground transition-all">
                 No History available
               </div>
             )}

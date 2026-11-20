@@ -60,7 +60,7 @@ const PresetRowDetails = ({ data }: { data: Preset }) => {
         setCode={setCode}
         setDescription={setDescription}
       />
-      <hr className="border-hhBG" />
+      <hr className="border-border" />
     </div>
   )
 }
@@ -173,7 +173,7 @@ const PresetTable = ({
   }
 
   return (
-    <div className="relative flex w-full flex-col rounded-lg bg-hhCard/40">
+    <div className="relative flex w-full flex-col rounded-lg bg-card">
       <Button
         className="absolute top-1.5 right-2 z-10 hidden md:inline-flex"
         onClick={ifLoggedIn(setAddModalOpen)}
