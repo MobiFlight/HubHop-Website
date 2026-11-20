@@ -52,6 +52,21 @@ export class PresetsPage {
     return this.page.getByLabel("Select Code Type")
   }
 
+  /** Picks an option of a filter (combobox or select) */
+  async choose(filter: Locator, option: string) {
+    await filter.click()
+    await this.page.getByRole("option", { name: option, exact: true }).click()
+  }
+
+  /** Opens a filter, checks its options and closes it again */
+  async expectOptions(filter: Locator, options: string[]) {
+    await filter.click()
+    await expect(this.page.getByRole("listbox").getByRole("option")).toHaveText(
+      options,
+    )
+    await this.page.keyboard.press("Escape")
+  }
+
   /** The X-Plane option of the MSFS 2020 / X-Plane switch */
   get xplaneSwitch() {
     return this.page.getByRole("radio", { name: "X-Plane" })

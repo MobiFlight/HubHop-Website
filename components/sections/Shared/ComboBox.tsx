@@ -25,6 +25,8 @@ type ComboBoxProps = {
   searchPlaceholder?: string
   /** offers "Create …" for a search text that isn't an option */
   allowCreate?: boolean
+  /** first entry, selects "" (e.g. "All vendors" in a filter) */
+  emptyOption?: string
   invalid?: boolean
   className?: string
 }
@@ -42,6 +44,7 @@ const ComboBox = ({
   placeholder,
   searchPlaceholder = "Search…",
   allowCreate = false,
+  emptyOption,
   invalid = false,
   className,
 }: ComboBoxProps) => {
@@ -92,6 +95,15 @@ const ComboBox = ({
           <CommandList>
             {!canCreate && <CommandEmpty>No results</CommandEmpty>}
             <CommandGroup>
+              {emptyOption && (
+                <CommandItem
+                  value={emptyOption}
+                  data-checked={value === ""}
+                  onSelect={() => choose("")}
+                >
+                  {emptyOption}
+                </CommandItem>
+              )}
               {options.map((option) => (
                 <CommandItem
                   key={option}

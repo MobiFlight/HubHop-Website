@@ -56,12 +56,12 @@ test.describe("User menu - logged in", () => {
   }) => {
     await presetsPage.gotoPage()
 
-    await page.getByRole("button", { name: "Show my presets" }).click()
+    await page.getByRole("checkbox", { name: "Show my presets" }).click()
 
     // one preset authored and one updated by the test user
     await expect(presetsPage.rows).toHaveCount(2)
     await expect(
-      page.getByRole("button", { name: "Show reported presets" }),
+      page.getByRole("checkbox", { name: "Show reported presets" }),
     ).toHaveCount(0)
   })
 })
@@ -78,7 +78,7 @@ test.describe("User menu - moderator", () => {
     await presetsPage.gotoPage()
 
     await expect(
-      page.getByRole("button", { name: "Show reported presets" }),
+      page.getByRole("checkbox", { name: "Show reported presets" }),
     ).toHaveCount(0)
 
     await test.step("Preset details show no reported count", async () => {
