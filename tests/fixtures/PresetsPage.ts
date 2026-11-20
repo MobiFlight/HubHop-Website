@@ -18,15 +18,11 @@ export class PresetsPage {
     return this.page.getByRole("table")
   }
 
-  /** Data rows of the preset table (excludes header and empty-state rows) */
+  /** Data rows of the preset table (excludes header, details and empty-state rows) */
   get rows(): Locator {
-    return (
-      this.table
-        .getByRole("row")
-        .filter({ hasNot: this.page.getByRole("columnheader") })
-        // the "no records" message is rendered as a row, too
-        .filter({ hasNot: this.page.getByRole("status") })
-    )
+    return this.table
+      .getByRole("row")
+      .filter({ has: this.page.getByRole("button", { name: "Details" }) })
   }
 
   row(label: string): Locator {
@@ -75,7 +71,7 @@ export class PresetsPage {
   /** Expands a preset row and returns the expanded details area */
   async expand(label: string): Promise<Locator> {
     await this.row(label).getByRole("cell").last().click()
-    // the table renders the details right after the row, without a role
-    return this.row(label).locator("xpath=following-sibling::div[1]")
+    // the details are the row right after it
+    return this.row(label).locator("xpath=following-sibling::*[@role='row'][1]")
   }
 }

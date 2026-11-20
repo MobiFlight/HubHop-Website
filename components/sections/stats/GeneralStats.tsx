@@ -1,9 +1,5 @@
 import { useMemo, useState } from "react"
-import DataTable, {
-  createTheme,
-  Media,
-  type TableColumn,
-} from "react-data-table-component"
+import DataTable, { type Column } from "../Shared/DataTable"
 import {
   Dialog,
   DialogContent,
@@ -50,123 +46,65 @@ const GeneralStats = ({ presets, stats }: GeneralStatsProps) => {
   const [contPresetSearch, setContPresetSearch] = useState("")
   const cont = useMemo(() => contributorsOf(presets), [presets])
 
-  const columns: TableColumn<Contributor>[] = [
+  const columns: Column<Contributor>[] = [
+    { id: "name", header: "Name", value: (row) => row.name, sortable: true },
     {
-      name: "Name",
-      selector: (row) => row.name,
-      maxWidth: "60%",
-      sortable: true,
-    },
-    {
-      name: "Submissions or updates",
-      selector: (row) => row.presets,
-      maxWidth: "40%",
+      id: "presets",
+      header: "Submissions or updates",
+      value: (row) => row.presets,
       sortable: true,
     },
   ]
-  const columnSingle: TableColumn<Preset>[] = [
+  const columnSingle: Column<Preset>[] = [
     {
-      name: "Last modification",
-      selector: (row) => new Date(row.createdDate ?? "").toLocaleString(),
+      id: "date",
+      header: "Last modification",
+      value: (row) => new Date(row.createdDate ?? "").toLocaleString(),
       sortable: true,
-      maxWidth: "15%",
-      hide: Media.MD,
+      wide: true,
     },
     {
-      name: "Author / Updated",
-      selector: (row) => (row.author ? "Author" : "Updated"),
+      id: "role",
+      header: "Author / Updated",
+      value: (row) => (row.author ? "Author" : "Updated"),
       sortable: true,
-      maxWidth: "10%",
-      hide: Media.MD,
+      wide: true,
     },
     {
-      name: "Vendor",
-      selector: (row) => row.vendor,
+      id: "vendor",
+      header: "Vendor",
+      value: (row) => row.vendor,
       sortable: true,
-      maxWidth: "10%",
-      hide: Media.MD,
+      wide: true,
     },
     {
-      name: "Aircraft",
-      selector: (row) => row.aircraft,
+      id: "aircraft",
+      header: "Aircraft",
+      value: (row) => row.aircraft,
       sortable: true,
-      maxWidth: "10%",
     },
     {
-      name: "System",
-      selector: (row) => row.system,
+      id: "system",
+      header: "System",
+      value: (row) => row.system,
       sortable: true,
-      maxWidth: "10%",
-      hide: Media.MD,
+      wide: true,
     },
     {
-      name: "Input/Output",
-      selector: (row) => row.presetType,
+      id: "presetType",
+      header: "Input/Output",
+      value: (row) => row.presetType,
       sortable: true,
-      maxWidth: "10%",
-      hide: Media.MD,
+      wide: true,
     },
     {
-      name: "Preset name",
-      selector: (row) => row.label,
+      id: "label",
+      header: "Preset name",
+      value: (row) => row.label,
       sortable: true,
-      maxWidth: "50%",
+      width: "minmax(0,2fr)",
     },
   ]
-
-  createTheme("hubhop", {
-    // v8 draws lines between header columns by default; v7 did not
-    headerSeparator: false,
-    text: {
-      primary: "#D2D0D2",
-      secondary: "#D2D0D2",
-      disabled: "rgba(0, 0, 0, .38)",
-    },
-    background: {
-      default: "transparent",
-    },
-    context: {
-      background: "transparent",
-      text: "#D2D0D2",
-    },
-    divider: {
-      default: "#33353e",
-    },
-    highlightOnHover: {
-      default: "#ffa047",
-      text: "#33353e",
-    },
-    button: {
-      default: "#D2D0D2",
-      focus: "rgba(0,0,0,.12)",
-      hover: "rgba(0,0,0,.12)",
-      disabled: "rgba(0, 0, 0, .18)",
-    },
-  })
-
-  const customStyles = {
-    noData: {
-      style: {
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        color: "#D2D0D2",
-        backgroundColor: "transparent",
-      },
-    },
-    rows: {
-      highlightOnHoverStyle: {
-        fontWeight: 700,
-      },
-    },
-    headRow: {
-      style: {
-        fontWeight: 700,
-        fontSize: "0.9rem",
-      },
-    },
-  }
-
   const topAircraft = stats?.aircrafts[0]
   const topContributor = stats?.contributors[0]
 
@@ -251,16 +189,10 @@ const GeneralStats = ({ presets, stats }: GeneralStatsProps) => {
               data={cont.filter((contributor) =>
                 contributor.name.toLowerCase().includes(contSearch),
               )}
-              customStyles={customStyles}
-              pagination
-              highlightOnHover
-              responsive={true}
-              theme="hubhop"
-              paginationPerPage={5}
-              paginationRowsPerPageOptions={[5, 10, 20, 30, 50, 100]}
-              defaultSortFieldId={2}
-              defaultSortAsc={false}
-              onRowClicked={(row) => {
+              initialSorting={{ id: "presets", desc: true }}
+              rowId={(row) => row.name}
+              pageSizes={[5, 10, 20, 30, 50, 100]}
+              onRowClick={(row) => {
                 setSingleCont(row.name)
                 setContModal(true)
               }}
@@ -279,6 +211,8 @@ const GeneralStats = ({ presets, stats }: GeneralStatsProps) => {
                 <div>
                   <DataTable
                     columns={columnSingle}
+                    rowId={(row) => row.id}
+                    pageSizes={[5, 10, 20, 30, 50, 100]}
                     data={presets
                       .filter(
                         (preset) =>
@@ -302,14 +236,7 @@ const GeneralStats = ({ presets, stats }: GeneralStatsProps) => {
                           new Date(b.createdDate ?? "").valueOf() -
                           new Date(a.createdDate ?? "").valueOf(),
                       )}
-                    customStyles={customStyles}
-                    pagination
-                    highlightOnHover
-                    responsive={true}
-                    theme="hubhop"
-                    paginationPerPage={5}
-                    paginationRowsPerPageOptions={[5, 10, 20, 30, 50, 100]}
-                    onRowClicked={(row) =>
+                    onRowClick={(row) =>
                       window.open(
                         "https://hubhop.mobiflight.com/preset/?id=" + row.id,
                         "_blank",

@@ -8,6 +8,7 @@ test.describe("Preset list", () => {
     await presetsPage.gotoPage()
 
     await expect(presetsPage.rows).toHaveCount(15)
+    await expect(page.getByText("1–15 of 17")).toBeVisible()
     expect(presetsPage.hubHopPage.downloads.msfs2020).toBe(1)
 
     await test.step("Go to the next page", async () => {
@@ -16,15 +17,19 @@ test.describe("Preset list", () => {
     })
   })
 
-  test("Preset list - rows per page can be changed", async ({
+  test("Preset list - rows per page can be changed and is remembered", async ({
     presetsPage,
     page,
   }) => {
     await presetsPage.gotoPage()
 
-    await page
-      .getByRole("combobox", { name: "Rows per page:" })
-      .selectOption("20")
+    await presetsPage.choose(
+      page.getByRole("combobox", { name: "Rows per page" }),
+      "20",
+    )
+    await expect(presetsPage.rows).toHaveCount(17)
+
+    await presetsPage.hubHopPage.reload()
     await expect(presetsPage.rows).toHaveCount(17)
   })
 

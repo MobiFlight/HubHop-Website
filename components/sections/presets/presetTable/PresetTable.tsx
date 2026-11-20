@@ -1,14 +1,7 @@
-import DataTable, {
-  createTheme,
-  SortOrder,
-  Media,
-  type SortFunction,
-  type TableColumn,
-} from "react-data-table-component"
-import { useRef, useState } from "react"
-import { compareText } from "../../../../lib/presetSearch"
-import AddPresetButton from "../ui/addPreset/AddPresetButton"
-import ExportPresetsButton from "../ui/exportPresets/ExportPresetsButton"
+import { useMemo, useState } from "react"
+import { IconCirclePlus, IconDownload } from "@tabler/icons-react"
+import { Button } from "@/components/ui/button"
+import DataTable, { type Column } from "../../Shared/DataTable"
 import PresetCard from "../ui/PresetCard"
 import type { Preset } from "../../../../interfaces/preset"
 import RelevanceGauge from "./RelevanceGauge"
@@ -24,15 +17,6 @@ type PresetTableProps = {
   setAddModalOpen: (open: boolean) => void
   // relevance in percent per preset; only set while searching
   relevance?: Map<Preset, number>
-}
-
-// sort text columns ignoring case ("Alternator" before "AP master")
-const sortIgnoringCase: SortFunction<Preset> = (rows, selector, direction) => {
-  const sign = direction === SortOrder.DESC ? -1 : 1
-  return [...rows].sort(
-    (a, b) =>
-      sign * compareText(String(selector(a) ?? ""), String(selector(b) ?? "")),
-  )
 }
 
 // Defined outside PresetTable: a component created during render gets a new
@@ -87,136 +71,80 @@ const PresetTable = ({
   setAddModalOpen,
   relevance,
 }: PresetTableProps) => {
-  // The table keeps the column object from when the sort was selected, so its
-  // selector would still use the relevance of the first letter typed.
-  // Reading through a ref gives the selector the current relevance.
-  const currentRelevance = useRef(relevance)
-  currentRelevance.current = relevance
-
-  const columns: TableColumn<Preset>[] = [
-    {
-      name: "Vendor",
-      selector: (row) => row.vendor,
-      sortable: true,
-      maxWidth: "10%",
-      hide: Media.MD,
-    },
-    {
-      name: "Aircraft",
-      selector: (row) => row.aircraft,
-      sortable: true,
-      maxWidth: "10%",
-    },
-    {
-      name: "System",
-      selector: (row) => row.system,
-      sortable: true,
-      maxWidth: "10%",
-      hide: Media.MD,
-    },
-    {
-      name: "Input/Output",
-      selector: (row) => row.presetType,
-      sortable: true,
-      maxWidth: "10%",
-      hide: Media.MD,
-    },
-    localStorage.getItem("simType") === "xplane"
-      ? {
-          name: "Code Type",
-          selector: (row) => row.codeType,
-          sortable: true,
-          maxWidth: "10%",
-          hide: Media.MD,
-        }
-      : {
-          name: "",
-          selector: (row) => row.codeType,
-          sortable: true,
-          maxWidth: "0%",
-        },
-    {
-      name: "Preset name",
-      selector: (row) => row.label,
-      sortable: true,
-      maxWidth: "50%",
-    },
-    ...(relevance
-      ? [
-          {
-            id: "relevance",
-            name: "Relevance",
-            selector: (row: Preset) => currentRelevance.current?.get(row) ?? 0,
-            cell: (row: Preset) => (
-              <RelevanceGauge value={relevance.get(row) ?? 0} />
-            ),
-            sortable: true,
-            minWidth: "130px",
-            maxWidth: "10%",
-          },
-        ]
-      : []),
-    // keeps the top-right corner free for the "Add preset" button
-    {
-      id: "add-preset-space",
-      name: "",
-      width: "150px",
-      hide: Media.MD,
-    },
-  ]
-
-  createTheme("hubhop", {
-    // v8 draws lines between header columns by default; v7 did not
-    headerSeparator: false,
-    text: {
-      primary: "#D2D0D2",
-      secondary: "#D2D0D2",
-      disabled: "rgba(0, 0, 0, .38)",
-    },
-    background: {
-      default: "transparent",
-    },
-    context: {
-      background: "transparent",
-      text: "#D2D0D2",
-    },
-    divider: {
-      default: "#33353e",
-    },
-    highlightOnHover: {
-      default: "#ffa047",
-      text: "#33353e",
-    },
-    button: {
-      default: "#D2D0D2",
-      focus: "rgba(0,0,0,.12)",
-      hover: "rgba(0,0,0,.12)",
-      disabled: "rgba(0, 0, 0, .18)",
-    },
-  })
-
-  const customStyles = {
-    noData: {
-      style: {
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        color: "#D2D0D2",
-        backgroundColor: "transparent",
+  const simType = localStorage.getItem("simType")
+  // stable between renders: a new column list re-sorts all presets
+  const columns = useMemo<Column<Preset>[]>(
+    () => [
+      {
+        id: "vendor",
+        header: "Vendor",
+        value: (row) => row.vendor,
+        sortable: true,
+        wide: true,
       },
-    },
-    rows: {
-      highlightOnHoverStyle: {
-        fontWeight: 700,
+      {
+        id: "aircraft",
+        header: "Aircraft",
+        value: (row) => row.aircraft,
+        sortable: true,
       },
-    },
-    headRow: {
-      style: {
-        fontWeight: 700,
-        fontSize: "0.9rem",
+      {
+        id: "system",
+        header: "System",
+        value: (row) => row.system,
+        sortable: true,
+        wide: true,
       },
-    },
-  }
+      {
+        id: "presetType",
+        header: "Input/Output",
+        value: (row) => row.presetType,
+        sortable: true,
+        wide: true,
+      },
+      ...(simType === "xplane"
+        ? [
+            {
+              id: "codeType",
+              header: "Code Type",
+              value: (row: Preset) => row.codeType ?? "",
+              sortable: true,
+              wide: true,
+            },
+          ]
+        : []),
+      {
+        id: "label",
+        header: "Preset name",
+        value: (row) => row.label,
+        sortable: true,
+        width: "minmax(0,3fr)",
+      },
+      ...(relevance
+        ? [
+            {
+              id: "relevance",
+              header: "Relevance",
+              value: (row: Preset) => relevance.get(row) ?? 0,
+              cell: (row: Preset) => (
+                <RelevanceGauge value={relevance.get(row) ?? 0} />
+              ),
+              sortable: true,
+              width: "8rem",
+            },
+          ]
+        : []),
+      // keeps the top-right corner free for the "Add preset" button
+      {
+        id: "add-preset-space",
+        header: "",
+        value: () => "",
+        width: "9rem",
+        wide: true,
+      },
+    ],
+    [relevance, simType],
+  )
 
   async function login() {
     await msalReady
@@ -239,60 +167,43 @@ const PresetTable = ({
     }
   }
 
-  const [userPagination, setUserPagination] = useState(
-    localStorage.getItem("pagination") === ""
-      ? 15
-      : parseInt(localStorage.getItem("pagination") || "15"),
-  )
-
-  const rowsPerPage = [15, 20, 30, 50, 100]
+  const ifLoggedIn = (open: (open: boolean) => void) => () => {
+    if (localStorage.getItem("username")) open(true)
+    else login()
+  }
 
   return (
     <div className="relative flex w-full flex-col rounded-lg bg-hhCard/40">
-      <div className="absolute right-0 z-10 mt-2 mr-2 hidden items-center space-x-3 md:flex">
-        <div
-          onClick={() => {
-            if (localStorage.getItem("username")) {
-              setAddModalOpen(true)
-            } else login()
-          }}
-        >
-          <AddPresetButton />
-        </div>
-      </div>
-      <div className="absolute bottom-3 left-3 z-10 mt-2 mr-2 hidden items-center space-x-3 md:flex">
-        <div
-          onClick={() => {
-            if (localStorage.getItem("username")) {
-              setExportModalOpen(true)
-            } else login()
-          }}
-        >
-          <ExportPresetsButton />
-        </div>
-      </div>
+      <Button
+        className="absolute top-1.5 right-2 z-10 hidden md:inline-flex"
+        onClick={ifLoggedIn(setAddModalOpen)}
+      >
+        <IconCirclePlus />
+        Add preset
+      </Button>
       <DataTable
         // remount when a search starts or ends, to apply its default sort
         key={relevance ? "search" : "list"}
         columns={columns}
         data={data}
-        customStyles={customStyles}
-        pagination
-        expandOnRowClicked
-        sortFunction={sortIgnoringCase}
-        expandableRows
-        expandableRowsComponent={PresetRowDetails}
-        highlightOnHover
-        responsive={true}
-        theme="hubhop"
-        paginationPerPage={userPagination}
-        paginationRowsPerPageOptions={rowsPerPage}
-        onChangeRowsPerPage={(currentRowsPerPage) => (
-          setUserPagination(currentRowsPerPage),
-          localStorage.setItem("pagination", currentRowsPerPage.toString())
-        )}
-        defaultSortFieldId={relevance ? "relevance" : 1}
-        defaultSortAsc={!relevance}
+        rowId={(row) => row.id}
+        initialSorting={
+          relevance
+            ? { id: "relevance", desc: true }
+            : { id: "vendor", desc: false }
+        }
+        renderExpanded={(row) => <PresetRowDetails data={row} />}
+        pageSizes={[15, 20, 30, 50, 100]}
+        pageSizeStorageKey="pagination"
+        footer={
+          <Button
+            className="hidden md:inline-flex"
+            onClick={ifLoggedIn(setExportModalOpen)}
+          >
+            <IconDownload />
+            Export presets
+          </Button>
+        }
       />
     </div>
   )
