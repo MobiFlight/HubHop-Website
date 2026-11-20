@@ -1,5 +1,5 @@
 // presetSync.ts
-import { db } from "./db"
+import { db } from "@/services/db"
 
 export type SimType = "msfs2020" | "xplane"
 

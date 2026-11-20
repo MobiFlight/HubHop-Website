@@ -1,4 +1,4 @@
-import { test, expect, authFile } from "./fixtures"
+import { test, expect, authFile } from "@/tests/fixtures"
 import type { Page } from "@playwright/test"
 
 // Screenshots of the main pages, to review every visual change of the

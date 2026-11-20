@@ -1,4 +1,4 @@
-import { test, expect, authFile, testUser } from "./fixtures"
+import { test, expect, authFile, testUser } from "@/tests/fixtures"
 
 test.describe("User menu - anonymous", () => {
   test("User menu - shows the login button", async ({ hubHopPage, page }) => {

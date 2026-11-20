@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { presetListUrl, type Sim } from "../../../lib/presetUrls"
-import { track } from "../../../services/analytics"
+import { presetListUrl, type Sim } from "@/lib/presetUrls"
+import { track } from "@/services/analytics"
 
 type ContributeBandProps = {
   sim: Sim

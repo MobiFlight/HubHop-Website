@@ -5,17 +5,12 @@ import { IconSearch } from "@tabler/icons-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Skeleton } from "@/components/ui/skeleton"
-import HubGraphic from "./HubGraphic"
-import SimSwitch from "../Shared/SimSwitch"
-import {
-  isSim,
-  presetListUrl,
-  slugify,
-  type Sim,
-} from "../../../lib/presetUrls"
-import { todaysActivity } from "../../../lib/recentActivity"
-import { track } from "../../../services/analytics"
-import type { Statistics } from "../../../interfaces/preset"
+import HubGraphic from "@/components/sections/home/HubGraphic"
+import SimSwitch from "@/components/sections/Shared/SimSwitch"
+import { isSim, presetListUrl, slugify, type Sim } from "@/lib/presetUrls"
+import { todaysActivity } from "@/lib/recentActivity"
+import { track } from "@/services/analytics"
+import type { Statistics } from "@/interfaces/preset"
 
 const searchExample: Record<Sim, string> = {
   msfs2020: "Fenix A320 APU",

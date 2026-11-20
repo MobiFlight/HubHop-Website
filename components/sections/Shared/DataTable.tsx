@@ -16,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { compareText } from "../../../lib/presetSearch"
+import { compareText } from "@/lib/presetSearch"
 
 export type Column<T> = {
   id: string

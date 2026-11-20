@@ -1,5 +1,5 @@
-import { test, expect } from "./fixtures"
-import { CONSENT_COOKIE } from "../lib/cookieConsent"
+import { test, expect } from "@/tests/fixtures"
+import { CONSENT_COOKIE } from "@/lib/cookieConsent"
 
 const GTM_URL = "https://www.googletagmanager.com/gtm.js?id=GTM-TEST"
 const DAY = 24 * 60 * 60

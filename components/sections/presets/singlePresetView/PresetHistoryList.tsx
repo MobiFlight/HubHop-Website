@@ -1,11 +1,11 @@
-import PresetPreviewLabel from "../ui/PresetInputLabel"
+import PresetPreviewLabel from "@/components/sections/presets/ui/PresetInputLabel"
 import { useState } from "react"
 import { cn } from "cn"
 import { IconChevronUp, IconLoader2 } from "@tabler/icons-react"
 import { Button } from "@/components/ui/button"
-import { REPORTING_ENABLED } from "../../../../lib/features"
-import type { Preset } from "../../../../interfaces/preset"
-import { isModerator } from "../../../../services/roles"
+import { REPORTING_ENABLED } from "@/lib/features"
+import type { Preset } from "@/interfaces/preset"
+import { isModerator } from "@/services/roles"
 
 type PresetHistoryListProps = {
   presetHistory: Preset[]

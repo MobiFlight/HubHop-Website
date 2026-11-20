@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { IconAppWindow } from "@tabler/icons-react"
 import { Button } from "@/components/ui/button"
-import { presetUrl, type Sim } from "../../../../lib/presetUrls"
+import { presetUrl, type Sim } from "@/lib/presetUrls"
 
 type OpenPresetButtonProps = {
   sim: Sim

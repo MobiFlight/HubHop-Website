@@ -1,10 +1,10 @@
-import { test, expect } from "./fixtures"
+import { test, expect } from "@/tests/fixtures"
 import {
   parsePresetsPath,
   presetListUrl,
   presetUrl,
   slugify,
-} from "../lib/presetUrls"
+} from "@/lib/presetUrls"
 
 const BATTERY_ID = "00000000-0000-4000-8000-000000000009"
 const BATTERY_URL = `/presets/msfs/asobo/c172/battery-master-on-${BATTERY_ID}/`

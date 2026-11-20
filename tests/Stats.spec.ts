@@ -1,4 +1,4 @@
-import { test, expect } from "./fixtures"
+import { test, expect } from "@/tests/fixtures"
 
 test.describe("Stats", () => {
   test.beforeEach(async ({ hubHopPage }) => {

@@ -1,7 +1,7 @@
 import * as CookieConsent from "vanilla-cookieconsent"
-import { ANALYTICS } from "../lib/cookieConsent"
-import { GTM_ID } from "./googleTagManager"
-import type { SimType } from "./presetSync"
+import { ANALYTICS } from "@/lib/cookieConsent"
+import { GTM_ID } from "@/services/googleTagManager"
+import type { SimType } from "@/services/presetSync"
 
 /**
  * Events sent to Google Tag Manager, with their parameters.

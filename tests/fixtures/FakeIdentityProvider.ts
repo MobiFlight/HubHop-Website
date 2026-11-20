@@ -1,7 +1,7 @@
 import type { BrowserContext, Route } from "@playwright/test"
 import { loadEnvConfig } from "@next/env"
 import path from "path"
-import { testUser } from "./auth"
+import { testUser } from "@/tests/fixtures/auth"
 
 loadEnvConfig(path.join(__dirname, "..", ".."))
 

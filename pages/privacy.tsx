@@ -1,5 +1,5 @@
 import Head from "next/head"
-import Layout from "../components/Layout"
+import Layout from "@/components/Layout"
 
 const Privacy = () => (
   <Layout title="Privacy Policy | Hubhop by Mobiflight">

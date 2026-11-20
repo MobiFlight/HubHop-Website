@@ -28,10 +28,10 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import ComboBox from "../../Shared/ComboBox"
-import { CODE_TYPES } from "../../../../lib/codeTypes"
-import { REPORTING_ENABLED } from "../../../../lib/features"
-import { isModerator } from "../../../../services/roles"
+import ComboBox from "@/components/sections/Shared/ComboBox"
+import { CODE_TYPES } from "@/lib/codeTypes"
+import { REPORTING_ENABLED } from "@/lib/features"
+import { isModerator } from "@/services/roles"
 
 type ChangeHandler = (value: string) => void
 

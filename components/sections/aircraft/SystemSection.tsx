@@ -1,5 +1,5 @@
 import Link from "next/link"
-import type { SheetPreset, SystemSheet } from "../../../lib/aircraftPages"
+import type { SheetPreset, SystemSheet } from "@/lib/aircraftPages"
 
 type PresetColumnProps = {
   title: string

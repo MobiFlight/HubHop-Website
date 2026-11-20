@@ -1,8 +1,11 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { test as base } from "@playwright/test"
-import { HubHopPage, type CookieConsentOption } from "./fixtures/HubHopPage"
-import { PresetsPage } from "./fixtures/PresetsPage"
-import { PresetViewPage } from "./fixtures/PresetViewPage"
+import {
+  HubHopPage,
+  type CookieConsentOption,
+} from "@/tests/fixtures/HubHopPage"
+import { PresetsPage } from "@/tests/fixtures/PresetsPage"
+import { PresetViewPage } from "@/tests/fixtures/PresetViewPage"
 
 type HHFixtures = {
   /** Cookie choice before the test; tests default to "rejected" so the banner stays hidden */
@@ -28,4 +31,4 @@ export const test = base.extend<HHFixtures>({
 })
 
 export { expect } from "@playwright/test"
-export { authFile, testUser } from "./fixtures/auth"
+export { authFile, testUser } from "@/tests/fixtures/auth"

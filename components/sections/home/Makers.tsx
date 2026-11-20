@@ -1,7 +1,7 @@
 import Link from "next/link"
-import { presetListUrl, type Sim } from "../../../lib/presetUrls"
-import { track } from "../../../services/analytics"
-import type { VendorCount } from "../../../services/libraryStats"
+import { presetListUrl, type Sim } from "@/lib/presetUrls"
+import { track } from "@/services/analytics"
+import type { VendorCount } from "@/services/libraryStats"
 
 const format = (value: number) => value.toLocaleString("en-US")
 

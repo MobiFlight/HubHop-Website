@@ -1,4 +1,4 @@
-import { test, expect } from "./fixtures"
+import { test, expect } from "@/tests/fixtures"
 import {
   aircraftList,
   aircraftSheet,
@@ -9,8 +9,8 @@ import {
   previewCounts,
   systemSheets,
   SYSTEM_PREVIEW,
-} from "../lib/aircraftPages"
-import type { Preset } from "../interfaces/preset"
+} from "@/lib/aircraftPages"
+import type { Preset } from "@/interfaces/preset"
 
 const preset = (fields: Partial<Preset>): Preset => ({
   id: String(Math.random()),

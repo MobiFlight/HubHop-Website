@@ -9,9 +9,9 @@ import {
   type Promotion,
   type PromotionContext,
   type SlotId,
-} from "../../../lib/promotions"
-import { loadMobiFlightPromotions } from "../../../services/promotionSources"
-import { track } from "../../../services/analytics"
+} from "@/lib/promotions"
+import { loadMobiFlightPromotions } from "@/services/promotionSources"
+import { track } from "@/services/analytics"
 
 // shop promotions aren't counted yet
 const trackClick = (kind: Promotion["kind"], slot: SlotId) => {

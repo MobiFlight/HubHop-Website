@@ -2,8 +2,8 @@
 // - HubHopApi: model/Preset.ts (PresetDbSchema), model/Statistics.ts, PresetHistoryGet
 // - MobiFlight Connector: frontend/src/types/preset.d.ts (same names and values)
 
-import type { CodeType } from "../lib/codeTypes"
-import type { PresetType, XplanePresetType } from "../lib/presetTypes"
+import type { CodeType } from "@/lib/codeTypes"
+import type { PresetType, XplanePresetType } from "@/lib/presetTypes"
 
 export type { CodeType, PresetType, XplanePresetType }
 

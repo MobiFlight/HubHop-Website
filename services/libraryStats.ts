@@ -2,8 +2,8 @@
 // whole library for the homepage (the statistics endpoint lacks them, #183)
 // and the aircraft cheat sheets. Server only: browsers never load this.
 
-import type { Preset } from "../interfaces/preset"
-import { SIMS, slugify, type Sim } from "../lib/presetUrls"
+import type { Preset } from "@/interfaces/preset"
+import { SIMS, slugify, type Sim } from "@/lib/presetUrls"
 
 export type VendorCount = {
   name: string

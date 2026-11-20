@@ -1,9 +1,9 @@
 import Head from "next/head"
 import { useState } from "react"
-import Layout from "../components/Layout"
+import Layout from "@/components/Layout"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import Potti from "../components/sections/tools/Potti"
+import Potti from "@/components/sections/tools/Potti"
 
 const Tools = () => {
   const [tool, setTool] = useState("potti")

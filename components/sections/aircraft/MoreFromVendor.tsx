@@ -1,6 +1,6 @@
 import Link from "next/link"
-import { aircraftUrl, type AircraftSummary } from "../../../lib/aircraftPages"
-import type { Sim } from "../../../lib/presetUrls"
+import { aircraftUrl, type AircraftSummary } from "@/lib/aircraftPages"
+import type { Sim } from "@/lib/presetUrls"
 
 type MoreFromVendorProps = {
   sim: Sim

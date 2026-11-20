@@ -1,10 +1,10 @@
 import { useLiveQuery } from "dexie-react-hooks"
 import { useRouter } from "next/router"
 import { useEffect, useMemo, useState } from "react"
-import PresetView from "./PresetView"
-import { presetTable } from "../../../../services/presetSync"
-import { presetUrl, type Sim } from "../../../../lib/presetUrls"
-import type { Preset } from "../../../../interfaces/preset"
+import PresetView from "@/components/sections/presets/singlePresetView/PresetView"
+import { presetTable } from "@/services/presetSync"
+import { presetUrl, type Sim } from "@/lib/presetUrls"
+import type { Preset } from "@/interfaces/preset"
 
 type PresetDetailProps = {
   sim: Sim

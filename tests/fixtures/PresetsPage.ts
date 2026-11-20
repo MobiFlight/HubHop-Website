@@ -1,5 +1,5 @@
 import { expect, type Locator } from "@playwright/test"
-import type { HubHopPage } from "./HubHopPage"
+import type { HubHopPage } from "@/tests/fixtures/HubHopPage"
 
 export class PresetsPage {
   constructor(public readonly hubHopPage: HubHopPage) {}

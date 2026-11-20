@@ -1,10 +1,10 @@
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
-import { presetUrl, type Sim } from "../../../lib/presetUrls"
-import { recentChanges } from "../../../lib/recentActivity"
-import { track } from "../../../services/analytics"
-import type { Statistics } from "../../../interfaces/preset"
+import { presetUrl, type Sim } from "@/lib/presetUrls"
+import { recentChanges } from "@/lib/recentActivity"
+import { track } from "@/services/analytics"
+import type { Statistics } from "@/interfaces/preset"
 
 type RecentChangesProps = {
   sim: Sim

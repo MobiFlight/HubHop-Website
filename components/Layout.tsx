@@ -1,7 +1,7 @@
 import React, { ReactNode, useState, useEffect } from "react"
 import Head from "next/head"
-import Navbar from "./sections/Navbar/Navbar"
-import Footer from "./sections/footer/Footer"
+import Navbar from "@/components/sections/Navbar/Navbar"
+import Footer from "@/components/sections/footer/Footer"
 import { IconArrowUp } from "@tabler/icons-react"
 import { Button } from "@/components/ui/button"
 

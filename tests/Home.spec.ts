@@ -1,7 +1,7 @@
-import { test, expect } from "./fixtures"
-import { recentChanges, todaysActivity } from "../lib/recentActivity"
-import msfsStatsData from "./data/msfs-stats.testdata.json"
-import type { Statistics } from "../interfaces/preset"
+import { test, expect } from "@/tests/fixtures"
+import { recentChanges, todaysActivity } from "@/lib/recentActivity"
+import msfsStatsData from "@/tests/data/msfs-stats.testdata.json"
+import type { Statistics } from "@/interfaces/preset"
 
 const msfsStats = msfsStatsData as unknown as Statistics
 

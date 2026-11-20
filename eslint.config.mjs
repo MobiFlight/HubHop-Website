@@ -22,6 +22,19 @@ const config = [
       "react-hooks/exhaustive-deps": "warn",
       // unused imports and variables are errors (next/typescript only warns)
       "@typescript-eslint/no-unused-vars": "error",
+      // import project files from the root: "@/components/…", not "../…"
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["./*", "../*"],
+              message:
+                'Use an absolute import: "@/<path from the project root>".',
+            },
+          ],
+        },
+      ],
     },
   },
   prettier,

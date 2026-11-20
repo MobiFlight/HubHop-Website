@@ -1,11 +1,7 @@
 import Link from "next/link"
-import AircraftBreadcrumb from "./AircraftBreadcrumb"
-import {
-  formatDate,
-  SIM_NAMES,
-  type AircraftSheet,
-} from "../../../lib/aircraftPages"
-import { presetListUrl, type Sim } from "../../../lib/presetUrls"
+import AircraftBreadcrumb from "@/components/sections/aircraft/AircraftBreadcrumb"
+import { formatDate, SIM_NAMES, type AircraftSheet } from "@/lib/aircraftPages"
+import { presetListUrl, type Sim } from "@/lib/presetUrls"
 
 const format = (value: number) => value.toLocaleString("en-US")
 

@@ -1,4 +1,4 @@
-import { test as setup, expect, authFile, testUser } from "./fixtures"
+import { test as setup, expect, authFile, testUser } from "@/tests/fixtures"
 
 /**
  * Creates Playwright storage states for the test personas by logging in

@@ -9,7 +9,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import { presetTable, type SimType } from "../../../../../services/presetSync"
+import { presetTable, type SimType } from "@/services/presetSync"
 
 type DeleteConfirmationModalProps = {
   label: string

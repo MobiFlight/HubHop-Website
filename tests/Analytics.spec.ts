@@ -1,4 +1,4 @@
-import { test, expect } from "./fixtures"
+import { test, expect } from "@/tests/fixtures"
 import type { Page } from "@playwright/test"
 
 /** Events pushed by track(), without Tag Manager's own entries */

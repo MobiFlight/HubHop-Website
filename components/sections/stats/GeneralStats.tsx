@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react"
-import DataTable, { type Column } from "../Shared/DataTable"
+import DataTable, { type Column } from "@/components/sections/Shared/DataTable"
 import {
   Dialog,
   DialogContent,
@@ -8,10 +8,10 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Skeleton } from "@/components/ui/skeleton"
-import StatsCard from "./ui/StatsCard"
-import { compareText } from "../../../lib/presetSearch"
-import type { Preset, Statistics } from "../../../interfaces/preset"
-import { presetUrl, type Sim } from "../../../lib/presetUrls"
+import StatsCard from "@/components/sections/stats/ui/StatsCard"
+import { compareText } from "@/lib/presetSearch"
+import type { Preset, Statistics } from "@/interfaces/preset"
+import { presetUrl, type Sim } from "@/lib/presetUrls"
 
 type GeneralStatsProps = {
   presets: Preset[]
