@@ -1,4 +1,6 @@
-import { AiOutlineLoading } from "react-icons/ai"
+import { IconLoader2 } from "@tabler/icons-react"
+import { cn } from "cn"
+import { buttonVariants } from "@/components/ui/button"
 
 type ExportButtonProps = {
   text: string
@@ -6,24 +8,19 @@ type ExportButtonProps = {
   disabled: boolean
 }
 
+// looks like a button; the surrounding element handles the click
 const ExportButton = ({ text, loading, disabled }: ExportButtonProps) => {
   return (
-    <div
-      className={`relative flex w-full items-center justify-center space-x-1 rounded-lg px-4 py-1.5 text-sm font-semibold transition-all ${
-        disabled
-          ? "cursor-not-allowed bg-hhBG text-hhText/50"
-          : "bg-hhOrange text-hhBG hover:bg-hhOrangeShade-600"
-      }`}
+    <span
+      className={cn(
+        buttonVariants({ variant: disabled ? "secondary" : "default" }),
+        "w-full",
+        disabled && "cursor-not-allowed opacity-50",
+      )}
     >
-      <div
-        className={`absolute left-3 mr-2 animate-spin text-lg ${
-          loading ? "text-hhBG" : "text-transparent"
-        }`}
-      >
-        <AiOutlineLoading />
-      </div>
-      <p className="px-5">{text}</p>
-    </div>
+      {loading && <IconLoader2 className="animate-spin" />}
+      {text}
+    </span>
   )
 }
 

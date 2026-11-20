@@ -1,6 +1,7 @@
 import { useState } from "react"
 import Modal from "../../../Shared/Modal"
 import ExportButton from "./ExportButton"
+import { buttonVariants } from "@/components/ui/button"
 
 type ExportPresetsModalProps = {
   onClose: () => void
@@ -30,10 +31,10 @@ const ExportPresetsModal = ({ onClose }: ExportPresetsModalProps) => {
     <Modal title="Export Presets" onClose={onClose}>
       <div className="mt-3 grid grid-cols-[repeat(5,auto)] items-start gap-5">
         <div className="flex flex-col items-center justify-center align-top">
-          <h2 className="border-b-2 border-hhCard text-xl font-semibold">
+          <h2 className="border-b-2 border-border text-xl font-semibold">
             Mobiflight
           </h2>
-          <p className="max-w-52 rounded-lg bg-red-800 p-3 text-justify text-xs leading-3 font-semibold text-hhText">
+          <p className="max-w-52 rounded-lg bg-destructive/20 p-3 text-justify text-xs leading-3 font-semibold text-destructive">
             Please use the build-in update funcionality inside Mobiflight to
             update your Hubhop presets.
           </p>
@@ -56,7 +57,7 @@ const ExportPresetsModal = ({ onClose }: ExportPresetsModalProps) => {
           </div>
         </div>
         <div className="flex flex-col items-center justify-center align-top">
-          <h2 className="border-b-2 border-hhCard text-xl font-semibold">
+          <h2 className="border-b-2 border-border text-xl font-semibold">
             Mobiflight WASM Module
           </h2>
           <div className="mt-3 flex flex-col justify-center space-y-3 align-top">
@@ -70,7 +71,7 @@ const ExportPresetsModal = ({ onClose }: ExportPresetsModalProps) => {
           </div>
         </div>
         <div className="flex flex-col items-center justify-center">
-          <h2 className="border-b-2 border-hhCard text-xl font-semibold">
+          <h2 className="border-b-2 border-border text-xl font-semibold">
             FSUIPC
           </h2>
           <div className="mt-3 flex flex-col justify-center space-y-3">
@@ -85,7 +86,7 @@ const ExportPresetsModal = ({ onClose }: ExportPresetsModalProps) => {
           </div>
         </div>
         <div className="flex flex-col items-center justify-center">
-          <h2 className="border-b-2 border-hhCard text-xl font-semibold">
+          <h2 className="border-b-2 border-border text-xl font-semibold">
             SPAD.neXt
           </h2>
           <div className="mt-3 flex flex-col justify-center space-y-3">
@@ -100,7 +101,7 @@ const ExportPresetsModal = ({ onClose }: ExportPresetsModalProps) => {
           </div>
         </div>
         <div className="flex flex-col items-center justify-center">
-          <h2 className="border-b-2 border-hhCard text-xl font-semibold">
+          <h2 className="border-b-2 border-border text-xl font-semibold">
             Axis and Ohs
           </h2>
           <div className="mt-3 flex flex-col justify-center space-y-3">
@@ -118,7 +119,7 @@ const ExportPresetsModal = ({ onClose }: ExportPresetsModalProps) => {
       <div className="mt-5 flex w-full items-center justify-end">
         <button
           onClick={onClose}
-          className="flex items-center space-x-1 rounded-lg bg-hhBG px-4 py-1.5 text-sm font-semibold transition-all hover:bg-hhBG/70"
+          className={buttonVariants({ variant: "secondary" })}
         >
           Cancel
         </button>

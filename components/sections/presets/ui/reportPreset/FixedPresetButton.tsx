@@ -1,13 +1,12 @@
-import { GiAutoRepair } from "react-icons/gi"
+import { IconTool } from "@tabler/icons-react"
+import { Button } from "@/components/ui/button"
 
 const FixedPresetButton = () => {
   return (
-    <button className="flex items-center space-x-1 rounded-lg bg-green-900 px-4 py-1.5 text-sm font-semibold text-hhText transition-all hover:bg-green-800">
-      <div className="text-lg">
-        <GiAutoRepair />
-      </div>
-      <p>Preset fixed</p>
-    </button>
+    <Button>
+      <IconTool />
+      Preset fixed
+    </Button>
   )
 }
 

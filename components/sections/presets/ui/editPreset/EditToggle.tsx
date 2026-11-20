@@ -1,44 +1,23 @@
-import { BiLockAlt, BiLockOpenAlt } from "react-icons/bi"
-import { motion } from "motion/react"
+import { IconLock, IconLockOpen } from "@tabler/icons-react"
+import { Toggle } from "@/components/ui/toggle"
 
 type EditToggleProps = {
   toggleEdit: boolean
   onToggle: () => void
 }
 
+/** Switches a preset between viewing and editing */
 const EditToggle = ({ toggleEdit, onToggle }: EditToggleProps) => {
   return (
-    <button
-      onClick={onToggle}
-      className={`relative flex items-center rounded-lg text-lg font-semibold xl:h-full ${
-        toggleEdit ? "bg-hhCard" : "bg-hhBG"
-      }`}
+    <Toggle
+      variant="outline"
+      pressed={toggleEdit}
+      onPressedChange={onToggle}
+      className="data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
     >
-      <motion.div
-        animate={toggleEdit ? { x: 50 } : { x: 0 }}
-        transition={{ type: "spring", stiffness: 400, damping: 30 }}
-        className="absolute hidden h-full w-1/2 items-center justify-center rounded-lg bg-hhOrange text-xs text-hhBG hover:bg-hhOrangeShade-600 xl:flex"
-      >
-        <div>{toggleEdit ? "Edit" : "View"}</div>
-      </motion.div>
-      <motion.div
-        animate={toggleEdit ? { x: 59 } : { x: -3 }}
-        transition={{ type: "spring", stiffness: 400, damping: 30 }}
-        className="absolute flex h-full w-1/2 items-center justify-center rounded-lg bg-hhOrange text-xs text-hhBG hover:bg-hhOrangeShade-600 xl:hidden"
-      >
-        <div>{toggleEdit ? "Edit" : "View"}</div>
-      </motion.div>
-      <div className="ml-1 hidden items-center space-x-2 px-4 py-1.5 xl:flex">
-        <BiLockAlt />
-        <div className="w-2"></div>
-        <BiLockOpenAlt />
-      </div>
-      <div className="ml-1 flex items-center space-x-2 px-4 py-1.5 xl:hidden">
-        <BiLockAlt />
-        <div className="w-8"></div>
-        <BiLockOpenAlt />
-      </div>
-    </button>
+      {toggleEdit ? <IconLockOpen /> : <IconLock />}
+      {toggleEdit ? "Edit" : "View"}
+    </Toggle>
   )
 }
 
