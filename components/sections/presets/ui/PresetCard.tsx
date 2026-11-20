@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { AnimatePresence, motion } from "motion/react"
 import PresetHistoryList from "../singlePresetView/PresetHistoryList"
 import PromoSlot from "../../Shared/PromoSlot"
 import EditToggle from "./editPreset/EditToggle"
@@ -101,7 +100,6 @@ const PresetCard = ({
   const [fixedModalOpen, setFixedModalOpen] = useState(false)
   const [edit, setEdit] = useState(false)
   const [editButton, setEditButton] = useState(false)
-  const [editTooltip, seteditTooltip] = useState(false)
   const [revertObject, setRevertObject] = useState<Partial<Preset>>({})
   const [revertModal, setRevertModal] = useState(false)
   const [simType, setSimType] = useState("")
@@ -234,13 +232,13 @@ const PresetCard = ({
           card && "container mx-auto mt-5 min-h-screen"
         }`}
       >
-        <div className={`${card && "mb-5 rounded-lg bg-hhCard/40"}`}>
+        <div className={`${card && "mb-5 rounded-lg bg-card"}`}>
           {card && (
-            <h2 className={`ml-5 pt-3 font-bold text-hhOrange text-${text}`}>
+            <h2 className={`ml-5 pt-3 font-bold text-primary text-${text}`}>
               {label}
             </h2>
           )}
-          <div className="flex w-full flex-col space-y-2 p-5 text-hhText lg:flex-row lg:space-y-0 lg:space-x-5">
+          <div className="flex w-full flex-col space-y-2 p-5 text-foreground lg:flex-row lg:space-y-0 lg:space-x-5">
             <div className="flex w-full flex-col space-y-2 lg:w-1/6">
               {version > 1 ? (
                 <PresetPreviewLabel title={"Updated by"} editData={updatedBy} />
@@ -341,36 +339,15 @@ const PresetCard = ({
               )}
             </div>
             <div className="flex flex-col-reverse justify-between space-y-2 space-y-reverse xl:flex-row xl:items-center xl:space-y-0 xl:space-x-5">
-              <AnimatePresence>
-                {edit && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.1 }}
-                    className="hidden xl:block"
-                  >
-                    <div onClick={() => editPreset()}>
-                      <SavePresetButton disabled={editButton} />
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              {edit && (
+                <div className="hidden animate-in fade-in-0 xl:block">
+                  <div onClick={() => editPreset()}>
+                    <SavePresetButton disabled={editButton} />
+                  </div>
+                </div>
+              )}
               {
                 <>
-                  <AnimatePresence>
-                    {editTooltip && (
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="fixed right-0 bottom-5 z-50 mx-3 rounded-lg bg-red-800 p-5 px-5 py-2 font-semibold text-hhText md:right-5"
-                      >
-                        No permission to edit this preset. You have to be logged
-                        in to perform this action.
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
                   <EditToggle
                     onToggle={() => {
                       if (
@@ -379,31 +356,22 @@ const PresetCard = ({
                       ) {
                         setEdit((e) => !e)
                       } else {
-                        seteditTooltip(true)
-                        setTimeout(() => {
-                          seteditTooltip(false)
-                        }, 5000)
+                        toast.error(
+                          "No permission to edit this preset. You have to be logged in to perform this action.",
+                        )
                       }
                     }}
                     toggleEdit={edit}
                   />
                 </>
               }
-              <AnimatePresence>
-                {edit && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.1 }}
-                    className="block xl:hidden"
-                  >
-                    <div onClick={() => editPreset()}>
-                      <SavePresetButton disabled={editButton} />
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              {edit && (
+                <div className="block animate-in fade-in-0 xl:hidden">
+                  <div onClick={() => editPreset()}>
+                    <SavePresetButton disabled={editButton} />
+                  </div>
+                </div>
+              )}
               {!card && <OpenPresetButton id={id} />}
             </div>
           </div>
@@ -432,89 +400,63 @@ const PresetCard = ({
                 )}
               />
             ) : (
-              <div className="rounded-lg bg-hhCard/40 p-3 text-xl text-hhText/50 transition-all">
+              <div className="rounded-lg bg-card p-3 text-xl text-muted-foreground transition-all">
                 No History available
               </div>
             )}
           </div>
         )}
       </div>
-      <AnimatePresence>
-        {deleteModalOpen && (
-          <motion.div
-            key="DeleteModal"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.05 }}
+      {deleteModalOpen && (
+        <div key="DeleteModal" className="animate-in fade-in-0">
+          <DeleteConfirmationModal
+            onClose={() => setDeleteModalOpen(false)}
+            presetId={id}
+            label={label}
+          />
+        </div>
+      )}
+      {reportModalOpen && (
+        <div key="ReportModal" className="animate-in fade-in-0">
+          <ReportPresetModal
+            onClose={() => setReportModalOpen(false)}
+            presetId={id}
+            label={label}
+          />
+        </div>
+      )}
+      {fixedModalOpen && (
+        <div key="FixedModal" className="animate-in fade-in-0">
+          <FixedPresetModal
+            onClose={() => setFixedModalOpen(false)}
+            presetId={id}
+            label={label}
+          />
+        </div>
+      )}
+      {revertModal && (
+        <div key="RevertModal" className="animate-in fade-in-0">
+          <AlertDialog
+            open
+            onOpenChange={(open) => !open && setRevertModal(false)}
           >
-            <DeleteConfirmationModal
-              onClose={() => setDeleteModalOpen(false)}
-              presetId={id}
-              label={label}
-            />
-          </motion.div>
-        )}
-        {reportModalOpen && (
-          <motion.div
-            key="ReportModal"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.05 }}
-          >
-            <ReportPresetModal
-              onClose={() => setReportModalOpen(false)}
-              presetId={id}
-              label={label}
-            />
-          </motion.div>
-        )}
-        {fixedModalOpen && (
-          <motion.div
-            key="FixedModal"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.05 }}
-          >
-            <FixedPresetModal
-              onClose={() => setFixedModalOpen(false)}
-              presetId={id}
-              label={label}
-            />
-          </motion.div>
-        )}
-        {revertModal && (
-          <motion.div
-            key="RevertModal"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.05 }}
-          >
-            <AlertDialog
-              open
-              onOpenChange={(open) => !open && setRevertModal(false)}
-            >
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Revert Preset</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Are you sure you want to revert this preset?
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>No</AlertDialogCancel>
-                  <AlertDialogAction onClick={revertPreset}>
-                    Yes
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Revert Preset</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Are you sure you want to revert this preset?
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>No</AlertDialogCancel>
+                <AlertDialogAction onClick={revertPreset}>
+                  Yes
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
+      )}
     </>
   )
 }

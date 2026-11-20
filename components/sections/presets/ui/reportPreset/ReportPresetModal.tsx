@@ -16,7 +16,7 @@ const ReportPresetModal = ({ onClose }: ReportPresetModalProps) => {
           <div className="flex flex-col">
             <label htmlFor="reportCategory">Category</label>
             <select
-              className="w-full rounded-lg border border-hhOrange bg-hhBG px-3 py-1 text-hhText"
+              className="w-full rounded-lg border border-primary bg-background px-3 py-1 text-foreground"
               id="reportCategory"
               defaultValue={""}
             >
@@ -33,7 +33,7 @@ const ReportPresetModal = ({ onClose }: ReportPresetModalProps) => {
           <div className="flex flex-col">
             <label htmlFor="reportDescription">Describe your report</label>
             <textarea
-              className="w-full rounded-lg border border-hhOrange bg-hhBG px-3 py-1 text-hhText"
+              className="w-full rounded-lg border border-primary bg-background px-3 py-1 text-foreground"
               name="reportDescription"
               id="reportDescription"
               cols={50}
@@ -47,7 +47,7 @@ const ReportPresetModal = ({ onClose }: ReportPresetModalProps) => {
         <div className="flex w-full items-center justify-between">
           <button
             onClick={onClose}
-            className="flex items-center space-x-1 rounded-lg bg-hhBG px-4 py-1.5 text-sm font-semibold transition-all hover:bg-hhBG/70"
+            className="flex items-center space-x-1 rounded-lg bg-background px-4 py-1.5 text-sm font-semibold transition-all hover:bg-background/70"
           >
             Cancel
           </button>

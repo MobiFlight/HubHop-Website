@@ -4,8 +4,7 @@ import { useEffect, useState } from "react"
 
 import PresetCard from "../ui/PresetCard"
 import type { Preset } from "../../../../interfaces/preset"
-import { BiSad } from "react-icons/bi"
-import { AiOutlineLoading } from "react-icons/ai"
+import { IconLoader2, IconMoodSad } from "@tabler/icons-react"
 
 type PresetViewProps = {
   // undefined while loading, empty if the preset doesn't exist
@@ -67,17 +66,13 @@ const PresetView = ({ preset, history, loading }: PresetViewProps) => {
       </Head>
       {loadingPreset ? (
         <div className="flex min-h-screen flex-col items-center justify-center">
-          <div className="animate-spin text-6xl text-hhOrange">
-            <AiOutlineLoading />
-          </div>
+          <IconLoader2 className="size-16 animate-spin text-primary" />
           <p className="mt-5">Loading Preset</p>
         </div>
       ) : notFound ? (
         <div className="flex h-[80vh] items-center justify-center">
           <div className="flex flex-col items-center space-y-5">
-            <div className="text-8xl">
-              <BiSad />
-            </div>
+            <IconMoodSad className="size-24" />
             <h2 className="text-center text-4xl">
               This preset does not exist or has been deleted
             </h2>

@@ -90,40 +90,6 @@
   --color-ring: var(--ring);
 }
 
-/* Colors of the pages that don't use the theme tokens yet; removed in #162 */
-@theme {
-  --color-mfBlue: #3366cc;
-  --color-hhBG: #33353e;
-  --color-hhCard: #545963;
-  --color-hhText: #d2d0d2;
-  --color-hhIcons: #f9e7e7;
-  --color-hhOrange: #ffa047;
-
-  --color-hhOrangeShade-100: #ffe2c6;
-  --color-hhOrangeShade-200: #ffd5ad;
-  --color-hhOrangeShade-300: #ffc793;
-  --color-hhOrangeShade-400: #ffba7a;
-  --color-hhOrangeShade-500: #ffa047;
-  --color-hhOrangeShade-600: #ff932d;
-  --color-hhOrangeShade-700: #ff8614;
-  --color-hhOrangeShade-800: #f97900;
-  --color-hhOrangeShade-900: #e06c00;
-
-  /*
-    Tailwind CSS v3 values of the built-in colors used on the old pages;
-    replaced by theme colors when the pages are migrated.
-  */
-  --color-red-500: #ef4444;
-  --color-red-600: #dc2626;
-  --color-red-700: #b91c1c;
-  --color-red-800: #991b1b;
-  --color-red-900: #7f1d1d;
-  --color-green-800: #166534;
-  --color-green-900: #14532d;
-  --color-gray-200: #e5e7eb;
-  --color-gray-400: #9ca3af;
-}
-
 /* shadcn/ui base styles */
 @layer base {
   * {
@@ -141,12 +107,6 @@
   ::placeholder {
     color: var(--color-muted-foreground);
   }
-
-  /* cell padding of the old data tables; removed with them (#158, #161) */
-  td,
-  th {
-    padding: 1px;
-  }
 }
 
 /*
@@ -155,8 +115,6 @@
 */
 @layer base {
   html {
-    padding: 0;
-    margin: 0;
     scroll-behavior: smooth;
   }
 
@@ -168,15 +126,6 @@
     background: url("../public/images/bg-hubhop-xplane.png");
     @apply bg-background bg-cover bg-fixed bg-no-repeat text-foreground transition-all;
   }
-
-  a {
-    color: inherit;
-    text-decoration: none;
-  }
-
-  * {
-    box-sizing: border-box;
-  }
 }
 
 ::-webkit-scrollbar {
@@ -184,39 +133,43 @@
   height: 7px;
 }
 ::-webkit-scrollbar-thumb {
-  background: #ffa047;
+  background: var(--primary);
   border-radius: 10px;
 }
 
-/* Cookie consent dialog (vanilla-cookieconsent) in HubHop colors */
+/* Cookie consent dialog (vanilla-cookieconsent) in the theme colors */
 #cc-main {
   --cc-font-family: inherit;
-  --cc-bg: var(--color-hhBG);
-  --cc-primary-color: var(--color-hhText);
-  --cc-secondary-color: var(--color-hhText);
-  --cc-btn-primary-bg: var(--color-hhOrange);
-  --cc-btn-primary-color: var(--color-hhBG);
-  --cc-btn-primary-border-color: var(--color-hhOrange);
-  --cc-btn-primary-hover-bg: var(--color-hhOrangeShade-700);
-  --cc-btn-primary-hover-color: var(--color-hhBG);
-  --cc-btn-primary-hover-border-color: var(--color-hhOrangeShade-700);
-  --cc-btn-secondary-bg: var(--color-hhCard);
-  --cc-btn-secondary-color: var(--color-hhText);
-  --cc-btn-secondary-border-color: var(--color-hhCard);
-  --cc-btn-secondary-hover-bg: var(--color-hhOrange);
-  --cc-btn-secondary-hover-color: var(--color-hhBG);
-  --cc-btn-secondary-hover-border-color: var(--color-hhOrange);
-  --cc-separator-border-color: var(--color-hhCard);
-  --cc-toggle-on-bg: var(--color-hhOrange);
-  --cc-toggle-off-bg: var(--color-hhCard);
-  --cc-toggle-readonly-bg: var(--color-hhCard);
-  --cc-cookie-category-block-bg: var(--color-hhCard);
-  --cc-cookie-category-block-border: var(--color-hhCard);
-  --cc-cookie-category-block-hover-bg: var(--color-hhCard);
-  --cc-cookie-category-block-hover-border: var(--color-hhCard);
-  --cc-footer-bg: var(--color-hhBG);
-  --cc-footer-color: var(--color-hhText);
-  --cc-footer-border-color: var(--color-hhCard);
+  --cc-bg: var(--popover);
+  --cc-primary-color: var(--popover-foreground);
+  --cc-secondary-color: var(--muted-foreground);
+  --cc-btn-primary-bg: var(--primary);
+  --cc-btn-primary-color: var(--primary-foreground);
+  --cc-btn-primary-border-color: var(--primary);
+  --cc-btn-primary-hover-bg: color-mix(
+    in oklab,
+    var(--primary) 80%,
+    transparent
+  );
+  --cc-btn-primary-hover-color: var(--primary-foreground);
+  --cc-btn-primary-hover-border-color: transparent;
+  --cc-btn-secondary-bg: var(--secondary);
+  --cc-btn-secondary-color: var(--secondary-foreground);
+  --cc-btn-secondary-border-color: var(--secondary);
+  --cc-btn-secondary-hover-bg: var(--primary);
+  --cc-btn-secondary-hover-color: var(--primary-foreground);
+  --cc-btn-secondary-hover-border-color: var(--primary);
+  --cc-separator-border-color: var(--border);
+  --cc-toggle-on-bg: var(--primary);
+  --cc-toggle-off-bg: var(--muted);
+  --cc-toggle-readonly-bg: var(--muted);
+  --cc-cookie-category-block-bg: var(--muted);
+  --cc-cookie-category-block-border: var(--muted);
+  --cc-cookie-category-block-hover-bg: var(--muted);
+  --cc-cookie-category-block-hover-border: var(--muted);
+  --cc-footer-bg: var(--popover);
+  --cc-footer-color: var(--muted-foreground);
+  --cc-footer-border-color: var(--border);
   --cc-overlay-bg: rgb(0 0 0 / 60%);
-  --cc-link-color: var(--color-hhOrange);
+  --cc-link-color: var(--primary);
 }

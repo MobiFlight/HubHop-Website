@@ -14,13 +14,13 @@ const RelevanceGauge = ({ value }: RelevanceGaugeProps) => (
     title={`${value}%`}
     className="relative h-2.5 w-20"
   >
-    <div className="absolute inset-x-0 top-1.5 h-0.5 bg-hhText/25" />
+    <div className="absolute inset-x-0 top-1.5 h-0.5 bg-foreground/25" />
     <div
-      className="absolute top-1.5 left-0 h-0.5 bg-hhOrange"
+      className="absolute top-1.5 left-0 h-0.5 bg-primary"
       style={{ width: `${value}%` }}
     />
     <div
-      className="absolute -top-0.5 -translate-x-1/2 border-x-4 border-t-[6px] border-x-transparent border-t-hhText"
+      className="absolute -top-0.5 -translate-x-1/2 border-x-4 border-t-[6px] border-x-transparent border-t-foreground"
       style={{ left: `${value}%` }}
     />
   </div>

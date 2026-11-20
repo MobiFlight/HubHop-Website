@@ -18,7 +18,7 @@ const FixedPresetModal = ({ onClose }: FixedPresetModalProps) => {
               Describe what you have fixed
             </label>
             <textarea
-              className="w-full rounded-lg border border-hhOrange bg-hhBG px-3 py-1 text-hhText"
+              className="w-full rounded-lg border border-primary bg-background px-3 py-1 text-foreground"
               name="reportDescription"
               id="reportDescription"
               cols={50}
@@ -32,7 +32,7 @@ const FixedPresetModal = ({ onClose }: FixedPresetModalProps) => {
         <div className="flex w-full items-center justify-between">
           <button
             onClick={onClose}
-            className="flex items-center space-x-1 rounded-lg bg-hhBG px-4 py-1.5 text-sm font-semibold transition-all hover:bg-hhBG/70"
+            className="flex items-center space-x-1 rounded-lg bg-background px-4 py-1.5 text-sm font-semibold transition-all hover:bg-background/70"
           >
             Cancel
           </button>

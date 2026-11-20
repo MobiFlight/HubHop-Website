@@ -4,7 +4,6 @@ import Navbar from "./sections/Navbar/Navbar"
 import Footer from "./sections/footer/Footer"
 import { IconArrowUp } from "@tabler/icons-react"
 import { Button } from "@/components/ui/button"
-import { AnimatePresence, motion } from "motion/react"
 
 type Props = {
   children?: ReactNode
@@ -60,24 +59,18 @@ const Layout = ({ children, title = "Hubhop" }: Props) => {
       <Navbar />
       {children}
       <Footer />
-      <AnimatePresence>
-        {clientWindowHeight > 10 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+      {clientWindowHeight > 10 && (
+        <div className="animate-in fade-in-0">
+          <Button
+            size="icon-lg"
+            onClick={() => toTop()}
+            className="fixed right-5 bottom-5"
+            aria-label="Back to top"
           >
-            <Button
-              size="icon-lg"
-              onClick={() => toTop()}
-              className="fixed right-5 bottom-5"
-              aria-label="Back to top"
-            >
-              <IconArrowUp className="size-6" />
-            </Button>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            <IconArrowUp className="size-6" />
+          </Button>
+        </div>
+      )}
     </>
   )
 }

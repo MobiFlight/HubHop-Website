@@ -1,5 +1,5 @@
-import { AiOutlineLoading } from "react-icons/ai"
-import { MdDone } from "react-icons/md"
+import { IconCheck, IconLoader2 } from "@tabler/icons-react"
+import { Button } from "@/components/ui/button"
 
 type SavePresetButtonProps = {
   disabled: boolean
@@ -7,23 +7,10 @@ type SavePresetButtonProps = {
 
 const SavePresetButton = ({ disabled }: SavePresetButtonProps) => {
   return (
-    <button
-      disabled={disabled}
-      className={`flex w-full items-center justify-center space-x-1 rounded-lg bg-hhOrange px-4 py-1.5 text-sm font-semibold ${
-        disabled ? "text-hhCard" : "text-hhBG"
-      } transition-all hover:bg-hhOrangeShade-600 xl:w-fit`}
-    >
-      {disabled ? (
-        <div className="mr-2 animate-spin text-hhCard">
-          <AiOutlineLoading />
-        </div>
-      ) : (
-        <div className="text-lg">
-          <MdDone />
-        </div>
-      )}
-      <p>Save</p>
-    </button>
+    <Button disabled={disabled} className="w-full xl:w-fit">
+      {disabled ? <IconLoader2 className="animate-spin" /> : <IconCheck />}
+      Save
+    </Button>
   )
 }
 

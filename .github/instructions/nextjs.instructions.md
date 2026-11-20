@@ -12,16 +12,17 @@ applyTo: "**/*.jsx, **/*.tsx, **/*.js, **/*.ts, **/*.css"
 - `trailingSlash: true`; dynamic data is addressed via query params (e.g. `/preset/?id=<id>&simType=<sim>`), not dynamic routes.
 - React with functional components and hooks
 - TypeScript in strict mode (legacy code uses `any` liberally; new code should be properly typed)
-- Tailwind CSS for styling (some legacy `styled-components` and `framer-motion` usage)
+- Tailwind CSS v4 with shadcn/ui (Radix, style `radix-vega`, see `components.json`) and Tabler icons (`@tabler/icons-react`)
 - Dexie (IndexedDB) as client-side preset cache
 - MSAL (`@azure/msal-browser`, `@azure/msal-react`) against Azure AD B2C for login
-- `react-hook-form` for forms, `react-data-table-component` for tables, `react-toastify` for toasts, `react-icons` for icons
+- `react-hook-form` with zod for forms, the shared `DataTable` for preset lists, Sonner for toasts
 
 ## Directory Map
 
 ```
 pages/                   # Routes: index, presets, preset (single view), stats, tools, privacy, terms
 components/
+  ui/                    # shadcn/ui components (added with the shadcn CLI, adapted to HubHop's look)
   Layout.tsx             # Page shell (navbar + footer)
   sections/
     Navbar/, footer/, home/, stats/, tools/
@@ -29,7 +30,7 @@ components/
       presetTable/       # List view, filters
       singlePresetView/  # Preset detail + history
       ui/                # Preset card and action buttons/modals (add, edit, delete, report, export)
-    Shared/              # Buttons, modal, toast, spinner, user dropdown
+    Shared/              # DataTable, ComboBox, Modal, SimSwitch, promotions, cookie consent
 services/
   db.ts                  # Dexie database (presetsMsfs, presetsXplane, presets tables)
   presetSync.ts          # Keeps the IndexedDB copy of each sim's presets current
@@ -109,7 +110,7 @@ public/                  # Static assets
   component itself handles the event.
 - Prefer `const` and immutable data over mutable variables (`let`, reassignment, in-place mutation).
   Keep values that must persist across renders in `useRef`/`useState`, not in reassigned locals.
-- Use Tailwind for new styling; do not add new `styled-components`.
+- Use Tailwind with the theme tokens (`bg-primary`, `text-muted-foreground`, `border-border`, …); no hard-coded colors.
 - Reuse existing shared components in `components/sections/Shared/` before creating new ones.
 - Handle loading, error and empty states for every API call.
 - Use semantic HTML and accessible names (labels, `aria-*`, alt text) so components are reachable via role-based Playwright locators.
@@ -117,14 +118,27 @@ public/                  # Static assets
 - Add or update Playwright tests in `tests/` for every user-facing change (see `tests/README.md`).
 - Use `useEffect` with correct dependency arrays and clean up listeners/timers.
 
+## UI components and theme
+
+- Use shadcn/ui components from `components/ui/` and Tabler icons; add missing ones with
+  `npx shadcn@latest add <component> --overwrite` (without `--overwrite` the CLI waits at a hidden prompt when a
+  dependency already exists) and run `npm run format` afterwards.
+- The theme is shadcn's default (base color "neutral") with HubHop's brand colors on top, in `styles/globals.css`.
+  Prefer theming over one-off styles; adapt a shadcn component in its file or with a thin wrapper when HubHop's look
+  differs (e.g. orange field borders, small label gap).
+- HubHop is dark-only for now (`<html class="dark">` in `pages/_document.tsx`); the light theme follows in #165.
+- Shared building blocks: `DataTable` (grid with table roles, sorting, pagination, expandable rows), `ComboBox`
+  (Popover + Command, as in MobiFlight Connector), `Modal` (Dialog wrapper), `SimSwitch`.
+- Use `table` only for tabular data; details and forms use flex or grid.
+
 ## Performance and library pitfalls
 
 - The preset list holds about 35,000 presets. Don't repeat expensive work on every render (sort once when the
   data changes, compute per-preset values once per render).
 - Sort text with `compareText` from `lib/presetSearch.ts` (a shared `Intl.Collator`). `localeCompare` with
   options creates a collator per comparison and is about 50 times slower.
-- react-data-table-component keeps the column object from when a sort was selected, so a column `selector`
-  must not read changing data from a closure (read it through a ref).
+- `DataTable` sorts when its data or columns change: memoize the column list (`useMemo`), otherwise every
+  render re-sorts all presets.
 - Define the expandable row component outside the render function; a new component identity remounts open rows.
 
 ## Code Style

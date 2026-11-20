@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react"
 import PresetFilter from "./presetTable/PresetFilter"
 import PresetTable from "./presetTable/PresetTable"
 import ExportPresetsModal from "./ui/exportPresets/ExportPresetsModal"
-import { AnimatePresence, motion } from "motion/react"
 import AddPresetsModal from "./ui/addPreset/AddPresetsModal"
 import PromoSlot from "../Shared/PromoSlot"
 import SimSwitch from "../Shared/SimSwitch"
@@ -399,33 +398,19 @@ const Presets = () => {
           <PromoSlot slot="loading" context={promotionContext} />
         </PresetListSkeleton>
       )}
-      <AnimatePresence>
-        {exportModalOpen && (
-          <motion.div
-            key="exportModal"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.05 }}
-          >
-            <ExportPresetsModal onClose={() => setExportModalOpen(false)} />
-          </motion.div>
-        )}
-        {addModalOpen && (
-          <motion.div
-            key="addPresetModal"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.05 }}
-          >
-            <AddPresetsModal
-              presets={presets}
-              onClose={() => setAddModalOpen(false)}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {exportModalOpen && (
+        <div key="exportModal" className="animate-in fade-in-0">
+          <ExportPresetsModal onClose={() => setExportModalOpen(false)} />
+        </div>
+      )}
+      {addModalOpen && (
+        <div key="addPresetModal" className="animate-in fade-in-0">
+          <AddPresetsModal
+            presets={presets}
+            onClose={() => setAddModalOpen(false)}
+          />
+        </div>
+      )}
     </div>
   )
 }

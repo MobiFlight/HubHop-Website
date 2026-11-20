@@ -99,7 +99,7 @@ const PromoSlot = ({
   return (
     <aside
       aria-label="Promotion"
-      className={`@container overflow-hidden rounded-lg bg-hhCard/40 text-hhText ${className}`}
+      className={`@container overflow-hidden rounded-lg bg-card text-foreground ${className}`}
     >
       {/* row: image on the left once the slot itself is wide enough */}
       <div className={`flex h-full flex-col ${row ? "@md:flex-row" : ""}`}>
@@ -130,11 +130,11 @@ const PromoSlot = ({
           </a>
         )}
         <div className="flex flex-1 flex-col p-4">
-          <p className="text-xs tracking-wide text-hhText/60 uppercase">
+          <p className="text-xs tracking-wide text-muted-foreground uppercase">
             {promotionLabel[promotion.kind]}
             {promotion.date && ` · ${promotion.date}`}
           </p>
-          <h2 className="mt-1 text-lg font-semibold text-hhOrange">
+          <h2 className="mt-1 text-lg font-semibold text-primary">
             {promotion.title}
           </h2>
           {promotion.content.map((line) => (
@@ -148,7 +148,7 @@ const PromoSlot = ({
             href={href}
             target="_blank"
             rel={rel}
-            className="self-start rounded-lg bg-hhOrange px-4 py-2 font-semibold text-hhBG transition-all hover:bg-hhOrangeShade-600"
+            className="self-start rounded-lg bg-primary px-4 py-2 font-semibold text-primary-foreground transition-all hover:bg-primary/80"
           >
             {promotion.action.title}
           </a>
