@@ -1,5 +1,4 @@
-import type { ColumnDef } from "@tanstack/react-table"
-import DataTable from "../Shared/DataTable"
+import DataTable, { type Column } from "../Shared/DataTable"
 import OpenPresetButton from "../presets/ui/OpenPresetButton"
 import PresetPreviewLabel from "../presets/ui/PresetInputLabel"
 import { REPORTING_ENABLED } from "../../../lib/features"
@@ -76,25 +75,38 @@ type TableStatsProps = {
 }
 
 const TableStats = ({ data, added }: TableStatsProps) => {
-  // hidden on small screens, as before
-  const wide = { className: "hidden md:table-cell" }
-  const columns: ColumnDef<StatisticsPreset>[] = [
+  const columns: Column<StatisticsPreset>[] = [
     {
       id: "date",
       header: added ? "Added" : "Updated",
-      accessorFn: (row) => new Date(row.createdDate ?? "").toLocaleString(),
+      value: (row) => new Date(row.createdDate ?? "").toLocaleString(),
     },
     {
       id: "by",
       header: added ? "Added by" : "Updated by",
-      accessorFn: (row) => (added ? row.author : (row.updatedBy ?? "")),
-      meta: wide,
+      value: (row) => (added ? row.author : (row.updatedBy ?? "")),
+      wide: true,
     },
-    { header: "Vendor", accessorKey: "vendor", meta: wide },
-    { header: "Aircraft", accessorKey: "aircraft", meta: wide },
-    { header: "System", accessorKey: "system", meta: wide },
-    { header: "Input/Output", accessorKey: "presetType", meta: wide },
-    { header: "Preset name", accessorKey: "label" },
+    { id: "vendor", header: "Vendor", value: (row) => row.vendor, wide: true },
+    {
+      id: "aircraft",
+      header: "Aircraft",
+      value: (row) => row.aircraft,
+      wide: true,
+    },
+    { id: "system", header: "System", value: (row) => row.system, wide: true },
+    {
+      id: "presetType",
+      header: "Input/Output",
+      value: (row) => row.presetType,
+      wide: true,
+    },
+    {
+      id: "label",
+      header: "Preset name",
+      value: (row) => row.label,
+      width: "minmax(0,2fr)",
+    },
   ]
 
   return (
@@ -102,6 +114,7 @@ const TableStats = ({ data, added }: TableStatsProps) => {
       <DataTable
         columns={columns}
         data={data}
+        rowId={(row) => row._id ?? row.id}
         renderExpanded={(row) => <PresetRowDetails data={row} />}
       />
     </div>

@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react"
-import type { ColumnDef } from "@tanstack/react-table"
-import DataTable from "../Shared/DataTable"
+import DataTable, { type Column } from "../Shared/DataTable"
 import {
   Dialog,
   DialogContent,
@@ -47,51 +46,64 @@ const GeneralStats = ({ presets, stats }: GeneralStatsProps) => {
   const [contPresetSearch, setContPresetSearch] = useState("")
   const cont = useMemo(() => contributorsOf(presets), [presets])
 
-  const columns: ColumnDef<Contributor>[] = [
-    { header: "Name", accessorKey: "name", enableSorting: true },
+  const columns: Column<Contributor>[] = [
+    { id: "name", header: "Name", value: (row) => row.name, sortable: true },
     {
+      id: "presets",
       header: "Submissions or updates",
-      accessorKey: "presets",
-      enableSorting: true,
+      value: (row) => row.presets,
+      sortable: true,
     },
   ]
-  // hidden on small screens, as before
-  const wide = { className: "hidden md:table-cell" }
-  const columnSingle: ColumnDef<Preset>[] = [
+  const columnSingle: Column<Preset>[] = [
     {
       id: "date",
       header: "Last modification",
-      accessorFn: (row) => new Date(row.createdDate ?? "").toLocaleString(),
-      enableSorting: true,
-      meta: wide,
+      value: (row) => new Date(row.createdDate ?? "").toLocaleString(),
+      sortable: true,
+      wide: true,
     },
     {
       id: "role",
       header: "Author / Updated",
-      accessorFn: (row) => (row.author ? "Author" : "Updated"),
-      enableSorting: true,
-      meta: wide,
+      value: (row) => (row.author ? "Author" : "Updated"),
+      sortable: true,
+      wide: true,
     },
     {
+      id: "vendor",
       header: "Vendor",
-      accessorKey: "vendor",
-      enableSorting: true,
-      meta: wide,
+      value: (row) => row.vendor,
+      sortable: true,
+      wide: true,
     },
-    { header: "Aircraft", accessorKey: "aircraft", enableSorting: true },
     {
+      id: "aircraft",
+      header: "Aircraft",
+      value: (row) => row.aircraft,
+      sortable: true,
+    },
+    {
+      id: "system",
       header: "System",
-      accessorKey: "system",
-      enableSorting: true,
-      meta: wide,
+      value: (row) => row.system,
+      sortable: true,
+      wide: true,
     },
     {
+      id: "presetType",
       header: "Input/Output",
-      accessorKey: "presetType",
-      enableSorting: true,
-      meta: wide,
+      value: (row) => row.presetType,
+      sortable: true,
+      wide: true,
     },
-    { header: "Preset name", accessorKey: "label", enableSorting: true },
+    {
+      id: "label",
+      header: "Preset name",
+      value: (row) => row.label,
+      sortable: true,
+      width: "minmax(0,2fr)",
+    },
   ]
   const topAircraft = stats?.aircrafts[0]
   const topContributor = stats?.contributors[0]
@@ -177,7 +189,8 @@ const GeneralStats = ({ presets, stats }: GeneralStatsProps) => {
               data={cont.filter((contributor) =>
                 contributor.name.toLowerCase().includes(contSearch),
               )}
-              initialSorting={[{ id: "presets", desc: true }]}
+              initialSorting={{ id: "presets", desc: true }}
+              rowId={(row) => row.name}
               onRowClick={(row) => {
                 setSingleCont(row.name)
                 setContModal(true)
@@ -197,6 +210,7 @@ const GeneralStats = ({ presets, stats }: GeneralStatsProps) => {
                 <div>
                   <DataTable
                     columns={columnSingle}
+                    rowId={(row) => row.id}
                     data={presets
                       .filter(
                         (preset) =>
