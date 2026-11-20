@@ -1,6 +1,6 @@
 import Head from "next/head"
-import Layout from "../components/Layout"
-import PresetList from "../components/sections/presets/Presets"
+import Layout from "../../components/Layout"
+import PresetList from "../../components/sections/presets/Presets"
 
 const Presets = () => {
   return (
