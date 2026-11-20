@@ -1,4 +1,4 @@
-import type { Locator } from "@playwright/test"
+import type { Locator, Page } from "@playwright/test"
 import { test, expect, authFile } from "./fixtures"
 
 test.describe("Add preset - anonymous", () => {
@@ -20,13 +20,22 @@ test.describe("Add preset - anonymous", () => {
   })
 })
 
-const fillForm = (form: Locator) =>
+/** A combobox or select of the add preset form, found by its label */
+const field = (page: Page, label: string) =>
+  page.locator("form").getByRole("combobox", { name: label })
+
+/** Picks an option of a combobox or select */
+const choose = async (page: Page, label: string, option: string) => {
+  await field(page, label).click()
+  await page.getByRole("option", { name: option, exact: true }).click()
+}
+
+const fillForm = (page: Page, form: Locator) =>
   test.step("Fill in the form", async () => {
-    const selects = form.getByRole("combobox")
-    await selects.nth(0).selectOption("Asobo")
-    await selects.nth(1).selectOption("C172")
-    await selects.nth(2).selectOption("Electrical")
-    await selects.nth(3).selectOption("Input")
+    await choose(page, "Vendor", "Asobo")
+    await choose(page, "Aircraft", "C172")
+    await choose(page, "System", "Electrical")
+    await choose(page, "Input/Output", "Input")
     await form.getByPlaceholder("Alternator 1 On").fill("Alternator 2 on")
     await form
       .getByPlaceholder("(>L:somecode) (>K:somecodeToo) * near")
@@ -61,7 +70,7 @@ test.describe("Add preset - user", () => {
 
   test("Add preset - submits a new preset", async ({ hubHopPage, page }) => {
     const form = page.locator("form")
-    await fillForm(form)
+    await fillForm(page, form)
 
     await form.getByRole("button", { name: "Add preset" }).click()
 
@@ -93,18 +102,14 @@ test.describe("Add preset - user", () => {
   test("Add preset - selecting a vendor lists only its aircraft", async ({
     page,
   }) => {
-    const selects = page.locator("form").getByRole("combobox")
-    const [vendor, aircraft, system] = [0, 1, 2].map((i) => selects.nth(i))
+    await choose(page, "Vendor", "FlyByWire")
 
-    await vendor.selectOption("FlyByWire")
-
-    await expect(aircraft.getByRole("option")).toHaveText([
-      "All Aircraft",
-      "A32NX",
-    ])
+    await field(page, "Aircraft").click()
+    await expect(page.getByRole("option")).toHaveText(["A32NX"])
+    await page.keyboard.press("Escape")
     await test.step("All systems stay available", async () => {
-      await expect(system.getByRole("option")).toHaveText([
-        "All Systems",
+      await field(page, "System").click()
+      await expect(page.getByRole("option")).toHaveText([
         "Autopilot",
         "Electrical",
         "Engine",
@@ -117,25 +122,19 @@ test.describe("Add preset - user", () => {
   test("Add preset - selecting an aircraft first fills in its vendor", async ({
     page,
   }) => {
-    const selects = page.locator("form").getByRole("combobox")
-    const [vendor, aircraft] = [0, 1].map((i) => selects.nth(i))
+    await choose(page, "Aircraft", "C172")
 
-    await aircraft.selectOption("C172")
-
-    await expect(vendor).toHaveValue("Asobo")
-    await expect(vendor.getByRole("option")).toHaveText([
-      "All Vendors",
-      "Asobo",
-    ])
+    await expect(field(page, "Vendor")).toHaveText("Asobo")
+    await field(page, "Vendor").click()
+    await expect(page.getByRole("option")).toHaveText(["Asobo"])
   })
 
   test("Add preset - Input/Output offers only the known values", async ({
     page,
   }) => {
-    const presetType = page.locator("form").getByRole("combobox").nth(3)
+    await field(page, "Input/Output").click()
 
-    await expect(presetType.getByRole("option")).toHaveText([
-      "All Inputs/Outputs",
+    await expect(page.getByRole("option")).toHaveText([
       "Input",
       "Output",
       "Input (Potentiometer)",
@@ -157,11 +156,10 @@ test.describe("Add preset - user", () => {
     page,
   }) => {
     const form = page.locator("form")
-    const selects = form.getByRole("combobox")
 
     await test.step("Select aircraft and system", async () => {
-      await selects.nth(1).selectOption("C172")
-      await selects.nth(2).selectOption("Electrical")
+      await choose(page, "Aircraft", "C172")
+      await choose(page, "System", "Electrical")
       await expect(form.getByText("3 presets found.")).toBeVisible()
     })
 
@@ -176,7 +174,7 @@ test.describe("Add preset - user", () => {
     })
 
     await test.step("Select a type without presets", async () => {
-      await selects.nth(3).selectOption("Output")
+      await choose(page, "Input/Output", "Output")
       await expect(form.getByText("No matches")).toBeVisible()
     })
   })
@@ -202,7 +200,7 @@ test.describe("Add preset - user", () => {
   }) => {
     hubHopPage.api.writeStatus.POST = 500
     const form = page.locator("form")
-    await fillForm(form)
+    await fillForm(page, form)
 
     await form.getByRole("button", { name: "Add preset" }).click()
 
@@ -216,17 +214,21 @@ test.describe("Add preset - user", () => {
   test("Add preset - users can enter a new vendor and aircraft but not a new system", async ({
     page,
   }) => {
-    const form = page.locator("form")
+    for (const label of ["Vendor", "Aircraft"]) {
+      await test.step(label, async () => {
+        await field(page, label).click()
+        await page.getByPlaceholder("Search…").fill("Carenado")
+        await page.getByRole("option", { name: 'Create "Carenado"' }).click()
+        await expect(field(page, label)).toHaveText("Carenado")
+      })
+    }
 
-    await expect(
-      form.getByRole("button", { name: "Enter a new vendor" }),
-    ).toBeVisible()
-    await expect(
-      form.getByRole("button", { name: "Enter a new aircraft" }),
-    ).toBeVisible()
-    await expect(
-      form.getByRole("button", { name: "Enter a new system" }),
-    ).toHaveCount(0)
+    await test.step("System", async () => {
+      await field(page, "System").click()
+      await page.getByPlaceholder("Search…").fill("Hydraulics")
+      await expect(page.getByText("No results")).toBeVisible()
+      await expect(page.getByRole("option", { name: /Create/ })).toHaveCount(0)
+    })
   })
 
   test("Add preset - close hides the dialog", async ({ page }) => {
@@ -250,13 +252,11 @@ test.describe("Add preset - moderator", () => {
   }) => {
     await presetsPage.gotoPage()
     await page.getByRole("button", { name: "Add preset" }).click()
-    const form = page.locator("form")
 
-    await form.getByRole("button", { name: "Enter a new system" }).click()
+    await field(page, "System").click()
+    await page.getByPlaceholder("Search…").fill("Hydraulics")
+    await page.getByRole("option", { name: 'Create "Hydraulics"' }).click()
 
-    await expect(form.getByPlaceholder("Provide a system name")).toBeVisible()
-    await expect(
-      form.getByRole("button", { name: "Choose an existing system" }),
-    ).toBeVisible()
+    await expect(field(page, "System")).toHaveText("Hydraulics")
   })
 })

@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { cn } from "cn"
-import { IconCheck, IconChevronDown, IconPlus } from "@tabler/icons-react"
+import { IconChevronDown, IconPlus } from "@tabler/icons-react"
 import { Button } from "@/components/ui/button"
 import {
   Command,
@@ -87,24 +87,22 @@ const ComboBox = ({
             onValueChange={setSearch}
           />
           <CommandList>
-            <CommandEmpty>No results</CommandEmpty>
+            {!canCreate && <CommandEmpty>No results</CommandEmpty>}
             <CommandGroup>
               {options.map((option) => (
                 <CommandItem
                   key={option}
                   value={option}
+                  data-checked={option === value}
                   onSelect={() => choose(option)}
                 >
                   <span className="truncate">{option}</span>
-                  <IconCheck
-                    className={cn(
-                      "ml-auto",
-                      option === value ? "opacity-100" : "opacity-0",
-                    )}
-                  />
                 </CommandItem>
               ))}
-              {canCreate && (
+            </CommandGroup>
+            {/* its own group: cmdk hides a group without matching items */}
+            {canCreate && (
+              <CommandGroup forceMount>
                 <CommandItem
                   value={`create:${text}`}
                   onSelect={() => choose(text)}
@@ -113,8 +111,8 @@ const ComboBox = ({
                   <IconPlus />
                   Create &quot;{text}&quot;
                 </CommandItem>
-              )}
-            </CommandGroup>
+              </CommandGroup>
+            )}
           </CommandList>
         </Command>
       </PopoverContent>
