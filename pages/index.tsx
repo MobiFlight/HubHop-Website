@@ -2,7 +2,10 @@ import type { GetStaticProps } from "next"
 import { useEffect, useState } from "react"
 import Layout from "../components/Layout"
 import Hero from "../components/sections/home/Hero"
+import ContributeBand from "../components/sections/home/ContributeBand"
 import HowItWorks from "../components/sections/home/HowItWorks"
+import Makers from "../components/sections/home/Makers"
+import NewsAndPartners from "../components/sections/home/NewsAndPartners"
 import RecentChanges from "../components/sections/home/RecentChanges"
 import StatsStrip from "../components/sections/home/StatsStrip"
 import { db } from "../services/db"
@@ -85,6 +88,13 @@ const Home = ({ library }: HomeProps) => {
           <RecentChanges sim={sim} stats={stats} />
           <HowItWorks />
         </div>
+        <Makers
+          sim={sim}
+          vendors={library[sim].topVendors}
+          vendorCount={library[sim].vendorCount}
+        />
+        <ContributeBand sim={sim} />
+        <NewsAndPartners sim={sim} />
       </main>
     </Layout>
   )

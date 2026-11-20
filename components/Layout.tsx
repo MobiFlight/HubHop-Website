@@ -37,14 +37,14 @@ const Layout = ({ children, title = "Hubhop" }: Props) => {
         <meta name="title" content={title} />
         <meta
           name="description"
-          content="HubHop is an API which consolidates Microsoft Flight Simulator 2020 variables and events and provides unique, understandable and standardized events and variables."
+          content="HubHop is the community library of events and variables for MSFS and X-Plane that connects your cockpit hardware to the sim through MobiFlight."
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://hubhop.mobiflight.com/" />
         <meta property="og:title" content="Hubhop" />
         <meta
           property="og:description"
-          content="HubHop is an API which consolidates Microsoft Flight Simulator 2020 variables and events and provides unique, understandable and standardized events and variables."
+          content="HubHop is the community library of events and variables for MSFS and X-Plane that connects your cockpit hardware to the sim through MobiFlight."
         />
         <meta property="og:image" content={banner} />
         <meta property="twitter:card" content="summary_large_image" />
@@ -52,7 +52,7 @@ const Layout = ({ children, title = "Hubhop" }: Props) => {
         <meta property="twitter:title" content="Hubhop" />
         <meta
           property="twitter:description"
-          content="HubHop is an API which consolidates Microsoft Flight Simulator 2020 variables and events and provides unique, understandable and standardized events and variables."
+          content="HubHop is the community library of events and variables for MSFS and X-Plane that connects your cockpit hardware to the sim through MobiFlight."
         />
         <meta property="twitter:image" content={banner} />
       </Head>

@@ -11,6 +11,15 @@ import {
   type SlotId,
 } from "../../../lib/promotions"
 import { loadMobiFlightPromotions } from "../../../services/promotionSources"
+import { track } from "../../../services/analytics"
+
+// shop promotions aren't counted yet
+const trackClick = (kind: Promotion["kind"], slot: SlotId) => {
+  if (kind === "news") track("news_click", { slot })
+  if (kind === "sponsor") track("sponsor_click", { slot })
+  if (kind === "club") track("club_click", { slot })
+  if (kind === "donation") track("donate_click", { slot })
+}
 
 type PromoSlotProps = {
   slot: SlotId
@@ -109,6 +118,7 @@ const PromoSlot = ({
             href={href}
             target="_blank"
             rel={rel}
+            onClick={() => trackClick(promotion.kind, slot)}
             tabIndex={-1}
             aria-hidden="true"
             // the same box for all images, so slots next to each other line up: 16:9 on top,
@@ -148,6 +158,7 @@ const PromoSlot = ({
             href={href}
             target="_blank"
             rel={rel}
+            onClick={() => trackClick(promotion.kind, slot)}
             className="self-start rounded-lg bg-primary px-4 py-2 font-semibold text-primary-foreground transition-all hover:bg-primary/80"
           >
             {promotion.action.title}

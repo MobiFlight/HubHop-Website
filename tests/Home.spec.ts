@@ -149,6 +149,83 @@ test.describe("Home page", () => {
   })
 })
 
+test.describe("Home page - bottom", () => {
+  test.beforeEach(async ({ hubHopPage, page }) => {
+    // the first of the promotions that fit a slot
+    await page.addInitScript(() => {
+      Math.random = () => 0
+    })
+    await hubHopPage.goto("/")
+  })
+
+  test("Home - aircraft makers link to their presets", async ({ page }) => {
+    const makers = page.getByRole("region", {
+      name: "Browse by aircraft maker",
+    })
+    await expect(makers.getByRole("listitem")).toHaveText([
+      "Asobo13 presets",
+      "FlyByWire4 presets",
+    ])
+    await expect(makers.getByRole("link", { name: /Asobo/ })).toHaveAttribute(
+      "href",
+      "/presets/msfs2020/asobo/",
+    )
+
+    await test.step("X-Plane shows its own makers", async () => {
+      await page.getByRole("radio", { name: "X-Plane" }).click()
+      await expect(makers.getByRole("listitem")).toHaveText([
+        "Laminar Research5 presets",
+      ])
+    })
+  })
+
+  test("Home - contribute band links to the preset list and Discord", async ({
+    page,
+  }) => {
+    const band = page.getByRole("region", {
+      name: "Built a switch that works? Share it.",
+    })
+    await expect(
+      band.getByRole("link", { name: "Add a preset" }),
+    ).toHaveAttribute("href", "/presets/msfs2020/")
+    await expect(
+      band.getByRole("link", { name: "Join us on Discord" }),
+    ).toHaveAttribute("href", "https://discord.gg/YMExvWp8eX")
+  })
+
+  test("Home - news, a sponsor and the Club next to each other", async ({
+    hubHopPage,
+    page,
+  }) => {
+    const promotions = page
+      .getByRole("region", { name: "MobiFlight news & partners" })
+      .and(page.locator("section"))
+    const cards = hubHopPage.promotions
+    await expect(cards).toHaveCount(3)
+    await expect(cards.nth(0)).toContainText("MobiFlight News")
+    await expect(cards.nth(0).getByRole("heading")).toHaveText(
+      "Test partner deal",
+    )
+    await expect(cards.nth(1)).toContainText("Sponsored")
+    await expect(cards.nth(1).getByRole("heading")).toHaveText("Test Sponsor")
+    await expect(cards.nth(2)).toContainText("MobiFlight Club")
+    await expect(
+      promotions.getByRole("link", { name: "Donate via PayPal" }),
+    ).toHaveAttribute("href", /paypal\.com\/donate/)
+  })
+})
+
+test.describe("Home page - footer", () => {
+  test("Footer - shows the current year", async ({ hubHopPage, page }) => {
+    await page.clock.setFixedTime(new Date("2027-03-01T12:00:00Z"))
+    await hubHopPage.goto("/")
+
+    await expect(page.getByRole("contentinfo")).toContainText(
+      "© 2027 HubHop and its contributors",
+    )
+  })
+})
+
 test.describe("Home page - activity", () => {
   test.use({ timezoneId: "UTC" })
 

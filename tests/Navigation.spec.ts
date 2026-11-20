@@ -40,14 +40,15 @@ test.describe("Navigation", () => {
   })
 
   test("Navigation - footer links", async ({ page }) => {
+    const footer = page.getByRole("contentinfo")
     await expect(
-      page.getByRole("link", { name: "Join us on Discord" }),
+      footer.getByRole("link", { name: "Join us on Discord" }),
     ).toHaveAttribute("href", /discord\.gg/)
 
-    await page.getByRole("link", { name: "Terms of Service" }).click()
+    await footer.getByRole("link", { name: "Terms of Service" }).click()
     await expect(page).toHaveURL(/\/terms\/$/)
 
-    await page.getByRole("link", { name: "Privacy Policy" }).click()
+    await footer.getByRole("link", { name: "Privacy Policy" }).click()
     await expect(page).toHaveURL(/\/privacy\/$/)
   })
 })
