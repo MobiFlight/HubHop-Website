@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react"
+import Link from "next/link"
+import { aircraftUrl } from "@/lib/aircraftPages"
 import PresetFilter from "@/components/sections/presets/presetTable/PresetFilter"
 import PresetTable from "@/components/sections/presets/presetTable/PresetTable"
 import ExportPresetsModal from "@/components/sections/presets/ui/exportPresets/ExportPresetsModal"
@@ -328,6 +330,14 @@ const Presets = ({ sim: simType, vendor, aircraft }: PresetsProps) => {
               </div>
             </div>
             <div className="flex w-full flex-col">
+              {vendor && aircraft && (
+                <Link
+                  href={aircraftUrl(simType, vendor, aircraft)}
+                  className="mb-3 self-start font-semibold text-primary hover:underline"
+                >
+                  Cheat sheet for the {filteredVendors} {filteredAircrafts} →
+                </Link>
+              )}
               <PresetTable
                 setAddModalOpen={() => setAddModalOpen(true)}
                 setExportModalOpen={() => setExportModalOpen(true)}

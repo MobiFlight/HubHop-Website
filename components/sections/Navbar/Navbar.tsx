@@ -4,6 +4,7 @@ import hhLogo from "@/public/images/logo-big.png"
 import Link from "next/link"
 import {
   IconBolt,
+  IconPlane,
   IconHome,
   IconList,
   IconLogout,
@@ -41,6 +42,7 @@ import { getUserSettings, getAccessToken } from "@/services/msalFunctions"
 const icons: Record<string, typeof IconHome> = {
   Home: IconHome,
   Presets: IconList,
+  Aircraft: IconPlane,
   Tools: IconBolt,
   Stats: IconTrendingUp,
 }

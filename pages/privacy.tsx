@@ -1,40 +1,7 @@
-import Head from "next/head"
 import Layout from "@/components/Layout"
 
 const Privacy = () => (
-  <Layout title="Privacy Policy | Hubhop by Mobiflight">
-    <Head>
-      <meta name="title" content="Privacy Policy | Hubhop by Mobiflight" />
-      <meta
-        name="description"
-        content="Get the preset for your favorite aircraft from Hubhop. The database is a community driven project. If you find events/variables of your favorite aircraft, please share them on Hubhop too."
-      />
-      <meta property="og:type" content="website" />
-      <meta property="og:url" content="https://hubhop.mobiflight.com/privacy" />
-      <meta
-        property="og:title"
-        content="Privacy Policy | Hubhop by Mobiflight"
-      />
-      <meta
-        property="og:description"
-        content="Get the preset for your favorite aircraft from Hubhop. The database is a community driven project. If you find events/variables of your favorite aircraft, please share them on Hubhop too."
-      />
-      <meta property="og:image" content="@/assets/logo-big.png" />
-      <meta property="twitter:card" content="summary_large_image" />
-      <meta
-        property="twitter:url"
-        content="https://hubhop.mobiflight.com/privacy"
-      />
-      <meta
-        property="twitter:title"
-        content="Privacy Policy | Hubhop by Mobiflight"
-      />
-      <meta
-        property="twitter:description"
-        content="Get the preset for your favorite aircraft from Hubhop. The database is a community driven project. If you find events/variables of your favorite aircraft, please share them on Hubhop too."
-      />
-      <meta property="twitter:image" content="@/assets/logo-big.png" />
-    </Head>
+  <Layout title="Privacy Policy | Hubhop by Mobiflight" path="/privacy/">
     <div className="container mx-auto mb-3 min-h-screen px-2 text-justify md:mt-10">
       <h1 className="mb-3 text-4xl">Datenschutzerklärung:</h1>
       <strong className="text-xl font-bold">Datenschutz</strong>

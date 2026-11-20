@@ -12,6 +12,15 @@ test.describe("Navigation", () => {
       await nav.getByRole("link", { name: "Presets" }).click()
       await expect(page).toHaveURL(/\/presets\/msfs\/$/)
     })
+    await test.step("Aircraft", async () => {
+      await nav.getByRole("link", { name: "Aircraft" }).click()
+      await expect(page).toHaveURL(/\/aircraft\/msfs\/$/)
+      await expect(
+        page.getByRole("heading", {
+          name: "MSFS aircraft preset cheat sheets",
+        }),
+      ).toBeVisible()
+    })
     await test.step("Tools", async () => {
       await nav.getByRole("link", { name: "Tools" }).click()
       await expect(page).toHaveURL(/\/tools\/$/)

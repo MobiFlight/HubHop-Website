@@ -1,9 +1,9 @@
 import type { GetStaticPaths, GetStaticProps } from "next"
-import Head from "next/head"
 import { useEffect } from "react"
 import Layout from "@/components/Layout"
 import MoreFromVendor from "@/components/sections/aircraft/MoreFromVendor"
 import NewToMobiFlight from "@/components/sections/aircraft/NewToMobiFlight"
+import BreadcrumbJsonLd from "@/components/sections/aircraft/BreadcrumbJsonLd"
 import SheetHeader from "@/components/sections/aircraft/SheetHeader"
 import SystemSection from "@/components/sections/aircraft/SystemSection"
 import {
@@ -12,7 +12,10 @@ import {
   aircraftSystemUrl,
   isIndexed,
   presetsOfAircraft,
-  SIM_NAMES,
+  sheetDescription,
+  sheetTitle,
+  aircraftIndexUrl,
+  aircraftUrl,
   SYSTEM_PREVIEW,
   type AircraftSheet,
   type AircraftSummary,
@@ -59,16 +62,10 @@ export const getStaticProps: GetStaticProps<CheatSheetProps> = async ({
   return { props: { sim, sheet: aircraftSheet(presets), related } }
 }
 
-const format = (value: number) => value.toLocaleString("en-US")
-
 /** The cheat sheet of an aircraft: every system with its inputs and outputs */
 const CheatSheet = ({ sim, sheet, related }: CheatSheetProps) => {
   const name = `${sheet.vendor} ${sheet.aircraft}`
-  const simName = SIM_NAMES[sim]
-  const topSystems = [...sheet.systems]
-    .sort((a, b) => b.total - a.total)
-    .slice(0, 3)
-    .map((system) => system.name)
+  const path = aircraftUrl(sim, sheet.vendorSlug, sheet.aircraftSlug)
 
   useEffect(() => {
     document.body.classList.toggle("xplane", sim === "xplane")
@@ -76,21 +73,19 @@ const CheatSheet = ({ sim, sheet, related }: CheatSheetProps) => {
 
   return (
     <Layout
-      title={`${name} MobiFlight presets — cheat sheet for every switch (${simName})`}
+      title={sheetTitle(sim, sheet)}
+      description={sheetDescription(sheet)}
+      path={path}
+      noindex={!isIndexed(sheet.presets)}
     >
-      <Head>
-        <meta
-          name="description"
-          content={`${format(sheet.presets)} MobiFlight presets for the ${name} in ${simName}, by system: ${topSystems.join(", ")} and more. Copy the code for every switch, knob and light.`}
-        />
-        {!isIndexed(sheet.presets) && <meta name="robots" content="noindex" />}
-      </Head>
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Aircraft", path: aircraftIndexUrl(sim) },
+          { name, path },
+        ]}
+      />
       <main className="container mx-auto flex flex-col gap-10 px-6 py-10">
-        <SheetHeader
-          sim={sim}
-          sheet={sheet}
-          systemCount={sheet.systems.length}
-        />
+        <SheetHeader sim={sim} sheet={sheet} />
         <div className="grid gap-8 lg:grid-cols-[14rem_1fr]">
           <nav
             aria-label="Systems"

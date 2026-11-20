@@ -1,18 +1,22 @@
 import Link from "next/link"
 import AircraftBreadcrumb from "@/components/sections/aircraft/AircraftBreadcrumb"
-import { formatDate, SIM_NAMES, type AircraftSheet } from "@/lib/aircraftPages"
+import {
+  formatDate,
+  sheetIntro,
+  SIM_NAMES,
+  type AircraftSheet,
+} from "@/lib/aircraftPages"
 import { presetListUrl, type Sim } from "@/lib/presetUrls"
 
 const format = (value: number) => value.toLocaleString("en-US")
 
 type SheetHeaderProps = {
   sim: Sim
-  sheet: Omit<AircraftSheet, "systems">
-  systemCount: number
+  sheet: AircraftSheet
 }
 
 /** Breadcrumb, title and what the data says about the aircraft */
-const SheetHeader = ({ sim, sheet, systemCount }: SheetHeaderProps) => (
+const SheetHeader = ({ sim, sheet }: SheetHeaderProps) => (
   <header className="flex flex-col gap-4">
     <AircraftBreadcrumb sim={sim} {...sheet} />
     <h1 className="text-4xl font-extrabold md:text-5xl">
@@ -20,11 +24,8 @@ const SheetHeader = ({ sim, sheet, systemCount }: SheetHeaderProps) => (
       <span className="text-primary">preset cheat sheet</span>
     </h1>
     <p className="max-w-3xl text-lg text-muted-foreground">
-      {format(sheet.presets)} MobiFlight{" "}
-      {sheet.presets === 1 ? "preset" : "presets"} for the {sheet.vendor}{" "}
-      {sheet.aircraft} in {systemCount}{" "}
-      {systemCount === 1 ? "system" : "systems"}. Copy a code from here, or get
-      them all in MobiFlight with Extras › HubHop › Download Latest Presets.
+      {sheetIntro(sheet)} Copy a code from here, or get them all in MobiFlight
+      with Extras › HubHop › Download Latest Presets.
     </p>
     <div className="flex flex-wrap items-baseline gap-x-6 gap-y-2">
       <dl className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-muted-foreground">

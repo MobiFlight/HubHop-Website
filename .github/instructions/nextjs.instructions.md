@@ -17,6 +17,10 @@ applyTo: "**/*.jsx, **/*.tsx, **/*.js, **/*.ts, **/*.css"
   from the full preset list (`services/libraryStats.ts#loadPresets`): `/aircraft/<sim>/` (index), `/aircraft/<sim>/<vendor>/<aircraft>/`
   (up to 30 presets per system) and `/aircraft/<sim>/<vendor>/<aircraft>/<system>/` for larger systems. Cheat sheets with fewer
   than 10 presets are `noindex`. The site is rebuilt to pick up new presets.
+- Search engines: pages pass `title`, `description`, `path` (canonical URL, `og:url`) and `noindex` to `Layout`, which writes
+  the meta and Open Graph tags; don't add them per page. `npm run build` also runs `scripts/sitemap.mjs`, which writes
+  `out/sitemap.xml` (every page with a canonical URL that isn't `noindex`) and `out/robots.txt`. Page texts for search
+  results are templates in `lib/aircraftPages.ts`; write them for home cockpit builders. See `docs/search-console.md`.
 - React with functional components and hooks
 - TypeScript in strict mode (legacy code uses `any` liberally; new code should be properly typed)
 - Tailwind CSS v4 with shadcn/ui (Radix, style `radix-vega`, see `components.json`) and Tabler icons (`@tabler/icons-react`)

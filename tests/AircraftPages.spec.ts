@@ -4,6 +4,7 @@ import {
   aircraftSheet,
   aircraftSystemUrl,
   aircraftUrl,
+  sheetDescription,
   isIndexed,
   largeSystems,
   previewCounts,
@@ -11,6 +12,10 @@ import {
   SYSTEM_PREVIEW,
 } from "@/lib/aircraftPages"
 import type { Preset } from "@/interfaces/preset"
+import { execFileSync } from "node:child_process"
+import fs from "node:fs"
+import os from "node:os"
+import path from "node:path"
 
 const preset = (fields: Partial<Preset>): Preset => ({
   id: String(Math.random()),
@@ -130,6 +135,63 @@ test.describe("Aircraft pages - data", () => {
   })
 })
 
+test.describe("Aircraft pages - texts and sitemap", () => {
+  test("Aircraft pages - the description names the largest systems for home cockpit builders", () => {
+    expect(
+      sheetDescription(
+        aircraftSheet([
+          ...many(3, { system: "FCU" }),
+          ...many(2, { system: "EFIS" }),
+          preset({ system: "Overhead" }),
+          preset({ system: "Lights" }),
+        ]),
+      ),
+    ).toBe(
+      "Build your FenixSim A320 home cockpit: 7 presets for every switch, knob and light in 4 systems, including FCU, EFIS and Lights. Copy the code and connect your hardware with MobiFlight.",
+    )
+    expect(sheetDescription(aircraftSheet([preset({ system: "FCU" })]))).toBe(
+      "Build your FenixSim A320 home cockpit: 1 preset for every switch, knob and light in the FCU system. Copy the code and connect your hardware with MobiFlight.",
+    )
+  })
+
+  test("Aircraft pages - the sitemap lists pages with a canonical URL that aren't noindex", () => {
+    const out = fs.mkdtempSync(path.join(os.tmpdir(), "sitemap-"))
+    const page = (dir: string, head: string) => {
+      fs.mkdirSync(path.join(out, dir), { recursive: true })
+      fs.writeFileSync(
+        path.join(out, dir, "index.html"),
+        `<html><head>${head}</head></html>`,
+      )
+    }
+    const canonical = (url: string) => `<link rel="canonical" href="${url}"/>`
+    page("", canonical("https://hubhop.mobiflight.com/"))
+    page(
+      "aircraft/msfs/asobo/a320neo",
+      canonical("https://hubhop.mobiflight.com/aircraft/msfs/asobo/a320neo/"),
+    )
+    page(
+      "aircraft/msfs/asobo/c172",
+      `<meta name="robots" content="noindex"/>${canonical("https://hubhop.mobiflight.com/aircraft/msfs/asobo/c172/")}`,
+    )
+    // the preset tool's shell has no canonical URL
+    page("presets/[[...slug]]", "")
+
+    execFileSync("node", ["scripts/sitemap.mjs", out])
+
+    expect(fs.readFileSync(path.join(out, "sitemap.xml"), "utf8"))
+      .toBe(`<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://hubhop.mobiflight.com/</loc></url>
+  <url><loc>https://hubhop.mobiflight.com/aircraft/msfs/asobo/a320neo/</loc></url>
+</urlset>
+`)
+    expect(fs.readFileSync(path.join(out, "robots.txt"), "utf8")).toContain(
+      "Sitemap: https://hubhop.mobiflight.com/sitemap.xml",
+    )
+    fs.rmSync(out, { recursive: true })
+  })
+})
+
 test.describe("Aircraft pages", () => {
   test("Aircraft pages - the index lists the aircraft by maker", async ({
     hubHopPage,
@@ -183,7 +245,7 @@ test.describe("Aircraft pages", () => {
     await hubHopPage.goto("/aircraft/msfs/asobo/a320neo/")
 
     await expect(page).toHaveTitle(
-      "Asobo A320neo MobiFlight presets — cheat sheet for every switch (MSFS)",
+      "Asobo A320neo home cockpit presets for MobiFlight (MSFS)",
     )
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(
       "Asobo A320neo preset cheat sheet",
@@ -244,6 +306,78 @@ test.describe("Aircraft pages", () => {
   }) => {
     await hubHopPage.goto("/aircraft/msfs/asobo/a320neo/")
 
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
+      "content",
+      "noindex",
+    )
+  })
+
+  test("Aircraft pages - a cheat sheet has a canonical URL, preview tags and breadcrumb data", async ({
+    hubHopPage,
+    page,
+  }) => {
+    await hubHopPage.goto("/aircraft/msfs/asobo/c172/")
+    const url = "https://hubhop.mobiflight.com/aircraft/msfs/asobo/c172/"
+
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+      "href",
+      url,
+    )
+    await expect(page.locator('meta[property="og:url"]')).toHaveAttribute(
+      "content",
+      url,
+    )
+    await expect(page.locator('meta[property="og:title"]')).toHaveAttribute(
+      "content",
+      "Asobo C172 home cockpit presets for MobiFlight (MSFS)",
+    )
+    await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
+      "content",
+      "https://hubhop.mobiflight.com/images/og-hubhop.png",
+    )
+    const breadcrumbs = JSON.parse(
+      (await page
+        .locator('script[type="application/ld+json"]')
+        .textContent()) ?? "",
+    )
+    expect(breadcrumbs.itemListElement).toEqual([
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Aircraft",
+        item: "https://hubhop.mobiflight.com/aircraft/msfs/",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Asobo C172",
+        item: url,
+      },
+    ])
+  })
+
+  test("Aircraft pages - the preset list of an aircraft links to its cheat sheet", async ({
+    presetsPage,
+    page,
+  }) => {
+    await presetsPage.gotoPage("msfs/asobo/c172/")
+
+    await expect(
+      page.getByRole("link", { name: "Cheat sheet for the Asobo C172 →" }),
+    ).toHaveAttribute("href", "/aircraft/msfs/asobo/c172/")
+  })
+
+  test("Aircraft pages - a single preset links to its cheat sheet and isn't indexed", async ({
+    presetViewPage,
+    page,
+  }) => {
+    await presetViewPage.gotoPage("00000000-0000-4000-8000-000000000009")
+
+    await expect(
+      page.getByRole("link", {
+        name: "All presets of the Asobo C172: cheat sheet →",
+      }),
+    ).toHaveAttribute("href", "/aircraft/msfs/asobo/c172/")
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
       "content",
       "noindex",

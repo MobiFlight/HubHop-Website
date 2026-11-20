@@ -1,14 +1,18 @@
 import type { GetStaticPaths, GetStaticProps } from "next"
-import Head from "next/head"
 import Link from "next/link"
 import { useEffect } from "react"
 import Layout from "@/components/Layout"
 import AircraftBreadcrumb from "@/components/sections/aircraft/AircraftBreadcrumb"
+import BreadcrumbJsonLd from "@/components/sections/aircraft/BreadcrumbJsonLd"
 import NewToMobiFlight from "@/components/sections/aircraft/NewToMobiFlight"
 import SystemSection from "@/components/sections/aircraft/SystemSection"
 import {
   aircraftList,
   aircraftUrl,
+  aircraftIndexUrl,
+  aircraftSystemUrl,
+  systemDescription,
+  systemTitle,
   largeSystems,
   presetsOfAircraft,
   SIM_NAMES,
@@ -82,13 +86,31 @@ const SystemPage = ({ sim, aircraft, system }: SystemPageProps) => {
   }, [sim])
 
   return (
-    <Layout title={`${name} ${system.name} MobiFlight presets (${simName})`}>
-      <Head>
-        <meta
-          name="description"
-          content={`All ${system.total} MobiFlight presets for the ${system.name} of the ${name} in ${simName}: ${system.inputCount} inputs and ${system.outputCount} outputs with their code.`}
-        />
-      </Head>
+    <Layout
+      title={systemTitle(sim, aircraft, system)}
+      description={systemDescription(sim, aircraft, system)}
+      path={aircraftSystemUrl(
+        sim,
+        aircraft.vendorSlug,
+        aircraft.aircraftSlug,
+        system.slug,
+      )}
+    >
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Aircraft", path: aircraftIndexUrl(sim) },
+          { name, path: sheetUrl },
+          {
+            name: system.name,
+            path: aircraftSystemUrl(
+              sim,
+              aircraft.vendorSlug,
+              aircraft.aircraftSlug,
+              system.slug,
+            ),
+          },
+        ]}
+      />
       <main className="container mx-auto flex flex-col gap-8 px-6 py-10">
         <header className="flex flex-col gap-4">
           <AircraftBreadcrumb sim={sim} {...aircraft} system={system.name} />

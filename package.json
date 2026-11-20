@@ -3,6 +3,7 @@
   "scripts": {
     "dev": "next -p 3000",
     "build": "next build",
+    "postbuild": "node scripts/sitemap.mjs",
     "start": "next start",
     "type-check": "tsc",
     "lint": "eslint .",
