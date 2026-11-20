@@ -32,6 +32,12 @@ const Presets = () => {
   // other components read the sim from localStorage; set it before they render
   if (sim && typeof window !== "undefined") localStorage.setItem("simType", sim)
 
+  // links from before used /presets/msfs2020/…; keep their filters
+  const movedTo = route?.kind === "moved" ? route.path : undefined
+  useEffect(() => {
+    if (movedTo) router.replace(movedTo + window.location.search)
+  }, [movedTo, router])
+
   useEffect(() => {
     if (sim) document.body.classList.toggle("xplane", sim === "xplane")
   }, [sim])

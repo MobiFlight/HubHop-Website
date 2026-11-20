@@ -53,7 +53,7 @@ test.describe("Analytics", () => {
         .getByRole("link", { name: /Asobo/ })
         .click()
 
-      await expect(page).toHaveURL(/\/presets\/msfs2020\/asobo\//)
+      await expect(page).toHaveURL(/\/presets\/msfs\/asobo\//)
       const entries = await page.evaluate(() =>
         (window.dataLayer ?? []).filter(
           (entry) => (entry as { event?: string }).event === "vendor_click",
@@ -73,7 +73,7 @@ test.describe("Analytics", () => {
         .fill("my secret")
       await page.getByRole("button", { name: "Search" }).click()
 
-      await expect(page).toHaveURL(/\/presets\/msfs2020\//)
+      await expect(page).toHaveURL(/\/presets\/msfs\//)
       const entries = await page.evaluate(() =>
         (window.dataLayer ?? []).filter(
           (entry) =>

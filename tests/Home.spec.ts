@@ -37,7 +37,7 @@ test.describe("Home page", () => {
     await search.fill("apu")
     await page.getByRole("button", { name: "Search" }).click()
 
-    await expect(page).toHaveURL(/\/presets\/msfs2020\/\?search=apu$/)
+    await expect(page).toHaveURL(/\/presets\/msfs\/\?search=apu$/)
     await expect(page.getByRole("table")).toBeVisible()
   })
 
@@ -58,13 +58,13 @@ test.describe("Home page", () => {
   test("Home - an empty search opens all presets", async ({ page }) => {
     await page.getByRole("button", { name: "Search" }).click()
 
-    await expect(page).toHaveURL(/\/presets\/msfs2020\/$/)
+    await expect(page).toHaveURL(/\/presets\/msfs\/$/)
   })
 
   test("Home - popular aircraft link to their presets", async ({ page }) => {
     await expect(
       page.getByRole("link", { name: "Asobo A320neo" }),
-    ).toHaveAttribute("href", "/presets/msfs2020/asobo/a320neo/")
+    ).toHaveAttribute("href", "/presets/msfs/asobo/a320neo/")
 
     await test.step("X-Plane shows its own popular aircraft", async () => {
       await page.getByRole("radio", { name: "X-Plane" }).click()
@@ -135,7 +135,7 @@ test.describe("Home page", () => {
       list.first().getByRole("link", { name: "AP master toggle" }),
     ).toHaveAttribute(
       "href",
-      "/presets/msfs2020/asobo/a320neo/ap-master-toggle-00000000-0000-4000-8000-000000000001/",
+      "/presets/msfs/asobo/a320neo/ap-master-toggle-00000000-0000-4000-8000-000000000001/",
     )
     await expect(
       page.getByRole("link", { name: "All recent changes" }),
@@ -168,7 +168,7 @@ test.describe("Home page - bottom", () => {
     ])
     await expect(makers.getByRole("link", { name: /Asobo/ })).toHaveAttribute(
       "href",
-      "/presets/msfs2020/asobo/",
+      "/presets/msfs/asobo/",
     )
 
     await test.step("X-Plane shows its own makers", async () => {
@@ -187,7 +187,7 @@ test.describe("Home page - bottom", () => {
     })
     await expect(
       band.getByRole("link", { name: "Add a preset" }),
-    ).toHaveAttribute("href", "/presets/msfs2020/")
+    ).toHaveAttribute("href", "/presets/msfs/")
     await expect(
       band.getByRole("link", { name: "Join us on Discord" }),
     ).toHaveAttribute("href", "https://discord.gg/YMExvWp8eX")
