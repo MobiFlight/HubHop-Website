@@ -47,16 +47,19 @@ const Hero = ({ sim, onSimChange, presetCount, stats }: HeroProps) => {
   return (
     <section className="container mx-auto flex flex-wrap items-center gap-12 px-6 pt-16 pb-16 md:pt-24">
       <div className="flex min-w-0 flex-[999_1_560px] flex-col gap-6">
-        {activity && (
-          <p className="flex items-center gap-2 self-start rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-sm font-semibold text-primary">
-            <span
-              aria-hidden="true"
-              className="size-2 rounded-full bg-primary motion-safe:animate-pulse-dot"
-            />
-            {activity.count} new preset{activity.count > 1 ? "s" : ""} for the{" "}
-            {activity.vendor} {activity.aircraft} today
-          </p>
-        )}
+        {/* keeps its space, so the headline doesn't jump when the note appears */}
+        <div className="min-h-9">
+          {activity && (
+            <p className="flex items-center gap-2 self-start rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-sm font-semibold text-primary">
+              <span
+                aria-hidden="true"
+                className="size-2 rounded-full bg-primary motion-safe:animate-pulse-dot"
+              />
+              {activity.count} new preset{activity.count > 1 ? "s" : ""} for the{" "}
+              {activity.vendor} {activity.aircraft} today
+            </p>
+          )}
+        </div>
         <h1 className="text-5xl leading-none font-extrabold tracking-tight text-primary md:text-6xl">
           Create, Share, Improve
         </h1>
@@ -83,7 +86,7 @@ const Hero = ({ sim, onSimChange, presetCount, stats }: HeroProps) => {
             </ToggleGroupItem>
             <ToggleGroupItem
               value="xplane"
-              className="px-4 font-semibold data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
+              className="px-4 font-semibold data-[state=on]:bg-xplane data-[state=on]:text-primary-foreground"
             >
               X-Plane
             </ToggleGroupItem>
@@ -106,7 +109,7 @@ const Hero = ({ sim, onSimChange, presetCount, stats }: HeroProps) => {
             </Button>
           </div>
           {popular === undefined ? (
-            <Skeleton className="h-8 w-3/4" />
+            <Skeleton className="h-11 w-3/4" />
           ) : (
             popular.length > 0 && (
               <div className="flex flex-wrap items-center gap-2 text-sm">

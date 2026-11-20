@@ -27,7 +27,7 @@ const SimSwitch = ({ value, onValueChange, className }: SimSwitchProps) => {
         </ToggleGroupItem>
         <ToggleGroupItem
           value="xplane"
-          className="flex-1 px-4 text-lg data-[state=on]:bg-[#0fb5e8] data-[state=on]:text-primary-foreground"
+          className="flex-1 px-4 text-lg data-[state=on]:bg-xplane data-[state=on]:text-primary-foreground"
         >
           X-Plane
         </ToggleGroupItem>

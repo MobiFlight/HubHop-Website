@@ -7,7 +7,7 @@ import RecentChanges from "../components/sections/home/RecentChanges"
 import StatsStrip from "../components/sections/home/StatsStrip"
 import { db } from "../services/db"
 import { loadLibraryStats, type LibraryStats } from "../services/libraryStats"
-import { isSim, type Sim } from "../lib/presetUrls"
+import { isSim, SIMS, type Sim } from "../lib/presetUrls"
 import type { Statistics } from "../interfaces/preset"
 
 const statsUrl: Record<Sim, string | undefined> = {
@@ -27,7 +27,9 @@ export const getStaticProps: GetStaticProps<HomeProps> = async () => ({
 
 const Home = ({ library }: HomeProps) => {
   const [sim, setSim] = useState<Sim>("msfs2020")
-  const [stats, setStats] = useState<Statistics | null>(null)
+  // statistics of both sims, loaded once, so switching the sim shows them at once
+  const [allStats, setAllStats] = useState<Partial<Record<Sim, Statistics>>>({})
+  const stats = allStats[sim] ?? null
 
   useEffect(() => {
     db.presets.count()
@@ -40,17 +42,28 @@ const Home = ({ library }: HomeProps) => {
 
   useEffect(() => {
     const effect = { active: true }
-    setStats(null)
-    fetch(statsUrl[sim] ?? "", { redirect: "follow" })
-      .then((res) => {
-        if (!res.ok) throw new Error(`Loading statistics failed: ${res.status}`)
-        return res.json()
-      })
-      .then((data: Statistics) => effect.active && setStats(data))
-      .catch((error) => console.error(error))
+    SIMS.forEach((statsSim) =>
+      fetch(statsUrl[statsSim] ?? "", { redirect: "follow" })
+        .then((res) => {
+          if (!res.ok)
+            throw new Error(`Loading statistics failed: ${res.status}`)
+          return res.json()
+        })
+        .then(
+          (data: Statistics) =>
+            effect.active &&
+            setAllStats((current) => ({ ...current, [statsSim]: data })),
+        )
+        .catch((error) => console.error(error)),
+    )
     return () => {
       effect.active = false
     }
+  }, [])
+
+  // the X-Plane look (background) as on the other pages
+  useEffect(() => {
+    document.body.classList.toggle("xplane", sim === "xplane")
   }, [sim])
 
   const changeSim = (newSim: Sim) => {
