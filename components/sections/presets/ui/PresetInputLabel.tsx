@@ -38,7 +38,9 @@ const PresetPreviewLabel = ({
 
   return (
     <div className="flex flex-col gap-1.5">
-      <Label htmlFor={id}>{title}</Label>
+      <Label htmlFor={edit || codeOrDescriptionBox ? id : undefined}>
+        {title}
+      </Label>
       {edit && options ? (
         <Select value={value} onValueChange={(v) => onValueChange?.(v)}>
           <SelectTrigger id={id} className="w-full" aria-label={title}>
@@ -62,15 +64,24 @@ const PresetPreviewLabel = ({
           value={value}
           onChange={(e) => onValueChange?.(e.target.value)}
         />
-      ) : (
+      ) : edit ? (
         <Input
           id={id}
           aria-label={title}
-          readOnly={!edit}
           className={cn(mono && "font-mono")}
           value={value}
           onChange={(e) => onValueChange?.(e.target.value)}
         />
+      ) : (
+        // a value to read, not a form field
+        <div
+          className={cn(
+            "flex min-h-9 items-center rounded-md border border-input bg-input/30 px-3 py-1 text-sm break-words",
+            mono && "font-mono",
+          )}
+        >
+          {value}
+        </div>
       )}
     </div>
   )

@@ -1,4 +1,11 @@
+import type { Locator, Page } from "@playwright/test"
 import { test, expect, authFile } from "./fixtures"
+
+/** Picks an option of a shadcn Select (its options open in a popup) */
+const choose = async (page: Page, select: Locator, option: string) => {
+  await select.click()
+  await page.getByRole("option", { name: option, exact: true }).click()
+}
 
 test.describe("Edit preset - anonymous", () => {
   test("Edit preset - requires login", async ({ presetViewPage, page }) => {
@@ -92,13 +99,15 @@ test.describe("Edit preset - moderator", () => {
     await page.getByRole("textbox", { name: "System" }).fill("Power")
     const presetType = page.getByRole("combobox", { name: "Input / Output" })
     await test.step("Input/Output offers only the known values", async () => {
-      await expect(presetType.getByRole("option")).toHaveText([
+      await presetType.click()
+      await expect(page.getByRole("option")).toHaveText([
         "Input",
         "Output",
         "Input (Potentiometer)",
       ])
+      await page.keyboard.press("Escape")
     })
-    await presetType.selectOption("Output")
+    await choose(page, presetType, "Output")
     await page.getByRole("button", { name: "Save" }).click()
 
     await expect
@@ -118,11 +127,9 @@ test.describe("Edit preset - moderator", () => {
     await page.getByRole("button", { name: "View" }).click()
 
     const codeType = page.getByRole("combobox", { name: "Code Type" })
-    await expect(codeType.getByRole("option")).toHaveText([
-      "DataRef",
-      "Command",
-    ])
-    await codeType.selectOption("DataRef")
+    await codeType.click()
+    await expect(page.getByRole("option")).toHaveText(["DataRef", "Command"])
+    await page.getByRole("option", { name: "DataRef", exact: true }).click()
     await page.getByRole("button", { name: "Save" }).click()
 
     await expect
@@ -150,9 +157,11 @@ test.describe("Edit preset - preset list", () => {
       await details.getByRole("textbox", { name: "Vendor" }).fill("Carenado")
       await details.getByRole("textbox", { name: "Aircraft" }).fill("C182")
       await details.getByRole("textbox", { name: "System" }).fill("Power")
-      await details
-        .getByRole("combobox", { name: "Input / Output" })
-        .selectOption("Output")
+      await choose(
+        page,
+        details.getByRole("combobox", { name: "Input / Output" }),
+        "Output",
+      )
       await details
         .getByRole("textbox", { name: "Preset name" })
         .fill("Battery master switch on")
