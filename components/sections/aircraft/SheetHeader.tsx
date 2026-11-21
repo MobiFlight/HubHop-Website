@@ -44,19 +44,6 @@ const SheetHeader = ({ sim, sheet, profileCount }: SheetHeaderProps) => (
             </dd>
           </div>
         )}
-        {profileCount > 0 && (
-          <div className="flex gap-1">
-            <dt>Profiles:</dt>
-            <dd>
-              <a
-                href={`#${PROFILES_ANCHOR}`}
-                className="font-semibold text-primary hover:underline"
-              >
-                {format(profileCount)} on flightsim.to
-              </a>
-            </dd>
-          </div>
-        )}
         {sheet.topContributors.length > 0 && (
           <div className="flex gap-1">
             <dt>Top contributors:</dt>
@@ -70,6 +57,19 @@ const SheetHeader = ({ sim, sheet, profileCount }: SheetHeaderProps) => (
                   ({format(contributor.presets)})
                 </span>
               ))}
+            </dd>
+          </div>
+        )}
+        {profileCount > 0 && (
+          <div className="flex gap-1">
+            <dt>Profiles:</dt>
+            <dd>
+              <a
+                href={`#${PROFILES_ANCHOR}`}
+                className="font-semibold text-primary hover:underline"
+              >
+                {format(profileCount)} on flightsim.to
+              </a>
             </dd>
           </div>
         )}
