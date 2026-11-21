@@ -1,8 +1,8 @@
 import Image from "next/image"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { IconExternalLink, IconStarFilled } from "@tabler/icons-react"
 import { Button } from "@/components/ui/button"
-import { formatDate } from "@/lib/aircraftPages"
+import { formatDate, timeAgo } from "@/lib/aircraftPages"
 import {
   PROFILE_PREVIEW,
   PROFILES_ANCHOR,
@@ -12,14 +12,23 @@ import {
 type FlightsimProfilesProps = {
   aircraft: string
   profiles: FlightsimProfile[]
+  // when the page was built: "3 days ago" in the HTML, recalculated in the browser
+  builtAt: string
 }
 
 // flightsim.to's CDN serves the thumbnail as is
 const passThrough = ({ src }: { src: string }) => src
 
 /** Community MobiFlight profiles for the aircraft, on flightsim.to */
-const FlightsimProfiles = ({ aircraft, profiles }: FlightsimProfilesProps) => {
+const FlightsimProfiles = ({
+  aircraft,
+  profiles,
+  builtAt,
+}: FlightsimProfilesProps) => {
   const [showAll, setShowAll] = useState(false)
+  // the page is built at night: the browser knows how long ago it really was
+  const [now, setNow] = useState(() => new Date(builtAt).getTime())
+  useEffect(() => setNow(Date.now()), [])
   if (profiles.length === 0) return null
   const shown = showAll ? profiles : profiles.slice(0, PROFILE_PREVIEW)
 
@@ -38,29 +47,29 @@ const FlightsimProfiles = ({ aircraft, profiles }: FlightsimProfilesProps) => {
           were built for, shared by the community on flightsim.to.
         </p>
       </div>
-      <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      <ul className="grid gap-4 lg:grid-cols-2">
         {shown.map((profile) => (
           <li key={profile.id}>
             <a
               href={profile.link}
               target="_blank"
               rel="noopener"
-              className="flex h-full flex-col overflow-hidden rounded-lg border bg-card transition-colors hover:border-primary"
+              className="flex h-full overflow-hidden rounded-lg border bg-card transition-colors hover:border-primary"
             >
               {profile.thumbnail && (
-                <span className="relative block aspect-video w-full bg-black/30">
+                <span className="relative block min-h-24 w-32 shrink-0 bg-black/30 sm:w-44">
                   <Image
                     src={profile.thumbnail}
                     alt=""
                     fill
                     unoptimized
                     loader={passThrough}
-                    sizes="384px"
+                    sizes="176px"
                     className="object-cover"
                   />
                 </span>
               )}
-              <span className="flex flex-1 flex-col gap-1 p-4">
+              <span className="flex min-w-0 flex-1 flex-col gap-1 p-4">
                 <span className="font-semibold">{profile.title}</span>
                 <span className="text-sm text-muted-foreground">
                   by {profile.author}
@@ -75,9 +84,13 @@ const FlightsimProfiles = ({ aircraft, profiles }: FlightsimProfilesProps) => {
                       {profile.rating.toFixed(1)}
                     </>
                   )}
-                </span>
-                <span className="text-sm text-muted-foreground">
-                  Updated {formatDate(profile.updatedAt)}
+                  {" · updated "}
+                  <time
+                    dateTime={profile.updatedAt}
+                    title={formatDate(profile.updatedAt)}
+                  >
+                    {timeAgo(profile.updatedAt, now)}
+                  </time>
                 </span>
                 <span className="mt-auto flex items-center gap-1 pt-2 text-sm font-semibold text-primary">
                   View on flightsim.to

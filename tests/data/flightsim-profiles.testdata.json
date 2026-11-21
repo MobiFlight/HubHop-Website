@@ -8,7 +8,7 @@
       "name": "Test Pilot 1"
     },
     "rating": 4.5,
-    "updated_at": "2026-11-20T10:00:00Z",
+    "updated_at": "2026-01-14T10:00:00Z",
     "affiliation": null
   },
   {
@@ -20,7 +20,7 @@
       "name": "Test Pilot 2"
     },
     "rating": 0,
-    "updated_at": "2026-11-19T10:00:00Z",
+    "updated_at": "2026-01-12T10:00:00Z",
     "affiliation": null
   },
   {
@@ -32,7 +32,7 @@
       "name": "Test Pilot 3"
     },
     "rating": 5,
-    "updated_at": "2026-11-18T10:00:00Z",
+    "updated_at": "2026-01-08T10:00:00Z",
     "affiliation": null
   },
   {
@@ -44,7 +44,7 @@
       "name": "Test Pilot 4"
     },
     "rating": 3.8,
-    "updated_at": "2026-11-17T10:00:00Z",
+    "updated_at": "2025-12-31T10:00:00Z",
     "affiliation": null
   },
   {
@@ -56,7 +56,7 @@
       "name": "Test Pilot 5"
     },
     "rating": 0,
-    "updated_at": "2026-11-16T10:00:00Z",
+    "updated_at": "2025-12-10T10:00:00Z",
     "affiliation": null
   },
   {
@@ -68,7 +68,7 @@
       "name": "Test Pilot 6"
     },
     "rating": 4.2,
-    "updated_at": "2026-11-15T10:00:00Z",
+    "updated_at": "2025-10-01T10:00:00Z",
     "affiliation": null
   },
   {
@@ -80,7 +80,7 @@
       "name": "Test Pilot 7"
     },
     "rating": 4.9,
-    "updated_at": "2026-11-14T10:00:00Z",
+    "updated_at": "2024-11-01T10:00:00Z",
     "affiliation": null
   },
   {
@@ -92,7 +92,7 @@
       "name": "Test Pilot 8"
     },
     "rating": 4.7,
-    "updated_at": "2026-10-01T10:00:00Z",
+    "updated_at": "2025-06-01T10:00:00Z",
     "affiliation": {
       "name": "FlyByWire A32NX",
       "slug": "flybywire-a32nx",
@@ -108,7 +108,7 @@
       "name": "Test Pilot 9"
     },
     "rating": 0,
-    "updated_at": "2026-09-01T10:00:00Z",
+    "updated_at": "2025-01-01T10:00:00Z",
     "affiliation": null
   }
 ]

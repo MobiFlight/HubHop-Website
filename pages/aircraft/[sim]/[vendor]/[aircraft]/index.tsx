@@ -34,6 +34,7 @@ type CheatSheetProps = {
   related: AircraftSummary[]
   // MobiFlight profiles on flightsim.to (MSFS only)
   profiles: FlightsimProfile[]
+  builtAt: string
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -71,12 +72,24 @@ export const getStaticProps: GetStaticProps<CheatSheetProps> = async ({
       ? await profilesOf(`${vendorSlug}/${aircraftSlug}`, aircraft)
       : []
   return {
-    props: { sim, sheet: aircraftSheet(presets), related, profiles },
+    props: {
+      sim,
+      sheet: aircraftSheet(presets),
+      related,
+      profiles,
+      builtAt: new Date().toISOString(),
+    },
   }
 }
 
 /** The cheat sheet of an aircraft: every system with its inputs and outputs */
-const CheatSheet = ({ sim, sheet, related, profiles }: CheatSheetProps) => {
+const CheatSheet = ({
+  sim,
+  sheet,
+  related,
+  profiles,
+  builtAt,
+}: CheatSheetProps) => {
   const name = `${sheet.vendor} ${sheet.aircraft}`
   const path = aircraftUrl(sim, sheet.vendorSlug, sheet.aircraftSlug)
 
@@ -147,7 +160,11 @@ const CheatSheet = ({ sim, sheet, related, profiles }: CheatSheetProps) => {
                 }
               />
             ))}
-            <FlightsimProfiles aircraft={name} profiles={profiles} />
+            <FlightsimProfiles
+              aircraft={name}
+              profiles={profiles}
+              builtAt={builtAt}
+            />
           </div>
         </div>
         <MoreFromVendor sim={sim} vendor={sheet.vendor} aircraft={related} />
