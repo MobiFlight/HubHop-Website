@@ -1,0 +1,114 @@
+[
+  {
+    "id": 900001,
+    "title": "Asobo A320neo | WinWing FCU | MobiFlight Profile",
+    "link": "https://flightsim.to/addon/900001/asobo-a320neo-profile-1",
+    "thumbnail": null,
+    "author": {
+      "name": "Test Pilot 1"
+    },
+    "rating": 4.5,
+    "updated_at": "2026-11-20T10:00:00Z",
+    "affiliation": null
+  },
+  {
+    "id": 900002,
+    "title": "Asobo A320neo | MiniCockpit MiniFCU | MobiFlight Profile",
+    "link": "https://flightsim.to/addon/900002/asobo-a320neo-profile-2",
+    "thumbnail": null,
+    "author": {
+      "name": "Test Pilot 2"
+    },
+    "rating": 0,
+    "updated_at": "2026-11-19T10:00:00Z",
+    "affiliation": null
+  },
+  {
+    "id": 900003,
+    "title": "Asobo A320neo | WinCtrl PAP3 | MobiFlight Profile",
+    "link": "https://flightsim.to/addon/900003/asobo-a320neo-profile-3",
+    "thumbnail": null,
+    "author": {
+      "name": "Test Pilot 3"
+    },
+    "rating": 5,
+    "updated_at": "2026-11-18T10:00:00Z",
+    "affiliation": null
+  },
+  {
+    "id": 900004,
+    "title": "Asobo A320neo | Honeycomb Bravo | MobiFlight Profile",
+    "link": "https://flightsim.to/addon/900004/asobo-a320neo-profile-4",
+    "thumbnail": null,
+    "author": {
+      "name": "Test Pilot 4"
+    },
+    "rating": 3.8,
+    "updated_at": "2026-11-17T10:00:00Z",
+    "affiliation": null
+  },
+  {
+    "id": 900005,
+    "title": "Asobo A320neo | Rowsfire A107 | MobiFlight Profile",
+    "link": "https://flightsim.to/addon/900005/asobo-a320neo-profile-5",
+    "thumbnail": null,
+    "author": {
+      "name": "Test Pilot 5"
+    },
+    "rating": 0,
+    "updated_at": "2026-11-16T10:00:00Z",
+    "affiliation": null
+  },
+  {
+    "id": 900006,
+    "title": "Asobo A320neo | Moza MB7F | MobiFlight Profile",
+    "link": "https://flightsim.to/addon/900006/asobo-a320neo-profile-6",
+    "thumbnail": null,
+    "author": {
+      "name": "Test Pilot 6"
+    },
+    "rating": 4.2,
+    "updated_at": "2026-11-15T10:00:00Z",
+    "affiliation": null
+  },
+  {
+    "id": 900007,
+    "title": "Asobo A320neo | WinWing MCDU | MobiFlight Profile",
+    "link": "https://flightsim.to/addon/900007/asobo-a320neo-profile-7",
+    "thumbnail": null,
+    "author": {
+      "name": "Test Pilot 7"
+    },
+    "rating": 4.9,
+    "updated_at": "2026-11-14T10:00:00Z",
+    "affiliation": null
+  },
+  {
+    "id": 900010,
+    "title": "FlyByWire A32NX | MiniCockpit MiniFCU | MobiFlight Profile",
+    "link": "https://flightsim.to/addon/900010/flybywire-a32nx-minifcu",
+    "thumbnail": null,
+    "author": {
+      "name": "Test Pilot 8"
+    },
+    "rating": 4.7,
+    "updated_at": "2026-10-01T10:00:00Z",
+    "affiliation": {
+      "name": "FlyByWire A32NX",
+      "slug": "flybywire-a32nx",
+      "link": "https://flightsim.to/affiliation/flybywire-a32nx"
+    }
+  },
+  {
+    "id": 900011,
+    "title": "Generic WinCtrl RMP MobiFlight Profile (Any Aircraft)",
+    "link": "https://flightsim.to/addon/900011/generic-rmp",
+    "thumbnail": null,
+    "author": {
+      "name": "Test Pilot 9"
+    },
+    "rating": 0,
+    "updated_at": "2026-09-01T10:00:00Z",
+    "affiliation": null
+  }
+]

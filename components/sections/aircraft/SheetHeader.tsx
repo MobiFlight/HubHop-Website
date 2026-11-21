@@ -6,6 +6,7 @@ import {
   SIM_NAMES,
   type AircraftSheet,
 } from "@/lib/aircraftPages"
+import { PROFILES_ANCHOR } from "@/lib/flightsimProfiles"
 import { presetListUrl, type Sim } from "@/lib/presetUrls"
 
 const format = (value: number) => value.toLocaleString("en-US")
@@ -13,10 +14,12 @@ const format = (value: number) => value.toLocaleString("en-US")
 type SheetHeaderProps = {
   sim: Sim
   sheet: AircraftSheet
+  // MobiFlight profiles on flightsim.to, shown further down
+  profileCount: number
 }
 
 /** Breadcrumb, title and what the data says about the aircraft */
-const SheetHeader = ({ sim, sheet }: SheetHeaderProps) => (
+const SheetHeader = ({ sim, sheet, profileCount }: SheetHeaderProps) => (
   <header className="flex flex-col gap-4">
     <AircraftBreadcrumb sim={sim} {...sheet} />
     <h1 className="text-4xl font-extrabold md:text-5xl">
@@ -38,6 +41,19 @@ const SheetHeader = ({ sim, sheet }: SheetHeaderProps) => (
             <dt>Last change:</dt>
             <dd className="font-semibold text-foreground">
               {formatDate(sheet.lastChange)}
+            </dd>
+          </div>
+        )}
+        {profileCount > 0 && (
+          <div className="flex gap-1">
+            <dt>Profiles:</dt>
+            <dd>
+              <a
+                href={`#${PROFILES_ANCHOR}`}
+                className="font-semibold text-primary hover:underline"
+              >
+                {format(profileCount)} on flightsim.to
+              </a>
             </dd>
           </div>
         )}
