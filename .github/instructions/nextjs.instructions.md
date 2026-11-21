@@ -15,7 +15,7 @@ applyTo: "**/*.jsx, **/*.tsx, **/*.js, **/*.ts, **/*.css"
   `staticwebapp.config.json`. Pages pass context (sim, filters) to each other through these URLs, not `localStorage`.
 - Aircraft cheat sheets (`lib/aircraftPages.ts`) are real static pages for search engines, generated at build time
   from the full preset list (`services/libraryStats.ts#loadPresets`): `/aircraft/<sim>/` (index), `/aircraft/<sim>/<vendor>/<aircraft>/`
-  (up to 30 presets per system) and `/aircraft/<sim>/<vendor>/<aircraft>/<system>/` for larger systems. Cheat sheets with fewer
+  (up to 20 presets per system) and `/aircraft/<sim>/<vendor>/<aircraft>/<system>/` for larger systems. Cheat sheets with fewer
   than 10 presets are `noindex`. The site is rebuilt to pick up new presets.
 - Search engines: pages pass `title`, `description`, `path` (canonical URL, `og:url`) and `noindex` to `Layout`, which writes
   the meta and Open Graph tags; don't add them per page. `npm run build` also runs `scripts/sitemap.mjs`, which writes
