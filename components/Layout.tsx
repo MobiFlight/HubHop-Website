@@ -14,10 +14,12 @@ type LayoutProps = {
   path?: string
   // keep the page out of search engines
   noindex?: boolean
+  // path of the link preview image (1200×630), e.g. an aircraft's own image
+  image?: string
 }
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL
-const IMAGE = `${SITE_URL}/images/og-hubhop.png`
+const IMAGE = "/images/og-hubhop.png"
 const DEFAULT_DESCRIPTION =
   "HubHop is the community library of events and variables for MSFS and X-Plane that connects your home cockpit hardware to the sim through MobiFlight."
 
@@ -27,6 +29,7 @@ const Layout = ({
   description = DEFAULT_DESCRIPTION,
   path,
   noindex = false,
+  image = IMAGE,
 }: LayoutProps) => {
   const [clientWindowHeight, setClientWindowHeight] = useState(0)
 
@@ -59,7 +62,7 @@ const Layout = ({
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
         {url && <meta property="og:url" content={url} />}
-        <meta property="og:image" content={IMAGE} />
+        <meta property="og:image" content={`${SITE_URL}${image}`} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta name="twitter:card" content="summary_large_image" />
