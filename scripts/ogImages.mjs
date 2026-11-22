@@ -1,8 +1,11 @@
-// Draws a link preview image (og:image, 1200×630) for every aircraft cheat sheet
-// after `next build` (npm "postbuild"): the aircraft's name, its numbers and the
-// sim, on HubHop's background. The numbers come from the exported page itself
-// (its __NEXT_DATA__), so image and page always match. The page's og:image
-// points to out/og/aircraft/<sim>/<vendor>/<aircraft>.jpg (lib/aircraftPages.ts).
+// Draws link preview images (og:image, 1200×630) after `next build` (npm
+// "postbuild"), on HubHop's background:
+// - every aircraft cheat sheet: the aircraft's name, its numbers and the sim,
+//   out/og/aircraft/<sim>/<vendor>/<aircraft>.jpg (lib/aircraftPages.ts)
+// - the hardware overview and every brand page: the brand and its numbers,
+//   out/og/hardware.jpg and out/og/hardware/<brand>.jpg (lib/hardwarePages.ts)
+// The numbers come from the exported page itself (its __NEXT_DATA__), so image
+// and page always match.
 import fs from "node:fs"
 import path from "node:path"
 import satori from "satori"
@@ -80,14 +83,12 @@ const count = (value, one, many) => [
 const fitted = (text, max) =>
   Math.min(max, Math.floor((WIDTH - 2 * PADDING) / (text.length * 0.56)))
 
-/** The image of one cheat sheet, as a satori element tree */
-const card = ({ sim, vendor, aircraft, presets, systems, profiles }) => {
+/**
+ * One preview image, as a satori element tree: logo and badge on top, a small
+ * line, the big title, a coloured subtitle, and the numbers at the bottom.
+ */
+const card = ({ sim, kicker, title, subtitle, stats }) => {
   const { label, color } = SIMS[sim]
-  const stats = [
-    count(presets, "preset", "presets"),
-    count(systems, "system", "systems"),
-    ...(profiles > 0 ? [count(profiles, "profile", "profiles")] : []),
-  ]
   return h(
     "div",
     {
@@ -131,27 +132,27 @@ const card = ({ sim, vendor, aircraft, presets, systems, profiles }) => {
       "div",
       {
         marginTop: 40,
-        fontSize: fitted(vendor, 60),
+        fontSize: fitted(kicker, 60),
         fontWeight: 600,
         color: "#b4b4bb",
         lineHeight: 1,
       },
-      vendor,
+      kicker,
     ),
     h(
       "div",
       {
         marginTop: 6,
-        fontSize: fitted(aircraft, 150),
+        fontSize: fitted(title, 150),
         fontWeight: 800,
         lineHeight: 1,
       },
-      aircraft,
+      title,
     ),
     h(
       "div",
       { marginTop: 14, fontSize: 58, fontWeight: 700, color, lineHeight: 1 },
-      "home cockpit presets",
+      subtitle,
     ),
     h(
       "div",
@@ -172,6 +173,59 @@ const card = ({ sim, vendor, aircraft, presets, systems, profiles }) => {
     ),
   )
 }
+
+/** A cheat sheet's image */
+const aircraftCard = ({ sim, vendor, aircraft, presets, systems, profiles }) =>
+  card({
+    sim,
+    kicker: vendor,
+    title: aircraft,
+    subtitle: "home cockpit presets",
+    stats: [
+      count(presets, "preset", "presets"),
+      count(systems, "system", "systems"),
+      ...(profiles > 0 ? [count(profiles, "profile", "profiles")] : []),
+    ],
+  })
+
+/** A hardware brand's image (MSFS only, like the profiles) */
+const brandCard = (brand) => {
+  const profiles = [
+    ...brand.products.flatMap((product) => product.profiles),
+    ...brand.other,
+  ]
+  const aircraft = new Set(
+    profiles.flatMap((profile) => profile.aircraft.map((entry) => entry.url)),
+  ).size
+  return card({
+    sim: "msfs2020",
+    kicker: brand.formerly
+      ? `Cockpit hardware · formerly ${brand.formerly}`
+      : "Cockpit hardware",
+    title: brand.name,
+    subtitle: "MobiFlight profiles",
+    stats: [
+      count(brand.profiles, "profile", "profiles"),
+      ...(brand.products.length > 0
+        ? [count(brand.products.length, "product", "products")]
+        : []),
+      ...(aircraft > 0 ? [count(aircraft, "aircraft", "aircraft")] : []),
+    ],
+  })
+}
+
+/** The hardware overview's image */
+const hardwareIndexCard = ({ brands, profiles }) =>
+  card({
+    sim: "msfs2020",
+    kicker: "Find the profile for your hardware",
+    title: "Cockpit hardware",
+    subtitle: "MobiFlight profiles",
+    stats: [
+      count(profiles, "profile", "profiles"),
+      count(brands.length, "brand", "brands"),
+    ],
+  })
 
 /** The cheat sheet pages: <out>/aircraft/<sim>/<vendor>/<aircraft>/index.html */
 const cheatSheets = () => {
@@ -202,14 +256,24 @@ const pagePropsOf = (file) => {
   return json && JSON.parse(json).props.pageProps
 }
 
-let written = 0
+const draw = async (element, ...target) => {
+  const svg = await satori(element, { width: WIDTH, height: HEIGHT, fonts })
+  const file = path.join(OUT, "og", ...target)
+  fs.mkdirSync(path.dirname(file), { recursive: true })
+  await sharp(Buffer.from(svg))
+    .jpeg({ quality: 85, mozjpeg: true })
+    .toFile(file)
+}
+
+let aircraftImages = 0
 for (const { segments } of cheatSheets()) {
   const props = pagePropsOf(
     path.join(OUT, "aircraft", ...segments, "index.html"),
   )
   if (!props?.sheet) continue
-  const svg = await satori(
-    card({
+  const [sim, vendor, aircraft] = segments
+  await draw(
+    aircraftCard({
       sim: props.sim,
       vendor: props.sheet.vendor,
       aircraft: props.sheet.aircraft,
@@ -217,21 +281,35 @@ for (const { segments } of cheatSheets()) {
       systems: props.sheet.systems.length,
       profiles: props.profiles?.length ?? 0,
     }),
-    { width: WIDTH, height: HEIGHT, fonts },
-  )
-  const [sim, vendor, aircraft] = segments
-  const target = path.join(
-    OUT,
-    "og",
     "aircraft",
     sim,
     vendor,
     `${aircraft}.jpg`,
   )
-  fs.mkdirSync(path.dirname(target), { recursive: true })
-  await sharp(Buffer.from(svg))
-    .jpeg({ quality: 85, mozjpeg: true })
-    .toFile(target)
-  written++
+  aircraftImages++
 }
-console.info(`preview images: ${written} aircraft`)
+
+/** The hardware overview and brand pages: <out>/hardware/[<brand>/]index.html */
+const hardwareRoot = path.join(OUT, "hardware")
+const indexProps =
+  fs.existsSync(path.join(hardwareRoot, "index.html")) &&
+  pagePropsOf(path.join(hardwareRoot, "index.html"))
+if (indexProps?.brands)
+  await draw(hardwareIndexCard(indexProps), "hardware.jpg")
+let brandImages = 0
+const brandDirs = fs.existsSync(hardwareRoot)
+  ? fs
+      .readdirSync(hardwareRoot, { withFileTypes: true })
+      .filter((entry) => entry.isDirectory())
+      .map((entry) => entry.name)
+  : []
+for (const slug of brandDirs) {
+  const file = path.join(hardwareRoot, slug, "index.html")
+  const props = fs.existsSync(file) && pagePropsOf(file)
+  if (!props?.brand) continue
+  await draw(brandCard(props.brand), "hardware", `${slug}.jpg`)
+  brandImages++
+}
+console.info(
+  `preview images: ${aircraftImages} aircraft, ${brandImages} hardware brands`,
+)

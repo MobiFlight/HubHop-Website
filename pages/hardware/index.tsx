@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import {
   brandUrl,
   hardwareIndexDescription,
+  hardwareIndexImageUrl,
   hardwareIndexTitle,
   hardwareIndexUrl,
   sponsorsFirst,
@@ -141,6 +142,7 @@ const HardwareIndex = ({ brands, profiles }: HardwareIndexProps) => {
       title={hardwareIndexTitle()}
       description={hardwareIndexDescription(brands.length, profiles)}
       path={hardwareIndexUrl()}
+      image={hardwareIndexImageUrl()}
     >
       <main className="container mx-auto flex flex-col gap-8 px-6 py-10">
         <div className="flex flex-col gap-2">
