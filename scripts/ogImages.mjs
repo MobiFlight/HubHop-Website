@@ -151,7 +151,13 @@ const card = ({ sim, kicker, title, subtitle, stats }) => {
     ),
     h(
       "div",
-      { marginTop: 14, fontSize: 58, fontWeight: 700, color, lineHeight: 1 },
+      {
+        marginTop: 14,
+        fontSize: fitted(subtitle, 58),
+        fontWeight: 700,
+        color,
+        lineHeight: 1,
+      },
       subtitle,
     ),
     h(
@@ -218,10 +224,10 @@ const brandCard = (brand) => {
 const hardwareIndexCard = ({ brands, profiles }) =>
   card({
     sim: "msfs2020",
-    // you find the profiles by browsing the hardware
-    kicker: "Discover plug-and-play",
+    // "plug and play", as simmers say: the profile does the setup work
+    kicker: "Discover ready-to-go",
     title: "MobiFlight profiles",
-    subtitle: "by cockpit hardware",
+    subtitle: "that make your controller plug-and-play",
     stats: [
       count(profiles, "profile", "profiles"),
       count(brands.length, "brand", "brands"),
