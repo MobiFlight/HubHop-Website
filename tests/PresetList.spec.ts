@@ -263,6 +263,31 @@ test.describe("Preset list", () => {
     await expect(presetsPage.row("Oil temperature")).toHaveCount(1)
   })
 
+  test("Preset list - the filter can be folded below md and is always open from md on", async ({
+    presetsPage,
+    page,
+  }) => {
+    const fold = page.getByRole("button", { name: "Filter", exact: true })
+    const search = page.getByLabel("Search Preset")
+
+    await test.step("Below md the filter sits above the table and folds", async () => {
+      await page.setViewportSize({ width: 600, height: 900 })
+      await presetsPage.gotoPage()
+      await fold.click()
+      await expect(fold).toHaveAttribute("aria-expanded", "false")
+      await expect(search).toBeHidden()
+      await fold.click()
+      await expect(search).toBeVisible()
+    })
+
+    await test.step("From md on the filter is a sidebar and always open", async () => {
+      await page.setViewportSize({ width: 1024, height: 900 })
+      await expect(fold).toBeHidden()
+      await expect(page.getByRole("heading", { name: "Filter" })).toBeVisible()
+      await expect(search).toBeVisible()
+    })
+  })
+
   // independent of the order the server sends or the cache returns (#61)
   test("Preset list - presets are listed by vendor, aircraft and name", async ({
     presetsPage,

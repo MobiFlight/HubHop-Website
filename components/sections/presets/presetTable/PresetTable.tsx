@@ -11,7 +11,6 @@ import { getUserSettings, getAccessToken } from "@/services/msalFunctions"
 type PresetTableProps = {
   data: Preset[]
   setExportModalOpen: (open: boolean) => void
-  setAddModalOpen: (open: boolean) => void
   // relevance in percent per preset; only set while searching
   relevance?: Map<Preset, number>
 }
@@ -62,10 +61,48 @@ const PresetRowDetails = ({ data }: { data: Preset }) => {
   )
 }
 
+async function login() {
+  await msalReady
+  await msalInstance.handleRedirectPromise()
+  const accounts = msalInstance.getAllAccounts()
+  if (accounts.length === 0) {
+    await msalInstance
+      .loginPopup()
+      .then(() => {
+        getAccessToken().then(() => getUserSettings())
+      })
+      .catch((error) => {
+        console.error(`error during authentication: ${error}`)
+        localStorage.setItem("roles", "Guest")
+        localStorage.setItem("setAccessToken", "")
+        msalInstance.logoutRedirect({}).catch((error) => {
+          console.error(error)
+        })
+      })
+  }
+}
+
+// anonymous visitors log in first
+const ifLoggedIn = (open: (open: boolean) => void) => () => {
+  if (localStorage.getItem("username")) open(true)
+  else login()
+}
+
+type AddPresetButtonProps = {
+  onOpen: (open: boolean) => void
+}
+
+/** Opens the add dialog; asks anonymous visitors to log in first */
+export const AddPresetButton = ({ onOpen }: AddPresetButtonProps) => (
+  <Button className="hidden md:inline-flex" onClick={ifLoggedIn(onOpen)}>
+    <IconCirclePlus />
+    Add preset
+  </Button>
+)
+
 const PresetTable = ({
   data,
   setExportModalOpen,
-  setAddModalOpen,
   relevance,
 }: PresetTableProps) => {
   const simType = localStorage.getItem("simType")
@@ -131,53 +168,12 @@ const PresetTable = ({
             },
           ]
         : []),
-      // keeps the top-right corner free for the "Add preset" button
-      {
-        id: "add-preset-space",
-        header: "",
-        value: () => "",
-        width: "9rem",
-        wide: true,
-      },
     ],
     [relevance, simType],
   )
 
-  async function login() {
-    await msalReady
-    await msalInstance.handleRedirectPromise()
-    const accounts = msalInstance.getAllAccounts()
-    if (accounts.length === 0) {
-      await msalInstance
-        .loginPopup()
-        .then(() => {
-          getAccessToken().then(() => getUserSettings())
-        })
-        .catch((error) => {
-          console.error(`error during authentication: ${error}`)
-          localStorage.setItem("roles", "Guest")
-          localStorage.setItem("setAccessToken", "")
-          msalInstance.logoutRedirect({}).catch((error) => {
-            console.error(error)
-          })
-        })
-    }
-  }
-
-  const ifLoggedIn = (open: (open: boolean) => void) => () => {
-    if (localStorage.getItem("username")) open(true)
-    else login()
-  }
-
   return (
-    <div className="relative flex w-full flex-col rounded-lg bg-card">
-      <Button
-        className="absolute top-1.5 right-2 z-10 hidden md:inline-flex"
-        onClick={ifLoggedIn(setAddModalOpen)}
-      >
-        <IconCirclePlus />
-        Add preset
-      </Button>
+    <div className="flex w-full flex-col rounded-lg bg-card">
       <DataTable
         // remount when a search starts or ends, to apply its default sort
         key={relevance ? "search" : "list"}
