@@ -75,12 +75,13 @@ test.describe("Aircraft pages - data", () => {
     expect(isIndexed(10)).toBe(true)
   })
 
-  test("Aircraft pages - a cheat sheet shows up to 30 presets per system, split between inputs and outputs", () => {
-    expect(previewCounts(10, 5, 30)).toEqual({ inputs: 10, outputs: 5 })
-    expect(previewCounts(40, 40, 30)).toEqual({ inputs: 15, outputs: 15 })
+  test("Aircraft pages - a cheat sheet shows up to 20 presets per system, split between inputs and outputs", () => {
+    expect(SYSTEM_PREVIEW).toBe(20)
+    expect(previewCounts(10, 5, 20)).toEqual({ inputs: 10, outputs: 5 })
+    expect(previewCounts(40, 40, 20)).toEqual({ inputs: 10, outputs: 10 })
     // what one side doesn't need goes to the other
-    expect(previewCounts(40, 4, 30)).toEqual({ inputs: 26, outputs: 4 })
-    expect(previewCounts(3, 40, 30)).toEqual({ inputs: 3, outputs: 27 })
+    expect(previewCounts(40, 4, 20)).toEqual({ inputs: 16, outputs: 4 })
+    expect(previewCounts(3, 40, 20)).toEqual({ inputs: 3, outputs: 17 })
   })
 
   test("Aircraft pages - systems are grouped, sorted and split into inputs and outputs", () => {
@@ -103,18 +104,20 @@ test.describe("Aircraft pages - data", () => {
     })
     expect(efis.inputs.map((entry) => entry.label)).toEqual(["FD on", "LS on"])
     expect(fcu).toMatchObject({ total: 40, inputCount: 20, outputCount: 20 })
-    expect(fcu.inputs).toHaveLength(15)
-    expect(fcu.outputs).toHaveLength(15)
+    expect(fcu.inputs).toHaveLength(10)
+    expect(fcu.outputs).toHaveLength(10)
     expect(fcu.inputs[0].label).toBe("Preset 00")
   })
 
-  test("Aircraft pages - systems with more than 30 presets get a page of their own", () => {
+  test("Aircraft pages - systems with more than 20 presets get a page of their own", () => {
     const presets = [
       ...many(SYSTEM_PREVIEW + 1, { system: "FCU" }),
       ...many(SYSTEM_PREVIEW, { system: "EFIS" }),
     ]
     expect(largeSystems(presets)).toEqual(["fcu"])
-    expect(systemSheets(presets, Infinity)[1].inputs).toHaveLength(31)
+    expect(systemSheets(presets, Infinity)[1].inputs).toHaveLength(
+      SYSTEM_PREVIEW + 1,
+    )
   })
 
   test("Aircraft pages - the header shows the newest change and the top contributors", () => {

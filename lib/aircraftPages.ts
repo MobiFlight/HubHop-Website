@@ -1,8 +1,8 @@
 // Aircraft cheat sheets, generated at build time:
 //
 //   /aircraft/msfs/                      all aircraft of a sim, grouped by maker
-//   /aircraft/msfs/fenixsim/a320/        cheat sheet: every system, up to 30 presets each
-//   /aircraft/msfs/fenixsim/a320/fcu/    all presets of a system with more than 30
+//   /aircraft/msfs/fenixsim/a320/        cheat sheet: every system, up to 20 presets each
+//   /aircraft/msfs/fenixsim/a320/fcu/    all presets of a system with more than 20
 //
 // Aircraft and systems are grouped by their slug, like the preset list's URLs:
 // spellings that share a slug share a page, named after the most used spelling.
@@ -13,7 +13,7 @@ import { compareText } from "@/lib/presetSearch"
 import { simSegment, slugify, type Sim } from "@/lib/presetUrls"
 
 /** Presets per system on a cheat sheet; larger systems get a page of their own */
-export const SYSTEM_PREVIEW = 30
+export const SYSTEM_PREVIEW = 20
 
 /** Cheat sheets of smaller aircraft exist but aren't indexed by search engines (thin content) */
 export const INDEXED_MIN_PRESETS = 10
