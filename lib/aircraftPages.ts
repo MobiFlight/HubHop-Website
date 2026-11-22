@@ -11,6 +11,7 @@
 import type { Preset } from "@/interfaces/preset"
 import { compareText } from "@/lib/presetSearch"
 import { simSegment, slugify, type Sim } from "@/lib/presetUrls"
+import { brandLabel, type BrandSummary } from "@/lib/profileHardware"
 
 /** Presets per system on a cheat sheet; larger systems get a page of their own */
 export const SYSTEM_PREVIEW = 20
@@ -269,7 +270,7 @@ const count = (value: number, one: string, many: string) =>
   `${value.toLocaleString("en-US")} ${value === 1 ? one : many}`
 
 /** "A", "A and B", "A, B and C" */
-const listOf = (names: string[]) =>
+export const listOf = (names: string[]) =>
   names.length > 1
     ? `${names.slice(0, -1).join(", ")} and ${names.at(-1)}`
     : (names[0] ?? "")
@@ -280,12 +281,39 @@ export const indexTitle = (sim: Sim) =>
 export const indexDescription = (sim: Sim, aircraft: number) =>
   `Preset cheat sheets for ${count(aircraft, "aircraft", "aircraft")} in ${SIM_NAMES[sim]}: every switch, knob and light by system, ready for your home cockpit hardware with MobiFlight.`
 
-export const sheetTitle = (sim: Sim, sheet: AircraftSummary) =>
-  `${sheet.vendor} ${sheet.aircraft} home cockpit presets for MobiFlight (${SIM_NAMES[sim]})`
+/** `profiles`: MobiFlight profiles on flightsim.to, named first when there are any */
+export const sheetTitle = (sim: Sim, sheet: AircraftSummary, profiles = 0) =>
+  profiles > 0
+    ? `${sheet.vendor} ${sheet.aircraft} MobiFlight profiles and presets (${SIM_NAMES[sim]})`
+    : `${sheet.vendor} ${sheet.aircraft} home cockpit presets for MobiFlight (${SIM_NAMES[sim]})`
+
+/** "WINCTRL (formerly WinWing) MCDU, 32 ECAM and RMP, Rowsfire A107 and more":
+ * the three brands with the most profiles, the first with its top three models */
+export const hardwareText = (hardware: BrandSummary[]) => {
+  const shown = hardware.slice(0, 3).map((brand, index) => {
+    const models = brand.models.slice(0, index === 0 ? 3 : 1)
+    const more = brand.models.length > models.length
+    return {
+      text: models.length
+        ? `${brandLabel(brand)} ${listOf(models.map((m) => m.name))}`
+        : brandLabel(brand),
+      more,
+    }
+  })
+  const more = hardware.length > 3 || shown.some((brand) => brand.more)
+  return more
+    ? `${shown.map((brand) => brand.text).join(", ")} and more`
+    : listOf(shown.map((brand) => brand.text))
+}
 
 /** Mentions the three systems with the most presets */
 /** `profiles`: MobiFlight profiles on flightsim.to, named first when there are any */
-export const sheetDescription = (sheet: AircraftSheet, profiles = 0) => {
+/** `hardware`: the brands and models the profiles are for, named first when known */
+export const sheetDescription = (
+  sheet: AircraftSheet,
+  profiles = 0,
+  hardware: BrandSummary[] = [],
+) => {
   const top = [...sheet.systems]
     .sort((a, b) => b.total - a.total)
     .slice(0, 3)
@@ -298,6 +326,8 @@ export const sheetDescription = (sheet: AircraftSheet, profiles = 0) => {
     profiles > 0
       ? `${count(profiles, "ready-made MobiFlight profile", "ready-made MobiFlight profiles")} and `
       : ""
+  if (profiles > 0 && hardware.length > 0)
+    return `${count(profiles, "MobiFlight profile", "MobiFlight profiles")} for ${hardwareText(hardware)}, plus ${count(sheet.presets, "preset", "presets")} for every switch, knob and light of your ${sheet.vendor} ${sheet.aircraft} home cockpit ${systems}. Copy the code and connect your hardware with MobiFlight.`
   return `Build your ${sheet.vendor} ${sheet.aircraft} home cockpit: ${ready}${count(sheet.presets, "preset", "presets")} for every switch, knob and light ${systems}. Copy the code and connect your hardware with MobiFlight.`
 }
 

@@ -101,7 +101,7 @@ test.describe("MobiFlight profiles - dates", () => {
 })
 
 test.describe("MobiFlight profiles - cheat sheet", () => {
-  test("MobiFlight profiles - a cheat sheet shows the newest profiles first, links to them and shows all on request", async ({
+  test("MobiFlight profiles - a cheat sheet names the hardware, shows the newest profiles first, links to them and shows all on request", async ({
     hubHopPage,
     page,
   }) => {
@@ -116,13 +116,16 @@ test.describe("MobiFlight profiles - cheat sheet", () => {
       ])
         await expect(page.locator(selector)).toHaveAttribute(
           "content",
-          /^Build your Asobo A320neo home cockpit: 9 ready-made MobiFlight profiles and 8 presets/,
+          /^9 MobiFlight profiles for WINCTRL \(formerly WinWing\) PAP3, PFP 3N and FCU, Rowsfire A107, MiniCockpit miniFCU and more, plus 8 presets for every switch, knob and light of your Asobo A320neo home cockpit/,
         )
+      await expect(page).toHaveTitle(
+        "Asobo A320neo MobiFlight profiles and presets (MSFS)",
+      )
     })
 
     await test.step("The profiles come first, and the header links to them", async () => {
       await expect(page.getByRole("heading", { level: 2 }).first()).toHaveText(
-        "MobiFlight profiles on flightsim.to",
+        "MobiFlight profiles for WINCTRL (formerly WinWing), Rowsfire and MiniCockpit",
       )
       await expect(
         page.getByRole("link", { name: "9 on flightsim.to" }),
@@ -130,8 +133,11 @@ test.describe("MobiFlight profiles - cheat sheet", () => {
     })
 
     const section = page.getByRole("region", {
-      name: "MobiFlight profiles on flightsim.to",
+      name: "MobiFlight profiles for WINCTRL (formerly WinWing), Rowsfire and MiniCockpit",
     })
+    await expect(section.locator("p", { hasText: /^Hardware:/ })).toHaveText(
+      "Hardware: WINCTRL (formerly WinWing) PAP3, PFP 3N, FCU, MCDU · Rowsfire A107 · MiniCockpit miniFCU · Honeycomb Bravo · Thrustmaster TCA · Moza MB7F",
+    )
     await expect(section.getByRole("listitem")).toHaveCount(6)
     await expect(section.getByRole("listitem").first()).toMatchAriaSnapshot(`
       - link "Asobo A320neo | WinWing FCU | MobiFlight Profile by Test Pilot 1 · rated 4.5 · updated 1 day ago":
@@ -160,7 +166,7 @@ test.describe("MobiFlight profiles - cheat sheet", () => {
       "Asobo C172 preset cheat sheet",
     )
     await expect(
-      page.getByRole("region", { name: "MobiFlight profiles on flightsim.to" }),
+      page.getByRole("region", { name: /^MobiFlight profiles/ }),
     ).toHaveCount(0)
     await expect(page.getByText("on flightsim.to")).toHaveCount(0)
   })

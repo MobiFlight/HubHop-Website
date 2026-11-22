@@ -28,6 +28,9 @@ applyTo: "**/*.jsx, **/*.tsx, **/*.js, **/*.ts, **/*.css"
   the pages read that file. The token is the repository secret `FLIGHTSIM_TO_TOKEN` (locally `.env.local`), never a `NEXT_PUBLIC_`
   variable. Without it the site is built without profiles. `lib/flightsimProfiles.ts` matches profiles to aircraft by title
   (maker and model must be named) and the flightsim.to affiliation; fix wrong matches with its alias and override lists.
+  `lib/profileHardware.ts` reads the hardware brand and model from each profile title (a model several brands make
+  counts only with its brand); the cheat sheet names them in its title, description and profiles heading. Add new
+  brands and models there.
 - React with functional components and hooks
 - TypeScript in strict mode (legacy code uses `any` liberally; new code should be properly typed)
 - Tailwind CSS v4 with shadcn/ui (Radix, style `radix-vega`, see `components.json`) and Tabler icons (`@tabler/icons-react`)
