@@ -336,8 +336,8 @@ const Presets = ({ sim: simType, vendor, aircraft }: PresetsProps) => {
               {vendor && aircraft && (
                 <Link
                   href={aircraftUrl(simType, vendor, aircraft)}
-                  // lines up with the table content below
-                  className="pl-4 font-semibold text-primary hover:underline"
+                  // lines up with the rows' arrows below
+                  className="pl-2 font-semibold text-primary hover:underline"
                 >
                   Cheat sheet for the {filteredVendors} {filteredAircrafts} →
                 </Link>
