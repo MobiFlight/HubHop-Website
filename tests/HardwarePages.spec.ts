@@ -132,7 +132,7 @@ test.describe("Hardware pages - sponsors", () => {
 })
 
 test.describe("Hardware pages", () => {
-  test("Hardware pages - the overview shows sponsors first, with their tier", async ({
+  test("Hardware pages - the overview shows sponsors first, with a tier badge", async ({
     hubHopPage,
     page,
   }) => {
@@ -143,13 +143,14 @@ test.describe("Hardware pages", () => {
         .getByRole("region", { name, exact: true })
         .getByRole("heading", { level: 3 })
     await expect(brands("MobiFlight sponsors")).toHaveText([
-      /^Honeycomb\s*1 profile$/,
-      /^Rowsfire\s*1 profile$/,
-      /^miniCOCKPIT\s*2 profiles$/,
+      /^Honeycomb\s*Gold sponsor\s*1 profile$/,
+      /^Rowsfire\s*Silver sponsor\s*1 profile$/,
+      /^miniCOCKPIT\s*Bronze sponsor\s*2 profiles$/,
     ])
+    // the tier is a badge next to the name
     await expect(
-      page.getByRole("region", { name: "Honeycomb 1 profile" }),
-    ).toContainText("Gold sponsor")
+      page.getByRole("heading", { name: "Honeycomb Gold sponsor 1 profile" }),
+    ).toHaveCount(1)
     await expect(brands("More brands")).toHaveText([
       /^WINCTRL \(formerly WinWing\)\s*5 profiles$/,
       /^Thrustmaster\s*1 profile$/,

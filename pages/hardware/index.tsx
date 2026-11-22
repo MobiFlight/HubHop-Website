@@ -1,6 +1,7 @@
 import type { GetStaticProps } from "next"
 import Link from "next/link"
 import Layout from "@/components/Layout"
+import { Badge } from "@/components/ui/badge"
 import {
   brandUrl,
   hardwareIndexDescription,
@@ -10,7 +11,7 @@ import {
   type BrandPage,
 } from "@/lib/hardwarePages"
 import { brandLabel } from "@/lib/profileHardware"
-import { tierLabel } from "@/lib/sponsors"
+import type { SponsorTier } from "@/lib/sponsors"
 import { loadBrandPages } from "@/services/hardwarePages"
 
 // only what the overview shows, not every profile
@@ -60,6 +61,19 @@ export const getStaticProps: GetStaticProps<HardwareIndexProps> = async () => {
 const count = (value: number, one: string, many: string) =>
   `${value.toLocaleString("en-US")} ${value === 1 ? one : many}`
 
+// gold stands out in the brand colour, silver and bronze stay quieter
+const TIER_BADGE: Record<SponsorTier, "default" | "secondary" | "outline"> = {
+  gold: "default",
+  silver: "secondary",
+  bronze: "outline",
+}
+
+const TIER_NAME: Record<SponsorTier, string> = {
+  gold: "Gold",
+  silver: "Silver",
+  bronze: "Bronze",
+}
+
 type BrandGridProps = { brands: BrandSummary[] }
 
 const BrandGrid = ({ brands }: BrandGridProps) => (
@@ -75,17 +89,20 @@ const BrandGrid = ({ brands }: BrandGridProps) => (
             href={brandUrl(brand.slug)}
             className="flex justify-between gap-3 hover:underline"
           >
-            {brandLabel(brand)}
+            <span className="flex items-center gap-2">
+              {brandLabel(brand)}
+              {brand.sponsor && (
+                <Badge variant={TIER_BADGE[brand.sponsor.tier]}>
+                  {TIER_NAME[brand.sponsor.tier]}
+                  <span className="sr-only"> sponsor</span>
+                </Badge>
+              )}
+            </span>
             <span className="text-sm font-normal text-muted-foreground">
               {count(brand.profiles, "profile", "profiles")}
             </span>
           </Link>
         </h3>
-        {brand.sponsor && (
-          <p className="text-sm font-semibold text-primary">
-            {tierLabel[brand.sponsor.tier]}
-          </p>
-        )}
         {brand.products.length > 0 && (
           <ul className="flex flex-col gap-1">
             {brand.products.map((product) => (
