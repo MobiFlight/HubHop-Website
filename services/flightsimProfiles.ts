@@ -39,3 +39,13 @@ export const profilesOf = async (
   matched ??= read().then((all) => profilesByAircraft(all, aircraft))
   return (await matched).get(key) ?? []
 }
+
+/** The number of profiles per aircraft key, for aircraft that have any */
+export const profileCounts = async (
+  aircraft: MatchableAircraft[],
+): Promise<Record<string, number>> => {
+  matched ??= read().then((all) => profilesByAircraft(all, aircraft))
+  return Object.fromEntries(
+    [...(await matched)].map(([key, profiles]) => [key, profiles.length]),
+  )
+}
