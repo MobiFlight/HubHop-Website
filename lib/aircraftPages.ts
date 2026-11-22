@@ -241,6 +241,20 @@ export const formatDate = (iso: string) =>
     timeZone: "UTC",
   })
 
+const DAY = 24 * 60 * 60 * 1000
+
+/** "today", "3 days ago", "1 week ago", "2 months ago", "1 year ago" */
+export const timeAgo = (iso: string, now: number) => {
+  const days = Math.floor((now - new Date(iso).getTime()) / DAY)
+  const ago = (value: number, unit: string) =>
+    `${value} ${unit}${value === 1 ? "" : "s"} ago`
+  if (days < 1) return "today"
+  if (days < 7) return ago(days, "day")
+  if (days < 30) return ago(Math.floor(days / 7), "week")
+  if (days < 365) return ago(Math.floor(days / 30), "month")
+  return ago(Math.floor(days / 365), "year")
+}
+
 // Texts for titles, search results and link previews. Written for home cockpit
 // builders, who search for their aircraft and hardware rather than for MobiFlight.
 
