@@ -1,5 +1,5 @@
 import type { GetStaticPaths, GetStaticProps } from "next"
-import { useEffect } from "react"
+import { Fragment, useEffect } from "react"
 import Layout from "@/components/Layout"
 import MoreFromVendor from "@/components/sections/aircraft/MoreFromVendor"
 import NewToMobiFlight from "@/components/sections/aircraft/NewToMobiFlight"
@@ -8,6 +8,7 @@ import BreadcrumbJsonLd from "@/components/sections/aircraft/BreadcrumbJsonLd"
 import FlightsimProfiles from "@/components/sections/aircraft/FlightsimProfiles"
 import SheetHeader from "@/components/sections/aircraft/SheetHeader"
 import SystemSection from "@/components/sections/aircraft/SystemSection"
+import PromoSlot from "@/components/sections/Shared/PromoSlot"
 import {
   aircraftList,
   aircraftSheet,
@@ -92,6 +93,11 @@ const CheatSheet = ({
   builtAt,
 }: CheatSheetProps) => {
   const name = `${sheet.vendor} ${sheet.aircraft}`
+  const promotionContext = {
+    sim,
+    vendor: sheet.vendor,
+    aircraft: sheet.aircraft,
+  }
   const path = aircraftUrl(sim, sheet.vendorSlug, sheet.aircraftSlug)
 
   useEffect(() => {
@@ -121,43 +127,57 @@ const CheatSheet = ({
           builtAt={builtAt}
         />
         <div className="grid gap-8 lg:grid-cols-[14rem_1fr]">
-          <nav
-            aria-label="Systems"
-            className="lg:sticky lg:top-4 lg:self-start"
-          >
-            <ul className="flex flex-wrap gap-1 lg:flex-col">
-              {sheet.systems.map((system) => (
-                <li key={system.slug}>
-                  <a
-                    href={`#${system.slug}`}
-                    className="flex justify-between gap-3 rounded-md px-2 py-1 text-primary hover:bg-card"
-                  >
-                    {system.name}
-                    <span className="text-muted-foreground">
-                      {system.total}
-                    </span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
+          {/* the promotion scrolls away, the systems stay in view */}
+          <div className="flex flex-col gap-6">
+            <PromoSlot
+              slot="cheatsheet-sidebar"
+              context={promotionContext}
+              className="hidden lg:block"
+            />
+            <nav aria-label="Systems" className="lg:sticky lg:top-4">
+              <ul className="flex flex-wrap gap-1 lg:flex-col">
+                {sheet.systems.map((system) => (
+                  <li key={system.slug}>
+                    <a
+                      href={`#${system.slug}`}
+                      className="flex justify-between gap-3 rounded-md px-2 py-1 text-primary hover:bg-card"
+                    >
+                      {system.name}
+                      <span className="text-muted-foreground">
+                        {system.total}
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </div>
           <div className="flex min-w-0 flex-col gap-10">
             <AircraftSearch sim={sim} aircraft={sheet} />
-            {sheet.systems.map((system) => (
-              <SystemSection
-                key={system.slug}
-                system={system}
-                allPresetsUrl={
-                  system.total > SYSTEM_PREVIEW
-                    ? aircraftSystemUrl(
-                        sim,
-                        sheet.vendorSlug,
-                        sheet.aircraftSlug,
-                        system.slug,
-                      )
-                    : undefined
-                }
-              />
+            {sheet.systems.map((system, index) => (
+              <Fragment key={system.slug}>
+                <SystemSection
+                  system={system}
+                  allPresetsUrl={
+                    system.total > SYSTEM_PREVIEW
+                      ? aircraftSystemUrl(
+                          sim,
+                          sheet.vendorSlug,
+                          sheet.aircraftSlug,
+                          system.slug,
+                        )
+                      : undefined
+                  }
+                />
+                {/* after the second system, so the first presets stay above the fold */}
+                {index === Math.min(1, sheet.systems.length - 1) && (
+                  <PromoSlot
+                    slot="cheatsheet-inline"
+                    context={promotionContext}
+                    layout="row"
+                  />
+                )}
+              </Fragment>
             ))}
           </div>
         </div>
