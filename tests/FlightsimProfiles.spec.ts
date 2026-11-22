@@ -114,7 +114,7 @@ test.describe("MobiFlight profiles - cheat sheet", () => {
         "MobiFlight profiles on flightsim.to",
       )
       await expect(
-        page.getByRole("link", { name: "7 on flightsim.to" }),
+        page.getByRole("link", { name: "9 on flightsim.to" }),
       ).toHaveAttribute("href", "#mobiflight-profiles")
     })
 
@@ -123,7 +123,7 @@ test.describe("MobiFlight profiles - cheat sheet", () => {
     })
     await expect(section.getByRole("listitem")).toHaveCount(6)
     await expect(section.getByRole("listitem").first()).toMatchAriaSnapshot(`
-      - link "Asobo A320neo | WinWing FCU | MobiFlight Profile by Test Pilot 1 · rated 4.5 · updated 1 day ago View on flightsim.to":
+      - link "Asobo A320neo | WinWing FCU | MobiFlight Profile by Test Pilot 1 · rated 4.5 · updated 1 day ago":
         - /url: https://flightsim.to/addon/900001/asobo-a320neo-profile-1
     `)
     // the exact date on hover
@@ -133,8 +133,8 @@ test.describe("MobiFlight profiles - cheat sheet", () => {
     )
 
     await test.step("Show all profiles", async () => {
-      await section.getByRole("button", { name: "Show all 7 profiles" }).click()
-      await expect(section.getByRole("listitem")).toHaveCount(7)
+      await section.getByRole("button", { name: "Show all 9 profiles" }).click()
+      await expect(section.getByRole("listitem")).toHaveCount(9)
       await expect(section.getByRole("button")).toHaveCount(0)
     })
   })

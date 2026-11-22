@@ -1,6 +1,6 @@
 import Image from "next/image"
 import { useEffect, useState } from "react"
-import { IconExternalLink, IconStarFilled } from "@tabler/icons-react"
+import { IconStarFilled } from "@tabler/icons-react"
 import { Button } from "@/components/ui/button"
 import { formatDate, timeAgo } from "@/lib/aircraftPages"
 import {
@@ -47,31 +47,33 @@ const FlightsimProfiles = ({
           were built for, shared by the community on flightsim.to.
         </p>
       </div>
-      <ul className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
+      <ul className="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
         {shown.map((profile) => (
           <li key={profile.id}>
             <a
               href={profile.link}
               target="_blank"
               rel="noopener"
-              className="flex h-full overflow-hidden rounded-lg border bg-card transition-colors hover:border-primary"
+              className="flex h-full items-center overflow-hidden rounded-lg border bg-card transition-colors hover:border-primary"
             >
               {profile.thumbnail && (
-                <span className="relative block min-h-24 w-32 shrink-0 bg-black/30 sm:w-44">
+                <span className="relative block w-28 shrink-0 self-stretch bg-black/30 sm:w-34">
                   <Image
                     src={profile.thumbnail}
                     alt=""
                     fill
                     unoptimized
                     loader={passThrough}
-                    sizes="176px"
+                    sizes="136px"
                     className="object-cover"
                   />
                 </span>
               )}
-              <span className="flex min-w-0 flex-1 flex-col gap-1 p-4">
-                <span className="font-semibold">{profile.title}</span>
-                <span className="text-sm text-muted-foreground">
+              <span className="flex min-w-0 flex-1 flex-col gap-1 px-4 py-3">
+                <span className="line-clamp-2 font-semibold">
+                  {profile.title}
+                </span>
+                <span className="text-sm text-muted-foreground sm:truncate">
                   by {profile.author}
                   {profile.rating > 0 && (
                     <>
@@ -91,10 +93,6 @@ const FlightsimProfiles = ({
                   >
                     {timeAgo(profile.updatedAt, now)}
                   </time>
-                </span>
-                <span className="mt-auto flex items-center gap-1 pt-2 text-sm font-semibold text-primary">
-                  View on flightsim.to
-                  <IconExternalLink aria-hidden="true" className="size-4" />
                 </span>
               </span>
             </a>

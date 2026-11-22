@@ -84,6 +84,30 @@
     "affiliation": null
   },
   {
+    "id": 900020,
+    "title": "Asobo A320neo | WinWing PFP 3N | MobiFlight Profile",
+    "link": "https://flightsim.to/addon/900020/asobo-a320neo-profile-8",
+    "thumbnail": null,
+    "author": {
+      "name": "Test Pilot 10"
+    },
+    "rating": 0,
+    "updated_at": "2024-08-01T10:00:00Z",
+    "affiliation": null
+  },
+  {
+    "id": 900021,
+    "title": "Asobo A320neo | Thrustmaster TCA | MobiFlight Profile",
+    "link": "https://flightsim.to/addon/900021/asobo-a320neo-profile-9",
+    "thumbnail": null,
+    "author": {
+      "name": "Test Pilot 11"
+    },
+    "rating": 0,
+    "updated_at": "2024-05-01T10:00:00Z",
+    "affiliation": null
+  },
+  {
     "id": 900010,
     "title": "FlyByWire A32NX | MiniCockpit MiniFCU | MobiFlight Profile",
     "link": "https://flightsim.to/addon/900010/flybywire-a32nx-minifcu",
