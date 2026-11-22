@@ -44,3 +44,6 @@ yarn-error.log*
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# build data downloaded before next build (scripts/flightsimProfiles.mjs)
+/.build-data/

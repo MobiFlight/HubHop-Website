@@ -21,6 +21,11 @@ applyTo: "**/*.jsx, **/*.tsx, **/*.js, **/*.ts, **/*.css"
   the meta and Open Graph tags; don't add them per page. `npm run build` also runs `scripts/sitemap.mjs`, which writes
   `out/sitemap.xml` (every page with a canonical URL that isn't `noindex`) and `out/robots.txt`. Page texts for search
   results are templates in `lib/aircraftPages.ts`; write them for home cockpit builders. See `docs/search-console.md`.
+- MSFS cheat sheets also show the community's MobiFlight profiles from flightsim.to. `npm run build` first runs
+  `scripts/flightsimProfiles.mjs`, which downloads them once with flightsim.to's partner API into `.build-data/` (gitignored);
+  the pages read that file. The token is the repository secret `FLIGHTSIM_TO_TOKEN` (locally `.env.local`), never a `NEXT_PUBLIC_`
+  variable. Without it the site is built without profiles. `lib/flightsimProfiles.ts` matches profiles to aircraft by title
+  (maker and model must be named) and the flightsim.to affiliation; fix wrong matches with its alias and override lists.
 - React with functional components and hooks
 - TypeScript in strict mode (legacy code uses `any` liberally; new code should be properly typed)
 - Tailwind CSS v4 with shadcn/ui (Radix, style `radix-vega`, see `components.json`) and Tabler icons (`@tabler/icons-react`)

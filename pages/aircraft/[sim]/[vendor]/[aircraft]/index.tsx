@@ -5,6 +5,7 @@ import MoreFromVendor from "@/components/sections/aircraft/MoreFromVendor"
 import NewToMobiFlight from "@/components/sections/aircraft/NewToMobiFlight"
 import AircraftSearch from "@/components/sections/aircraft/AircraftSearch"
 import BreadcrumbJsonLd from "@/components/sections/aircraft/BreadcrumbJsonLd"
+import FlightsimProfiles from "@/components/sections/aircraft/FlightsimProfiles"
 import SheetHeader from "@/components/sections/aircraft/SheetHeader"
 import SystemSection from "@/components/sections/aircraft/SystemSection"
 import {
@@ -21,7 +22,9 @@ import {
   type AircraftSheet,
   type AircraftSummary,
 } from "@/lib/aircraftPages"
+import type { FlightsimProfile } from "@/lib/flightsimProfiles"
 import { SIMS, simFromSegment, simSegment, type Sim } from "@/lib/presetUrls"
+import { profilesOf } from "@/services/flightsimProfiles"
 import { loadPresets } from "@/services/libraryStats"
 
 type CheatSheetProps = {
@@ -29,6 +32,9 @@ type CheatSheetProps = {
   sheet: AircraftSheet
   // the vendor's other aircraft
   related: AircraftSummary[]
+  // MobiFlight profiles on flightsim.to (MSFS only)
+  profiles: FlightsimProfile[]
+  builtAt: string
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -56,15 +62,34 @@ export const getStaticProps: GetStaticProps<CheatSheetProps> = async ({
   const aircraftSlug = String(params?.aircraft)
   const presets = presetsOfAircraft(all, vendorSlug, aircraftSlug)
   if (presets.length === 0) return { notFound: true }
-  const related = aircraftList(all).filter(
+  const aircraft = aircraftList(all)
+  const related = aircraft.filter(
     (entry) =>
       entry.vendorSlug === vendorSlug && entry.aircraftSlug !== aircraftSlug,
   )
-  return { props: { sim, sheet: aircraftSheet(presets), related } }
+  const profiles =
+    sim === "msfs2020"
+      ? await profilesOf(`${vendorSlug}/${aircraftSlug}`, aircraft)
+      : []
+  return {
+    props: {
+      sim,
+      sheet: aircraftSheet(presets),
+      related,
+      profiles,
+      builtAt: new Date().toISOString(),
+    },
+  }
 }
 
 /** The cheat sheet of an aircraft: every system with its inputs and outputs */
-const CheatSheet = ({ sim, sheet, related }: CheatSheetProps) => {
+const CheatSheet = ({
+  sim,
+  sheet,
+  related,
+  profiles,
+  builtAt,
+}: CheatSheetProps) => {
   const name = `${sheet.vendor} ${sheet.aircraft}`
   const path = aircraftUrl(sim, sheet.vendorSlug, sheet.aircraftSlug)
 
@@ -86,7 +111,13 @@ const CheatSheet = ({ sim, sheet, related }: CheatSheetProps) => {
         ]}
       />
       <main className="container mx-auto flex flex-col gap-10 px-6 py-10">
-        <SheetHeader sim={sim} sheet={sheet} />
+        <SheetHeader sim={sim} sheet={sheet} profileCount={profiles.length} />
+        {/* ready-made profiles first: they save the most time */}
+        <FlightsimProfiles
+          aircraft={name}
+          profiles={profiles}
+          builtAt={builtAt}
+        />
         <div className="grid gap-8 lg:grid-cols-[14rem_1fr]">
           <nav
             aria-label="Systems"
