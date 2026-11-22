@@ -4,6 +4,7 @@ import hhLogo from "@/public/images/logo-big.png"
 import Link from "next/link"
 import {
   IconBolt,
+  IconDeviceGamepad2,
   IconPlane,
   IconHome,
   IconList,
@@ -43,6 +44,7 @@ const icons: Record<string, typeof IconHome> = {
   Home: IconHome,
   Presets: IconList,
   Aircraft: IconPlane,
+  Hardware: IconDeviceGamepad2,
   Tools: IconBolt,
   Stats: IconTrendingUp,
 }

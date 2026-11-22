@@ -10,7 +10,8 @@ import {
   type MatchableAircraft,
 } from "@/lib/flightsimProfiles"
 
-const read = async (): Promise<FlightsimAddon[]> => {
+/** All downloaded MobiFlight profiles; none when the download is missing */
+export const loadProfiles = async (): Promise<FlightsimAddon[]> => {
   const { readFile } = await import("node:fs/promises")
   const { join } = await import("node:path")
   // Playwright sets this, see services/libraryStats.ts
@@ -36,7 +37,7 @@ export const profilesOf = async (
   key: string,
   aircraft: MatchableAircraft[],
 ): Promise<FlightsimProfile[]> => {
-  matched ??= read().then((all) => profilesByAircraft(all, aircraft))
+  matched ??= loadProfiles().then((all) => profilesByAircraft(all, aircraft))
   return (await matched).get(key) ?? []
 }
 
@@ -44,7 +45,7 @@ export const profilesOf = async (
 export const profileCounts = async (
   aircraft: MatchableAircraft[],
 ): Promise<Record<string, number>> => {
-  matched ??= read().then((all) => profilesByAircraft(all, aircraft))
+  matched ??= loadProfiles().then((all) => profilesByAircraft(all, aircraft))
   return Object.fromEntries(
     [...(await matched)].map(([key, profiles]) => [key, profiles.length]),
   )

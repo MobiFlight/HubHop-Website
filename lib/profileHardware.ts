@@ -102,7 +102,7 @@ export const HARDWARE: HardwareBrand[] = [
     models: [model("TCA", "TCA", /\btca\b/, true)],
   },
   {
-    name: "Wingflex",
+    name: "WingFlex",
     pattern: /\bwingflex\b/,
     models: [
       model("FCU", "FCU", /\bfcu\b/),
@@ -117,7 +117,7 @@ export const HARDWARE: HardwareBrand[] = [
     models: [],
   },
   {
-    name: "Moza",
+    name: "MOZA",
     pattern: /\bmoza\b/,
     models: [
       model("MB7F", "MB7F", /\bmb7f\b/, true),

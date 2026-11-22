@@ -41,10 +41,10 @@ test.describe("Profile hardware", () => {
   })
 
   test("Profile hardware - a model several brands make needs the brand", () => {
-    // WINCTRL, Wingflex and others make an MCDU or an RMP
+    // WINCTRL, WingFlex and others make an MCDU or an RMP
     expect(names("PMDG B737 NG MCDU MobiFlight Profile")).toEqual([])
     expect(names("Wingflex RMP Cube - PMDG 737/777 Profiles")).toEqual([
-      "Wingflex RMP",
+      "WingFlex RMP",
     ])
     // the FCU belongs to the brand named before it
     expect(

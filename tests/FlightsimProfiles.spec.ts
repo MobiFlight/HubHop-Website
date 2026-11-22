@@ -136,7 +136,7 @@ test.describe("MobiFlight profiles - cheat sheet", () => {
       name: "MobiFlight profiles for WINCTRL (formerly WinWing), Rowsfire and MiniCockpit",
     })
     await expect(section.locator("p", { hasText: /^Hardware:/ })).toHaveText(
-      "Hardware: WINCTRL (formerly WinWing) PAP3, PFP 3N, FCU, MCDU · Rowsfire A107 · MiniCockpit miniFCU · Honeycomb Bravo · Thrustmaster TCA · Moza MB7F",
+      "Hardware: WINCTRL (formerly WinWing) PAP3, PFP 3N, FCU, MCDU · Rowsfire A107 · MiniCockpit miniFCU · Honeycomb Bravo · Thrustmaster TCA · MOZA MB7F",
     )
     await expect(section.getByRole("listitem")).toHaveCount(6)
     await expect(section.getByRole("listitem").first()).toMatchAriaSnapshot(`

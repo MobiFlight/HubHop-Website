@@ -12,6 +12,10 @@ const NavbarLinks = [
     href: "/aircraft/msfs/",
   },
   {
+    title: "Hardware",
+    href: "/hardware/",
+  },
+  {
     title: "Tools",
     href: "/tools",
   },
