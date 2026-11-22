@@ -145,8 +145,8 @@ const HardwareIndex = ({ brands, profiles }: HardwareIndexProps) => {
       <main className="container mx-auto flex flex-col gap-8 px-6 py-10">
         <div className="flex flex-col gap-2">
           <h1 className="text-4xl font-extrabold">
-            Cockpit hardware{" "}
-            <span className="text-primary">with MobiFlight profiles</span>
+            MobiFlight profiles{" "}
+            <span className="text-primary">for your cockpit hardware</span>
           </h1>
           <p className="text-lg text-muted-foreground">
             {count(profiles, "ready-made profile", "ready-made profiles")} for{" "}

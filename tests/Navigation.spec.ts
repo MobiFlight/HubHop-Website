@@ -26,7 +26,7 @@ test.describe("Navigation", () => {
       await expect(page).toHaveURL(/\/hardware\/$/)
       await expect(
         page.getByRole("heading", {
-          name: "Cockpit hardware with MobiFlight profiles",
+          name: "MobiFlight profiles for your cockpit hardware",
         }),
       ).toBeVisible()
     })

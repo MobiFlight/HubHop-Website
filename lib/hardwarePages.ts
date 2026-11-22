@@ -191,7 +191,7 @@ export const brandDescription = (brand: BrandPage) => {
 }
 
 export const hardwareIndexTitle = () =>
-  "Cockpit hardware with MobiFlight profiles (MSFS) | HubHop"
+  "MobiFlight profiles for your cockpit hardware (MSFS) | HubHop"
 
 export const hardwareIndexDescription = (brands: number, profiles: number) =>
   `Ready-made MobiFlight profiles for ${brands.toLocaleString("en-US")} cockpit hardware brands: ${profiles.toLocaleString("en-US")} profiles for FCUs, MCDUs, throttles and panels in MSFS. Pick your brand and find the profile for your aircraft.`

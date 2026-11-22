@@ -192,7 +192,10 @@ test.describe("Hardware pages", () => {
     await hubHopPage.goto("/hardware/")
 
     await expect(page).toHaveTitle(
-      "Cockpit hardware with MobiFlight profiles (MSFS) | HubHop",
+      "MobiFlight profiles for your cockpit hardware (MSFS) | HubHop",
+    )
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+      "MobiFlight profiles for your cockpit hardware",
     )
     await expect(
       page.getByRole("region", {
