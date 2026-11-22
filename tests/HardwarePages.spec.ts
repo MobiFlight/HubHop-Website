@@ -76,11 +76,13 @@ test.describe("Hardware pages - link preview images", () => {
       )
     }
     const profile = { aircraft: [{ url: "/aircraft/msfs/fenixsim/a320/" }] }
-    page(path.join(out, "profiles"), {
+    page(path.join(out, "profiles", "msfs"), {
+      sim: "msfs2020",
       brands: [{ name: "WINCTRL" }],
       profiles: 300,
     })
-    page(path.join(out, "profiles", "winctrl"), {
+    page(path.join(out, "profiles", "msfs", "winctrl"), {
+      sim: "msfs2020",
       brand: {
         name: "WINCTRL",
         formerly: "WinWing",
@@ -92,7 +94,7 @@ test.describe("Hardware pages - link preview images", () => {
 
     execFileSync("node", ["scripts/ogImages.mjs", out])
 
-    for (const image of ["profiles.jpg", "profiles/winctrl.jpg"])
+    for (const image of ["profiles/msfs.jpg", "profiles/msfs/winctrl.jpg"])
       expect(await sharp(path.join(out, "og", image)).metadata()).toMatchObject(
         { format: "jpeg", width: 1200, height: 630 },
       )
@@ -176,7 +178,7 @@ test.describe("Hardware pages", () => {
     hubHopPage,
     page,
   }) => {
-    await hubHopPage.goto("/profiles/")
+    await hubHopPage.goto("/profiles/msfs/")
 
     const brands = (name: string) =>
       page
@@ -202,7 +204,7 @@ test.describe("Hardware pages", () => {
     hubHopPage,
     page,
   }) => {
-    await hubHopPage.goto("/profiles/honeycomb/")
+    await hubHopPage.goto("/profiles/msfs/honeycomb/")
 
     const box = page.getByRole("complementary", { name: "Sponsor" })
     await expect(box).toContainText("Gold sponsor of MobiFlight and HubHop")
@@ -215,7 +217,7 @@ test.describe("Hardware pages", () => {
     await expect(link).toHaveAttribute("target", "_blank")
 
     await test.step("Brands that aren't sponsors have no sponsor link", async () => {
-      await hubHopPage.goto("/profiles/thrustmaster/")
+      await hubHopPage.goto("/profiles/msfs/thrustmaster/")
       await expect(page.getByRole("heading", { level: 1 })).toHaveText(
         "Thrustmaster MobiFlight profiles",
       )
@@ -229,7 +231,7 @@ test.describe("Hardware pages", () => {
     hubHopPage,
     page,
   }) => {
-    await hubHopPage.goto("/profiles/")
+    await hubHopPage.goto("/profiles/msfs/")
 
     await expect(page).toHaveTitle(
       "MobiFlight profiles that make your hardware plug-and-play | HubHop",
@@ -249,23 +251,23 @@ test.describe("Hardware pages", () => {
       - region:
         - heading "WINCTRL (formerly WinWing) 5 profiles" [level=3]:
           - link:
-            - /url: /profiles/winctrl/
+            - /url: /profiles/msfs/winctrl/
         - list:
           - listitem:
             - link "PAP 1 profile":
-              - /url: /profiles/winctrl/#pap
+              - /url: /profiles/msfs/winctrl/#pap
           - listitem:
             - link "PFP 1 profile":
-              - /url: /profiles/winctrl/#pfp
+              - /url: /profiles/msfs/winctrl/#pfp
           - listitem:
             - link "FCU 1 profile":
-              - /url: /profiles/winctrl/#fcu
+              - /url: /profiles/msfs/winctrl/#fcu
           - listitem:
             - link "MCDU 1 profile":
-              - /url: /profiles/winctrl/#mcdu
+              - /url: /profiles/msfs/winctrl/#mcdu
           - listitem:
             - link "RMP 1 profile":
-              - /url: /profiles/winctrl/#rmp
+              - /url: /profiles/msfs/winctrl/#rmp
     `)
   })
 
@@ -273,7 +275,7 @@ test.describe("Hardware pages", () => {
     hubHopPage,
     page,
   }) => {
-    await hubHopPage.goto("/profiles/winctrl/")
+    await hubHopPage.goto("/profiles/msfs/winctrl/")
 
     await expect(page).toHaveTitle(
       "WINCTRL (formerly WinWing) MobiFlight profiles for your home cockpit (MSFS)",
@@ -283,10 +285,10 @@ test.describe("Hardware pages", () => {
       page
         .getByRole("navigation", { name: "breadcrumb" })
         .getByRole("link", { name: "Profiles" }),
-    ).toHaveAttribute("href", "/profiles/")
+    ).toHaveAttribute("href", "/profiles/msfs/")
     await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
       "content",
-      /\/og\/profiles\/winctrl\.jpg$/,
+      /\/og\/profiles\/msfs\/winctrl\.jpg$/,
     )
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(
       "WINCTRL (formerly WinWing) MobiFlight profiles",
@@ -311,7 +313,7 @@ test.describe("Hardware pages", () => {
     hubHopPage,
     page,
   }) => {
-    await hubHopPage.goto("/profiles/rowsfire/")
+    await hubHopPage.goto("/profiles/msfs/rowsfire/")
 
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
       "content",
@@ -332,6 +334,6 @@ test.describe("Hardware pages", () => {
     await hubHopPage.goto("/aircraft/msfs/asobo/a320neo/")
 
     await page.getByRole("link", { name: "WINCTRL (formerly WinWing)" }).click()
-    await expect(page).toHaveURL(/\/profiles\/winctrl\/$/)
+    await expect(page).toHaveURL(/\/profiles\/msfs\/winctrl\/$/)
   })
 })

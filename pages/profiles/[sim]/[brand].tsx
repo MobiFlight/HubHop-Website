@@ -22,14 +22,17 @@ import {
   MIN_INDEXED_PROFILES,
   MIN_PRODUCTS_FOR_SIDEBAR,
   productHeading,
+  PROFILE_SIMS,
   type BrandPage,
 } from "@/lib/hardwarePages"
 import { brandLabel } from "@/lib/profileHardware"
+import { simFromSegment, simSegment, type Sim } from "@/lib/presetUrls"
 import { tierLabel } from "@/lib/sponsors"
 import { track } from "@/services/analytics"
 import { loadBrandPages } from "@/services/hardwarePages"
 
 type BrandProps = {
+  sim: Sim
   brand: BrandPage
   // when the page was built: "3 days ago" in the HTML, recalculated in the browser
   builtAt: string
@@ -37,30 +40,37 @@ type BrandProps = {
 
 const OTHER_ANCHOR = "other-profiles"
 
-export const getStaticPaths: GetStaticPaths = async () => ({
-  paths: (await loadBrandPages()).map((brand) => ({
-    params: { brand: brand.slug },
-  })),
-  fallback: false,
-})
+export const getStaticPaths: GetStaticPaths = async () => {
+  const brands = await loadBrandPages()
+  return {
+    paths: PROFILE_SIMS.flatMap((sim) =>
+      brands.map((brand) => ({
+        params: { sim: simSegment(sim), brand: brand.slug },
+      })),
+    ),
+    fallback: false,
+  }
+}
 
 export const getStaticProps: GetStaticProps<BrandProps> = async ({
   params,
 }) => {
+  const sim = simFromSegment(String(params?.sim))
+  if (!sim || !PROFILE_SIMS.includes(sim)) return { notFound: true }
   const brand = (await loadBrandPages()).find(
     (page) => page.slug === String(params?.brand),
   )
   if (!brand) return { notFound: true }
-  return { props: { brand, builtAt: new Date().toISOString() } }
+  return { props: { sim, brand, builtAt: new Date().toISOString() } }
 }
 
 /** A hardware brand: its MobiFlight profiles on flightsim.to, by product */
-const Brand = ({ brand, builtAt }: BrandProps) => {
+const Brand = ({ sim, brand, builtAt }: BrandProps) => {
   // the page is built at night: the browser knows how long ago it really was
   const [now, setNow] = useState(() => new Date(builtAt).getTime())
   useEffect(() => setNow(Date.now()), [])
   const name = brandLabel(brand)
-  const path = brandUrl(brand.slug)
+  const path = brandUrl(sim, brand.slug)
   const aircraft = new Set(
     [...brand.products.flatMap((p) => p.profiles), ...brand.other].flatMap(
       (profile) => profile.aircraft.map((entry) => entry.url),
@@ -92,11 +102,11 @@ const Brand = ({ brand, builtAt }: BrandProps) => {
       description={brandDescription(brand)}
       path={path}
       noindex={brand.profiles < MIN_INDEXED_PROFILES}
-      image={brandImageUrl(brand.slug)}
+      image={brandImageUrl(sim, brand.slug)}
     >
       <BreadcrumbJsonLd
         items={[
-          { name: "Profiles", path: hardwareIndexUrl() },
+          { name: "Profiles", path: hardwareIndexUrl(sim) },
           { name, path },
         ]}
       />
@@ -106,7 +116,7 @@ const Brand = ({ brand, builtAt }: BrandProps) => {
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink asChild>
-                  <Link href={hardwareIndexUrl()}>Profiles</Link>
+                  <Link href={hardwareIndexUrl(sim)}>Profiles</Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />

@@ -3,7 +3,7 @@
 // - every aircraft cheat sheet: the aircraft's name, its numbers and the sim,
 //   out/og/aircraft/<sim>/<vendor>/<aircraft>.jpg (lib/aircraftPages.ts)
 // - the profiles overview and every brand page: the brand and its numbers,
-//   out/og/profiles.jpg and out/og/profiles/<brand>.jpg (lib/hardwarePages.ts)
+//   out/og/profiles/<sim>.jpg and out/og/profiles/<sim>/<brand>.jpg (lib/hardwarePages.ts)
 // The numbers come from the exported page itself (its __NEXT_DATA__), so image
 // and page always match.
 import fs from "node:fs"
@@ -199,8 +199,8 @@ const aircraftCard = ({ sim, vendor, aircraft, presets, systems, profiles }) =>
     ],
   })
 
-/** A hardware brand's image (MSFS only, like the profiles) */
-const brandCard = (brand) => {
+/** A hardware brand's image */
+const brandCard = (sim, brand) => {
   const profiles = [
     ...brand.products.flatMap((product) => product.profiles),
     ...brand.other,
@@ -209,7 +209,7 @@ const brandCard = (brand) => {
     profiles.flatMap((profile) => profile.aircraft.map((entry) => entry.url)),
   ).size
   return card({
-    sim: "msfs2020",
+    sim,
     kicker: brand.formerly
       ? `Hardware · formerly ${brand.formerly}`
       : "Hardware",
@@ -226,9 +226,9 @@ const brandCard = (brand) => {
 }
 
 /** The profiles overview's image */
-const hardwareIndexCard = ({ brands, profiles }) =>
+const hardwareIndexCard = ({ sim, brands, profiles }) =>
   card({
-    sim: "msfs2020",
+    sim,
     // the same words as the page title
     title: "MobiFlight profiles",
     subtitle: "that make your hardware plug-and-play",
@@ -300,26 +300,33 @@ for (const { segments } of cheatSheets()) {
   aircraftImages++
 }
 
-/** The profiles overview and brand pages: <out>/profiles/[<brand>/]index.html */
+/** The profiles overview and brand pages: <out>/profiles/<sim>/[<brand>/]index.html */
+const subdirs = (dir) =>
+  fs.existsSync(dir)
+    ? fs
+        .readdirSync(dir, { withFileTypes: true })
+        .filter((entry) => entry.isDirectory())
+        .map((entry) => entry.name)
+    : []
 const hardwareRoot = path.join(OUT, "profiles")
-const indexProps =
-  fs.existsSync(path.join(hardwareRoot, "index.html")) &&
-  pagePropsOf(path.join(hardwareRoot, "index.html"))
-if (indexProps?.brands)
-  await draw(hardwareIndexCard(indexProps), "profiles.jpg")
 let brandImages = 0
-const brandDirs = fs.existsSync(hardwareRoot)
-  ? fs
-      .readdirSync(hardwareRoot, { withFileTypes: true })
-      .filter((entry) => entry.isDirectory())
-      .map((entry) => entry.name)
-  : []
-for (const slug of brandDirs) {
-  const file = path.join(hardwareRoot, slug, "index.html")
-  const props = fs.existsSync(file) && pagePropsOf(file)
-  if (!props?.brand) continue
-  await draw(brandCard(props.brand), "profiles", `${slug}.jpg`)
-  brandImages++
+for (const simDir of subdirs(hardwareRoot)) {
+  const indexFile = path.join(hardwareRoot, simDir, "index.html")
+  const indexProps = fs.existsSync(indexFile) && pagePropsOf(indexFile)
+  if (!indexProps?.brands) continue
+  await draw(hardwareIndexCard(indexProps), "profiles", `${simDir}.jpg`)
+  for (const slug of subdirs(path.join(hardwareRoot, simDir))) {
+    const file = path.join(hardwareRoot, simDir, slug, "index.html")
+    const props = fs.existsSync(file) && pagePropsOf(file)
+    if (!props?.brand) continue
+    await draw(
+      brandCard(props.sim, props.brand),
+      "profiles",
+      simDir,
+      `${slug}.jpg`,
+    )
+    brandImages++
+  }
 }
 console.info(
   `preview images: ${aircraftImages} aircraft, ${brandImages} hardware brands`,

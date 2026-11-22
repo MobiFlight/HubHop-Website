@@ -13,7 +13,7 @@ const NavbarLinks = [
   },
   {
     title: "Profiles",
-    href: "/profiles/",
+    href: "/profiles/msfs/",
   },
   {
     title: "Tools",

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import ProfileCard from "@/components/sections/Shared/ProfileCard"
 import { listOf } from "@/lib/aircraftPages"
 import { brandUrl } from "@/lib/hardwarePages"
-import { slugify } from "@/lib/presetUrls"
+import { slugify, type Sim } from "@/lib/presetUrls"
 import {
   PROFILE_PREVIEW,
   PROFILES_ANCHOR,
@@ -13,6 +13,7 @@ import {
 import { brandLabel, type BrandSummary } from "@/lib/profileHardware"
 
 type FlightsimProfilesProps = {
+  sim: Sim
   aircraft: string
   profiles: FlightsimProfile[]
   // the brands and models named in the profiles' titles, most profiles first
@@ -23,6 +24,7 @@ type FlightsimProfilesProps = {
 
 /** Community MobiFlight profiles for the aircraft, on flightsim.to */
 const FlightsimProfiles = ({
+  sim,
   aircraft,
   profiles,
   hardware,
@@ -59,7 +61,7 @@ const FlightsimProfiles = ({
               <span key={brand.name}>
                 {index > 0 && " · "}
                 <Link
-                  href={brandUrl(slugify(brand.name))}
+                  href={brandUrl(sim, slugify(brand.name))}
                   className="text-primary hover:underline"
                 >
                   {brandLabel(brand)}
