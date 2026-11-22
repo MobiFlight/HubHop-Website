@@ -26,6 +26,9 @@ export type SlotId =
   | "home-news"
   | "home-sponsor"
   | "home-club"
+  // aircraft cheat sheets: above the systems list (from lg on) and after the second system
+  | "cheatsheet-sidebar"
+  | "cheatsheet-inline"
 
 export type PromotionSim = "msfs2020" | "xplane"
 
