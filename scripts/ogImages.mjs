@@ -218,10 +218,10 @@ const brandCard = (brand) => {
 const hardwareIndexCard = ({ brands, profiles }) =>
   card({
     sim: "msfs2020",
-    // the same order as the page title: what you get, then for what
-    kicker: "Shared by the home cockpit community",
+    // you find the profiles by browsing the hardware
+    kicker: "Discover ready-made",
     title: "MobiFlight profiles",
-    subtitle: "for your cockpit hardware",
+    subtitle: "by cockpit hardware",
     stats: [
       count(profiles, "profile", "profiles"),
       count(brands.length, "brand", "brands"),
