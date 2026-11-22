@@ -109,6 +109,17 @@ test.describe("MobiFlight profiles - cheat sheet", () => {
     await page.clock.setFixedTime(new Date("2026-01-15T12:00:00Z"))
     await hubHopPage.goto("/aircraft/msfs/asobo/a320neo/")
 
+    await test.step("Search results and link previews mention the profiles", async () => {
+      for (const selector of [
+        'meta[name="description"]',
+        'meta[property="og:description"]',
+      ])
+        await expect(page.locator(selector)).toHaveAttribute(
+          "content",
+          /^Build your Asobo A320neo home cockpit: 9 ready-made MobiFlight profiles and 8 presets/,
+        )
+    })
+
     await test.step("The profiles come first, and the header links to them", async () => {
       await expect(page.getByRole("heading", { level: 2 }).first()).toHaveText(
         "MobiFlight profiles on flightsim.to",
