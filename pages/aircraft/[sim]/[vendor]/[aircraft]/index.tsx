@@ -22,7 +22,7 @@ import {
   type AircraftSheet,
   type AircraftSummary,
 } from "@/lib/aircraftPages"
-import { PROFILES_ANCHOR, type FlightsimProfile } from "@/lib/flightsimProfiles"
+import type { FlightsimProfile } from "@/lib/flightsimProfiles"
 import { SIMS, simFromSegment, simSegment, type Sim } from "@/lib/presetUrls"
 import { profilesOf } from "@/services/flightsimProfiles"
 import { loadPresets } from "@/services/libraryStats"
@@ -112,6 +112,12 @@ const CheatSheet = ({
       />
       <main className="container mx-auto flex flex-col gap-10 px-6 py-10">
         <SheetHeader sim={sim} sheet={sheet} profileCount={profiles.length} />
+        {/* ready-made profiles first: they save the most time */}
+        <FlightsimProfiles
+          aircraft={name}
+          profiles={profiles}
+          builtAt={builtAt}
+        />
         <div className="grid gap-8 lg:grid-cols-[14rem_1fr]">
           <nav
             aria-label="Systems"
@@ -132,15 +138,6 @@ const CheatSheet = ({
                 </li>
               ))}
             </ul>
-            {profiles.length > 0 && (
-              <a
-                href={`#${PROFILES_ANCHOR}`}
-                className="mt-3 flex justify-between gap-3 rounded-md border-t px-2 pt-3 pb-1 text-primary hover:bg-card"
-              >
-                MobiFlight profiles
-                <span className="text-muted-foreground">{profiles.length}</span>
-              </a>
-            )}
           </nav>
           <div className="flex min-w-0 flex-col gap-10">
             <AircraftSearch sim={sim} aircraft={sheet} />
@@ -160,11 +157,6 @@ const CheatSheet = ({
                 }
               />
             ))}
-            <FlightsimProfiles
-              aircraft={name}
-              profiles={profiles}
-              builtAt={builtAt}
-            />
           </div>
         </div>
         <MoreFromVendor sim={sim} vendor={sheet.vendor} aircraft={related} />

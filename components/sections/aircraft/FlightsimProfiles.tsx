@@ -47,7 +47,7 @@ const FlightsimProfiles = ({
           were built for, shared by the community on flightsim.to.
         </p>
       </div>
-      <ul className="grid gap-4 lg:grid-cols-2">
+      <ul className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
         {shown.map((profile) => (
           <li key={profile.id}>
             <a

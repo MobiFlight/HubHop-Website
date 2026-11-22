@@ -101,7 +101,7 @@ test.describe("MobiFlight profiles - dates", () => {
 })
 
 test.describe("MobiFlight profiles - cheat sheet", () => {
-  test("MobiFlight profiles - a cheat sheet shows the newest profiles, links to them and shows all on request", async ({
+  test("MobiFlight profiles - a cheat sheet shows the newest profiles first, links to them and shows all on request", async ({
     hubHopPage,
     page,
   }) => {
@@ -109,14 +109,12 @@ test.describe("MobiFlight profiles - cheat sheet", () => {
     await page.clock.setFixedTime(new Date("2026-01-15T12:00:00Z"))
     await hubHopPage.goto("/aircraft/msfs/asobo/a320neo/")
 
-    await test.step("The header and the sidebar link to the profiles", async () => {
+    await test.step("The profiles come first, and the header links to them", async () => {
+      await expect(page.getByRole("heading", { level: 2 }).first()).toHaveText(
+        "MobiFlight profiles on flightsim.to",
+      )
       await expect(
         page.getByRole("link", { name: "7 on flightsim.to" }),
-      ).toHaveAttribute("href", "#mobiflight-profiles")
-      await expect(
-        page
-          .getByRole("navigation", { name: "Systems" })
-          .getByRole("link", { name: "MobiFlight profiles 7" }),
       ).toHaveAttribute("href", "#mobiflight-profiles")
     })
 
