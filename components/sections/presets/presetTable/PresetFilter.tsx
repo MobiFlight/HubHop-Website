@@ -2,8 +2,8 @@ import type { ReactNode } from "react"
 import {
   IconAdjustmentsHorizontal,
   IconBuildingStore,
-  IconChevronLeft,
-  IconChevronRight,
+  IconChevronDown,
+  IconChevronUp,
   IconDeviceGamepad2,
   IconListDetails,
   IconPlane,
@@ -134,35 +134,31 @@ const PresetFilter = ({
   setFilterOpen,
 }: PresetFilterProps) => {
   return (
-    <Card
-      className={`mb-5 w-full gap-3 p-3 md:mb-0 ${filterOpen ? "md:w-96" : "md:w-16"}`}
-    >
+    // below md the filter sits above the table and can be folded away;
+    // from md on it's a sidebar and always open
+    <Card className="w-full gap-3 p-3 md:w-96">
       <Button
         variant="ghost"
         onClick={() => setFilterOpen()}
-        className="w-full justify-between px-1 text-2xl"
+        className="w-full justify-between px-1 text-2xl md:hidden"
         aria-expanded={filterOpen}
       >
         <span className="flex items-center gap-1">
           <IconAdjustmentsHorizontal className="size-6" />
-          <span className={filterOpen ? "" : "md:hidden"}>Filter</span>
+          Filter
         </span>
         {filterOpen ? (
-          <IconChevronLeft className="size-6" />
+          <IconChevronUp className="size-6" />
         ) : (
-          <IconChevronRight className="size-6" />
+          <IconChevronDown className="size-6" />
         )}
       </Button>
-      {!filterOpen && (
-        <button
-          onClick={() => setFilterOpen()}
-          className="mt-5 hidden origin-center -rotate-90 pb-10 text-4xl md:block"
-        >
-          Filter
-        </button>
-      )}
+      <h2 className="hidden items-center gap-1 px-1 text-2xl font-medium md:flex">
+        <IconAdjustmentsHorizontal className="size-6" />
+        Filter
+      </h2>
       <div
-        className={`flex flex-col gap-3 text-sm ${filterOpen ? "" : "hidden"}`}
+        className={`flex-col gap-3 text-sm md:flex ${filterOpen ? "flex" : "hidden"}`}
       >
         <FilterField
           id="filter-search"

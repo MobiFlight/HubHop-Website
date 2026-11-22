@@ -2,7 +2,9 @@ import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { aircraftUrl } from "@/lib/aircraftPages"
 import PresetFilter from "@/components/sections/presets/presetTable/PresetFilter"
-import PresetTable from "@/components/sections/presets/presetTable/PresetTable"
+import PresetTable, {
+  AddPresetButton,
+} from "@/components/sections/presets/presetTable/PresetTable"
 import ExportPresetsModal from "@/components/sections/presets/ui/exportPresets/ExportPresetsModal"
 import AddPresetsModal from "@/components/sections/presets/ui/addPreset/AddPresetsModal"
 import PromoSlot from "@/components/sections/Shared/PromoSlot"
@@ -265,87 +267,92 @@ const Presets = ({ sim: simType, vendor, aircraft }: PresetsProps) => {
         </PresetListSkeleton>
       ) : presets.length ? (
         <div className="min-h-screen">
-          <div className="flex flex-col p-3 md:flex-row md:space-x-3">
-            <div>
-              <SimSwitch
-                value={simType}
-                onValueChange={changeSimType}
-                className="mb-3 w-full"
+          {/* a grid from md on: the sim switch lines up with the toolbar, the filter with the table */}
+          <div className="grid gap-3 p-3 md:grid-cols-[auto_minmax(0,1fr)]">
+            <SimSwitch
+              value={simType}
+              onValueChange={changeSimType}
+              className="w-full md:col-start-1 md:row-start-1"
+            />
+            {/* sticky together, so the filter doesn't slide over the promotion */}
+            <div className="flex flex-col md:sticky md:top-3 md:col-start-1 md:row-start-2 md:self-start">
+              <PresetFilter
+                filterOpen={filterOpen}
+                setFilterOpen={() => setFilterOpen((prev) => !prev)}
+                search={(value) => {
+                  setSearchText(value)
+                  clearTimeout(searchTimer.current)
+                  searchTimer.current = setTimeout(
+                    // replace: typing must not add a history entry per search
+                    () => navigate({ search: value }, { replace: true }),
+                    SEARCH_DELAY_MS,
+                  )
+                }}
+                filterVendor={(value) =>
+                  navigate({ vendor: value ? slugify(value) : undefined })
+                }
+                filterAircraft={(value) =>
+                  navigate({ aircraft: value ? slugify(value) : undefined })
+                }
+                filterSystem={(value) => navigate({ system: value })}
+                filterPresetType={(value) => navigate({ presetType: value })}
+                filterCodeType={(value) => navigate({ codeType: value })}
+                resetFilter={() => {
+                  clearTimeout(searchTimer.current)
+                  setSearchText("")
+                  navigate({
+                    vendor: undefined,
+                    aircraft: undefined,
+                    search: "",
+                    system: "",
+                    presetType: "",
+                    codeType: "",
+                  })
+                }}
+                filteredPresets={searchText}
+                filteredVendors={filteredVendors}
+                filteredAircrafts={filteredAircrafts}
+                filteredSystems={filteredSystems}
+                filteredPresetTypes={filteredPresetTypes}
+                filteredCodeTypes={filteredCodeTypes}
+                options={filterOptions}
+                setShowMyPresets={() => setShowMyPresets((prev) => !prev)}
+                setShowReportedPresets={() =>
+                  setShowReportedPresets((prev) => !prev)
+                }
+                showMyPresets={showMyPresets}
+                showReportedPresets={showReportedPresets}
               />
-              {/* sticky together, so the filter doesn't slide over the promotion */}
-              <div className="flex flex-col md:sticky md:top-3">
-                <PresetFilter
-                  filterOpen={filterOpen}
-                  setFilterOpen={() => setFilterOpen((prev) => !prev)}
-                  search={(value) => {
-                    setSearchText(value)
-                    clearTimeout(searchTimer.current)
-                    searchTimer.current = setTimeout(
-                      // replace: typing must not add a history entry per search
-                      () => navigate({ search: value }, { replace: true }),
-                      SEARCH_DELAY_MS,
-                    )
-                  }}
-                  filterVendor={(value) =>
-                    navigate({ vendor: value ? slugify(value) : undefined })
-                  }
-                  filterAircraft={(value) =>
-                    navigate({ aircraft: value ? slugify(value) : undefined })
-                  }
-                  filterSystem={(value) => navigate({ system: value })}
-                  filterPresetType={(value) => navigate({ presetType: value })}
-                  filterCodeType={(value) => navigate({ codeType: value })}
-                  resetFilter={() => {
-                    clearTimeout(searchTimer.current)
-                    setSearchText("")
-                    navigate({
-                      vendor: undefined,
-                      aircraft: undefined,
-                      search: "",
-                      system: "",
-                      presetType: "",
-                      codeType: "",
-                    })
-                  }}
-                  filteredPresets={searchText}
-                  filteredVendors={filteredVendors}
-                  filteredAircrafts={filteredAircrafts}
-                  filteredSystems={filteredSystems}
-                  filteredPresetTypes={filteredPresetTypes}
-                  filteredCodeTypes={filteredCodeTypes}
-                  options={filterOptions}
-                  setShowMyPresets={() => setShowMyPresets((prev) => !prev)}
-                  setShowReportedPresets={() =>
-                    setShowReportedPresets((prev) => !prev)
-                  }
-                  showMyPresets={showMyPresets}
-                  showReportedPresets={showReportedPresets}
-                />
-                <PromoSlot
-                  slot="filter-sidebar"
-                  context={promotionContext}
-                  // the collapsed filter is too narrow for it
-                  className={`mb-3 md:mt-3 md:w-96 ${filterOpen ? "" : "md:hidden"}`}
-                />
-              </div>
+              <PromoSlot
+                slot="filter-sidebar"
+                context={promotionContext}
+                className="mt-3 md:w-96"
+              />
             </div>
-            <div className="flex w-full flex-col">
+            {/* the table's toolbar; "Add preset" is only offered from md on */}
+            <div
+              className={`${vendor && aircraft ? "flex" : "hidden md:flex"} items-center gap-3 md:col-start-2 md:row-start-1`}
+            >
               {vendor && aircraft && (
                 <Link
                   href={aircraftUrl(simType, vendor, aircraft)}
-                  className="mb-3 self-start font-semibold text-primary hover:underline"
+                  className="font-semibold text-primary hover:underline"
                 >
                   Cheat sheet for the {filteredVendors} {filteredAircrafts} →
                 </Link>
               )}
+              <div className="ml-auto">
+                <AddPresetButton onOpen={() => setAddModalOpen(true)} />
+              </div>
+            </div>
+            <div className="flex min-w-0 flex-col md:col-start-2 md:row-start-2">
               <PresetTable
-                setAddModalOpen={() => setAddModalOpen(true)}
                 setExportModalOpen={() => setExportModalOpen(true)}
                 data={filteredItems}
                 relevance={terms.length > 0 ? relevance : undefined}
               />
               {/* three next to each other: one promotion alone leaves most of the width empty */}
-              <div className="mt-3 grid gap-3 lg:grid-cols-3">
+              <div className="mt-3 grid gap-3 md:grid-cols-3">
                 {[1, 2, 3].map((position) => (
                   <PromoSlot
                     key={position}
