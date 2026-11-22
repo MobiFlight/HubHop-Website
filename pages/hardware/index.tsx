@@ -68,6 +68,11 @@ const TIER_BADGE: Record<SponsorTier, "default" | "secondary" | "outline"> = {
   bronze: "outline",
 }
 
+// silver gets a border in its text colour
+const TIER_CLASS: Partial<Record<SponsorTier, string>> = {
+  silver: "border-secondary-foreground",
+}
+
 const TIER_NAME: Record<SponsorTier, string> = {
   gold: "Gold",
   silver: "Silver",
@@ -92,7 +97,10 @@ const BrandGrid = ({ brands }: BrandGridProps) => (
             <span className="flex items-center gap-2">
               {brandLabel(brand)}
               {brand.sponsor && (
-                <Badge variant={TIER_BADGE[brand.sponsor.tier]}>
+                <Badge
+                  variant={TIER_BADGE[brand.sponsor.tier]}
+                  className={TIER_CLASS[brand.sponsor.tier]}
+                >
                   {TIER_NAME[brand.sponsor.tier]}
                   <span className="sr-only"> sponsor</span>
                 </Badge>
