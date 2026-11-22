@@ -16,6 +16,7 @@ import { execFileSync } from "node:child_process"
 import fs from "node:fs"
 import os from "node:os"
 import path from "node:path"
+import sharp from "sharp"
 
 const preset = (fields: Partial<Preset>): Preset => ({
   id: String(Math.random()),
@@ -190,6 +191,48 @@ test.describe("Aircraft pages - texts and sitemap", () => {
     )
     fs.rmSync(out, { recursive: true })
   })
+
+  test("Aircraft pages - every cheat sheet gets a link preview image after the build", async () => {
+    const out = fs.mkdtempSync(path.join(os.tmpdir(), "og-"))
+    const dir = path.join(out, "aircraft", "msfs", "fenixsim", "a320")
+    fs.mkdirSync(path.join(dir, "fcu"), { recursive: true })
+    const pageProps = {
+      sim: "msfs2020",
+      sheet: {
+        vendor: "FenixSim",
+        aircraft: "A320",
+        presets: 2287,
+        systems: [{ name: "FCU" }, { name: "EFIS" }],
+      },
+      profiles: [{ id: 1 }],
+    }
+    fs.writeFileSync(
+      path.join(dir, "index.html"),
+      `<html><body><script id="__NEXT_DATA__" type="application/json">${JSON.stringify({ props: { pageProps } })}</script></body></html>`,
+    )
+    // a system page is no cheat sheet
+    fs.writeFileSync(path.join(dir, "fcu", "index.html"), "<html></html>")
+
+    execFileSync("node", ["scripts/ogImages.mjs", out])
+
+    const image = path.join(
+      out,
+      "og",
+      "aircraft",
+      "msfs",
+      "fenixsim",
+      "a320.jpg",
+    )
+    expect(await sharp(image).metadata()).toMatchObject({
+      format: "jpeg",
+      width: 1200,
+      height: 630,
+    })
+    expect(
+      fs.readdirSync(path.join(out, "og", "aircraft", "msfs", "fenixsim")),
+    ).toEqual(["a320.jpg"])
+    fs.rmSync(out, { recursive: true })
+  })
 })
 
 test.describe("Aircraft pages", () => {
@@ -331,9 +374,10 @@ test.describe("Aircraft pages", () => {
       "content",
       "Asobo C172 home cockpit presets for MobiFlight (MSFS)",
     )
+    // its own image, drawn after the build (scripts/ogImages.mjs)
     await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
       "content",
-      "https://hubhop.mobiflight.com/images/og-hubhop.png",
+      "https://hubhop.mobiflight.com/og/aircraft/msfs/asobo/c172.jpg",
     )
     const breadcrumbs = JSON.parse(
       (await page

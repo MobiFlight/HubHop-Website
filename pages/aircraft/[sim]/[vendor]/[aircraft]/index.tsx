@@ -16,6 +16,7 @@ import {
   presetsOfAircraft,
   sheetDescription,
   sheetTitle,
+  aircraftImageUrl,
   aircraftIndexUrl,
   aircraftUrl,
   SYSTEM_PREVIEW,
@@ -103,6 +104,7 @@ const CheatSheet = ({
       description={sheetDescription(sheet)}
       path={path}
       noindex={!isIndexed(sheet.presets)}
+      image={aircraftImageUrl(sim, sheet.vendorSlug, sheet.aircraftSlug)}
     >
       <BreadcrumbJsonLd
         items={[

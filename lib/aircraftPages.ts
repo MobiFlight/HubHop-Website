@@ -29,6 +29,13 @@ export const aircraftUrl = (
   aircraftSlug: string,
 ) => `/aircraft/${simSegment(sim)}/${vendorSlug}/${aircraftSlug}/`
 
+/** The aircraft's link preview image, written by scripts/ogImages.mjs after the build */
+export const aircraftImageUrl = (
+  sim: Sim,
+  vendorSlug: string,
+  aircraftSlug: string,
+) => `/og/aircraft/${simSegment(sim)}/${vendorSlug}/${aircraftSlug}.jpg`
+
 export const aircraftSystemUrl = (
   sim: Sim,
   vendorSlug: string,

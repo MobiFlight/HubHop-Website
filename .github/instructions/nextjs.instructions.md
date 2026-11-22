@@ -19,7 +19,9 @@ applyTo: "**/*.jsx, **/*.tsx, **/*.js, **/*.ts, **/*.css"
   than 10 presets are `noindex`. The site is rebuilt to pick up new presets.
 - Search engines: pages pass `title`, `description`, `path` (canonical URL, `og:url`) and `noindex` to `Layout`, which writes
   the meta and Open Graph tags; don't add them per page. `npm run build` also runs `scripts/sitemap.mjs`, which writes
-  `out/sitemap.xml` (every page with a canonical URL that isn't `noindex`) and `out/robots.txt`. Page texts for search
+  `out/sitemap.xml` (every page with a canonical URL that isn't `noindex`) and `out/robots.txt`. Then `scripts/ogImages.mjs` draws a link preview image
+  (1200×630 JPEG, satori + sharp) for every cheat sheet into `out/og/aircraft/…`, from the page's own `__NEXT_DATA__`; the cheat sheet passes its
+  path to `Layout` as `image`. Fonts for it are static instances of Assistant in `scripts/og/`. Page texts for search
   results are templates in `lib/aircraftPages.ts`; write them for home cockpit builders. See `docs/search-console.md`.
 - MSFS cheat sheets also show the community's MobiFlight profiles from flightsim.to. `npm run build` first runs
   `scripts/flightsimProfiles.mjs`, which downloads them once with flightsim.to's partner API into `.build-data/` (gitignored);
