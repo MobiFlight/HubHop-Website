@@ -11,6 +11,7 @@ import {
   aircraftList,
   aircraftUrl,
   byMaker,
+  count,
   SIM_NAMES,
   type AircraftSummary,
 } from "@/lib/aircraftPages"
@@ -21,11 +22,14 @@ import {
   simSegment,
   type Sim,
 } from "@/lib/presetUrls"
+import { profileCounts } from "@/services/flightsimProfiles"
 import { loadPresets } from "@/services/libraryStats"
 
 type AircraftIndexProps = {
   sim: Sim
   aircraft: AircraftSummary[]
+  // MobiFlight profiles on flightsim.to per "vendor/aircraft" key (MSFS only)
+  profiles: Record<string, number>
 }
 
 export const getStaticPaths: GetStaticPaths = async () => ({
@@ -38,16 +42,21 @@ export const getStaticProps: GetStaticProps<AircraftIndexProps> = async ({
 }) => {
   const sim = simFromSegment(String(params?.sim))
   if (!sim) return { notFound: true }
-  return { props: { sim, aircraft: aircraftList(await loadPresets(sim)) } }
+  const aircraft = aircraftList(await loadPresets(sim))
+  const profiles = sim === "msfs2020" ? await profileCounts(aircraft) : {}
+  return { props: { sim, aircraft, profiles } }
 }
 
 const format = (value: number) => value.toLocaleString("en-US")
 
 /** All aircraft of a sim, grouped by maker; each links to its cheat sheet */
-const AircraftIndex = ({ sim, aircraft }: AircraftIndexProps) => {
+const AircraftIndex = ({ sim, aircraft, profiles }: AircraftIndexProps) => {
   const router = useRouter()
   const simName = SIM_NAMES[sim]
   const makers = byMaker(aircraft)
+  const profilesOf = (entry: AircraftSummary) =>
+    profiles[`${entry.vendorSlug}/${entry.aircraftSlug}`] ?? 0
+  const withProfiles = aircraft.filter((entry) => profilesOf(entry) > 0).length
 
   useEffect(() => {
     document.body.classList.toggle("xplane", sim === "xplane")
@@ -56,7 +65,7 @@ const AircraftIndex = ({ sim, aircraft }: AircraftIndexProps) => {
   return (
     <Layout
       title={indexTitle(sim)}
-      description={indexDescription(sim, aircraft.length)}
+      description={indexDescription(sim, aircraft.length, withProfiles)}
       path={aircraftIndexUrl(sim)}
     >
       <main className="container mx-auto flex flex-col gap-8 px-6 py-10">
@@ -67,8 +76,10 @@ const AircraftIndex = ({ sim, aircraft }: AircraftIndexProps) => {
               <span className="text-primary">preset cheat sheets</span>
             </h1>
             <p className="text-lg text-muted-foreground">
-              {format(aircraft.length)} aircraft from {makers.size} makers. Pick
-              yours to see every preset by system.
+              {format(aircraft.length)} aircraft from {makers.size} makers
+              {withProfiles > 0 &&
+                `, ${format(withProfiles)} of them with ready-made MobiFlight profiles`}
+              . Pick yours to see every preset by system.
             </p>
           </div>
           <SimSwitch
@@ -98,7 +109,9 @@ const AircraftIndex = ({ sim, aircraft }: AircraftIndexProps) => {
                     >
                       <span className="text-primary">{entry.aircraft}</span>
                       <span className="text-sm text-muted-foreground">
-                        {format(entry.presets)}
+                        {profilesOf(entry) > 0 &&
+                          `${count(profilesOf(entry), "profile", "profiles")} · `}
+                        {count(entry.presets, "preset", "presets")}
                       </span>
                     </Link>
                   </li>

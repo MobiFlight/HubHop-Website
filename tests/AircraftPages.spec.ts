@@ -295,7 +295,7 @@ test.describe("Aircraft pages - texts and sitemap", () => {
 })
 
 test.describe("Aircraft pages", () => {
-  test("Aircraft pages - the index lists the aircraft by maker", async ({
+  test("Aircraft pages - the index lists the aircraft by maker with their profiles and presets", async ({
     hubHopPage,
     page,
   }) => {
@@ -303,7 +303,7 @@ test.describe("Aircraft pages", () => {
 
     await expect(page.getByRole("main")).toMatchAriaSnapshot(`
       - heading "MSFS aircraft preset cheat sheets" [level=1]
-      - paragraph: 3 aircraft from 2 makers. Pick yours to see every preset by system.
+      - paragraph: 3 aircraft from 2 makers, 2 of them with ready-made MobiFlight profiles. Pick yours to see every preset by system.
       - radiogroup "Simulator":
         - radio "MSFS" [checked]
         - radio "X-Plane"
@@ -311,18 +311,30 @@ test.describe("Aircraft pages", () => {
         - heading "Asobo" [level=2]
         - list:
           - listitem:
-            - link "A320neo 8":
+            - link "A320neo 9 profiles · 8 presets":
               - /url: /aircraft/msfs/asobo/a320neo/
           - listitem:
-            - link "C172 5":
+            - link "C172 5 presets":
               - /url: /aircraft/msfs/asobo/c172/
       - region "FlyByWire":
         - heading "FlyByWire" [level=2]
         - list:
           - listitem:
-            - link "A32NX 4":
+            - link "A32NX 1 profile · 4 presets":
               - /url: /aircraft/msfs/flybywire/a32nx/
     `)
+  })
+
+  test("Aircraft pages - the index description names the aircraft with profiles", async ({
+    hubHopPage,
+    page,
+  }) => {
+    await hubHopPage.goto("/aircraft/msfs/")
+
+    await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+      "content",
+      "Preset cheat sheets for 3 aircraft in MSFS, 2 of them with ready-made MobiFlight profiles: every switch, knob and light by system, ready for your home cockpit hardware with MobiFlight.",
+    )
   })
 
   test("Aircraft pages - the sim switch opens the other sim's index", async ({

@@ -266,7 +266,7 @@ export const timeAgo = (iso: string, now: number) => {
 // Texts for titles, search results and link previews. Written for home cockpit
 // builders, who search for their aircraft and hardware rather than for MobiFlight.
 
-const count = (value: number, one: string, many: string) =>
+export const count = (value: number, one: string, many: string) =>
   `${value.toLocaleString("en-US")} ${value === 1 ? one : many}`
 
 /** "A", "A and B", "A, B and C" */
@@ -278,8 +278,13 @@ export const listOf = (names: string[]) =>
 export const indexTitle = (sim: Sim) =>
   `${SIM_NAMES[sim]} aircraft presets for your home cockpit | HubHop`
 
-export const indexDescription = (sim: Sim, aircraft: number) =>
-  `Preset cheat sheets for ${count(aircraft, "aircraft", "aircraft")} in ${SIM_NAMES[sim]}: every switch, knob and light by system, ready for your home cockpit hardware with MobiFlight.`
+/** `withProfiles`: aircraft with MobiFlight profiles on flightsim.to */
+export const indexDescription = (
+  sim: Sim,
+  aircraft: number,
+  withProfiles = 0,
+) =>
+  `Preset cheat sheets for ${count(aircraft, "aircraft", "aircraft")} in ${SIM_NAMES[sim]}${withProfiles > 0 ? `, ${withProfiles.toLocaleString("en-US")} of them with ready-made MobiFlight profiles` : ""}: every switch, knob and light by system, ready for your home cockpit hardware with MobiFlight.`
 
 /** `profiles`: MobiFlight profiles on flightsim.to, named first when there are any */
 export const sheetTitle = (sim: Sim, sheet: AircraftSummary, profiles = 0) =>
