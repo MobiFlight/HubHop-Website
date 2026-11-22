@@ -34,6 +34,10 @@ applyTo: "**/*.jsx, **/*.tsx, **/*.js, **/*.ts, **/*.css"
 - Hardware pages (`lib/hardwarePages.ts`, `pages/hardware/`) are built from the same profiles: `/hardware/` lists the
   brands, `/hardware/<brand>/` a brand's profiles by product family, each with the aircraft's cheat sheet. Brands with
   fewer than 3 profiles are `noindex`.
+  Sponsors come from the mobiflight-website repository (`astro/src/data/sponsors.json`): `scripts/sponsors.mjs` downloads
+  it before the build (no copy in this repository); `lib/sponsors.ts` maps `amount` to gold/silver/bronze like
+  mobiflight.com and matches a sponsor to the brand its name starts with. Sponsors come first on `/hardware/`, and
+  their brand page links to them (`rel="sponsored"`). `mobiflight.com/sponsors.json` lists gold sponsors only (for the app).
 - React with functional components and hooks
 - TypeScript in strict mode (legacy code uses `any` liberally; new code should be properly typed)
 - Tailwind CSS v4 with shadcn/ui (Radix, style `radix-vega`, see `components.json`) and Tabler icons (`@tabler/icons-react`)

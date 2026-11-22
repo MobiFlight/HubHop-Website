@@ -20,9 +20,9 @@ To add an event: add it to `AnalyticsEvents` in `services/analytics.ts` and desc
 | `vendor_click`           | `vendor`           | An aircraft maker card on the homepage is clicked         | Which makers do visitors browse by?                 |
 | `add_preset_click`       |                    | "Add a preset" on the homepage is clicked                 | Does the homepage turn visitors into contributors?  |
 | `news_click`             | `slot`             | A MobiFlight news promotion is clicked                    | Do HubHop visitors care about MobiFlight news?      |
-| `sponsor_click`          | `slot`             | A sponsor promotion is clicked                            | How much attention do partners get from HubHop?     |
+| `sponsor_click`          | `slot`             | A sponsor promotion or link is clicked                    | How much attention do partners get from HubHop?     |
 | `club_click`             | `slot`             | A MobiFlight Club promotion is clicked                    | Does HubHop bring members to the MobiFlight Club?   |
 | `donate_click`           | `slot`             | A donation promotion or link is clicked                   | Does HubHop bring donations?                        |
 
-`slot` is where the promotion was shown: a promotion slot (e.g. `home-news`, `filter-sidebar`, `cheatsheet-inline`, see `SlotId` in
+`slot` is where the promotion was shown: a promotion slot (e.g. `home-news`, `filter-sidebar`, `cheatsheet-inline`, `hardware-brand` for the sponsor link on a hardware brand page, see `SlotId` in
 `lib/promotions.ts`) or `home` for the homepage's donation link. Shop promotions aren't counted yet.
