@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import Layout from "@/components/Layout"
 import BreadcrumbJsonLd from "@/components/sections/aircraft/BreadcrumbJsonLd"
 import ProfileSection from "@/components/sections/hardware/ProfileSection"
+import { Button } from "@/components/ui/button"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -23,6 +24,8 @@ import {
   type BrandPage,
 } from "@/lib/hardwarePages"
 import { brandLabel } from "@/lib/profileHardware"
+import { tierLabel } from "@/lib/sponsors"
+import { track } from "@/services/analytics"
 import { loadBrandPages } from "@/services/hardwarePages"
 
 type BrandProps = {
@@ -121,6 +124,31 @@ const Brand = ({ brand, builtAt }: BrandProps) => {
             community on flightsim.to: download the profile for your aircraft
             and connect your home cockpit in MSFS.
           </p>
+          {brand.sponsor && (
+            <aside
+              aria-label="Sponsor"
+              className="flex flex-wrap items-center gap-x-4 gap-y-2 self-start rounded-lg border bg-card px-4 py-3"
+            >
+              <p>
+                <span className="font-semibold text-primary">
+                  {tierLabel[brand.sponsor.tier]}
+                </span>{" "}
+                of MobiFlight and HubHop
+              </p>
+              <Button asChild>
+                <a
+                  href={brand.sponsor.href}
+                  target="_blank"
+                  rel="sponsored noopener"
+                  onClick={() =>
+                    track("sponsor_click", { slot: "hardware-brand" })
+                  }
+                >
+                  Visit {brand.sponsor.name}
+                </a>
+              </Button>
+            </aside>
+          )}
         </div>
         <div
           className={`grid gap-8 ${sidebar ? "lg:grid-cols-[14rem_1fr]" : ""}`}

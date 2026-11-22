@@ -1,20 +1,23 @@
 import type { GetStaticProps } from "next"
 import Link from "next/link"
 import Layout from "@/components/Layout"
+import { Badge } from "@/components/ui/badge"
 import {
   brandUrl,
   hardwareIndexDescription,
   hardwareIndexTitle,
   hardwareIndexUrl,
+  sponsorsFirst,
   type BrandPage,
 } from "@/lib/hardwarePages"
 import { brandLabel } from "@/lib/profileHardware"
+import type { SponsorTier } from "@/lib/sponsors"
 import { loadBrandPages } from "@/services/hardwarePages"
 
 // only what the overview shows, not every profile
 type BrandSummary = Pick<
   BrandPage,
-  "name" | "formerly" | "slug" | "profiles"
+  "name" | "formerly" | "slug" | "profiles" | "sponsor"
 > & {
   products: { family: string; slug: string; profiles: number }[]
 }
@@ -37,17 +40,20 @@ export const getStaticProps: GetStaticProps<HardwareIndexProps> = async () => {
   return {
     props: {
       profiles: ids.size,
-      brands: pages.map(({ name, formerly, slug, profiles, products }) => ({
-        name,
-        ...(formerly ? { formerly } : {}),
-        slug,
-        profiles,
-        products: products.map((product) => ({
-          family: product.family,
-          slug: product.slug,
-          profiles: product.profiles.length,
-        })),
-      })),
+      brands: pages.map(
+        ({ name, formerly, slug, profiles, products, sponsor }) => ({
+          name,
+          ...(formerly ? { formerly } : {}),
+          ...(sponsor ? { sponsor } : {}),
+          slug,
+          profiles,
+          products: products.map((product) => ({
+            family: product.family,
+            slug: product.slug,
+            profiles: product.profiles.length,
+          })),
+        }),
+      ),
     },
   }
 }
@@ -55,66 +61,132 @@ export const getStaticProps: GetStaticProps<HardwareIndexProps> = async () => {
 const count = (value: number, one: string, many: string) =>
   `${value.toLocaleString("en-US")} ${value === 1 ? one : many}`
 
-/** All hardware brands with MobiFlight profiles, most profiles first */
-const HardwareIndex = ({ brands, profiles }: HardwareIndexProps) => (
-  <Layout
-    title={hardwareIndexTitle()}
-    description={hardwareIndexDescription(brands.length, profiles)}
-    path={hardwareIndexUrl()}
-  >
-    <main className="container mx-auto flex flex-col gap-8 px-6 py-10">
-      <div className="flex flex-col gap-2">
-        <h1 className="text-4xl font-extrabold">
-          Cockpit hardware{" "}
-          <span className="text-primary">with MobiFlight profiles</span>
-        </h1>
-        <p className="text-lg text-muted-foreground">
-          {count(profiles, "ready-made profile", "ready-made profiles")} for{" "}
-          {count(brands.length, "brand", "brands")} in MSFS, shared by the
-          community on flightsim.to. Pick your hardware to find the profile for
-          your aircraft.
-        </p>
-      </div>
-      <div className="grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
-        {brands.map((brand) => (
-          <section
-            key={brand.slug}
-            aria-labelledby={`${brand.slug}-heading`}
-            className="flex flex-col gap-2"
+// gold stands out in the brand colour, silver and bronze stay quieter
+const TIER_BADGE: Record<SponsorTier, "default" | "secondary" | "outline"> = {
+  gold: "default",
+  silver: "secondary",
+  bronze: "outline",
+}
+
+// silver gets a border in its text colour
+const TIER_CLASS: Partial<Record<SponsorTier, string>> = {
+  silver: "border-secondary-foreground",
+}
+
+const TIER_NAME: Record<SponsorTier, string> = {
+  gold: "Gold",
+  silver: "Silver",
+  bronze: "Bronze",
+}
+
+type BrandGridProps = { brands: BrandSummary[] }
+
+const BrandGrid = ({ brands }: BrandGridProps) => (
+  <div className="grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
+    {brands.map((brand) => (
+      <section
+        key={brand.slug}
+        aria-labelledby={`${brand.slug}-heading`}
+        className="flex flex-col gap-2"
+      >
+        <h3 id={`${brand.slug}-heading`} className="text-xl font-bold">
+          <Link
+            href={brandUrl(brand.slug)}
+            className="flex justify-between gap-3 hover:underline"
           >
-            <h2 id={`${brand.slug}-heading`} className="text-xl font-bold">
-              <Link
-                href={brandUrl(brand.slug)}
-                className="flex justify-between gap-3 hover:underline"
-              >
-                {brandLabel(brand)}
-                <span className="text-sm font-normal text-muted-foreground">
-                  {count(brand.profiles, "profile", "profiles")}
-                </span>
-              </Link>
-            </h2>
-            {brand.products.length > 0 && (
-              <ul className="flex flex-col gap-1">
-                {brand.products.map((product) => (
-                  <li key={product.slug}>
-                    <Link
-                      href={`${brandUrl(brand.slug)}#${product.slug}`}
-                      className="flex justify-between gap-3 rounded-md px-2 py-1 hover:bg-card"
-                    >
-                      <span className="text-primary">{product.family}</span>
-                      <span className="text-sm text-muted-foreground">
-                        {count(product.profiles, "profile", "profiles")}
-                      </span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </section>
-        ))}
-      </div>
-    </main>
-  </Layout>
+            <span className="flex items-center gap-2">
+              {brandLabel(brand)}
+              {brand.sponsor && (
+                <Badge
+                  variant={TIER_BADGE[brand.sponsor.tier]}
+                  className={TIER_CLASS[brand.sponsor.tier]}
+                >
+                  {TIER_NAME[brand.sponsor.tier]}
+                  <span className="sr-only"> sponsor</span>
+                </Badge>
+              )}
+            </span>
+            <span className="text-sm font-normal text-muted-foreground">
+              {count(brand.profiles, "profile", "profiles")}
+            </span>
+          </Link>
+        </h3>
+        {brand.products.length > 0 && (
+          <ul className="flex flex-col gap-1">
+            {brand.products.map((product) => (
+              <li key={product.slug}>
+                <Link
+                  href={`${brandUrl(brand.slug)}#${product.slug}`}
+                  className="flex justify-between gap-3 rounded-md px-2 py-1 hover:bg-card"
+                >
+                  <span className="text-primary">{product.family}</span>
+                  <span className="text-sm text-muted-foreground">
+                    {count(product.profiles, "profile", "profiles")}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+    ))}
+  </div>
 )
+
+/** All hardware brands with MobiFlight profiles: sponsors first, then by profiles */
+const HardwareIndex = ({ brands, profiles }: HardwareIndexProps) => {
+  const { sponsors, others } = sponsorsFirst(brands)
+  return (
+    <Layout
+      title={hardwareIndexTitle()}
+      description={hardwareIndexDescription(brands.length, profiles)}
+      path={hardwareIndexUrl()}
+    >
+      <main className="container mx-auto flex flex-col gap-8 px-6 py-10">
+        <div className="flex flex-col gap-2">
+          <h1 className="text-4xl font-extrabold">
+            Cockpit hardware{" "}
+            <span className="text-primary">with MobiFlight profiles</span>
+          </h1>
+          <p className="text-lg text-muted-foreground">
+            {count(profiles, "ready-made profile", "ready-made profiles")} for{" "}
+            {count(brands.length, "brand", "brands")} in MSFS, shared by the
+            community on flightsim.to. Pick your hardware to find the profile
+            for your aircraft.
+          </p>
+        </div>
+        {sponsors.length > 0 && (
+          <section
+            aria-labelledby="sponsors-heading"
+            className="flex flex-col gap-4"
+          >
+            <div className="flex flex-col gap-1">
+              <h2 id="sponsors-heading" className="text-2xl font-extrabold">
+                MobiFlight sponsors
+              </h2>
+              <p className="text-muted-foreground">
+                These hardware makers support MobiFlight and HubHop.
+              </p>
+            </div>
+            <BrandGrid brands={sponsors} />
+          </section>
+        )}
+        {others.length > 0 && (
+          <section
+            aria-labelledby="brands-heading"
+            className="flex flex-col gap-4"
+          >
+            {sponsors.length > 0 && (
+              <h2 id="brands-heading" className="text-2xl font-extrabold">
+                More brands
+              </h2>
+            )}
+            <BrandGrid brands={others} />
+          </section>
+        )}
+      </main>
+    </Layout>
+  )
+}
 
 export default HardwareIndex

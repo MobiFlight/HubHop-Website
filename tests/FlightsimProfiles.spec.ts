@@ -116,7 +116,7 @@ test.describe("MobiFlight profiles - cheat sheet", () => {
       ])
         await expect(page.locator(selector)).toHaveAttribute(
           "content",
-          /^9 MobiFlight profiles for WINCTRL \(formerly WinWing\) PAP3, PFP 3N and FCU, Rowsfire A107, MiniCockpit miniFCU and more, plus 8 presets for every switch, knob and light of your Asobo A320neo home cockpit/,
+          /^9 MobiFlight profiles for WINCTRL \(formerly WinWing\) PAP3, PFP 3N and FCU, Rowsfire A107, miniCOCKPIT miniFCU and more, plus 8 presets for every switch, knob and light of your Asobo A320neo home cockpit/,
         )
       await expect(page).toHaveTitle(
         "Asobo A320neo MobiFlight profiles and presets (MSFS)",
@@ -125,7 +125,7 @@ test.describe("MobiFlight profiles - cheat sheet", () => {
 
     await test.step("The profiles come first, and the header links to them", async () => {
       await expect(page.getByRole("heading", { level: 2 }).first()).toHaveText(
-        "MobiFlight profiles for WINCTRL (formerly WinWing), Rowsfire and MiniCockpit",
+        "MobiFlight profiles for WINCTRL (formerly WinWing), Rowsfire and miniCOCKPIT",
       )
       await expect(
         page.getByRole("link", { name: "9 on flightsim.to" }),
@@ -133,10 +133,10 @@ test.describe("MobiFlight profiles - cheat sheet", () => {
     })
 
     const section = page.getByRole("region", {
-      name: "MobiFlight profiles for WINCTRL (formerly WinWing), Rowsfire and MiniCockpit",
+      name: "MobiFlight profiles for WINCTRL (formerly WinWing), Rowsfire and miniCOCKPIT",
     })
     await expect(section.locator("p", { hasText: /^Hardware:/ })).toHaveText(
-      "Hardware: WINCTRL (formerly WinWing) PAP3, PFP 3N, FCU, MCDU · Rowsfire A107 · MiniCockpit miniFCU · Honeycomb Bravo · Thrustmaster TCA · MOZA MB7F",
+      "Hardware: WINCTRL (formerly WinWing) PAP3, PFP 3N, FCU, MCDU · Rowsfire A107 · miniCOCKPIT miniFCU · Honeycomb Bravo · Thrustmaster TCA · MOZA MB7F",
     )
     await expect(section.getByRole("listitem")).toHaveCount(6)
     await expect(section.getByRole("listitem").first()).toMatchAriaSnapshot(`

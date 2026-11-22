@@ -36,7 +36,7 @@ test.describe("Profile hardware", () => {
     expect(names("Ocatvi IFR1 Profile Synaptic A220")).toEqual(["Octavi IFR-1"])
     expect(names("Honeycomb Bravo | miniFCU | FSS 727")).toEqual([
       "Honeycomb Bravo",
-      "MiniCockpit miniFCU",
+      "miniCOCKPIT miniFCU",
     ])
   })
 

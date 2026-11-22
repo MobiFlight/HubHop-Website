@@ -13,6 +13,12 @@ import {
 import { brandLabel, HARDWARE, hardwareOf } from "@/lib/profileHardware"
 import { aircraftUrl } from "@/lib/aircraftPages"
 import { slugify } from "@/lib/presetUrls"
+import {
+  sponsorOf,
+  TIER_ORDER,
+  type BrandSponsor,
+  type Sponsor,
+} from "@/lib/sponsors"
 
 /** Brand pages with fewer profiles aren't indexed */
 export const MIN_INDEXED_PROFILES = 3
@@ -44,6 +50,8 @@ export type BrandPage = {
   products: ProductSection[]
   // profiles that name the brand but no product
   other: HardwareProfile[]
+  // when the brand sponsors MobiFlight
+  sponsor?: BrandSponsor
 }
 
 /** "PFP (PFP 3N, PFP 4, PFP 7)"; "FCU" when the model is the family */
@@ -146,6 +154,28 @@ export const brandPages = (
     (page) => page.profiles,
   )
 }
+
+/** Adds each brand's sponsor entry, if it has one */
+export const withSponsors = (
+  pages: BrandPage[],
+  sponsors: Sponsor[],
+): BrandPage[] =>
+  pages.map((page) => {
+    const sponsor = sponsorOf(page.name, sponsors)
+    return sponsor ? { ...page, sponsor } : page
+  })
+
+/** Sponsors first, by tier; within a tier and for the others, most profiles first */
+export const sponsorsFirst = <
+  T extends { profiles: number; sponsor?: BrandSponsor },
+>(
+  brands: T[],
+): { sponsors: T[]; others: T[] } => ({
+  sponsors: TIER_ORDER.flatMap((tier) =>
+    brands.filter((brand) => brand.sponsor?.tier === tier),
+  ),
+  others: brands.filter((brand) => !brand.sponsor),
+})
 
 export const brandTitle = (brand: BrandPage) =>
   `${brandLabel(brand)} MobiFlight profiles for your home cockpit (MSFS)`

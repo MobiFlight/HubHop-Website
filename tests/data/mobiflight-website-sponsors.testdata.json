@@ -1,0 +1,30 @@
+[
+  {
+    "name": "Honeycomb Aeronautical",
+    "logo": "/sponsors/honeycomb.png",
+    "href": "https://example.com/honeycomb?ref=mobiflight",
+    "amount": 200,
+    "sizeClass": "h-28"
+  },
+  {
+    "name": "Rowsfire",
+    "logo": "/sponsors/rowsfire.png",
+    "href": "https://example.com/rowsfire?ref=mobiflight",
+    "amount": 100,
+    "sizeClass": "h-20"
+  },
+  {
+    "name": "miniCockpit",
+    "logo": "/sponsors/minicockpit.png",
+    "href": "https://example.com/minicockpit?ref=mobiflight",
+    "amount": 50,
+    "sizeClass": "h-20"
+  },
+  {
+    "name": "Thrustmaster Fans",
+    "logo": "/sponsors/fans.png",
+    "href": "https://example.com/fans",
+    "amount": 25,
+    "sizeClass": "h-20"
+  }
+]

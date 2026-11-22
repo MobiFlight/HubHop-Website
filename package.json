@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "dev": "next -p 3000",
-    "prebuild": "node scripts/flightsimProfiles.mjs",
+    "prebuild": "node scripts/flightsimProfiles.mjs && node scripts/sponsors.mjs",
     "build": "next build",
     "postbuild": "node scripts/sitemap.mjs && node scripts/ogImages.mjs",
     "start": "next start",

@@ -42,6 +42,31 @@ test.describe("Analytics", () => {
       await expect.poll(() => trackedEvents(page)).toEqual(["discord_click"])
     })
 
+    test("Analytics - a click on a sponsor link of a hardware brand is tracked", async ({
+      hubHopPage,
+      page,
+    }) => {
+      await page
+        .context()
+        .route("https://example.com/**", (route) => route.fulfill({ body: "" }))
+      await hubHopPage.goto("/hardware/honeycomb/")
+
+      const popup = page.waitForEvent("popup")
+      await page
+        .getByRole("link", { name: "Visit Honeycomb Aeronautical" })
+        .click()
+      await (await popup).close()
+
+      const entries = await page.evaluate(() =>
+        (window.dataLayer ?? []).filter(
+          (entry) => (entry as { event?: string }).event === "sponsor_click",
+        ),
+      )
+      expect(entries).toEqual([
+        { event: "sponsor_click", slot: "hardware-brand" },
+      ])
+    })
+
     test("Analytics - a click on an aircraft maker is tracked with its name", async ({
       hubHopPage,
       page,
