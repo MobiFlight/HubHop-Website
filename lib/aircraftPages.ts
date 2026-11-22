@@ -277,7 +277,8 @@ export const sheetTitle = (sim: Sim, sheet: AircraftSummary) =>
   `${sheet.vendor} ${sheet.aircraft} home cockpit presets for MobiFlight (${SIM_NAMES[sim]})`
 
 /** Mentions the three systems with the most presets */
-export const sheetDescription = (sheet: AircraftSheet) => {
+/** `profiles`: MobiFlight profiles on flightsim.to, named first when there are any */
+export const sheetDescription = (sheet: AircraftSheet, profiles = 0) => {
   const top = [...sheet.systems]
     .sort((a, b) => b.total - a.total)
     .slice(0, 3)
@@ -286,7 +287,11 @@ export const sheetDescription = (sheet: AircraftSheet) => {
     sheet.systems.length === 1
       ? `in the ${top[0]} system`
       : `in ${count(sheet.systems.length, "system", "systems")}, including ${listOf(top)}`
-  return `Build your ${sheet.vendor} ${sheet.aircraft} home cockpit: ${count(sheet.presets, "preset", "presets")} for every switch, knob and light ${systems}. Copy the code and connect your hardware with MobiFlight.`
+  const ready =
+    profiles > 0
+      ? `${count(profiles, "ready-made MobiFlight profile", "ready-made MobiFlight profiles")} and `
+      : ""
+  return `Build your ${sheet.vendor} ${sheet.aircraft} home cockpit: ${ready}${count(sheet.presets, "preset", "presets")} for every switch, knob and light ${systems}. Copy the code and connect your hardware with MobiFlight.`
 }
 
 export const sheetIntro = (sheet: AircraftSheet) =>

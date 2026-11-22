@@ -154,6 +154,16 @@ test.describe("Aircraft pages - texts and sitemap", () => {
     )
   })
 
+  test("Aircraft pages - the description names the MobiFlight profiles first", () => {
+    const sheet = aircraftSheet([preset({ system: "FCU" })])
+    expect(sheetDescription(sheet, 37)).toBe(
+      "Build your FenixSim A320 home cockpit: 37 ready-made MobiFlight profiles and 1 preset for every switch, knob and light in the FCU system. Copy the code and connect your hardware with MobiFlight.",
+    )
+    expect(sheetDescription(sheet, 1)).toMatch(
+      /home cockpit: 1 ready-made MobiFlight profile and 1 preset/,
+    )
+  })
+
   test("Aircraft pages - the sitemap lists pages with a canonical URL that aren't noindex", () => {
     const out = fs.mkdtempSync(path.join(os.tmpdir(), "sitemap-"))
     const page = (dir: string, head: string) => {

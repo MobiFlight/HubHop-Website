@@ -100,7 +100,7 @@ const CheatSheet = ({
   return (
     <Layout
       title={sheetTitle(sim, sheet)}
-      description={sheetDescription(sheet)}
+      description={sheetDescription(sheet, profiles.length)}
       path={path}
       noindex={!isIndexed(sheet.presets)}
     >
