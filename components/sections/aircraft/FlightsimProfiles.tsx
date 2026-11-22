@@ -1,8 +1,10 @@
-import Image from "next/image"
+import Link from "next/link"
 import { useEffect, useState } from "react"
-import { IconStarFilled } from "@tabler/icons-react"
 import { Button } from "@/components/ui/button"
-import { formatDate, listOf, timeAgo } from "@/lib/aircraftPages"
+import ProfileCard from "@/components/sections/Shared/ProfileCard"
+import { listOf } from "@/lib/aircraftPages"
+import { brandUrl } from "@/lib/hardwarePages"
+import { slugify } from "@/lib/presetUrls"
 import {
   PROFILE_PREVIEW,
   PROFILES_ANCHOR,
@@ -18,9 +20,6 @@ type FlightsimProfilesProps = {
   // when the page was built: "3 days ago" in the HTML, recalculated in the browser
   builtAt: string
 }
-
-// flightsim.to's CDN serves the thumbnail as is
-const passThrough = ({ src }: { src: string }) => src
 
 /** Community MobiFlight profiles for the aircraft, on flightsim.to */
 const FlightsimProfiles = ({
@@ -56,65 +55,26 @@ const FlightsimProfiles = ({
         {hardware.length > 0 && (
           <p className="text-sm text-muted-foreground">
             <span className="font-semibold text-foreground">Hardware:</span>{" "}
-            {hardware
-              .map((brand) =>
-                brand.models.length
-                  ? `${brandLabel(brand)} ${brand.models.map((m) => m.name).join(", ")}`
-                  : brandLabel(brand),
-              )
-              .join(" · ")}
+            {hardware.map((brand, index) => (
+              <span key={brand.name}>
+                {index > 0 && " · "}
+                <Link
+                  href={brandUrl(slugify(brand.name))}
+                  className="text-primary hover:underline"
+                >
+                  {brandLabel(brand)}
+                </Link>
+                {brand.models.length > 0 &&
+                  ` ${brand.models.map((m) => m.name).join(", ")}`}
+              </span>
+            ))}
           </p>
         )}
       </div>
       <ul className="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
         {shown.map((profile) => (
           <li key={profile.id}>
-            <a
-              href={profile.link}
-              target="_blank"
-              rel="noopener"
-              className="flex h-full items-center overflow-hidden rounded-lg border bg-card transition-colors hover:border-primary"
-            >
-              {profile.thumbnail && (
-                <span className="relative block w-28 shrink-0 self-stretch bg-black/30 sm:w-34">
-                  <Image
-                    src={profile.thumbnail}
-                    alt=""
-                    fill
-                    unoptimized
-                    loader={passThrough}
-                    sizes="136px"
-                    className="object-cover"
-                  />
-                </span>
-              )}
-              <span className="flex min-w-0 flex-1 flex-col gap-1 px-4 py-3">
-                <span className="line-clamp-2 font-semibold">
-                  {profile.title}
-                </span>
-                <span className="text-sm text-muted-foreground sm:truncate">
-                  by {profile.author}
-                  {profile.rating > 0 && (
-                    <>
-                      {" · "}
-                      <IconStarFilled
-                        aria-hidden="true"
-                        className="inline size-3.5 text-primary"
-                      />{" "}
-                      <span className="sr-only">rated </span>
-                      {profile.rating.toFixed(1)}
-                    </>
-                  )}
-                  {" · updated "}
-                  <time
-                    dateTime={profile.updatedAt}
-                    title={formatDate(profile.updatedAt)}
-                  >
-                    {timeAgo(profile.updatedAt, now)}
-                  </time>
-                </span>
-              </span>
-            </a>
+            <ProfileCard profile={profile} now={now} />
           </li>
         ))}
       </ul>

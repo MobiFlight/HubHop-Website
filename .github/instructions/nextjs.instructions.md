@@ -31,6 +31,9 @@ applyTo: "**/*.jsx, **/*.tsx, **/*.js, **/*.ts, **/*.css"
   `lib/profileHardware.ts` reads the hardware brand and model from each profile title (a model several brands make
   counts only with its brand); the cheat sheet names them in its title, description and profiles heading. Add new
   brands and models there.
+- Hardware pages (`lib/hardwarePages.ts`, `pages/hardware/`) are built from the same profiles: `/hardware/` lists the
+  brands, `/hardware/<brand>/` a brand's profiles by product family, each with the aircraft's cheat sheet. Brands with
+  fewer than 3 profiles are `noindex`.
 - React with functional components and hooks
 - TypeScript in strict mode (legacy code uses `any` liberally; new code should be properly typed)
 - Tailwind CSS v4 with shadcn/ui (Radix, style `radix-vega`, see `components.json`) and Tabler icons (`@tabler/icons-react`)
@@ -41,12 +44,12 @@ applyTo: "**/*.jsx, **/*.tsx, **/*.js, **/*.ts, **/*.css"
 ## Directory Map
 
 ```
-pages/                   # Routes: index, presets/[[...slug]] (list and single preset), preset (old links), aircraft/[sim]/… (cheat sheets), stats, tools, privacy, terms
+pages/                   # Routes: index, presets/[[...slug]] (list and single preset), preset (old links), aircraft/[sim]/… (cheat sheets), hardware/… (profiles by brand), stats, tools, privacy, terms
 components/
   ui/                    # shadcn/ui components (added with the shadcn CLI, adapted to HubHop's look)
   Layout.tsx             # Page shell (navbar + footer)
   sections/
-    Navbar/, footer/, home/, aircraft/, stats/, tools/
+    Navbar/, footer/, home/, aircraft/, hardware/, stats/, tools/
     presets/
       presetTable/       # List view, filters
       singlePresetView/  # Preset detail + history
@@ -63,6 +66,8 @@ lib/
   presetSearch.ts        # Search, relevance and default order; shared with MobiFlight Connector
   presetUrls.ts          # Preset list and preset URLs, slugs
   aircraftPages.ts       # Aircraft cheat sheets: grouping, limits, URLs
+  profileHardware.ts     # Hardware brands and models in flightsim.to profile titles
+  hardwarePages.ts       # Hardware pages: profiles by brand and product, URLs
   presetFacets.ts        # Faceted filter options
   presetTypes.ts         # Fixed Input/Output values per sim
   codeTypes.ts           # Fixed X-Plane code types
