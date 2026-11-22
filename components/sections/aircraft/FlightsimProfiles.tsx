@@ -2,16 +2,19 @@ import Image from "next/image"
 import { useEffect, useState } from "react"
 import { IconStarFilled } from "@tabler/icons-react"
 import { Button } from "@/components/ui/button"
-import { formatDate, timeAgo } from "@/lib/aircraftPages"
+import { formatDate, listOf, timeAgo } from "@/lib/aircraftPages"
 import {
   PROFILE_PREVIEW,
   PROFILES_ANCHOR,
   type FlightsimProfile,
 } from "@/lib/flightsimProfiles"
+import { brandLabel, type BrandSummary } from "@/lib/profileHardware"
 
 type FlightsimProfilesProps = {
   aircraft: string
   profiles: FlightsimProfile[]
+  // the brands and models named in the profiles' titles, most profiles first
+  hardware: BrandSummary[]
   // when the page was built: "3 days ago" in the HTML, recalculated in the browser
   builtAt: string
 }
@@ -23,6 +26,7 @@ const passThrough = ({ src }: { src: string }) => src
 const FlightsimProfiles = ({
   aircraft,
   profiles,
+  hardware,
   builtAt,
 }: FlightsimProfilesProps) => {
   const [showAll, setShowAll] = useState(false)
@@ -40,12 +44,27 @@ const FlightsimProfiles = ({
     >
       <div className="flex flex-col gap-1">
         <h2 id={`${PROFILES_ANCHOR}-title`} className="text-2xl font-extrabold">
-          MobiFlight profiles on flightsim.to
+          {hardware.length > 0
+            ? `MobiFlight profiles for ${listOf(hardware.slice(0, 3).map(brandLabel))}`
+            : "MobiFlight profiles on flightsim.to"}
         </h2>
         <p className="text-muted-foreground">
           Ready-made profiles for the {aircraft} and the cockpit hardware they
           were built for, shared by the community on flightsim.to.
         </p>
+        {/* every exact model, as people search for it */}
+        {hardware.length > 0 && (
+          <p className="text-sm text-muted-foreground">
+            <span className="font-semibold text-foreground">Hardware:</span>{" "}
+            {hardware
+              .map((brand) =>
+                brand.models.length
+                  ? `${brandLabel(brand)} ${brand.models.map((m) => m.name).join(", ")}`
+                  : brandLabel(brand),
+              )
+              .join(" · ")}
+          </p>
+        )}
       </div>
       <ul className="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
         {shown.map((profile) => (

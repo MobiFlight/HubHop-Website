@@ -5,6 +5,8 @@ import {
   aircraftSystemUrl,
   aircraftUrl,
   sheetDescription,
+  sheetTitle,
+  hardwareText,
   isIndexed,
   largeSystems,
   previewCounts,
@@ -12,6 +14,7 @@ import {
   SYSTEM_PREVIEW,
 } from "@/lib/aircraftPages"
 import type { Preset } from "@/interfaces/preset"
+import { hardwareSummary } from "@/lib/profileHardware"
 import { execFileSync } from "node:child_process"
 import fs from "node:fs"
 import os from "node:os"
@@ -168,6 +171,49 @@ test.describe("Aircraft pages - texts and sitemap", () => {
     )
   })
 
+  test("Aircraft pages - with profiles, title and description name them and their hardware first", () => {
+    const sheet = aircraftSheet([preset({ system: "FCU" })])
+    const hardware = hardwareSummary([
+      "Fenix A320 | WINCTRL FCU | MobiFlight Profile",
+      "Fenix A320 | WinWing FCU + EFIS L | MobiFlight Profile",
+      "Fenix A320 | WINCTRL MCDU | MobiFlight Profile",
+      "Fenix A320 | Rowsfire A107 | MobiFlight Profile",
+    ])
+
+    expect(sheetTitle("msfs2020", sheet, 4)).toBe(
+      "FenixSim A320 MobiFlight profiles and presets (MSFS)",
+    )
+    expect(sheetTitle("msfs2020", sheet)).toBe(
+      "FenixSim A320 home cockpit presets for MobiFlight (MSFS)",
+    )
+    expect(sheetDescription(sheet, 4, hardware)).toBe(
+      "4 MobiFlight profiles for WINCTRL (formerly WinWing) FCU, EFIS L and MCDU and Rowsfire A107, plus 1 preset for every switch, knob and light of your FenixSim A320 home cockpit in the FCU system. Copy the code and connect your hardware with MobiFlight.",
+    )
+  })
+
+  test("Aircraft pages - the description names three brands and the first brand's top three models", () => {
+    const hardware = hardwareSummary([
+      "WINCTRL FCU",
+      "WINCTRL FCU",
+      "WINCTRL FCU",
+      "WINCTRL MCDU",
+      "WINCTRL MCDU",
+      "WINCTRL RMP",
+      "Rowsfire A107",
+      "Rowsfire A107",
+      "Rowsfire A106",
+      "Honeycomb Bravo",
+      "Sim Gauges Overhead",
+    ])
+
+    expect(hardwareText(hardware)).toBe(
+      "WINCTRL (formerly WinWing) FCU, MCDU and RMP, Rowsfire A107, Honeycomb Bravo and more",
+    )
+    expect(hardwareText(hardwareSummary(["Sim Gauges Overhead"]))).toBe(
+      "Sim Gauges",
+    )
+  })
+
   test("Aircraft pages - the sitemap lists pages with a canonical URL that aren't noindex", () => {
     const out = fs.mkdtempSync(path.join(os.tmpdir(), "sitemap-"))
     const page = (dir: string, head: string) => {
@@ -301,7 +347,8 @@ test.describe("Aircraft pages", () => {
     await hubHopPage.goto("/aircraft/msfs/asobo/a320neo/")
 
     await expect(page).toHaveTitle(
-      "Asobo A320neo home cockpit presets for MobiFlight (MSFS)",
+      // the test data has profiles for it
+      "Asobo A320neo MobiFlight profiles and presets (MSFS)",
     )
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(
       "Asobo A320neo preset cheat sheet",

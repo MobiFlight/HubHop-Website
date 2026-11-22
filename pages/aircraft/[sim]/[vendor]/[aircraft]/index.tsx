@@ -25,6 +25,7 @@ import {
 } from "@/lib/aircraftPages"
 import type { FlightsimProfile } from "@/lib/flightsimProfiles"
 import { SIMS, simFromSegment, simSegment, type Sim } from "@/lib/presetUrls"
+import { hardwareSummary } from "@/lib/profileHardware"
 import { profilesOf } from "@/services/flightsimProfiles"
 import { loadPresets } from "@/services/libraryStats"
 
@@ -93,6 +94,7 @@ const CheatSheet = ({
 }: CheatSheetProps) => {
   const name = `${sheet.vendor} ${sheet.aircraft}`
   const path = aircraftUrl(sim, sheet.vendorSlug, sheet.aircraftSlug)
+  const hardware = hardwareSummary(profiles.map((profile) => profile.title))
 
   useEffect(() => {
     document.body.classList.toggle("xplane", sim === "xplane")
@@ -100,8 +102,8 @@ const CheatSheet = ({
 
   return (
     <Layout
-      title={sheetTitle(sim, sheet)}
-      description={sheetDescription(sheet, profiles.length)}
+      title={sheetTitle(sim, sheet, profiles.length)}
+      description={sheetDescription(sheet, profiles.length, hardware)}
       path={path}
       noindex={!isIndexed(sheet.presets)}
       image={aircraftImageUrl(sim, sheet.vendorSlug, sheet.aircraftSlug)}
@@ -118,6 +120,7 @@ const CheatSheet = ({
         <FlightsimProfiles
           aircraft={name}
           profiles={profiles}
+          hardware={hardware}
           builtAt={builtAt}
         />
         <div className="grid gap-8 lg:grid-cols-[14rem_1fr]">
