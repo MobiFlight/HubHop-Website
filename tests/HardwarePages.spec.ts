@@ -1,4 +1,9 @@
 import { test, expect } from "@/tests/fixtures"
+import { execFileSync } from "node:child_process"
+import fs from "node:fs"
+import os from "node:os"
+import path from "node:path"
+import sharp from "sharp"
 import type { FlightsimAddon } from "@/lib/flightsimProfiles"
 import {
   brandPages,
@@ -57,6 +62,41 @@ test.describe("Hardware pages - data", () => {
       { name: "FenixSim A320", url: "/aircraft/msfs/fenixsim/a320/" },
     ])
     expect(winctrl.other[0].aircraft).toEqual([])
+  })
+})
+
+test.describe("Hardware pages - link preview images", () => {
+  test("Hardware pages - the overview and every brand page get a link preview image after the build", async () => {
+    const out = fs.mkdtempSync(path.join(os.tmpdir(), "og-hardware-"))
+    const page = (dir: string, pageProps: object) => {
+      fs.mkdirSync(dir, { recursive: true })
+      fs.writeFileSync(
+        path.join(dir, "index.html"),
+        `<html><body><script id="__NEXT_DATA__" type="application/json">${JSON.stringify({ props: { pageProps } })}</script></body></html>`,
+      )
+    }
+    const profile = { aircraft: [{ url: "/aircraft/msfs/fenixsim/a320/" }] }
+    page(path.join(out, "hardware"), {
+      brands: [{ name: "WINCTRL" }],
+      profiles: 300,
+    })
+    page(path.join(out, "hardware", "winctrl"), {
+      brand: {
+        name: "WINCTRL",
+        formerly: "WinWing",
+        profiles: 2,
+        products: [{ profiles: [profile] }],
+        other: [profile],
+      },
+    })
+
+    execFileSync("node", ["scripts/ogImages.mjs", out])
+
+    for (const image of ["hardware.jpg", "hardware/winctrl.jpg"])
+      expect(await sharp(path.join(out, "og", image)).metadata()).toMatchObject(
+        { format: "jpeg", width: 1200, height: 630 },
+      )
+    fs.rmSync(out, { recursive: true })
   })
 })
 
@@ -232,6 +272,10 @@ test.describe("Hardware pages", () => {
       "WINCTRL (formerly WinWing) MobiFlight profiles for your home cockpit (MSFS)",
     )
     await expect(page.locator('meta[name="robots"]')).toHaveCount(0)
+    await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
+      "content",
+      /\/og\/hardware\/winctrl\.jpg$/,
+    )
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(
       "WINCTRL (formerly WinWing) MobiFlight profiles",
     )

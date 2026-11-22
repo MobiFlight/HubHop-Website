@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/breadcrumb"
 import {
   brandDescription,
+  brandImageUrl,
   brandTitle,
   brandUrl,
   hardwareIndexUrl,
@@ -91,6 +92,7 @@ const Brand = ({ brand, builtAt }: BrandProps) => {
       description={brandDescription(brand)}
       path={path}
       noindex={brand.profiles < MIN_INDEXED_PROFILES}
+      image={brandImageUrl(brand.slug)}
     >
       <BreadcrumbJsonLd
         items={[

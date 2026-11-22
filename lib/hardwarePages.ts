@@ -27,6 +27,10 @@ export const MIN_PRODUCTS_FOR_SIDEBAR = 3
 
 export const hardwareIndexUrl = () => "/hardware/"
 export const brandUrl = (brandSlug: string) => `/hardware/${brandSlug}/`
+/** Link preview images, drawn after the build (scripts/ogImages.mjs) */
+export const hardwareIndexImageUrl = () => "/og/hardware.jpg"
+export const brandImageUrl = (brandSlug: string) =>
+  `/og/hardware/${brandSlug}.jpg`
 
 /** A profile with the aircraft it's for, linking to their cheat sheets */
 export type HardwareProfile = FlightsimProfile & {
