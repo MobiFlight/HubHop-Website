@@ -219,7 +219,7 @@ const hardwareIndexCard = ({ brands, profiles }) =>
   card({
     sim: "msfs2020",
     // you find the profiles by browsing the hardware
-    kicker: "Discover ready-made",
+    kicker: "Discover plug-and-play",
     title: "MobiFlight profiles",
     subtitle: "by cockpit hardware",
     stats: [
