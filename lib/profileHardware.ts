@@ -72,7 +72,7 @@ export const HARDWARE: HardwareBrand[] = [
     ],
   },
   {
-    name: "miniCockpit",
+    name: "miniCOCKPIT",
     pattern: /\bminicockpit\b/,
     models: [
       model("miniFCU", "miniFCU", /\bmini ?fcu\b/, true),

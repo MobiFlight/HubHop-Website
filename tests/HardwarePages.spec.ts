@@ -145,7 +145,7 @@ test.describe("Hardware pages", () => {
     await expect(brands("MobiFlight sponsors")).toHaveText([
       /^Honeycomb\s*1 profile$/,
       /^Rowsfire\s*1 profile$/,
-      /^miniCockpit\s*2 profiles$/,
+      /^miniCOCKPIT\s*2 profiles$/,
     ])
     await expect(
       page.getByRole("region", { name: "Honeycomb 1 profile" }),
