@@ -2,8 +2,8 @@
 // "postbuild"), on HubHop's background:
 // - every aircraft cheat sheet: the aircraft's name, its numbers and the sim,
 //   out/og/aircraft/<sim>/<vendor>/<aircraft>.jpg (lib/aircraftPages.ts)
-// - the hardware overview and every brand page: the brand and its numbers,
-//   out/og/hardware.jpg and out/og/hardware/<brand>.jpg (lib/hardwarePages.ts)
+// - the profiles overview and every brand page: the brand and its numbers,
+//   out/og/profiles.jpg and out/og/profiles/<brand>.jpg (lib/hardwarePages.ts)
 // The numbers come from the exported page itself (its __NEXT_DATA__), so image
 // and page always match.
 import fs from "node:fs"
@@ -128,21 +128,26 @@ const card = ({ sim, kicker, title, subtitle, stats }) => {
         label,
       ),
     ),
+    // the small line above the title is optional
+    ...(kicker
+      ? [
+          h(
+            "div",
+            {
+              marginTop: 40,
+              fontSize: fitted(kicker, 60),
+              fontWeight: 600,
+              color: "#b4b4bb",
+              lineHeight: 1,
+            },
+            kicker,
+          ),
+        ]
+      : []),
     h(
       "div",
       {
-        marginTop: 40,
-        fontSize: fitted(kicker, 60),
-        fontWeight: 600,
-        color: "#b4b4bb",
-        lineHeight: 1,
-      },
-      kicker,
-    ),
-    h(
-      "div",
-      {
-        marginTop: 6,
+        marginTop: kicker ? 6 : 46,
         fontSize: fitted(title, 150),
         fontWeight: 800,
         lineHeight: 1,
@@ -151,7 +156,13 @@ const card = ({ sim, kicker, title, subtitle, stats }) => {
     ),
     h(
       "div",
-      { marginTop: 14, fontSize: 58, fontWeight: 700, color, lineHeight: 1 },
+      {
+        marginTop: 14,
+        fontSize: fitted(subtitle, 58),
+        fontWeight: 700,
+        color,
+        lineHeight: 1,
+      },
       subtitle,
     ),
     h(
@@ -200,8 +211,8 @@ const brandCard = (brand) => {
   return card({
     sim: "msfs2020",
     kicker: brand.formerly
-      ? `Cockpit hardware · formerly ${brand.formerly}`
-      : "Cockpit hardware",
+      ? `Hardware · formerly ${brand.formerly}`
+      : "Hardware",
     title: brand.name,
     subtitle: "MobiFlight profiles",
     stats: [
@@ -214,13 +225,13 @@ const brandCard = (brand) => {
   })
 }
 
-/** The hardware overview's image */
+/** The profiles overview's image */
 const hardwareIndexCard = ({ brands, profiles }) =>
   card({
     sim: "msfs2020",
-    kicker: "Find the profile for your hardware",
-    title: "Cockpit hardware",
-    subtitle: "MobiFlight profiles",
+    // the same words as the page title
+    title: "MobiFlight profiles",
+    subtitle: "that make your hardware plug-and-play",
     stats: [
       count(profiles, "profile", "profiles"),
       count(brands.length, "brand", "brands"),
@@ -289,13 +300,13 @@ for (const { segments } of cheatSheets()) {
   aircraftImages++
 }
 
-/** The hardware overview and brand pages: <out>/hardware/[<brand>/]index.html */
-const hardwareRoot = path.join(OUT, "hardware")
+/** The profiles overview and brand pages: <out>/profiles/[<brand>/]index.html */
+const hardwareRoot = path.join(OUT, "profiles")
 const indexProps =
   fs.existsSync(path.join(hardwareRoot, "index.html")) &&
   pagePropsOf(path.join(hardwareRoot, "index.html"))
 if (indexProps?.brands)
-  await draw(hardwareIndexCard(indexProps), "hardware.jpg")
+  await draw(hardwareIndexCard(indexProps), "profiles.jpg")
 let brandImages = 0
 const brandDirs = fs.existsSync(hardwareRoot)
   ? fs
@@ -307,7 +318,7 @@ for (const slug of brandDirs) {
   const file = path.join(hardwareRoot, slug, "index.html")
   const props = fs.existsSync(file) && pagePropsOf(file)
   if (!props?.brand) continue
-  await draw(brandCard(props.brand), "hardware", `${slug}.jpg`)
+  await draw(brandCard(props.brand), "profiles", `${slug}.jpg`)
   brandImages++
 }
 console.info(

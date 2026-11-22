@@ -20,8 +20,8 @@ applyTo: "**/*.jsx, **/*.tsx, **/*.js, **/*.ts, **/*.css"
 - Search engines: pages pass `title`, `description`, `path` (canonical URL, `og:url`) and `noindex` to `Layout`, which writes
   the meta and Open Graph tags; don't add them per page. `npm run build` also runs `scripts/sitemap.mjs`, which writes
   `out/sitemap.xml` (every page with a canonical URL that isn't `noindex`) and `out/robots.txt`. Then `scripts/ogImages.mjs` draws a link preview image
-  (1200×630 JPEG, satori + sharp) for every cheat sheet into `out/og/aircraft/…`, and for the hardware overview and brand pages into
-  `out/og/hardware.jpg` and `out/og/hardware/…`, from the page's own `__NEXT_DATA__`; each page passes its path to `Layout` as `image`. Fonts for it are static instances of Assistant in `scripts/og/`. Page texts for search
+  (1200×630 JPEG, satori + sharp) for every cheat sheet into `out/og/aircraft/…`, and for the profiles overview and brand pages into
+  `out/og/profiles.jpg` and `out/og/profiles/…`, from the page's own `__NEXT_DATA__`; each page passes its path to `Layout` as `image`. Fonts for it are static instances of Assistant in `scripts/og/`. Page texts for search
   results are templates in `lib/aircraftPages.ts`; write them for home cockpit builders. See `docs/search-console.md`.
 - MSFS cheat sheets also show the community's MobiFlight profiles from flightsim.to. `npm run build` first runs
   `scripts/flightsimProfiles.mjs`, which downloads them once with flightsim.to's partner API into `.build-data/` (gitignored);
@@ -31,12 +31,12 @@ applyTo: "**/*.jsx, **/*.tsx, **/*.js, **/*.ts, **/*.css"
   `lib/profileHardware.ts` reads the hardware brand and model from each profile title (a model several brands make
   counts only with its brand); the cheat sheet names them in its title, description and profiles heading. Add new
   brands and models there.
-- Hardware pages (`lib/hardwarePages.ts`, `pages/hardware/`) are built from the same profiles: `/hardware/` lists the
-  brands, `/hardware/<brand>/` a brand's profiles by product family, each with the aircraft's cheat sheet. Brands with
+- Profile pages by hardware (`lib/hardwarePages.ts`, `pages/profiles/`, menu item "Profiles") are built from the same profiles: `/profiles/` lists the
+  brands, `/profiles/<brand>/` a brand's profiles by product family, each with the aircraft's cheat sheet. Brands with
   fewer than 3 profiles are `noindex`.
   Sponsors come from the mobiflight-website repository (`astro/src/data/sponsors.json`): `scripts/sponsors.mjs` downloads
   it before the build (no copy in this repository); `lib/sponsors.ts` maps `amount` to gold/silver/bronze like
-  mobiflight.com and matches a sponsor to the brand its name starts with. Sponsors come first on `/hardware/`, and
+  mobiflight.com and matches a sponsor to the brand its name starts with. Sponsors come first on `/profiles/`, and
   their brand page links to them (`rel="sponsored"`). `mobiflight.com/sponsors.json` lists gold sponsors only (for the app).
 - React with functional components and hooks
 - TypeScript in strict mode (legacy code uses `any` liberally; new code should be properly typed)

@@ -96,7 +96,7 @@ const Brand = ({ brand, builtAt }: BrandProps) => {
     >
       <BreadcrumbJsonLd
         items={[
-          { name: "Hardware", path: hardwareIndexUrl() },
+          { name: "Profiles", path: hardwareIndexUrl() },
           { name, path },
         ]}
       />
@@ -106,7 +106,7 @@ const Brand = ({ brand, builtAt }: BrandProps) => {
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink asChild>
-                  <Link href={hardwareIndexUrl()}>Hardware</Link>
+                  <Link href={hardwareIndexUrl()}>Profiles</Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
@@ -119,9 +119,8 @@ const Brand = ({ brand, builtAt }: BrandProps) => {
             {name} <span className="text-primary">MobiFlight profiles</span>
           </h1>
           <p className="max-w-3xl text-lg text-muted-foreground">
-            {brand.profiles} ready-made MobiFlight{" "}
-            {brand.profiles === 1 ? "profile" : "profiles"} for {name} cockpit
-            hardware
+            {brand.profiles} ready-to-go MobiFlight{" "}
+            {brand.profiles === 1 ? "profile" : "profiles"} for {name} hardware
             {aircraft > 0 && `, for ${aircraft} aircraft`}. Shared by the
             community on flightsim.to: download the profile for your aircraft
             and connect your home cockpit in MSFS.

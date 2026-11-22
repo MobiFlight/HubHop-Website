@@ -21,12 +21,12 @@ test.describe("Navigation", () => {
         }),
       ).toBeVisible()
     })
-    await test.step("Hardware", async () => {
-      await nav.getByRole("link", { name: "Hardware" }).click()
-      await expect(page).toHaveURL(/\/hardware\/$/)
+    await test.step("Profiles", async () => {
+      await nav.getByRole("link", { name: "Profiles" }).click()
+      await expect(page).toHaveURL(/\/profiles\/$/)
       await expect(
         page.getByRole("heading", {
-          name: "Cockpit hardware with MobiFlight profiles",
+          name: "MobiFlight profiles that make your hardware plug-and-play",
         }),
       ).toBeVisible()
     })
