@@ -44,7 +44,7 @@ const icons: Record<string, typeof IconHome> = {
   Home: IconHome,
   Presets: IconList,
   Aircraft: IconPlane,
-  Hardware: IconDeviceGamepad2,
+  Profiles: IconDeviceGamepad2,
   Tools: IconBolt,
   Stats: IconTrendingUp,
 }

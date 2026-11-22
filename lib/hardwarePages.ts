@@ -1,6 +1,6 @@
 // Hardware pages: the cockpit hardware brands that MobiFlight profiles on
 // flightsim.to are made for (lib/profileHardware.ts), MSFS only.
-// /hardware/ lists the brands, /hardware/<brand>/ lists a brand's profiles
+// /profiles/ lists the brands, /profiles/<brand>/ lists a brand's profiles
 // by product family. Built from the same profile data as the cheat sheets.
 
 import {
@@ -25,12 +25,12 @@ export const MIN_INDEXED_PROFILES = 3
 /** Brand pages show the product sidebar from this many products on */
 export const MIN_PRODUCTS_FOR_SIDEBAR = 3
 
-export const hardwareIndexUrl = () => "/hardware/"
-export const brandUrl = (brandSlug: string) => `/hardware/${brandSlug}/`
+export const hardwareIndexUrl = () => "/profiles/"
+export const brandUrl = (brandSlug: string) => `/profiles/${brandSlug}/`
 /** Link preview images, drawn after the build (scripts/ogImages.mjs) */
-export const hardwareIndexImageUrl = () => "/og/hardware.jpg"
+export const hardwareIndexImageUrl = () => "/og/profiles.jpg"
 export const brandImageUrl = (brandSlug: string) =>
-  `/og/hardware/${brandSlug}.jpg`
+  `/og/profiles/${brandSlug}.jpg`
 
 /** A profile with the aircraft it's for, linking to their cheat sheets */
 export type HardwareProfile = FlightsimProfile & {
@@ -191,11 +191,11 @@ export const brandDescription = (brand: BrandPage) => {
     ? ` for the ${top.length > 1 ? `${top.slice(0, -1).join(", ")} and ${top.at(-1)}` : top[0]}${brand.products.length > 3 ? " and more" : ""}`
     : ""
   const count = brand.profiles.toLocaleString("en-US")
-  return `${count} ready-made MobiFlight ${brand.profiles === 1 ? "profile" : "profiles"} for ${brandLabel(brand)} hardware${products}. Find the profile for your aircraft and connect your home cockpit in MSFS.`
+  return `${count} ready-to-go MobiFlight ${brand.profiles === 1 ? "profile" : "profiles"} for ${brandLabel(brand)} hardware${products}. Find the profile for your aircraft and connect your home cockpit in MSFS.`
 }
 
 export const hardwareIndexTitle = () =>
-  "Cockpit hardware with MobiFlight profiles (MSFS) | HubHop"
+  "MobiFlight profiles that make your hardware plug-and-play | HubHop"
 
 export const hardwareIndexDescription = (brands: number, profiles: number) =>
-  `Ready-made MobiFlight profiles for ${brands.toLocaleString("en-US")} cockpit hardware brands: ${profiles.toLocaleString("en-US")} profiles for FCUs, MCDUs, throttles and panels in MSFS. Pick your brand and find the profile for your aircraft.`
+  `Ready-to-go MobiFlight profiles that make your hardware plug-and-play: ${profiles.toLocaleString("en-US")} profiles for ${brands.toLocaleString("en-US")} brands of controllers and panels, from FCUs and MCDUs to throttles and yokes, in MSFS.`

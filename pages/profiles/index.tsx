@@ -147,14 +147,16 @@ const HardwareIndex = ({ brands, profiles }: HardwareIndexProps) => {
       <main className="container mx-auto flex flex-col gap-8 px-6 py-10">
         <div className="flex flex-col gap-2">
           <h1 className="text-4xl font-extrabold">
-            Cockpit hardware{" "}
-            <span className="text-primary">with MobiFlight profiles</span>
+            MobiFlight profiles{" "}
+            <span className="text-primary">
+              that make your hardware plug-and-play
+            </span>
           </h1>
           <p className="text-lg text-muted-foreground">
-            {count(profiles, "ready-made profile", "ready-made profiles")} for{" "}
-            {count(brands.length, "brand", "brands")} in MSFS, shared by the
-            community on flightsim.to. Pick your hardware to find the profile
-            for your aircraft.
+            {count(profiles, "ready-to-go profile", "ready-to-go profiles")} for{" "}
+            {count(brands.length, "hardware brand", "hardware brands")} in MSFS,
+            shared by the community on flightsim.to. Pick your brand, then find
+            the profile for your aircraft.
           </p>
         </div>
         {sponsors.length > 0 && (
@@ -186,6 +188,14 @@ const HardwareIndex = ({ brands, profiles }: HardwareIndexProps) => {
             <BrandGrid brands={others} />
           </section>
         )}
+        {/* the words builders use for their hardware */}
+        <p className="max-w-3xl text-muted-foreground">
+          A MobiFlight profile connects your flight sim hardware to your
+          favorite add-on aircraft. Controllers, panels, yokes, joysticks,
+          throttle quadrants, switches and radio panels are set up in just a few
+          moments. Load the profile in MobiFlight, and your home cockpit
+          hardware feels plug-and-play.
+        </p>
       </main>
     </Layout>
   )
