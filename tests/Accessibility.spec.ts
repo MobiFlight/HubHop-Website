@@ -45,7 +45,9 @@ const pages: PageCheck[] = [
     name: "aircraft index",
     open: async ({ hubHopPage, page }) => {
       await hubHopPage.goto("/aircraft/msfs/")
-      await expect(page.getByRole("link", { name: "A32NX 1 profile · 4 presets" })).toBeVisible()
+      await expect(
+        page.getByRole("link", { name: "A32NX 1 profile · 4 presets" }),
+      ).toBeVisible()
     },
     known: {},
   },
