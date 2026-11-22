@@ -423,4 +423,35 @@ test.describe("Promotion slots", () => {
       presetViewPage.hubHopPage.promotions.getByRole("link"),
     ).toHaveAttribute("href", /utm_content=preset-detail/)
   })
+
+  test("Promotion slots - a cheat sheet shows one promotion beside the systems and one after the second system", async ({
+    hubHopPage,
+    page,
+  }) => {
+    await hubHopPage.goto("/aircraft/msfs/asobo/a320neo/")
+    const promotions = hubHopPage.promotions
+
+    await expect(promotions).toHaveCount(2)
+    const titles = await promotions.getByRole("heading").allTextContents()
+    expect(new Set(titles).size).toBe(2)
+    await expect(promotions.first().getByRole("link")).toHaveAttribute(
+      "href",
+      /utm_content=cheatsheet-sidebar/,
+    )
+    await expect(
+      page
+        .getByRole("region", { name: "Lights 3 presets" })
+        .locator("+ aside")
+        .getByRole("link"),
+    ).toHaveAttribute("href", /utm_content=cheatsheet-inline/)
+
+    await test.step("Below lg only the one after the second system is shown", async () => {
+      await page.setViewportSize({ width: 800, height: 900 })
+      await expect(promotions).toHaveCount(1)
+      await expect(promotions.getByRole("link")).toHaveAttribute(
+        "href",
+        /utm_content=cheatsheet-inline/,
+      )
+    })
+  })
 })
