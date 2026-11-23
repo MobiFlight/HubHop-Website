@@ -199,6 +199,16 @@ export const brandDescription = (brand: BrandPage) => {
   return `${count} ready-to-go MobiFlight ${brand.profiles === 1 ? "profile" : "profiles"} for ${brandLabel(brand)} hardware${products}. Find the profile for your aircraft and connect your home cockpit in MSFS.`
 }
 
+/** Profiles that name any brand; a profile for several products counts once */
+export const profileCount = (pages: BrandPage[]) =>
+  new Set(
+    pages.flatMap((brand) =>
+      [...brand.products.flatMap((p) => p.profiles), ...brand.other].map(
+        (profile) => profile.id,
+      ),
+    ),
+  ).size
+
 export const hardwareIndexTitle = () =>
   "MobiFlight profiles that make your hardware plug-and-play | HubHop"
 

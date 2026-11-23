@@ -40,90 +40,105 @@ const Hero = ({ sim, onSimChange, presetCount, stats }: HeroProps) => {
   }
 
   return (
-    <section className="container mx-auto flex flex-wrap items-center gap-12 px-6 pt-16 pb-16 md:pt-24">
-      <div className="flex min-w-0 flex-[999_1_560px] flex-col gap-6">
-        {/* keeps its space, so the headline doesn't jump when the note appears */}
-        <div className="min-h-9">
-          {activity && (
-            <p className="flex items-center gap-2 self-start rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-sm font-semibold text-primary">
-              <span
-                aria-hidden="true"
-                className="size-2 rounded-full bg-primary motion-safe:animate-pulse-dot"
-              />
-              {activity.count} new preset{activity.count > 1 ? "s" : ""} for the{" "}
-              {activity.vendor} {activity.aircraft} today
-            </p>
-          )}
-        </div>
-        <h1 className="text-5xl leading-none font-extrabold tracking-tight text-primary md:text-6xl">
-          Create, Share, Improve
-        </h1>
-        <p className="max-w-xl text-xl text-muted-foreground">
-          The community library of events and variables that connects your
-          cockpit hardware to the sim. Find the preset for any switch, in any
-          aircraft — then use it straight from MobiFlight.
-        </p>
-
-        <form role="search" onSubmit={submit} className="flex flex-col gap-3">
-          <SimSwitch
-            value={sim}
-            onValueChange={(value) => isSim(value) && onSimChange(value)}
-          />
-          <div className="flex items-center gap-3 rounded-2xl border bg-card py-2 pr-2 pl-5 shadow-lg ring-4 ring-primary/10 focus-within:ring-primary/30">
-            <IconSearch aria-hidden="true" className="size-6 text-primary" />
-            <label htmlFor="home-search" className="sr-only">
-              Search presets
-            </label>
-            <Input
-              id="home-search"
-              type="search"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder={`Search ${presetCount.toLocaleString("en-US")} presets — try “${searchExample[sim]}”`}
-              className="h-12 min-w-0 flex-1 border-0 bg-transparent text-lg shadow-none focus-visible:ring-0 md:text-lg dark:bg-transparent"
-            />
-            <Button type="submit" size="lg" className="h-12 px-6 text-base">
-              Search
-            </Button>
+    <section className="container mx-auto flex flex-col gap-10 px-6 pt-16 pb-16 md:pt-24">
+      {/* heading and search next to the hub graphic, the longer text below both */}
+      <div className="flex flex-wrap items-center gap-12">
+        <div className="flex min-w-0 flex-[999_1_560px] flex-col gap-6">
+          {/* keeps its space, so the headline doesn't jump when the note appears */}
+          <div className="min-h-9">
+            {activity && (
+              <p className="flex items-center gap-2 self-start rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-sm font-semibold text-primary">
+                <span
+                  aria-hidden="true"
+                  className="size-2 rounded-full bg-primary motion-safe:animate-pulse-dot"
+                />
+                {activity.count} new preset{activity.count > 1 ? "s" : ""} for
+                the {activity.vendor} {activity.aircraft} today
+              </p>
+            )}
           </div>
-          {popular === undefined ? (
-            <Skeleton className="h-11 w-3/4" />
-          ) : (
-            popular.length > 0 && (
-              <div className="flex flex-wrap items-center gap-2 text-sm">
-                <span className="mr-1 text-muted-foreground">Popular:</span>
-                {popular.map(({ _id: { vendor, aircraft } }) => (
-                  <Link
-                    key={`${vendor} ${aircraft}`}
-                    href={presetListUrl({
-                      sim,
-                      vendor: slugify(vendor),
-                      aircraft: slugify(aircraft),
-                    })}
-                    onClick={() =>
-                      track("popular_aircraft_click", {
-                        aircraft: `${vendor} ${aircraft}`,
-                      })
-                    }
-                    className="flex min-h-11 items-center rounded-full border bg-card px-3 transition-colors hover:border-primary hover:text-primary"
-                  >
-                    {vendor} {aircraft}
-                  </Link>
-                ))}
-              </div>
-            )
-          )}
-        </form>
+          <div className="flex flex-col gap-3">
+            <h1 className="text-5xl leading-none font-extrabold tracking-tight text-primary md:text-6xl">
+              Get the most out of your flight sim hardware
+            </h1>
+            <p className="text-2xl font-bold md:text-3xl">
+              Less time configuring, more time flying
+            </p>
+          </div>
+          <form
+            role="search"
+            onSubmit={submit}
+            className="mt-6 flex flex-col gap-3"
+          >
+            <SimSwitch
+              value={sim}
+              onValueChange={(value) => isSim(value) && onSimChange(value)}
+            />
+            <div className="flex items-center gap-3 rounded-2xl border bg-card py-2 pr-2 pl-5 shadow-lg ring-4 ring-primary/10 focus-within:ring-primary/30">
+              <IconSearch aria-hidden="true" className="size-6 text-primary" />
+              <label htmlFor="home-search" className="sr-only">
+                Search presets
+              </label>
+              <Input
+                id="home-search"
+                type="search"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder={`Search ${presetCount.toLocaleString("en-US")} presets — try “${searchExample[sim]}”`}
+                className="h-12 min-w-0 flex-1 border-0 bg-transparent text-lg shadow-none focus-visible:ring-0 md:text-lg dark:bg-transparent"
+              />
+              <Button type="submit" size="lg" className="h-12 px-6 text-base">
+                Search
+              </Button>
+            </div>
+            {popular === undefined ? (
+              <Skeleton className="h-11 w-3/4" />
+            ) : (
+              popular.length > 0 && (
+                <div className="flex flex-wrap items-center gap-2 text-sm">
+                  <span className="mr-1 text-muted-foreground">Popular:</span>
+                  {popular.map(({ _id: { vendor, aircraft } }) => (
+                    <Link
+                      key={`${vendor} ${aircraft}`}
+                      href={presetListUrl({
+                        sim,
+                        vendor: slugify(vendor),
+                        aircraft: slugify(aircraft),
+                      })}
+                      onClick={() =>
+                        track("popular_aircraft_click", {
+                          aircraft: `${vendor} ${aircraft}`,
+                        })
+                      }
+                      className="flex min-h-11 items-center rounded-full border bg-card px-3 transition-colors hover:border-primary hover:text-primary"
+                    >
+                      {vendor} {aircraft}
+                    </Link>
+                  ))}
+                </div>
+              )
+            )}
+          </form>
+        </div>
+        <div className="hidden min-w-0 flex-[1_1_360px] justify-center lg:flex">
+          <HubGraphic />
+        </div>
+      </div>
+      <div className="flex flex-col gap-3">
+        <p className="text-xl text-muted-foreground">
+          HubHop is the community catalog of presets and profiles for
+          MobiFlight, for default and add-on aircraft in MSFS and X-Plane.
+          Cockpit builders share what they figured out, so you can assign the
+          right function to any switch, encoder or display. Use ready-made
+          profiles that make your home cockpit hardware plug-and-play.
+        </p>
         <a
           href="https://www.mobiflight.com/en/index.html"
           target="_blank"
           className="self-start text-sm text-muted-foreground transition-colors hover:text-primary"
         >
-          Created and sponsored by Mobiflight and the Mobiflight community
+          HubHop is part of MobiFlight, free and open source
         </a>
-      </div>
-      <div className="flex min-w-0 flex-[1_1_360px] justify-center">
-        <HubGraphic />
       </div>
     </section>
   )

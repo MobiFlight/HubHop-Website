@@ -47,7 +47,9 @@ test.describe("Navigation", () => {
     await test.step("Home", async () => {
       await nav.getByRole("link", { name: "Home" }).click()
       await expect(
-        page.getByRole("heading", { name: "Create, Share, Improve" }),
+        page.getByRole("heading", {
+          name: "Get the most out of your flight sim hardware",
+        }),
       ).toBeVisible()
     })
   })

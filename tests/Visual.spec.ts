@@ -39,7 +39,9 @@ for (const theme of themes) {
     }) => {
       await hubHopPage.goto("/")
       await expect(
-        page.getByRole("heading", { name: "Create, Share, Improve" }),
+        page.getByRole("heading", {
+          name: "Get the most out of your flight sim hardware",
+        }),
       ).toBeVisible()
       await expect(page).toHaveScreenshot(
         `home-${theme}.png`,

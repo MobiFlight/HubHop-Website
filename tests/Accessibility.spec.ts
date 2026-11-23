@@ -27,7 +27,9 @@ const pages: PageCheck[] = [
     open: async ({ hubHopPage, page }) => {
       await hubHopPage.goto("/")
       await expect(
-        page.getByRole("heading", { name: "Create, Share, Improve" }),
+        page.getByRole("heading", {
+          name: "Get the most out of your flight sim hardware",
+        }),
       ).toBeVisible()
     },
     known: {},

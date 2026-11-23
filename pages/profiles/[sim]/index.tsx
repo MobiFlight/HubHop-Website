@@ -9,6 +9,7 @@ import {
   hardwareIndexTitle,
   hardwareIndexUrl,
   PROFILE_SIMS,
+  profileCount,
   sponsorsFirst,
   type BrandPage,
 } from "@/lib/hardwarePages"
@@ -43,17 +44,10 @@ export const getStaticProps: GetStaticProps<HardwareIndexProps> = async ({
   const sim = simFromSegment(String(params?.sim))
   if (!sim || !PROFILE_SIMS.includes(sim)) return { notFound: true }
   const pages = await loadBrandPages()
-  const ids = new Set(
-    pages.flatMap((brand) =>
-      [...brand.products.flatMap((p) => p.profiles), ...brand.other].map(
-        (profile) => profile.id,
-      ),
-    ),
-  )
   return {
     props: {
       sim,
-      profiles: ids.size,
+      profiles: profileCount(pages),
       brands: pages.map(
         ({ name, formerly, slug, profiles, products, sponsor }) => ({
           name,

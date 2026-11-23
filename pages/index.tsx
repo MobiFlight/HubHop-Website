@@ -10,6 +10,8 @@ import RecentChanges from "@/components/sections/home/RecentChanges"
 import StatsStrip from "@/components/sections/home/StatsStrip"
 import { db } from "@/services/db"
 import { loadLibraryStats, type LibraryStats } from "@/services/libraryStats"
+import { loadBrandPages } from "@/services/hardwarePages"
+import { profileCount } from "@/lib/hardwarePages"
 import { isSim, SIMS, type Sim } from "@/lib/presetUrls"
 import type { Statistics } from "@/interfaces/preset"
 
@@ -20,13 +22,20 @@ const statsUrl: Record<Sim, string | undefined> = {
 
 type HomeProps = {
   library: LibraryStats
+  // MobiFlight profiles on the profiles pages, for the link preview image
+  profiles: number
 }
 
 // the numbers about the whole library are baked in at build time; the
 // homepage itself never downloads the full preset list
-export const getStaticProps: GetStaticProps<HomeProps> = async () => ({
-  props: { library: await loadLibraryStats() },
-})
+export const getStaticProps: GetStaticProps<HomeProps> = async () => {
+  return {
+    props: {
+      library: await loadLibraryStats(),
+      profiles: profileCount(await loadBrandPages()),
+    },
+  }
+}
 
 const Home = ({ library }: HomeProps) => {
   const [sim, setSim] = useState<Sim>("msfs2020")
@@ -75,7 +84,11 @@ const Home = ({ library }: HomeProps) => {
   }
 
   return (
-    <Layout title="Home | Hubhop by Mobiflight" path="/">
+    <Layout
+      title="Home cockpit presets for MSFS and X-Plane | HubHop"
+      path="/"
+      image="/og/home.jpg"
+    >
       <main className="flex flex-col gap-20 pb-24">
         <Hero
           sim={sim}
