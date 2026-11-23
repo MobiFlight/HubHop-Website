@@ -23,7 +23,7 @@ test.describe("Navigation", () => {
     })
     await test.step("Profiles", async () => {
       await nav.getByRole("link", { name: "Profiles" }).click()
-      await expect(page).toHaveURL(/\/profiles\/$/)
+      await expect(page).toHaveURL(/\/profiles\/msfs\/$/)
       await expect(
         page.getByRole("heading", {
           name: "MobiFlight profiles that make your hardware plug-and-play",

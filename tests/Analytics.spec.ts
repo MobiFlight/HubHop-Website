@@ -49,7 +49,7 @@ test.describe("Analytics", () => {
       await page
         .context()
         .route("https://example.com/**", (route) => route.fulfill({ body: "" }))
-      await hubHopPage.goto("/profiles/honeycomb/")
+      await hubHopPage.goto("/profiles/msfs/honeycomb/")
 
       const popup = page.waitForEvent("popup")
       await page

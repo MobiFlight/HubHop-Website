@@ -1,4 +1,4 @@
-import type { GetStaticProps } from "next"
+import type { GetStaticPaths, GetStaticProps } from "next"
 import Link from "next/link"
 import Layout from "@/components/Layout"
 import { Badge } from "@/components/ui/badge"
@@ -8,10 +8,12 @@ import {
   hardwareIndexImageUrl,
   hardwareIndexTitle,
   hardwareIndexUrl,
+  PROFILE_SIMS,
   sponsorsFirst,
   type BrandPage,
 } from "@/lib/hardwarePages"
 import { brandLabel } from "@/lib/profileHardware"
+import { simFromSegment, simSegment, type Sim } from "@/lib/presetUrls"
 import type { SponsorTier } from "@/lib/sponsors"
 import { loadBrandPages } from "@/services/hardwarePages"
 
@@ -24,12 +26,22 @@ type BrandSummary = Pick<
 }
 
 type HardwareIndexProps = {
+  sim: Sim
   brands: BrandSummary[]
   // profiles that name any brand
   profiles: number
 }
 
-export const getStaticProps: GetStaticProps<HardwareIndexProps> = async () => {
+export const getStaticPaths: GetStaticPaths = async () => ({
+  paths: PROFILE_SIMS.map((sim) => ({ params: { sim: simSegment(sim) } })),
+  fallback: false,
+})
+
+export const getStaticProps: GetStaticProps<HardwareIndexProps> = async ({
+  params,
+}) => {
+  const sim = simFromSegment(String(params?.sim))
+  if (!sim || !PROFILE_SIMS.includes(sim)) return { notFound: true }
   const pages = await loadBrandPages()
   const ids = new Set(
     pages.flatMap((brand) =>
@@ -40,6 +52,7 @@ export const getStaticProps: GetStaticProps<HardwareIndexProps> = async () => {
   )
   return {
     props: {
+      sim,
       profiles: ids.size,
       brands: pages.map(
         ({ name, formerly, slug, profiles, products, sponsor }) => ({
@@ -80,9 +93,9 @@ const TIER_NAME: Record<SponsorTier, string> = {
   bronze: "Bronze",
 }
 
-type BrandGridProps = { brands: BrandSummary[] }
+type BrandGridProps = { sim: Sim; brands: BrandSummary[] }
 
-const BrandGrid = ({ brands }: BrandGridProps) => (
+const BrandGrid = ({ sim, brands }: BrandGridProps) => (
   <div className="grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
     {brands.map((brand) => (
       <section
@@ -92,7 +105,7 @@ const BrandGrid = ({ brands }: BrandGridProps) => (
       >
         <h3 id={`${brand.slug}-heading`} className="text-xl font-bold">
           <Link
-            href={brandUrl(brand.slug)}
+            href={brandUrl(sim, brand.slug)}
             className="flex justify-between gap-3 hover:underline"
           >
             <span className="flex items-center gap-2">
@@ -117,7 +130,7 @@ const BrandGrid = ({ brands }: BrandGridProps) => (
             {brand.products.map((product) => (
               <li key={product.slug}>
                 <Link
-                  href={`${brandUrl(brand.slug)}#${product.slug}`}
+                  href={`${brandUrl(sim, brand.slug)}#${product.slug}`}
                   className="flex justify-between gap-3 rounded-md px-2 py-1 hover:bg-card"
                 >
                   <span className="text-primary">{product.family}</span>
@@ -135,14 +148,14 @@ const BrandGrid = ({ brands }: BrandGridProps) => (
 )
 
 /** All hardware brands with MobiFlight profiles: sponsors first, then by profiles */
-const HardwareIndex = ({ brands, profiles }: HardwareIndexProps) => {
+const HardwareIndex = ({ sim, brands, profiles }: HardwareIndexProps) => {
   const { sponsors, others } = sponsorsFirst(brands)
   return (
     <Layout
       title={hardwareIndexTitle()}
       description={hardwareIndexDescription(brands.length, profiles)}
-      path={hardwareIndexUrl()}
-      image={hardwareIndexImageUrl()}
+      path={hardwareIndexUrl(sim)}
+      image={hardwareIndexImageUrl(sim)}
     >
       <main className="container mx-auto flex flex-col gap-8 px-6 py-10">
         <div className="flex flex-col gap-2">
@@ -172,7 +185,7 @@ const HardwareIndex = ({ brands, profiles }: HardwareIndexProps) => {
                 These hardware makers support MobiFlight and HubHop.
               </p>
             </div>
-            <BrandGrid brands={sponsors} />
+            <BrandGrid sim={sim} brands={sponsors} />
           </section>
         )}
         {others.length > 0 && (
@@ -185,7 +198,7 @@ const HardwareIndex = ({ brands, profiles }: HardwareIndexProps) => {
                 More brands
               </h2>
             )}
-            <BrandGrid brands={others} />
+            <BrandGrid sim={sim} brands={others} />
           </section>
         )}
         {/* the words builders use for their hardware */}

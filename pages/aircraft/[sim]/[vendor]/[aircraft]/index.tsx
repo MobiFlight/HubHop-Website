@@ -124,6 +124,7 @@ const CheatSheet = ({
         <SheetHeader sim={sim} sheet={sheet} profileCount={profiles.length} />
         {/* ready-made profiles first: they save the most time */}
         <FlightsimProfiles
+          sim={sim}
           aircraft={name}
           profiles={profiles}
           hardware={hardware}

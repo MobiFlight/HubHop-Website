@@ -1,7 +1,7 @@
 // Hardware pages: the cockpit hardware brands that MobiFlight profiles on
-// flightsim.to are made for (lib/profileHardware.ts), MSFS only.
-// /profiles/ lists the brands, /profiles/<brand>/ lists a brand's profiles
-// by product family. Built from the same profile data as the cheat sheets.
+// flightsim.to are made for (lib/profileHardware.ts).
+// /profiles/<sim>/ lists the brands, /profiles/<sim>/<brand>/ lists a brand's
+// profiles by product family. Built from the same profile data as the cheat sheets.
 
 import {
   matchProfile,
@@ -12,7 +12,7 @@ import {
 } from "@/lib/flightsimProfiles"
 import { brandLabel, HARDWARE, hardwareOf } from "@/lib/profileHardware"
 import { aircraftUrl } from "@/lib/aircraftPages"
-import { slugify } from "@/lib/presetUrls"
+import { simSegment, slugify, type Sim } from "@/lib/presetUrls"
 import {
   sponsorOf,
   TIER_ORDER,
@@ -25,12 +25,17 @@ export const MIN_INDEXED_PROFILES = 3
 /** Brand pages show the product sidebar from this many products on */
 export const MIN_PRODUCTS_FOR_SIDEBAR = 3
 
-export const hardwareIndexUrl = () => "/profiles/"
-export const brandUrl = (brandSlug: string) => `/profiles/${brandSlug}/`
+/** The sims with profile pages: flightsim.to's MobiFlight profiles are for MSFS */
+export const PROFILE_SIMS: Sim[] = ["msfs2020"]
+
+export const hardwareIndexUrl = (sim: Sim) => `/profiles/${simSegment(sim)}/`
+export const brandUrl = (sim: Sim, brandSlug: string) =>
+  `/profiles/${simSegment(sim)}/${brandSlug}/`
 /** Link preview images, drawn after the build (scripts/ogImages.mjs) */
-export const hardwareIndexImageUrl = () => "/og/profiles.jpg"
-export const brandImageUrl = (brandSlug: string) =>
-  `/og/profiles/${brandSlug}.jpg`
+export const hardwareIndexImageUrl = (sim: Sim) =>
+  `/og/profiles/${simSegment(sim)}.jpg`
+export const brandImageUrl = (sim: Sim, brandSlug: string) =>
+  `/og/profiles/${simSegment(sim)}/${brandSlug}.jpg`
 
 /** A profile with the aircraft it's for, linking to their cheat sheets */
 export type HardwareProfile = FlightsimProfile & {

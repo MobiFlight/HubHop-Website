@@ -13,6 +13,11 @@
       "statusCode": 302
     },
     {
+      "route": "/profiles/",
+      "redirect": "/profiles/msfs/",
+      "statusCode": 302
+    },
+    {
       "route": "/presets/*",
       "rewrite": "/presets/[[...slug]]/index.html"
     }
