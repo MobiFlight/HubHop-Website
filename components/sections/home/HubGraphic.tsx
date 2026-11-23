@@ -20,7 +20,7 @@ const dark = "color-mix(in oklab, var(--primary) 75%, black)"
 const HubGraphic = () => (
   <svg
     role="img"
-    aria-label="HubHop hub: community presets flowing into one shared library"
+    aria-label="HubHop hub: community presets flowing into one shared catalog"
     viewBox="0 0 420 400"
     className="h-auto w-full max-w-56 text-primary md:max-w-md"
   >

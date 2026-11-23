@@ -1,4 +1,9 @@
 import { test, expect } from "@/tests/fixtures"
+import { execFileSync } from "node:child_process"
+import fs from "node:fs"
+import os from "node:os"
+import path from "node:path"
+import sharp from "sharp"
 import { recentChanges, todaysActivity } from "@/lib/recentActivity"
 import msfsStatsData from "@/tests/data/msfs-stats.testdata.json"
 import type { Statistics } from "@/interfaces/preset"
@@ -8,6 +13,27 @@ const msfsStats = msfsStatsData as unknown as Statistics
 // the day the newest test preset was added
 const NEWEST_ADDED_DAY = new Date("2024-03-01T12:00:00Z")
 
+test.describe("Home page - link preview image", () => {
+  test("Home - the homepage gets a link preview image after the build", async () => {
+    const out = fs.mkdtempSync(path.join(os.tmpdir(), "og-home-"))
+    const pageProps = {
+      library: { msfs2020: { presets: 34808 }, xplane: { presets: 11415 } },
+      profiles: 444,
+    }
+    fs.writeFileSync(
+      path.join(out, "index.html"),
+      `<html><body><script id="__NEXT_DATA__" type="application/json">${JSON.stringify({ props: { pageProps } })}</script></body></html>`,
+    )
+
+    execFileSync("node", ["scripts/ogImages.mjs", out])
+
+    expect(
+      await sharp(path.join(out, "og", "home.jpg")).metadata(),
+    ).toMatchObject({ format: "jpeg", width: 1200, height: 630 })
+    fs.rmSync(out, { recursive: true })
+  })
+})
+
 test.describe("Home page", () => {
   test.use({ timezoneId: "UTC" })
 
@@ -16,13 +42,38 @@ test.describe("Home page", () => {
   })
 
   test("Home - shows the hero section", async ({ page }) => {
-    await expect(page).toHaveTitle("Home | Hubhop by Mobiflight")
+    await expect(page).toHaveTitle(
+      "Home cockpit presets for MSFS and X-Plane | HubHop",
+    )
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+      "Get the most out of your flight sim hardware",
+    )
     await expect(
-      page.getByRole("heading", { name: "Create, Share, Improve" }),
-    ).toBeVisible()
+      page.getByText("Less time configuring, more time flying"),
+    ).toHaveCount(1)
     await expect(
-      page.getByRole("link", { name: /Created and sponsored by Mobiflight/ }),
+      page.getByText(
+        /^HubHop is the community catalog of presets and profiles/,
+      ),
+    ).toContainText("add-on aircraft in MSFS and X-Plane")
+    await expect(
+      page.getByRole("link", {
+        name: "HubHop is part of MobiFlight, free and open source",
+      }),
     ).toHaveAttribute("href", "https://www.mobiflight.com/en/index.html")
+  })
+
+  test("Home - link preview shows the home cockpit description and its own image", async ({
+    page,
+  }) => {
+    await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+      "content",
+      "HubHop is the community catalog of MobiFlight presets and profiles for default and add-on aircraft in MSFS and X-Plane. Make your home cockpit plug-and-play.",
+    )
+    await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
+      "content",
+      /\/og\/home\.jpg$/,
+    )
   })
 
   test("Home - search opens the preset list of the selected sim", async ({
@@ -104,12 +155,12 @@ test.describe("Home page", () => {
     ])
   })
 
-  test("Home - stats strip shows library size and leaders", async ({
+  test("Home - stats strip shows catalog size and leaders", async ({
     page,
   }) => {
     const numbers = page.getByRole("region", { name: "HubHop in numbers" })
     await expect(numbers).toMatchAriaSnapshot(`
-      - term: presets in the library
+      - term: presets in the catalog
       - definition: "17"
       - term: community contributors
       - definition: "2"

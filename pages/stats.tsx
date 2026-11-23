@@ -61,7 +61,7 @@ const Stats = () => {
   return (
     <Layout
       title="Stats | Hubhop by Mobiflight"
-      description="How the HubHop preset library grows: top contributors, the aircraft with the most presets and the latest presets for MSFS and X-Plane."
+      description="How the HubHop preset catalog grows: top contributors, the aircraft with the most presets and the latest presets for MSFS and X-Plane."
       path="/stats/"
     >
       <div className="mb-5 min-h-screen p-3">

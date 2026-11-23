@@ -78,17 +78,36 @@ const count = (value, one, many) => [
   h("span", { marginLeft: 12 }, value === 1 ? one : many),
 ]
 
-// big for short names, smaller for long ones, always one line
+// big for short names, smaller for long ones, on one line unless more are allowed
 // (Assistant ExtraBold is about 0.55 em wide per character)
-const fitted = (text, max) =>
-  Math.min(max, Math.floor((WIDTH - 2 * PADDING) / (text.length * 0.56)))
+const fitted = (text, max, lines = 1) =>
+  Math.min(
+    max,
+    Math.floor(((WIDTH - 2 * PADDING) * lines) / (text.length * 0.56)),
+  )
+
+const badge = (sim) =>
+  h(
+    "div",
+    {
+      backgroundColor: SIMS[sim].color,
+      color: "#1b1b1f",
+      fontWeight: 800,
+      fontSize: 40,
+      padding: "2px 24px",
+      borderRadius: 12,
+    },
+    SIMS[sim].label,
+  )
 
 /**
- * One preview image, as a satori element tree: logo and badge on top, a small
- * line, the big title, a coloured subtitle, and the numbers at the bottom.
+ * One preview image, as a satori element tree: logo and sim badges on top, a
+ * small line, the big title, a coloured subtitle, and the numbers at the
+ * bottom. Background and subtitle colour are those of the first sim.
  */
-const card = ({ sim, kicker, title, subtitle, stats }) => {
-  const { label, color } = SIMS[sim]
+const card = ({ sims, kicker, title, titleLines = 1, subtitle, stats }) => {
+  const [sim] = sims
+  const { color } = SIMS[sim]
   return h(
     "div",
     {
@@ -115,18 +134,7 @@ const card = ({ sim, kicker, title, subtitle, stats }) => {
         type: "img",
         props: { src: logo, width: logoWidth, height: LOGO_HEIGHT },
       },
-      h(
-        "div",
-        {
-          backgroundColor: color,
-          color: "#1b1b1f",
-          fontWeight: 800,
-          fontSize: 40,
-          padding: "2px 24px",
-          borderRadius: 12,
-        },
-        label,
-      ),
+      h("div", { display: "flex", gap: 16 }, ...sims.map(badge)),
     ),
     // the small line above the title is optional
     ...(kicker
@@ -148,9 +156,9 @@ const card = ({ sim, kicker, title, subtitle, stats }) => {
       "div",
       {
         marginTop: kicker ? 6 : 46,
-        fontSize: fitted(title, 150),
+        fontSize: fitted(title, 150, titleLines),
         fontWeight: 800,
-        lineHeight: 1,
+        lineHeight: titleLines > 1 ? 1.05 : 1,
       },
       title,
     ),
@@ -188,7 +196,7 @@ const card = ({ sim, kicker, title, subtitle, stats }) => {
 /** A cheat sheet's image */
 const aircraftCard = ({ sim, vendor, aircraft, presets, systems, profiles }) =>
   card({
-    sim,
+    sims: [sim],
     kicker: vendor,
     title: aircraft,
     subtitle: "home cockpit presets",
@@ -209,7 +217,7 @@ const brandCard = (sim, brand) => {
     profiles.flatMap((profile) => profile.aircraft.map((entry) => entry.url)),
   ).size
   return card({
-    sim,
+    sims: [sim],
     kicker: brand.formerly
       ? `Hardware · formerly ${brand.formerly}`
       : "Hardware",
@@ -228,13 +236,30 @@ const brandCard = (sim, brand) => {
 /** The profiles overview's image */
 const hardwareIndexCard = ({ sim, brands, profiles }) =>
   card({
-    sim,
+    sims: [sim],
     // the same words as the page title
     title: "MobiFlight profiles",
     subtitle: "that make your hardware plug-and-play",
     stats: [
       count(profiles, "profile", "profiles"),
       count(brands.length, "brand", "brands"),
+    ],
+  })
+
+/** The homepage's image: the same heading and tagline as the page */
+const homeCard = ({ library, profiles }) =>
+  card({
+    sims: ["msfs2020", "xplane"],
+    title: "Get the most out of your flight sim hardware",
+    titleLines: 2,
+    subtitle: "Less time configuring, more time flying",
+    stats: [
+      count(
+        library.msfs2020.presets + library.xplane.presets,
+        "preset",
+        "presets",
+      ),
+      ...(profiles > 0 ? [count(profiles, "profile", "profiles")] : []),
     ],
   })
 
@@ -275,6 +300,10 @@ const draw = async (element, ...target) => {
     .jpeg({ quality: 85, mozjpeg: true })
     .toFile(file)
 }
+
+const homeFile = path.join(OUT, "index.html")
+const homeProps = fs.existsSync(homeFile) && pagePropsOf(homeFile)
+if (homeProps?.library) await draw(homeCard(homeProps), "home.jpg")
 
 let aircraftImages = 0
 for (const { segments } of cheatSheets()) {

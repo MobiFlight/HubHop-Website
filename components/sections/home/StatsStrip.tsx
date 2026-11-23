@@ -35,7 +35,7 @@ const StatsStrip = ({ library, stats }: StatsStripProps) => {
   return (
     <section aria-label="HubHop in numbers" className="container mx-auto px-6">
       <dl className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-px overflow-hidden rounded-2xl border bg-border">
-        <Stat value={format(library.presets)} label="presets in the library" />
+        <Stat value={format(library.presets)} label="presets in the catalog" />
         <Stat
           value={format(library.contributors)}
           label="community contributors"

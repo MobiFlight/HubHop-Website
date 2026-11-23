@@ -21,7 +21,7 @@ type LayoutProps = {
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL
 const IMAGE = "/images/og-hubhop.png"
 const DEFAULT_DESCRIPTION =
-  "HubHop is the community library of events and variables for MSFS and X-Plane that connects your home cockpit hardware to the sim through MobiFlight."
+  "HubHop is the community catalog of MobiFlight presets and profiles for default and add-on aircraft in MSFS and X-Plane. Make your home cockpit plug-and-play."
 
 const Layout = ({
   children,

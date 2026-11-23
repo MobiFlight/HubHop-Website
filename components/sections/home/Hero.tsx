@@ -55,13 +55,20 @@ const Hero = ({ sim, onSimChange, presetCount, stats }: HeroProps) => {
             </p>
           )}
         </div>
-        <h1 className="text-5xl leading-none font-extrabold tracking-tight text-primary md:text-6xl">
-          Create, Share, Improve
-        </h1>
+        <div className="flex flex-col gap-3">
+          <h1 className="text-5xl leading-none font-extrabold tracking-tight text-primary md:text-6xl">
+            Get the most out of your flight sim hardware
+          </h1>
+          <p className="text-2xl font-bold md:text-3xl">
+            Less time configuring, more time flying
+          </p>
+        </div>
         <p className="max-w-xl text-xl text-muted-foreground">
-          The community library of events and variables that connects your
-          cockpit hardware to the sim. Find the preset for any switch, in any
-          aircraft — then use it straight from MobiFlight.
+          HubHop is the community catalog of presets and profiles for
+          MobiFlight, for default and add-on aircraft in MSFS and X-Plane.
+          Cockpit builders share what they figured out, so you can assign the
+          right function to any switch, encoder or display. Use ready-made
+          profiles that make your home cockpit hardware plug-and-play.
         </p>
 
         <form role="search" onSubmit={submit} className="flex flex-col gap-3">
@@ -119,7 +126,7 @@ const Hero = ({ sim, onSimChange, presetCount, stats }: HeroProps) => {
           target="_blank"
           className="self-start text-sm text-muted-foreground transition-colors hover:text-primary"
         >
-          Created and sponsored by Mobiflight and the Mobiflight community
+          HubHop is part of MobiFlight, free and open source
         </a>
       </div>
       <div className="flex min-w-0 flex-[1_1_360px] justify-center">
