@@ -17,6 +17,8 @@ The build writes `sitemap.xml` and `robots.txt` (`scripts/sitemap.mjs`); Google 
 - **Sitemaps**: status "Success" and the number of discovered pages (aircraft cheat sheets, system pages, main pages).
 - **Pages**: indexed vs. not indexed. "Crawled - currently not indexed" for some cheat sheets is normal at the start.
   Cheat sheets with fewer than 10 presets are `noindex` on purpose and aren't in the sitemap.
+  The preset list and single presets (`/presets/…`) are `noindex` too: they all share one HTML file, so Google
+  would see them as duplicates. The cheat sheets are the pages for search engines.
 - **Performance**: impressions, clicks and the search terms per page. Use them to improve page texts
   (`lib/aircraftPages.ts`, "Texts for titles, search results and link previews").
 

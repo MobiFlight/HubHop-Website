@@ -263,6 +263,27 @@ test.describe("Preset list", () => {
     await expect(presetsPage.row("Oil temperature")).toHaveCount(1)
   })
 
+  test("Preset list - search engines don't index the list", async ({
+    presetsPage,
+    page,
+  }) => {
+    const robots = page.locator('meta[name="robots"]')
+
+    await test.step("The HTML before JavaScript runs is noindex", async () => {
+      const response = await page.request.get(
+        "/presets/msfs/asobo/c172/?system=Engine",
+      )
+      expect(await response.text()).toMatch(
+        /<meta name="robots" content="noindex"/,
+      )
+    })
+
+    await test.step("The loaded list is noindex", async () => {
+      await presetsPage.gotoPage("msfs/asobo/c172/?system=Engine")
+      await expect(robots).toHaveAttribute("content", "noindex")
+    })
+  })
+
   test("Preset list - the filter can be folded below md and is always open from md on", async ({
     presetsPage,
     page,
