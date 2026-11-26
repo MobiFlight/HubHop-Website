@@ -22,7 +22,8 @@ applyTo: "**/*.jsx, **/*.tsx, **/*.js, **/*.ts, **/*.css"
   `out/sitemap.xml` (every page with a canonical URL that isn't `noindex`) and `out/robots.txt`. Then `scripts/ogImages.mjs` draws a link preview image
   (1200×630 JPEG, satori + sharp) for every cheat sheet into `out/og/aircraft/…`, and for the profiles overview and brand pages into
   `out/og/profiles/<sim>.jpg` and `out/og/profiles/<sim>/…`, and for the homepage into `out/og/home.jpg` (pages without their own image use `public/images/og-hubhop.png`), from the page's own `__NEXT_DATA__`; each page passes its path to `Layout` as `image`. Fonts for it are static instances of Assistant in `scripts/og/`. Page texts for search
-  results are templates in `lib/aircraftPages.ts`; write them for home cockpit builders. See `docs/search-console.md`.
+  results are templates in `lib/aircraftPages.ts`; write them for home cockpit builders. The preset list and single presets
+  (`/presets/…`) share one HTML file and are `noindex`; the cheat sheets are the pages for search engines. See `docs/search-console.md`.
 - MSFS cheat sheets also show the community's MobiFlight profiles from flightsim.to. `npm run build` first runs
   `scripts/flightsimProfiles.mjs`, which downloads them once with flightsim.to's partner API into `.build-data/` (gitignored);
   the pages read that file. The token is the repository secret `FLIGHTSIM_TO_TOKEN` (locally `.env.local`), never a `NEXT_PUBLIC_`

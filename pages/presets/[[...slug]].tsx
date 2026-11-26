@@ -64,8 +64,14 @@ const Presets = () => {
   if (route?.kind === "preset")
     return <PresetDetail key={route.id} sim={route.sim} id={route.id} />
 
+  // the list is a tool with endless filter combinations, all served from the
+  // same HTML; the aircraft cheat sheets are the pages for search engines (#231)
   return (
-    <Layout title="Presets | Hubhop by Mobiflight" description={description}>
+    <Layout
+      title="Presets | Hubhop by Mobiflight"
+      description={description}
+      noindex
+    >
       {route?.kind === "list" ? (
         <PresetList
           sim={route.sim}
