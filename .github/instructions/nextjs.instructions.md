@@ -27,7 +27,7 @@ applyTo: "**/*.jsx, **/*.tsx, **/*.js, **/*.ts, **/*.css"
 - MSFS cheat sheets also show the community's MobiFlight profiles from flightsim.to. `npm run build` first runs
   `scripts/flightsimProfiles.mjs`, which downloads them once with flightsim.to's partner API into `.build-data/` (gitignored);
   the pages read that file. The token is the repository secret `FLIGHTSIM_TO_TOKEN` (locally `.env.local`), never a `NEXT_PUBLIC_`
-  variable. Without it the site is built without profiles. `lib/flightsimProfiles.ts` matches profiles to aircraft by title
+  variable. Without it the site is built without profiles; with it, a failed download fails the build (the live site keeps its profiles). `lib/flightsimProfiles.ts` matches profiles to aircraft by title
   (maker and model must be named) and the flightsim.to affiliation; fix wrong matches with its alias and override lists.
   `lib/profileHardware.ts` reads the hardware brand and model from each profile title (a model several brands make
   counts only with its brand); the cheat sheet names them in its title, description and profiles heading. Add new

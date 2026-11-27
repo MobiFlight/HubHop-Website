@@ -3,7 +3,9 @@
 // them (services/flightsimProfiles.ts). Once per build: Next.js builds pages
 // in several processes, and the API allows 60 searches per minute.
 // The token is the repository secret FLIGHTSIM_TO_TOKEN (or .env.local).
-// Without it, or if flightsim.to fails, the site is built without profiles.
+// Without it the site is built without profiles. With it, a failed download
+// fails the build, so a short outage at flightsim.to doesn't remove the
+// profiles from the live site; the next nightly build tries again.
 import fs from "node:fs"
 import path from "node:path"
 import nextEnv from "@next/env"
@@ -39,18 +41,22 @@ const download = async (token) => {
   return profiles
 }
 
-const token = process.env.FLIGHTSIM_TO_TOKEN
-let profiles = []
-if (!token) {
-  console.info("MobiFlight profiles: no FLIGHTSIM_TO_TOKEN, building without")
-} else {
+const loadProfiles = async (token) => {
+  if (!token) {
+    console.info("MobiFlight profiles: no FLIGHTSIM_TO_TOKEN, building without")
+    return []
+  }
   try {
-    profiles = await download(token)
+    const profiles = await download(token)
+    if (profiles.length === 0) throw new Error("no profiles returned")
     console.info(`MobiFlight profiles: ${profiles.length} downloaded`)
+    return profiles
   } catch (error) {
-    // profiles are an extra: build the site without them
-    console.warn(`MobiFlight profiles not loaded: ${error.message}`)
+    console.error(`MobiFlight profiles not loaded: ${error.message}`)
+    process.exit(1)
   }
 }
+
+const profiles = await loadProfiles(process.env.FLIGHTSIM_TO_TOKEN)
 fs.mkdirSync(path.dirname(PROFILES_FILE), { recursive: true })
 fs.writeFileSync(PROFILES_FILE, JSON.stringify(profiles))
